@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_expense_breadcrumbs" inherit_id="portal.portal_breadcrumbs" name="Portal Expense Breadcrumbs">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+
+            <!-- My Leaves list -->
+            <li t-if="page_name == 'portal_my_expenses'" class="breadcrumb-item active">
+                My Expense
+            </li>
+
+            <!-- New Leave form -->
+            <li t-if="page_name in ['portal_expense_form','portal_expense_edit_form','portal_expense_view']" class="breadcrumb-item">
+                <a t-att-href="'/my/expenses'">
+                    My Expense
+                </a>
+            </li>
+
+            <li t-if="page_name == 'portal_expense_form'" class="breadcrumb-item active">
+                New Request
+            </li>
+            <li t-if="page_name == 'portal_expense_edit_form'" class="breadcrumb-item active">
+                <t t-esc="expense.name"/>
+            </li>
+            <li t-if="page_name == 'portal_expense_view'" class="breadcrumb-item active">
+                <t t-esc="expense.name"/>
+            </li>
+
+        </xpath>
+    </template>
+</odoo>
