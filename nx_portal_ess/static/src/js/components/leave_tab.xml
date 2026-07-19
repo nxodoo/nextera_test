@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="nx_portal_ess.LeaveTab">
+        <div class="nx-ess-tab">
+            <div class="nx-ess-page-head">
+                <div>
+                    <h2>Leave Management</h2>
+                    <p>Review your balances and submit new time-off requests</p>
+                </div>
+                <button class="nx-ess-btn-primary" t-on-click="toggleForm">
+                    <i class="fa fa-plus"/> New Request
+                </button>
+            </div>
+
+            <t t-if="state.loading">
+                <div class="nx-ess-loading"><div class="nx-ess-spinner"/></div>
+            </t>
+            <t t-elif="state.error">
+                <div class="nx-ess-alert nx-ess-alert-danger" t-esc="state.error"/>
+            </t>
+            <t t-elif="!state.data.has_employee">
+                <div class="nx-ess-alert nx-ess-alert-warning">No employee linked to your account.</div>
+            </t>
+            <t t-else="">
+                <!-- Balances -->
+                <div class="nx-ess-balances">
+                    <t t-if="!state.data.balances.length">
+                        <div class="nx-ess-alert nx-ess-alert-info">No leave allocations found.</div>
+                    </t>
+                    <div class="nx-ess-balance-card" t-foreach="state.data.balances" t-as="b" t-key="b.type_id">
+                        <div class="nx-ess-balance-name" t-esc="b.name"/>
+                        <div class="nx-ess-balance-value"><t t-esc="b.remaining"/> <small>days left</small></div>
+                        <div class="nx-ess-balance-sub">
+                            <t t-esc="b.taken"/> taken / <t t-esc="b.allocated"/> allocated
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inline form -->
+                <t t-if="state.showForm">
+                    <div class="nx-ess-panel nx-ess-form">
+                        <div class="nx-ess-panel-title">New Leave Request</div>
+                        <div class="nx-ess-form-grid">
+                            <label>
+                                Leave Type
+                                <select t-model="state.form.leave_type_id">
+                                    <option value="">Select…</option>
+                                    <option t-foreach="state.data.leave_types" t-as="opt" t-key="opt.id"
+                                            t-att-value="opt.id" t-esc="opt.name"/>
+                                </select>
+                            </label>
+                            <label>From
+                                <input type="date" t-model="state.form.date_from"/>
+                            </label>
+                            <label>To
+                                <input type="date" t-model="state.form.date_to"/>
+                            </label>
+                            <label class="nx-ess-col-span">Description
+                                <input type="text" t-model="state.form.name" placeholder="Reason (optional)"/>
+                            </label>
+                        </div>
+                        <div t-if="state.formError" class="nx-ess-alert nx-ess-alert-danger" t-esc="state.formError"/>
+                        <div class="nx-ess-form-actions">
+                            <button class="nx-ess-btn-ghost" t-on-click="toggleForm">Cancel</button>
+                            <button class="nx-ess-btn-primary" t-on-click="submit" t-att-disabled="state.submitting">
+                                <t t-esc="state.submitting ? 'Submitting…' : 'Submit Request'"/>
+                            </button>
+                        </div>
+                    </div>
+                </t>
+
+                <!-- History -->
+                <div class="nx-ess-panel">
+                    <div class="nx-ess-panel-title">Leave History</div>
+                    <div class="nx-ess-table-wrap">
+                        <table class="nx-ess-table">
+                            <thead>
+                                <tr><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Status</th></tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="!state.data.leaves.length">
+                                    <tr><td colspan="5" class="nx-ess-empty">No leave requests yet.</td></tr>
+                                </t>
+                                <tr t-foreach="state.data.leaves" t-as="lv" t-key="lv.id">
+                                    <td t-esc="lv.name"/>
+                                    <td t-esc="lv.date_from"/>
+                                    <td t-esc="lv.date_to"/>
+                                    <td t-esc="lv.days"/>
+                                    <td><span t-att-class="'nx-ess-badge accent-' + stateAccent(lv.state)" t-esc="lv.state_label"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

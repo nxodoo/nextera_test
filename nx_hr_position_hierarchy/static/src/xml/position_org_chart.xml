@@ -5,7 +5,7 @@
         <div class="o_nx_position_org_chart h-100 d-flex flex-column">
             <div class="o_nx_position_header border-bottom bg-white">
                 <div class="d-flex align-items-center justify-content-between px-4 py-3">
-                    <h2 class="m-0 fs-4">Org Chart</h2>
+                    <h2 class="m-0 fs-4" t-esc="pageTitle"/>
                     <div class="btn-group" role="group" aria-label="Org chart view mode">
                         <button class="btn btn-light active" type="button">Position View</button>
                     </div>
@@ -49,7 +49,7 @@
                 <div t-elif="!state.nodes.length" class="o_nx_position_empty">No positions match the selected filters.</div>
                 <div t-else="" class="o_nx_position_tree_roots">
                     <t t-foreach="state.nodes" t-as="node" t-key="node.id">
-                        <PositionOrgChartNode node="node" openJob.bind="openJob"/>
+                        <PositionOrgChartNode node="node" openJob.bind="openJob" openEmployee.bind="openEmployee"/>
                     </t>
                 </div>
             </div>
@@ -60,9 +60,10 @@
         <div class="o_nx_position_node_wrap">
             <div t-attf-class="o_nx_position_node_body #{props.node.children.length ? 'o_nx_has_children' : ''} #{props.node.assistant_children.length ? 'o_nx_has_assistant' : ''}">
                 <div class="o_nx_position_parent_slot">
-                    <button type="button"
-                            t-attf-class="o_nx_position_card o_nx_position_{{props.node.status}} #{props.node.is_assistant ? 'o_nx_position_assistant_card' : ''}"
-                            t-on-click="() => props.openJob(props.node.id)">
+                    <div role="button"
+                         tabindex="0"
+                         t-attf-class="o_nx_position_card o_nx_position_{{props.node.status}} #{props.node.is_assistant ? 'o_nx_position_assistant_card' : ''}"
+                         t-on-click="() => props.openJob(props.node.id)">
                         <div class="d-flex align-items-start justify-content-between gap-2">
                             <span class="o_nx_position_dept" t-esc="props.node.department_name || 'No department'"/>
                             <span t-attf-class="o_nx_position_status o_nx_position_status_{{props.node.status}}">
@@ -75,10 +76,10 @@
                         <div class="o_nx_position_people">
                             <t t-if="props.node.employees.length">
                                 <t t-foreach="props.node.employees" t-as="employee" t-key="employee.id">
-                                    <div class="o_nx_position_employee">
+                                    <button type="button" class="o_nx_position_employee o_nx_position_employee_button" t-on-click.stop="() => props.openEmployee(employee.id)">
                                         <span class="o_nx_position_avatar" t-att-style="'background-image: url(' + employee.avatar_url + ')'"/>
                                         <span t-esc="employee.name"/>
-                                    </div>
+                                    </button>
                                 </t>
                             </t>
                             <t t-else="">
@@ -92,13 +93,14 @@
                             <span>Headcount <t t-esc="props.node.assigned_count"/>/<t t-esc="props.node.headcount"/></span>
                             <span t-if="props.node.vacancy_count">Vacancies <t t-esc="props.node.vacancy_count"/></span>
                         </div>
-                    </button>
+                    </div>
                     <div t-if="props.node.assistant_children.length" class="o_nx_position_assistants">
                         <t t-foreach="props.node.assistant_children" t-as="assistant" t-key="assistant.id">
                             <div class="o_nx_position_assistant_branch">
-                                <button type="button"
-                                        t-attf-class="o_nx_position_card o_nx_position_{{assistant.status}} o_nx_position_assistant_card"
-                                        t-on-click="() => props.openJob(assistant.id)">
+                                <div role="button"
+                                     tabindex="0"
+                                     t-attf-class="o_nx_position_card o_nx_position_{{assistant.status}} o_nx_position_assistant_card"
+                                     t-on-click="() => props.openJob(assistant.id)">
                                     <div class="d-flex align-items-start justify-content-between gap-2">
                                         <span class="o_nx_position_dept" t-esc="assistant.department_name || 'No department'"/>
                                         <span t-attf-class="o_nx_position_status o_nx_position_status_{{assistant.status}}">
@@ -111,10 +113,10 @@
                                     <div class="o_nx_position_people">
                                         <t t-if="assistant.employees.length">
                                             <t t-foreach="assistant.employees" t-as="employee" t-key="employee.id">
-                                                <div class="o_nx_position_employee">
+                                                <button type="button" class="o_nx_position_employee o_nx_position_employee_button" t-on-click.stop="() => props.openEmployee(employee.id)">
                                                     <span class="o_nx_position_avatar" t-att-style="'background-image: url(' + employee.avatar_url + ')'"/>
                                                     <span t-esc="employee.name"/>
-                                                </div>
+                                                </button>
                                             </t>
                                         </t>
                                         <t t-else="">
@@ -128,7 +130,7 @@
                                         <span>Headcount <t t-esc="assistant.assigned_count"/>/<t t-esc="assistant.headcount"/></span>
                                         <span t-if="assistant.vacancy_count">Vacancies <t t-esc="assistant.vacancy_count"/></span>
                                     </div>
-                                </button>
+                                </div>
                             </div>
                         </t>
                     </div>
@@ -137,7 +139,7 @@
             <div t-if="props.node.children.length" class="o_nx_position_children">
                 <t t-foreach="props.node.children" t-as="child" t-key="child.id">
                     <div class="o_nx_position_child_branch">
-                        <PositionOrgChartNode node="child" openJob.bind="props.openJob"/>
+                        <PositionOrgChartNode node="child" openJob.bind="props.openJob" openEmployee.bind="props.openEmployee"/>
                     </div>
                 </t>
             </div>

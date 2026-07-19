@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Hide the website top header on the ESS single-page app -->
+    <template id="ess_hide_top_header" inherit_id="website.layout" priority="96">
+        <xpath expr="//div[@id='wrapwrap']/header" position="attributes">
+            <attribute name="t-if">not no_header and not (request and request.httprequest.path and request.httprequest.path.startswith('/my/ess'))</attribute>
+        </xpath>
+    </template>
+
+    <!-- Full-screen ESS app page -->
+    <template id="ess_portal_page" name="Employee Self-Service Portal">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="True"/>
+            <div id="wrap" class="oe_structure">
+                <div class="nx-ess-root">
+                    <owl-component name="nx.EssPortalApp"/>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="nx_portal_ess.DashboardTab">
+        <div class="nx-ess-tab">
+            <t t-if="state.loading">
+                <div class="nx-ess-loading"><div class="nx-ess-spinner"/></div>
+            </t>
+            <t t-elif="state.error">
+                <div class="nx-ess-alert nx-ess-alert-danger" t-esc="state.error"/>
+            </t>
+            <t t-elif="!state.data.has_employee">
+                <div class="nx-ess-alert nx-ess-alert-warning">
+                    Your portal account is not linked to an employee record yet.
+                    Please contact HR.
+                </div>
+            </t>
+            <t t-else="">
+                <!-- Profile header -->
+                <div class="nx-ess-hero">
+                    <img class="nx-ess-hero-avatar" t-att-src="state.data.employee.avatar" alt="avatar"/>
+                    <div class="nx-ess-hero-info">
+                        <div class="nx-ess-hero-greet">Good day <span>☀</span></div>
+                        <h1 t-esc="state.data.employee.name"/>
+                        <div class="nx-ess-hero-meta">
+                            <span t-if="state.data.employee.job_title">
+                                <i class="fa fa-briefcase"/> <t t-esc="state.data.employee.job_title"/>
+                            </span>
+                            <span t-if="state.data.employee.department">
+                                <i class="fa fa-building"/> <t t-esc="state.data.employee.department"/>
+                            </span>
+                            <span t-if="state.data.employee.manager">
+                                <i class="fa fa-sitemap"/> Reports to <t t-esc="state.data.employee.manager"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="nx-ess-hero-badge" t-if="state.data.employee.employee_number">
+                        <t t-esc="state.data.employee.employee_number"/>
+                    </div>
+                </div>
+
+                <!-- KPI cards -->
+                <div class="nx-ess-kpis">
+                    <div class="nx-ess-kpi" t-on-click="() => this.open('leave')">
+                        <div class="nx-ess-kpi-icon accent-warning"><i class="fa fa-clock-o"/></div>
+                        <div class="nx-ess-kpi-value"><t t-esc="kpis.pending_approvals"/> <small>items</small></div>
+                        <div class="nx-ess-kpi-label">Pending Approvals</div>
+                    </div>
+                    <div class="nx-ess-kpi" t-on-click="() => this.open('leave')">
+                        <div class="nx-ess-kpi-icon accent-info"><i class="fa fa-exclamation-circle"/></div>
+                        <div class="nx-ess-kpi-value"><t t-esc="kpis.open_requests"/> <small>active</small></div>
+                        <div class="nx-ess-kpi-label">Open Requests</div>
+                    </div>
+                    <div class="nx-ess-kpi" t-on-click="() => this.open('attendance')">
+                        <div class="nx-ess-kpi-icon accent-success"><i class="fa fa-user-o"/></div>
+                        <div class="nx-ess-kpi-value"><t t-esc="kpis.attendance_rate"/> <small>%</small></div>
+                        <div class="nx-ess-kpi-label">Attendance</div>
+                    </div>
+                    <div class="nx-ess-kpi" t-on-click="() => this.open('payroll')">
+                        <div class="nx-ess-kpi-icon accent-primary"><i class="fa fa-credit-card"/></div>
+                        <div class="nx-ess-kpi-value"><t t-esc="kpis.latest_payslip || '—'"/></div>
+                        <div class="nx-ess-kpi-label">Latest Payslip</div>
+                    </div>
+                </div>
+
+                <!-- Quick actions -->
+                <div class="nx-ess-panel">
+                    <div class="nx-ess-panel-title">Quick Actions</div>
+                    <div class="nx-ess-quick">
+                        <button class="nx-ess-quick-btn" t-on-click="() => this.open('leave')">
+                            <span class="nx-ess-quick-ic accent-warning"><i class="fa fa-calendar"/></span>
+                            Request Leave
+                        </button>
+                        <button class="nx-ess-quick-btn" t-on-click="() => this.open('attendance')">
+                            <span class="nx-ess-quick-ic accent-success"><i class="fa fa-clock-o"/></span>
+                            Attendance
+                        </button>
+                        <button class="nx-ess-quick-btn" t-on-click="() => this.open('payroll')">
+                            <span class="nx-ess-quick-ic accent-info"><i class="fa fa-credit-card"/></span>
+                            Payslip
+                        </button>
+                        <button class="nx-ess-quick-btn" t-on-click="() => this.open('trips')">
+                            <span class="nx-ess-quick-ic accent-primary"><i class="fa fa-plane"/></span>
+                            Business Trip
+                        </button>
+                        <button class="nx-ess-quick-btn" t-on-click="() => this.open('letters')">
+                            <span class="nx-ess-quick-ic accent-purple"><i class="fa fa-envelope-o"/></span>
+                            Letter Request
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent requests -->
+                <div class="nx-ess-panel">
+                    <div class="nx-ess-panel-title">Recent Requests</div>
+                    <div class="nx-ess-table-wrap">
+                        <table class="nx-ess-table">
+                            <thead>
+                                <tr>
+                                    <th>Reference</th>
+                                    <th>Type</th>
+                                    <th>Date</th>
+                                    <th>Submitted</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="!state.data.recent_requests.length">
+                                    <tr><td colspan="5" class="nx-ess-empty">No requests yet.</td></tr>
+                                </t>
+                                <tr t-foreach="state.data.recent_requests" t-as="row" t-key="row.ref">
+                                    <td class="nx-ess-mono" t-esc="row.ref"/>
+                                    <td t-esc="row.type"/>
+                                    <td t-esc="row.date"/>
+                                    <td t-esc="row.submitted"/>
+                                    <td>
+                                        <span t-att-class="'nx-ess-badge accent-' + stateAccent(row.state)"
+                                              t-esc="row.state_label"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

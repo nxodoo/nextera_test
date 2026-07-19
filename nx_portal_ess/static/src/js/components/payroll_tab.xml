@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="nx_portal_ess.PayrollTab">
+        <div class="nx-ess-tab">
+            <div class="nx-ess-page-head">
+                <div>
+                    <h2>Payroll</h2>
+                    <p>Your payslips history</p>
+                </div>
+            </div>
+
+            <t t-if="state.loading">
+                <div class="nx-ess-loading"><div class="nx-ess-spinner"/></div>
+            </t>
+            <t t-elif="state.error">
+                <div class="nx-ess-alert nx-ess-alert-danger" t-esc="state.error"/>
+            </t>
+            <t t-elif="!state.data.has_employee">
+                <div class="nx-ess-alert nx-ess-alert-warning">No employee linked to your account.</div>
+            </t>
+            <t t-else="">
+                <div class="nx-ess-panel">
+                    <div class="nx-ess-panel-title">My Payslips</div>
+                    <div class="nx-ess-table-wrap">
+                        <table class="nx-ess-table">
+                            <thead>
+                                <tr><th>Reference</th><th>Period</th><th>Basic</th><th>Net</th><th>Status</th><th/></tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="!state.data.payslips.length">
+                                    <tr><td colspan="6" class="nx-ess-empty">No payslips available.</td></tr>
+                                </t>
+                                <tr t-foreach="state.data.payslips" t-as="s" t-key="s.id">
+                                    <td class="nx-ess-mono" t-esc="s.number"/>
+                                    <td t-esc="s.period"/>
+                                    <td t-esc="fmtMoney(s.basic_wage, s.currency)"/>
+                                    <td t-esc="fmtMoney(s.net_wage, s.currency)"/>
+                                    <td><span t-att-class="'nx-ess-badge accent-' + stateAccent(s.state)" t-esc="s.state"/></td>
+                                    <td>
+                                        <button class="nx-ess-link" t-on-click="() => this.openDetail(s.id)">
+                                            <i class="fa fa-eye"/> View
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Detail modal -->
+                <t t-if="state.detail and state.detail.open">
+                    <div class="nx-ess-modal-backdrop" t-on-click="closeDetail">
+                        <div class="nx-ess-modal" t-on-click.stop="() => {}">
+                            <div class="nx-ess-modal-head">
+                                <h3>Payslip <t t-esc="state.detail.number || ''"/></h3>
+                                <button class="nx-ess-icon-btn" t-on-click="closeDetail"><i class="fa fa-times"/></button>
+                            </div>
+                            <t t-if="state.detailLoading">
+                                <div class="nx-ess-loading"><div class="nx-ess-spinner"/></div>
+                            </t>
+                            <t t-elif="state.detail.error">
+                                <div class="nx-ess-alert nx-ess-alert-danger" t-esc="state.detail.error"/>
+                            </t>
+                            <t t-else="">
+                                <p class="nx-ess-modal-sub" t-esc="state.detail.period"/>
+                                <table class="nx-ess-table">
+                                    <thead><tr><th>Code</th><th>Description</th><th class="text-end">Amount</th></tr></thead>
+                                    <tbody>
+                                        <tr t-foreach="state.detail.lines" t-as="line" t-key="line_index">
+                                            <td class="nx-ess-mono" t-esc="line.code"/>
+                                            <td t-esc="line.name"/>
+                                            <td class="text-end" t-esc="fmtMoney(line.total, state.detail.currency)"/>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </div>
+    </t>
+</templates>

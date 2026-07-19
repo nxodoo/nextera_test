@@ -125,10 +125,17 @@
         <field name="search_view_id" ref="hr.view_job_filter"/>
     </record>
 
+    <record id="action_hr_job_position_cards" model="ir.actions.client">
+        <field name="name">Job Positions</field>
+        <field name="tag">nx_position_org_chart</field>
+        <field name="target">current</field>
+        <field name="params" eval="{'title': 'Job Positions'}"/>
+    </record>
+
     <menuitem id="menu_hr_job_position_structure"
               name="Job Positions"
               parent="hr.menu_human_resources_configuration"
-              action="action_hr_job_position_structure"
+              action="action_hr_job_position_cards"
               groups="hr.group_hr_user"
               sequence="5"/>
 </odoo>

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_letter_request_user,hr.letter.request.user,model_hr_letter_request,base.group_user,1,1,1,1
+access_hr_letter_request_portal,hr.letter.request.portal,model_hr_letter_request,base.group_portal,1,0,0,0
+access_hr_business_trip_user,hr.business.trip.user,model_hr_business_trip,base.group_user,1,1,1,1
+access_hr_business_trip_portal,hr.business.trip.portal,model_hr_business_trip,base.group_portal,1,0,0,0

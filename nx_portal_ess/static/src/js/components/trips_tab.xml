@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="nx_portal_ess.TripsTab">
+        <div class="nx-ess-tab">
+            <div class="nx-ess-page-head">
+                <div>
+                    <h2>Business Trips</h2>
+                    <p>Plan and request your business travel</p>
+                </div>
+                <button class="nx-ess-btn-primary" t-on-click="toggleForm">
+                    <i class="fa fa-plus"/> New Trip
+                </button>
+            </div>
+
+            <t t-if="state.loading">
+                <div class="nx-ess-loading"><div class="nx-ess-spinner"/></div>
+            </t>
+            <t t-elif="state.error">
+                <div class="nx-ess-alert nx-ess-alert-danger" t-esc="state.error"/>
+            </t>
+            <t t-elif="!state.data.has_employee">
+                <div class="nx-ess-alert nx-ess-alert-warning">No employee linked to your account.</div>
+            </t>
+            <t t-else="">
+                <t t-if="state.showForm">
+                    <div class="nx-ess-panel nx-ess-form">
+                        <div class="nx-ess-panel-title">New Business Trip</div>
+                        <div class="nx-ess-form-grid">
+                            <label>Destination
+                                <input type="text" t-model="state.form.destination"/>
+                            </label>
+                            <label>Estimated Cost
+                                <input type="number" step="0.01" t-model="state.form.estimated_cost"/>
+                            </label>
+                            <label>From
+                                <input type="date" t-model="state.form.date_from"/>
+                            </label>
+                            <label>To
+                                <input type="date" t-model="state.form.date_to"/>
+                            </label>
+                            <label class="nx-ess-col-span">Purpose
+                                <textarea t-model="state.form.purpose" rows="3"/>
+                            </label>
+                        </div>
+                        <div t-if="state.formError" class="nx-ess-alert nx-ess-alert-danger" t-esc="state.formError"/>
+                        <div class="nx-ess-form-actions">
+                            <button class="nx-ess-btn-ghost" t-on-click="toggleForm">Cancel</button>
+                            <button class="nx-ess-btn-primary" t-on-click="submit" t-att-disabled="state.submitting">
+                                <t t-esc="state.submitting ? 'Submitting…' : 'Submit Request'"/>
+                            </button>
+                        </div>
+                    </div>
+                </t>
+
+                <div class="nx-ess-panel">
+                    <div class="nx-ess-panel-title">My Business Trips</div>
+                    <div class="nx-ess-table-wrap">
+                        <table class="nx-ess-table">
+                            <thead>
+                                <tr><th>Reference</th><th>Destination</th><th>From</th><th>To</th><th>Days</th><th>Cost</th><th>Status</th></tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="!state.data.trips.length">
+                                    <tr><td colspan="7" class="nx-ess-empty">No business trips yet.</td></tr>
+                                </t>
+                                <tr t-foreach="state.data.trips" t-as="t" t-key="t.id">
+                                    <td class="nx-ess-mono" t-esc="t.name"/>
+                                    <td t-esc="t.destination"/>
+                                    <td t-esc="t.date_from"/>
+                                    <td t-esc="t.date_to"/>
+                                    <td t-esc="t.duration"/>
+                                    <td t-esc="fmtMoney(t.estimated_cost, t.currency)"/>
+                                    <td><span t-att-class="'nx-ess-badge accent-' + stateAccent(t.state)" t-esc="t.state_label"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

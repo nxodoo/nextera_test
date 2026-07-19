@@ -10,6 +10,7 @@ class PositionOrgChartNode extends Component {
     static props = {
         node: Object,
         openJob: Function,
+        openEmployee: Function,
     };
 }
 
@@ -31,6 +32,7 @@ export class PositionOrgChart extends Component {
             showVacant: true,
             loading: true,
         });
+        this.pageTitle = this.props.action.params?.title || this.props.action.name || "Org Chart";
         this.rootJobId = this.props.action.params?.root_job_id || false;
 
         onWillStart(async () => {
@@ -78,6 +80,16 @@ export class PositionOrgChart extends Component {
             type: "ir.actions.act_window",
             res_model: "hr.job",
             res_id: jobId,
+            views: [[false, "form"]],
+            target: "current",
+        });
+    }
+
+    openEmployee(employeeId) {
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            res_model: "hr.employee",
+            res_id: employeeId,
             views: [[false, "form"]],
             target: "current",
         });

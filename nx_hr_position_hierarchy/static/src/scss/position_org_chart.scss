@@ -66,6 +66,7 @@
         color: #111827;
         text-align: left;
         box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+        cursor: pointer;
     }
 
     .o_nx_position_card:hover {
@@ -128,6 +129,20 @@
         gap: 8px;
         min-width: 0;
         font-size: 13px;
+    }
+
+    .o_nx_position_employee_button {
+        width: 100%;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+        text-align: left;
+    }
+
+    .o_nx_position_employee_button:hover span:last-child {
+        text-decoration: underline;
     }
 
     .o_nx_position_avatar {

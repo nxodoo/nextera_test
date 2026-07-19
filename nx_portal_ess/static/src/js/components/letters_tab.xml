@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="nx_portal_ess.LettersTab">
+        <div class="nx-ess-tab">
+            <div class="nx-ess-page-head">
+                <div>
+                    <h2>Letter Requests</h2>
+                    <p>Request HR letters and certificates</p>
+                </div>
+                <button class="nx-ess-btn-primary" t-on-click="toggleForm">
+                    <i class="fa fa-plus"/> New Request
+                </button>
+            </div>
+
+            <t t-if="state.loading">
+                <div class="nx-ess-loading"><div class="nx-ess-spinner"/></div>
+            </t>
+            <t t-elif="state.error">
+                <div class="nx-ess-alert nx-ess-alert-danger" t-esc="state.error"/>
+            </t>
+            <t t-elif="!state.data.has_employee">
+                <div class="nx-ess-alert nx-ess-alert-warning">No employee linked to your account.</div>
+            </t>
+            <t t-else="">
+                <t t-if="state.showForm">
+                    <div class="nx-ess-panel nx-ess-form">
+                        <div class="nx-ess-panel-title">New Letter Request</div>
+                        <div class="nx-ess-form-grid">
+                            <label>Letter Type
+                                <select t-model="state.form.letter_type">
+                                    <option value="">Select…</option>
+                                    <option t-foreach="state.data.letter_types" t-as="opt" t-key="opt.value"
+                                            t-att-value="opt.value" t-esc="opt.label"/>
+                                </select>
+                            </label>
+                            <label>Addressed To
+                                <input type="text" t-model="state.form.addressed_to" placeholder="e.g. Embassy, Bank…"/>
+                            </label>
+                            <label class="nx-ess-col-span">Reason / Notes
+                                <textarea t-model="state.form.reason" rows="3"/>
+                            </label>
+                        </div>
+                        <div t-if="state.formError" class="nx-ess-alert nx-ess-alert-danger" t-esc="state.formError"/>
+                        <div class="nx-ess-form-actions">
+                            <button class="nx-ess-btn-ghost" t-on-click="toggleForm">Cancel</button>
+                            <button class="nx-ess-btn-primary" t-on-click="submit" t-att-disabled="state.submitting">
+                                <t t-esc="state.submitting ? 'Submitting…' : 'Submit Request'"/>
+                            </button>
+                        </div>
+                    </div>
+                </t>
+
+                <div class="nx-ess-panel">
+                    <div class="nx-ess-panel-title">My Letter Requests</div>
+                    <div class="nx-ess-table-wrap">
+                        <table class="nx-ess-table">
+                            <thead>
+                                <tr><th>Reference</th><th>Type</th><th>Addressed To</th><th>Date</th><th>Status</th></tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="!state.data.letters.length">
+                                    <tr><td colspan="5" class="nx-ess-empty">No letter requests yet.</td></tr>
+                                </t>
+                                <tr t-foreach="state.data.letters" t-as="r" t-key="r.id">
+                                    <td class="nx-ess-mono" t-esc="r.name"/>
+                                    <td t-esc="r.letter_type"/>
+                                    <td t-esc="r.addressed_to || '—'"/>
+                                    <td t-esc="r.request_date"/>
+                                    <td><span t-att-class="'nx-ess-badge accent-' + stateAccent(r.state)" t-esc="r.state_label"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

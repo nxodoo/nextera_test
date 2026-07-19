@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="nx_portal_ess.AttendanceTab">
+        <div class="nx-ess-tab">
+            <div class="nx-ess-page-head">
+                <div>
+                    <h2>Attendance</h2>
+                    <p>Your recent check-in and check-out history</p>
+                </div>
+            </div>
+
+            <t t-if="state.loading">
+                <div class="nx-ess-loading"><div class="nx-ess-spinner"/></div>
+            </t>
+            <t t-elif="state.error">
+                <div class="nx-ess-alert nx-ess-alert-danger" t-esc="state.error"/>
+            </t>
+            <t t-elif="!state.data.has_employee">
+                <div class="nx-ess-alert nx-ess-alert-warning">No employee linked to your account.</div>
+            </t>
+            <t t-else="">
+                <div class="nx-ess-kpis">
+                    <div class="nx-ess-kpi">
+                        <div class="nx-ess-kpi-icon accent-info"><i class="fa fa-list"/></div>
+                        <div class="nx-ess-kpi-value"><t t-esc="summary.count"/></div>
+                        <div class="nx-ess-kpi-label">Records</div>
+                    </div>
+                    <div class="nx-ess-kpi">
+                        <div class="nx-ess-kpi-icon accent-success"><i class="fa fa-hourglass-half"/></div>
+                        <div class="nx-ess-kpi-value"><t t-esc="summary.total_hours"/> <small>h</small></div>
+                        <div class="nx-ess-kpi-label">Total Hours</div>
+                    </div>
+                    <div class="nx-ess-kpi">
+                        <div class="nx-ess-kpi-icon accent-primary"><i class="fa fa-clock-o"/></div>
+                        <div class="nx-ess-kpi-value"><t t-esc="summary.avg_hours"/> <small>h</small></div>
+                        <div class="nx-ess-kpi-label">Avg / day</div>
+                    </div>
+                </div>
+
+                <div class="nx-ess-panel">
+                    <div class="nx-ess-panel-title">History</div>
+                    <div class="nx-ess-table-wrap">
+                        <table class="nx-ess-table">
+                            <thead>
+                                <tr><th>Check In</th><th>Check Out</th><th>Worked Hours</th></tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="!state.data.records.length">
+                                    <tr><td colspan="3" class="nx-ess-empty">No attendance records.</td></tr>
+                                </t>
+                                <tr t-foreach="state.data.records" t-as="r" t-key="r.id">
+                                    <td t-esc="r.check_in"/>
+                                    <td t-esc="r.check_out || '—'"/>
+                                    <td t-esc="r.worked_hours"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

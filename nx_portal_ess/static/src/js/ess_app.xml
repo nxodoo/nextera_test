@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="nx_portal_ess.EssPortalApp">
+        <div class="nx-ess-shell" t-att-class="{ 'nx-ess-sidebar-open': state.sidebarOpen }">
+            <!-- Sidebar -->
+            <aside class="nx-ess-sidebar">
+                <div class="nx-ess-brand">
+                    <div class="nx-ess-brand-badge">ESS</div>
+                    <div class="nx-ess-brand-text">
+                        <strong>Self-Service</strong>
+                        <span>Employee Portal</span>
+                    </div>
+                </div>
+
+                <nav class="nx-ess-nav">
+                    <button t-foreach="topTabs" t-as="tab" t-key="tab.id"
+                            class="nx-ess-nav-item"
+                            t-att-class="{ active: state.active === tab.id }"
+                            t-on-click="() => this.setTab(tab.id)">
+                        <i class="fa" t-att-class="tab.icon"/>
+                        <span t-esc="tab.label"/>
+                    </button>
+
+                    <t t-foreach="groups" t-as="group" t-key="group">
+                        <div class="nx-ess-nav-group" t-esc="group"/>
+                        <button t-foreach="tabsForGroup(group)" t-as="tab" t-key="tab.id"
+                                class="nx-ess-nav-item"
+                                t-att-class="{ active: state.active === tab.id }"
+                                t-on-click="() => this.setTab(tab.id)">
+                            <i class="fa" t-att-class="tab.icon"/>
+                            <span t-esc="tab.label"/>
+                        </button>
+                    </t>
+                </nav>
+            </aside>
+
+            <!-- Backdrop for mobile -->
+            <div class="nx-ess-backdrop" t-on-click="toggleSidebar"/>
+
+            <!-- Main -->
+            <div class="nx-ess-main">
+                <header class="nx-ess-topbar">
+                    <button class="nx-ess-burger" t-on-click="toggleSidebar">
+                        <i class="fa fa-bars"/>
+                    </button>
+                    <div class="nx-ess-topbar-title" t-esc="activeTab.label"/>
+                    <a class="nx-ess-topbar-logout" href="/web/session/logout" title="Log out">
+                        <i class="fa fa-sign-out"/>
+                    </a>
+                </header>
+
+                <main class="nx-ess-content">
+                    <t t-if="state.active === 'dashboard'">
+                        <DashboardTab setTab.bind="setTab"/>
+                    </t>
+                    <t t-elif="state.active === 'leave'">
+                        <LeaveTab/>
+                    </t>
+                    <t t-elif="state.active === 'attendance'">
+                        <AttendanceTab/>
+                    </t>
+                    <t t-elif="state.active === 'payroll'">
+                        <PayrollTab/>
+                    </t>
+                    <t t-elif="state.active === 'letters'">
+                        <LettersTab/>
+                    </t>
+                    <t t-elif="state.active === 'trips'">
+                        <TripsTab/>
+                    </t>
+                </main>
+            </div>
+        </div>
+    </t>
+</templates>

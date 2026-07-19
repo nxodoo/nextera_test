@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_letter_request_list" model="ir.ui.view">
+        <field name="name">hr.letter.request.list</field>
+        <field name="model">hr.letter.request</field>
+        <field name="arch" type="xml">
+            <list string="Letter Requests">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="letter_type"/>
+                <field name="request_date"/>
+                <field name="state" widget="badge"
+                       decoration-success="state in ('approved','issued')"
+                       decoration-danger="state == 'refused'"
+                       decoration-info="state == 'submitted'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hr_letter_request_form" model="ir.ui.view">
+        <field name="name">hr.letter.request.form</field>
+        <field name="model">hr.letter.request</field>
+        <field name="arch" type="xml">
+            <form string="Letter Request">
+                <header>
+                    <button name="action_submit" type="object" string="Submit"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="Approve"
+                            class="btn-primary" invisible="state != 'submitted'"/>
+                    <button name="action_issue" type="object" string="Mark Issued"
+                            invisible="state != 'approved'"/>
+                    <button name="action_refuse" type="object" string="Refuse"
+                            invisible="state in ('refused','issued')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved,issued"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="letter_type"/>
+                            <field name="addressed_to"/>
+                        </group>
+                        <group>
+                            <field name="request_date"/>
+                        </group>
+                    </group>
+                    <group string="Reason / Notes">
+                        <field name="reason" nolabel="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_letter_request" model="ir.actions.act_window">
+        <field name="name">Letter Requests</field>
+        <field name="res_model">hr.letter.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No letter requests yet</p>
+            <p>Requests submitted by employees from the ESS portal appear here.</p>
+        </field>
+    </record>
+
+    <!-- Dedicated parent menu for ESS-submitted employee requests -->
+    <menuitem id="menu_ess_employee_requests"
+              name="Employee Requests"
+              parent="hr.menu_hr_root"
+              groups="hr.group_hr_user"
+              sequence="55"/>
+
+    <menuitem id="menu_hr_letter_request_root"
+              name="Letter Requests"
+              parent="menu_ess_employee_requests"
+              action="action_hr_letter_request"
+              sequence="10"/>
+</odoo>
