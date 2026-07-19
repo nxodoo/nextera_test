@@ -1,0 +1,98 @@
+name: Odoo Stage Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+concurrency:
+  group: nextera-test-stage
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-stage:
+    name: Deploy Stage Server
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Deploy Odoo Stage
+        uses: appleboy/ssh-action@v1.2.0
+
+        with:
+          host: ${{ secrets.NEXTERA_VPS_HOST }}
+          username: ${{ secrets.NEXTERA_VPS_USER }}
+          key: ${{ secrets.NEXTERA_VPS_SSH_KEY }}
+          port: 22
+          script_stop: true
+          command_timeout: 8m
+
+          script: |
+            set -Eeuo pipefail
+
+            APP_DIR="/opt/odoo18/custom_sources/nextera_test"
+            BRANCH="main"
+            SERVICE="odoo18"
+            HEALTH_URL="http://127.0.0.1:8069/web/login"
+
+            echo "======================================"
+            echo "DEPLOYING NEXTERA TEST - STAGE"
+            echo "======================================"
+
+            cd "$APP_DIR"
+
+            echo "Fetching latest code..."
+            git fetch origin "$BRANCH"
+
+            echo "Switching to main branch..."
+            git checkout "$BRANCH"
+
+            echo "Deploying exact origin/main commit..."
+            git reset --hard "origin/$BRANCH"
+
+            echo "Deployed commit:"
+            git log -1 --oneline
+
+            echo "Restarting Odoo..."
+            sudo -n systemctl restart "$SERVICE"
+
+            echo "Checking service..."
+            sudo -n systemctl is-active --quiet "$SERVICE"
+
+            echo "Waiting for Odoo health check..."
+
+            HEALTHY=false
+
+            for attempt in $(seq 1 12); do
+              if curl \
+                --silent \
+                --show-error \
+                --fail \
+                --max-time 10 \
+                "$HEALTH_URL" > /dev/null; then
+
+                HEALTHY=true
+                break
+              fi
+
+              echo "Attempt ${attempt}/12 failed. Retrying..."
+              sleep 5
+            done
+
+            if [ "$HEALTHY" != "true" ]; then
+              echo "======================================"
+              echo "DEPLOYMENT FAILED"
+              echo "======================================"
+
+              sudo -n systemctl status "$SERVICE" --no-pager || true
+              exit 1
+            fi
+
+            echo "======================================"
+            echo "STAGE DEPLOYMENT SUCCESSFUL"
+            echo "======================================"
