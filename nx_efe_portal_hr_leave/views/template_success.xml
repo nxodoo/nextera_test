@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="approval_success" name="Leave Approval Result">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <h2 class="text-center">
+                    <t t-esc="message"/>
+                </h2>
+            </div>
+        </t>
+    </template>
+</odoo>

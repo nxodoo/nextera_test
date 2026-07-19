@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Optional layout inheritance if you want to add custom buttons or navigation -->
+    <template id="portal_my_layout" inherit_id="portal.portal_layout" priority="20">
+        <!-- You can add custom elements or buttons here -->
+    </template>
+
+    <!-- My Leaves Page -->
+    <template id="portal_my_leaves" name="My Leaves">
+        <t t-call="portal.portal_layout">
+            <div class="container mt16 mb16">
+                <h2>My Leave Requests</h2>
+                <a class="btn btn-primary mb8" href="/my/leaves/new">Request New Leave</a>
+                <a class="btn btn-secondary mb8" href="/my/allocations/new">Request Allocation</a>
+                <a class="btn btn-secondary mb8" href="/my/allocations">My Allocations</a>
+
+
+                <div class="row mb16 text-center">
+                    <t t-foreach="leave_balances" t-as="lb">
+                        <t t-if="int(lb['available_days'])">
+                            <div class="col-md-4 mb8">
+                                <div class="p-3 border rounded shadow-sm">
+                                    <h4 class="text-primary">
+                                        <t t-esc="lb['name']"/>
+                                    </h4>
+                                    <h2 class="text-purple fw-bold">
+                                        <t t-esc="int(lb['available_days'])"/>
+                                    </h2>
+                                    <p class="text-muted">DAYS AVAILABLE</p>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                </div>
+
+                <t t-if="leaves and len(leaves) &gt; 0">
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th>Leave Type</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Days</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="leaves" t-as="l">
+                                <tr>
+                                    <td>
+                                        <t t-esc="l.holiday_status_id.name or '-'"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="l.date_from or '-'"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="l.date_to or '-'"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="l.number_of_days or '-'"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="l._fields['state'].convert_to_export(l.state, l) or '-'"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+
+                <t t-if="not leaves or len(leaves) == 0">
+                    <div>No leave requests found.</div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- My Allocations Page -->
+    <template id="portal_my_allocations" name="My Allocation Requests">
+        <t t-call="portal.portal_layout">
+            <div class="container mt16 mb16">
+                <h2>My Allocation Requests</h2>
+                <a class="btn btn-primary mb8" href="/my/leaves/new">Request New Leave</a>
+                <a class="btn btn-secondary mb8" href="/my/allocations/new">Request Allocation</a>
+                <a class="btn btn-secondary mb8" href="/my/leaves">My Leaves</a>
+
+
+                <t t-if="allocations and len(allocations) &gt; 0">
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th>Time Off Type</th>
+                                <th>Allocated Days</th>
+                                <th>Validity Date</th>
+                                <!--<th>Validity To</th>-->
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="allocations" t-as="a">
+                                <tr>
+                                    <td>
+                                        <t t-esc="a.holiday_status_id.name or '-'"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="a.number_of_days or 0"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="a.date_from or '-'"/>
+                                    </td>
+                                    <!--<td>
+                                        <t t-esc="a.date_to or '-'"/>
+                                    </td>-->
+                                    <td>
+                                        <t t-esc="a._fields['state'].convert_to_export(a.state, a)"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+
+                <t t-if="not allocations or len(allocations) == 0">
+                    <div class="alert alert-info">
+                        No allocation requests found.
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+
+    <!-- Leave Request Form -->
+    <template id="portal_leave_form" name="Leave Request Form">
+        <t t-call="portal.portal_layout">
+            <div class="container mt16 mb16">
+                <h2>New Leave Request</h2>
+                <form method="post" action="/my/leaves/new">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                    <div class="form-group">
+                        <label>Leave Type</label>
+                        <br/>
+                        <select name="holiday_status_id" class="form-control" required="required">
+                            <t t-foreach="leave_types" t-as="lt">
+                                <option t-att-value="lt.id">
+                                    <t t-esc="lt.name"/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                    <br/>
+
+                    <div class="form-row row mb-3">
+                        <div class="form-group col-md-6">
+                            <label>From (Date)</label>
+                            <br/>
+                            <input type="date" name="date_from" class="form-control"/>
+                        </div>
+                        <br/>
+                        <div class="form-group col-md-6">
+                            <label>To (Date)</label>
+                            <br/>
+                            <input type="date" name="date_to" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <br/>
+                        <textarea name="description" class="form-control"/>
+                    </div>
+                    <br/>
+
+                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                    <a class="btn btn-secondary" href="/my/leaves">Cancel</a>
+                </form>
+            </div>
+        </t>
+    </template>
+
+    <!-- Allocation Request Form -->
+    <template id="portal_allocation_form" name="Allocation Request Form">
+        <t t-call="portal.portal_layout">
+            <div class="container mt16 mb16">
+                <h2>New Allocation Request</h2>
+
+                <form method="post" action="/my/allocations/new">
+                    <input type="hidden" name="csrf_token"
+                           t-att-value="request.csrf_token()"/>
+
+                    <!-- Time Off Type -->
+                    <div class="form-group">
+                        <label>Time Off Type</label>
+                        <select name="holiday_status_id" class="form-control" required="required">
+                            <t t-foreach="leave_types" t-as="lt">
+                                <option t-att-value="lt.id">
+                                    <t t-esc="lt.name"/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                    <br/>
+
+                    <!-- Allocation Days -->
+                    <div class="form-group">
+                        <label>Allocation (Days)</label>
+                        <input type="number" step="0.5" name="number_of_days"
+                               class="form-control" required="required"/>
+                    </div>
+                    <br/>
+
+                    <!-- Validity Period -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Alternative Date From</label>
+                            <input type="date" name="date_from" class="form-control"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Alternative Date To</label>
+                            <input type="date" name="date_to" class="form-control"/>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <!-- Reason -->
+                    <div class="form-group">
+                        <label>Reason</label>
+                        <textarea name="reason" class="form-control"/>
+                    </div>
+                    <br/>
+
+                    <button type="submit" class="btn btn-primary">
+                        Submit Allocation Request
+                    </button>
+                    <a href="/my/leaves" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                </form>
+            </div>
+        </t>
+    </template>
+
+
+    <template id="portal_leave_breadcrumbs" inherit_id="portal.portal_breadcrumbs" name="Portal Leaves Breadcrumbs">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+
+            <!-- My Leaves list -->
+            <li t-if="page_name == 'portal_my_leaves'" class="breadcrumb-item active">
+                My Leaves
+            </li>
+            <li t-if="page_name == 'portal_my_allocations'" class="breadcrumb-item active">
+                My Allocations
+            </li>
+
+
+            <!-- New Leave form -->
+            <li t-if="page_name == 'portal_leave_form'" class="breadcrumb-item">
+                <a t-att-href="'/my/leaves'">
+                    My Leaves
+                </a>
+            </li>
+            <li t-if="page_name == 'portal_allocation_form'" class="breadcrumb-item">
+                <a t-att-href="'/my/allocations'">
+                    My Allocations
+                </a>
+            </li>
+
+            <li t-if="page_name == 'portal_allocation_form'" class="breadcrumb-item active">
+                Allocation Request
+            </li>
+            <li t-if="page_name == 'portal_leave_form'" class="breadcrumb-item active">
+                New Request
+            </li>
+
+        </xpath>
+    </template>
+
+</odoo>
