@@ -97,8 +97,12 @@ export class SectionToggle extends Component {
 
 const viewWidgetsRegistry = registry.category("view_widgets");
 
-if (!viewWidgetsRegistry.contains("section_toggle")) {
-    viewWidgetsRegistry.add("section_toggle", {
+viewWidgetsRegistry.add(
+    "section_toggle",
+    {
         component: SectionToggle,
-    });
-}
+    },
+    {
+        force: true,
+    }
+);
