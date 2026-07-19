@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- ========================= -->
+    <!-- Tasks List -->
+    <!-- ========================= -->
+    <template id="portal_open_tasks_list">
+        <t t-call="portal.portal_layout">
+            <div class="container mt16 mb16">
+                <a class="btn btn-secondary mb8" href="/my/close-tasks">My Close Task</a>
+                <t t-if="tasks">
+                    <table class="table table-hover o_portal_table">
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Project</th>
+                                <th>Stage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="tasks" t-as="task">
+                                <tr>
+                                    <td>
+                                        <a t-att-href="'/my/open-task/%s' % task.id">
+                                            <t t-esc="task.name"/>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <t t-esc="task.project_id.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="task.stage_id.name"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+                <t t-else="">
+                    <div class="alert alert-info mt-3">
+                        No open tasks found.
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+
+    <!-- ========================= -->
+    <!-- Task Form -->
+    <!-- ========================= -->
+    <template id="portal_task_form">
+        <t t-call="portal.portal_layout">
+
+            <!-- ================= HEADER INFO ================= -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p>
+                        <strong>Project:</strong>
+                        <t t-esc="task.project_id.name"/>
+                    </p>
+                    <p>
+                        <strong>Milestone:</strong>
+                        <t t-if="task.milestone_id">
+                            <t t-esc="task.milestone_id.name"/>
+                        </t>
+                        <t t-else="">-</t>
+                    </p>
+                    <p>
+                        <strong>Assignees:</strong>
+                        <t t-if="task.user_ids">
+                            <t t-foreach="task.user_ids" t-as="user">
+                                <span class="badge bg-secondary me-1">
+                                    <t t-esc="user.name"/>
+                                </span>
+                            </t>
+                        </t>
+                        <t t-else="">-</t>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <!--                <p><strong>Customer:</strong> <t t-if="task.partner_id"> <t t-esc="task.partner_id.name"/> </t> <t t-else="">-</t></p>-->
+                    <!--                <p><strong>Sales Order Item:</strong> <t t-if="task.sale_order_line_id"> <t t-esc="task.sale_order_line_id.display_name"/> </t> <t t-else="">-</t></p>-->
+                    <p>
+                        <strong>Deadline:</strong>
+                        <t t-if="task.date_deadline">
+                            <t t-esc="task.date_deadline"/>
+                        </t>
+                        <t t-else="">-</t>
+                    </p>
+                    <p>
+                        <strong>Allocated Time:</strong>
+                        <t t-esc="task.allocated_hours or 0"/>
+                        (0%)
+                    </p>
+                </div>
+            </div>
+
+            <!-- ================= TABS ================= -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" id="description-tab" data-bs-toggle="tab" href="#description" role="tab">
+                        Description
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" id="timesheets-tab" data-bs-toggle="tab" href="#timesheets" role="tab">
+                        Timesheets
+                    </a>
+                </li>
+                <!-- <li class="nav-item">
+                     <a class="nav-link" id="subtasks-tab" data-bs-toggle="tab" href="#subtasks" role="tab">Sub-tasks</a>
+                 </li>
+                 <li class="nav-item">
+                     <a class="nav-link" id="extra-tab" data-bs-toggle="tab" href="#extra" role="tab">Extra Info</a>
+                 </li>-->
+            </ul>
+
+            <div class="tab-content mt-3">
+                <!-- ========== Description Tab ========== -->
+                <div class="tab-pane fade" id="description" role="tabpanel">
+                    <p t-if="task.description" t-raw="task.description"/>
+                    <p t-else="">No description available.</p>
+                </div>
+
+                <!-- ========== Timesheets Tab ========== -->
+                <div class="tab-pane fade show active" id="timesheets" role="tabpanel">
+                    <table class="table table-sm table-hover ">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Employee</th>
+                                <th>Description</th>
+                                <th>Time Spent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-if="timesheets">
+                                <t t-foreach="timesheets" t-as="ts">
+                                    <tr>
+                                        <td>
+                                            <t t-esc="ts.date"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="ts.employee_id.name"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="ts.name"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="ts.unit_amount"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                            <t t-else="">
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No timesheets found.</td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <!-- Add Timesheet -->
+                    <form action="/my/task/timesheet/add" method="post" class="mt-3">
+                        <input type="hidden" name="task_id" t-att-value="task.id"/>
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <div class="row g-2">
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" name="name" placeholder="Description"/>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="date" step="0.01" class="form-control" name="date"
+                                       placeholder="Hours"/>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="number" step="0.01" class="form-control" name="unit_amount"
+                                       placeholder="Hours"/>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-primary w-100">Add</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Times Summary -->
+                    <div class="mt-3 text-end">
+                        <p>
+                            <strong>Time Spent:</strong>
+                            <t t-esc="sum([ts.unit_amount for ts in timesheets]) if timesheets else 0"/>
+                        </p>
+                        <p>
+                            <strong>Time Remaining:</strong>
+                            <t t-esc="task.remaining_hours"/>
+<!--                            <t t-esc="(task.planned_hours or 0) - (sum([ts.unit_amount for ts in timesheets]) if timesheets else 0)"/>-->
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ========== Sub-tasks Tab ========== -->
+                <!--<div class="tab-pane fade" id="subtasks" role="tabpanel">
+                    <p>Sub-tasks list will appear here...</p>
+                </div>-->
+
+                <!-- ========== Extra Info Tab ========== -->
+                <!--<div class="tab-pane fade" id="extra" role="tabpanel">
+                    <p>Extra information about the task will appear here...</p>
+                </div>-->
+            </div>
+        </t>
+    </template>
+
+
+    <template id="portal_task_breadcrumbs" inherit_id="portal.portal_breadcrumbs" name="Portal Tasks Breadcrumbs">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+
+            <!-- My Tasks list -->
+            <li t-if="page_name == 'portal_my_tasks_edit'" class="breadcrumb-item active">
+                My Open Tasks
+            </li>
+            <li t-if="page_name == 'portal_my_tasks_close'" class="breadcrumb-item active">
+                My Close Tasks
+            </li>
+
+            <!-- Task Details -->
+            <li t-if="page_name == 'portal_task_form_edit'" class="breadcrumb-item">
+                <a t-att-href="'/my/open-tasks'">Tasks</a>
+            </li>
+            <li t-if="page_name == 'portal_task_form_close'" class="breadcrumb-item">
+                <a t-att-href="'/my/close-tasks'">Tasks</a>
+            </li>
+
+            <li t-if="page_name == 'portal_task_form_edit'" class="breadcrumb-item active">
+                <t t-esc="task.name"/>
+            </li>
+            <li t-if="page_name == 'portal_task_form_close'" class="breadcrumb-item active">
+                <t t-esc="task.name"/>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="hide_default_task_breadcrumbs" inherit_id="project.portal_layout"
+              name="Hide Default Task Breadcrumbs">
+
+        <xpath expr="//li[@t-if=&quot;page_name == 'task' or (task and not project)&quot;]" position="replace"/>
+
+        <xpath expr="//li[@t-elif='task' and contains(@class, 'text-break')]" position="replace"/>
+
+    </template>
+
+
+</odoo>

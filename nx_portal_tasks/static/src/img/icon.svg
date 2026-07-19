@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 64 64"
+     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="taskPaperGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f8fafc"/>
+    </linearGradient>
+
+    <filter id="taskShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="2" dy="3" stdDeviation="2" flood-color="#d1d5db" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <g transform="skewY(-3) rotate(2, 32, 32)">
+    <!-- Paper background -->
+    <rect x="14" y="10" width="36" height="48" rx="4"
+          fill="url(#taskPaperGradient)" stroke="#d1d5db" stroke-width="1.5"
+          filter="url(#taskShadow)"/>
+
+    <!-- Optional small label -->
+    <text x="22" y="25"
+          font-family="Open Sans, Arial, Helvetica, sans-serif"
+          font-size="8" fill="#495057" font-weight="600">TASK</text>
+
+    <!-- Task lines -->
+    <rect x="20" y="31" width="27" height="2" rx="1" fill="#e9ecef"/>
+    <rect x="20" y="36" width="25" height="2" rx="1" fill="#e9ecef"/>
+    <rect x="20" y="41" width="22" height="2" rx="1" fill="#e9ecef"/>
+    <rect x="20" y="46" width="20" height="2" rx="1" fill="#e9ecef"/>
+  </g>
+</svg>
