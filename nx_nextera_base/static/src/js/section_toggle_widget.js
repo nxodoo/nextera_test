@@ -97,14 +97,8 @@ export class SectionToggle extends Component {
 
 const viewWidgetsRegistry = registry.category("view_widgets");
 
-if (viewWidgetsRegistry.contains("section_toggle")) {
-    console.warn(
-        'Replacing existing "section_toggle" view widget with nx_nextera_base version'
-    );
-
-    viewWidgetsRegistry.remove("section_toggle");
+if (!viewWidgetsRegistry.contains("section_toggle")) {
+    viewWidgetsRegistry.add("section_toggle", {
+        component: SectionToggle,
+    });
 }
-
-viewWidgetsRegistry.add("section_toggle", {
-    component: SectionToggle,
-});
