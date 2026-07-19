@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ============================================= -->
+    <!--        portal.sidebar.group  Views            -->
+    <!-- ============================================= -->
+
+    <record id="portal_sidebar_group_tree" model="ir.ui.view">
+        <field name="name">portal.sidebar.group.tree</field>
+        <field name="model">portal.sidebar.group</field>
+        <field name="arch" type="xml">
+            <list default_order="sequence">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="portal_sidebar_group_form" model="ir.ui.view">
+        <field name="name">portal.sidebar.group.form</field>
+        <field name="model">portal.sidebar.group</field>
+        <field name="arch" type="xml">
+            <form string="Sidebar Group">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Items" name="items">
+                            <field name="item_ids">
+                                <list default_order="sequence">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="icon_preview" string=" " nolabel="1"/>
+                                    <field name="name"/>
+                                    <field name="url"/>
+                                    <field name="url_match_prefix"/>
+                                    <field name="exact_match"/>
+                                    <field name="active" widget="boolean_toggle"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="portal_sidebar_group_action" model="ir.actions.act_window">
+        <field name="name">Sidebar Groups</field>
+        <field name="res_model">portal.sidebar.group</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first sidebar group
+            </p>
+            <p>
+                Groups organise sidebar items into sections (e.g. "Account", "Documents").
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================================= -->
+    <!--        portal.sidebar.item  Views             -->
+    <!-- ============================================= -->
+
+    <record id="portal_sidebar_item_tree" model="ir.ui.view">
+        <field name="name">portal.sidebar.item.tree</field>
+        <field name="model">portal.sidebar.item</field>
+        <field name="arch" type="xml">
+            <list default_order="sequence">
+                <field name="sequence" widget="handle"/>
+                <field name="icon_preview" string=" " nolabel="1"/>
+                <field name="name"/>
+                <field name="url"/>
+                <field name="group_id"/>
+                <field name="url_match_prefix"/>
+                <field name="exact_match"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="portal_sidebar_item_form" model="ir.ui.view">
+        <field name="name">portal.sidebar.item.form</field>
+        <field name="model">portal.sidebar.item</field>
+        <field name="arch" type="xml">
+            <form string="Sidebar Item">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. My Orders"/></h1>
+                    </div>
+                    <group>
+                        <group string="Navigation">
+                            <field name="url" placeholder="/my/orders"/>
+                            <field name="group_id"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group string="Matching &amp; Status">
+                            <field name="url_match_prefix" placeholder="/my/orders"/>
+                            <field name="exact_match"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Icon" name="icon_tab">
+                            <group>
+                                <group string="Icon Preview">
+                                    <div class="text-center p-4">
+                                        <field name="icon_preview" nolabel="1" readonly="True"/>
+                                    </div>
+                                </group>
+                                <group string="SVG Code">
+                                    <field name="icon" nolabel="1" widget="text"
+                                           placeholder='&lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" ...&gt;...&lt;/svg&gt;'/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="portal_sidebar_item_action" model="ir.actions.act_window">
+        <field name="name">Sidebar Items</field>
+        <field name="res_model">portal.sidebar.item</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first sidebar item
+            </p>
+            <p>
+                Items are the navigation links shown in the portal sidebar.
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================================= -->
+    <!--              Menu Items                       -->
+    <!-- ============================================= -->
+
+    <menuitem id="menu_portal_sidebar_root"
+              name="Portal Sidebar"
+              parent="base.menu_custom"
+              sequence="90"/>
+
+    <menuitem id="menu_portal_sidebar_groups"
+              name="Sidebar Groups"
+              parent="menu_portal_sidebar_root"
+              action="portal_sidebar_group_action"
+              sequence="10"/>
+
+    <menuitem id="menu_portal_sidebar_items"
+              name="Sidebar Items"
+              parent="menu_portal_sidebar_root"
+              action="portal_sidebar_item_action"
+              sequence="20"/>
+
+</odoo>
+
+
+
+

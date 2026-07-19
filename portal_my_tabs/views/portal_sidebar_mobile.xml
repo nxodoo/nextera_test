@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!--
+    ============================================================
+    COMPONENT: portal_my_tabs.sidebar_mobile_topbar
+    Purpose  : Sticky top bar shown on mobile only (d-md-none).
+               Contains logo + offcanvas toggle button.
+    ============================================================
+    -->
+    <template id="sidebar_mobile_topbar" name="Sidebar: Mobile Top Bar">
+        <div class="portal-sidebar__mobile-topbar d-md-none">
+
+            <a href="/" class="portal-sidebar__mobile-logo-link">
+                <img src="/portal_my_tabs/static/img/img.png"
+                     alt="Logo"
+                     class="portal-sidebar__mobile-logo-img"/>
+            </a>
+
+            <button class="portal-sidebar__toggle"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#portalSidebarOffcanvas"
+                    aria-controls="portalSidebarOffcanvas">
+                <t t-call="portal_my_tabs.sidebar_icon_layout">
+                    <t t-set="size" t-value="'20'"/>
+                </t>
+                <span>Menu</span>
+            </button>
+
+        </div>
+    </template>
+
+
+    <!--
+    ============================================================
+    COMPONENT: portal_my_tabs.sidebar_mobile_offcanvas
+    Purpose  : Bootstrap 5 offcanvas panel for mobile navigation.
+               Reuses sidebar_nav_groups and sidebar_footer to
+               avoid any duplication with the desktop sidebar.
+    Visibility: d-md-none (hidden on tablet and above)
+    ============================================================
+    -->
+    <template id="sidebar_mobile_offcanvas" name="Sidebar: Mobile Offcanvas">
+        <div class="offcanvas offcanvas-start portal-sidebar__offcanvas d-md-none"
+             tabindex="-1"
+             id="portalSidebarOffcanvas"
+             aria-labelledby="portalSidebarOffcanvasLabel">
+
+            <!-- Offcanvas header: logo + close button -->
+            <div class="offcanvas-header d-flex justify-content-between">
+                <a href="/"
+                   class="portal-sidebar__logo-link"
+                   id="portalSidebarOffcanvasLabel">
+                    <img src="/portal_my_tabs/static/img/img.png"
+                         alt="Logo"
+                         class="portal-sidebar__logo-img"/>
+                </a>
+                <button type="button"
+                        class="portal-sidebar__offcanvas-close"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="18" height="18"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path d="M18 6 6 18"/>
+                        <path d="m6 6 12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Offcanvas body: nav groups + footer -->
+            <div class="offcanvas-body p-0">
+                <div class="portal-sidebar__inner">
+                    <t t-call="portal_my_tabs.sidebar_nav_groups"/>
+                    <t t-call="portal_my_tabs.sidebar_footer"/>
+                </div>
+            </div>
+
+        </div>
+    </template>
+
+</odoo>
+

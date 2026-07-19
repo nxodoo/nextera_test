@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="nx_portal_my_expenses_override" name="Enhanced Portal My Expenses">
+        <t t-call="portal.portal_layout">
+            <t t-set="title">My Expenses</t>
+            <div class="nx-tasks-portal nx-portal-layout">
+
+
+                <!-- ═══════════════════════════════════════════════
+                     OWL EXPENSE TABLE
+                ═══════════════════════════════════════════════ -->
+                <div class="nx-table-section">
+                    <owl-component name="nx.ExpenseTableApp">
+                        <!-- Placeholder shown while the OWL component loads -->
+                        <div class="nx-owl-placeholder">
+
+
+                            <div class="nx-page-header circle-head">
+                    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 nx-page-header-inner">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <div class="nx-header-icon">
+                                    <i class="fa fa-money nx-header-icon-i"/>
+                                </div>
+                                <div>
+                                    <h2 class="mb-0 d-flex align-items-start">My Expenses  <span class="nx-count-badge">-</span></h2>
+                                    <p>Track and manage your expense reports</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2 align-items-center">
+                             <div class="nx-btn-white nx-skel-cell nx-skel-cell--lg"/>
+
+                        </div>
+                    </div>
+                </div>
+
+                            <div class="nx-skel-table-inner">
+                                <div class="nx-skel-row" t-foreach="[1,2,3,4,5]" t-as="i" t-key="i">
+                                    <div class="nx-skel-cell nx-skel-cell--sm"/>
+                                    <div class="nx-skel-cell nx-skel-cell--md"/>
+                                    <div class="nx-skel-cell nx-skel-cell--lg"/>
+                                    <div class="nx-skel-cell nx-skel-cell--md"/>
+                                    <div class="nx-skel-cell nx-skel-cell--md"/>
+                                    <div class="nx-skel-cell nx-skel-cell--sm"/>
+                                    <div class="nx-skel-cell nx-skel-cell--sm"/>
+                                </div>
+                            </div>
+                            <div class="nx-skel-footer">
+                                <div class="nx-spinner"/>
+                                <span>Loading expenses…</span>
+                            </div>
+                        </div>
+                    </owl-component>
+                </div>
+
+            </div>
+
+        </t>
+    </template>
+</odoo>

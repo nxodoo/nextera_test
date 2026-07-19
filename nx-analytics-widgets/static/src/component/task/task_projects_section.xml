@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Right column: Projects Overview + Doughnut chart -->
+    <t t-name="nx_analytics_widgets.TaskProjectsSection">
+        <t t-if="state.loading">
+            <div class="nx-skel-chart"/>
+        </t>
+        <t t-elif="state.error">
+            <div class="alert alert-danger" t-esc="state.error"/>
+        </t>
+        <t t-else="">
+            <t t-if="state.projects.length">
+
+                <div class="nx-chart-card">
+                    <div class="nx-aw-header-row mb-2">
+                        <div class="nx-aw-icon-wrapper bg-primary d-flex align-items-center">
+                            <i class="fa fa-folder-open nx-aw-header-icon"/>
+                        </div>
+                        <div>
+                            <div class="nx-aw-title">Projects Overview</div>
+                            <div class="nx-aw-subtitle">
+                                <i class="fa fa-tasks"/> <t t-esc="state.projects.length"/> projects
+                            </div>
+                        </div>
+                    </div>
+                    <TaskProjectChart projects="state.projects"/>
+                </div>
+
+            </t>
+        </t>
+    </t>
+
+</templates>
+

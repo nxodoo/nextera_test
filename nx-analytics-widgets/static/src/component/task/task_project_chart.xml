@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+        <!-- ═══════════════════════════════════════════════════════════════════════
+         PROJECT DOUGHNUT CHART  (child component)
+    ════════════════════════════════════════════════════════════════════════ -->
+    <t t-name="nx_analytics_widgets.TaskProjectChart">
+        <div class="nx-project-chart-wrapper">
+
+            <!-- ── Doughnut Chart ── -->
+            <div class="nx-chart-content">
+                <div class="nx-project-chart-container">
+                    <canvas t-ref="projectChart"/>
+                </div>
+                <div class="nx-project-chart-hint">
+                    <i class="fa fa-hand-pointer-o"/>
+                    Click a slice to see project details
+                </div>
+            </div>
+
+            <!-- ── Detail Panel POPUP (appears on click) ── -->
+            <t t-if="state.selectedProject">
+                <div class="nx-pd-overlay" t-on-click="closePanel">
+                    <div class="nx-project-detail-panel" t-on-click.stop="">
+
+                        <!-- SVG gradient defs (hidden) -->
+                        <svg width="0" height="0" style="position:absolute">
+                            <defs>
+                                <linearGradient id="nxRingGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#4f46e5"/>
+                                    <stop offset="100%" stop-color="#8b5cf6"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+
+                        <!-- ▸ Gradient Header Banner -->
+                        <div class="nx-pd-banner">
+                            <div class="nx-pd-banner-blob nx-pd-banner-blob--1"/>
+                            <div class="nx-pd-banner-blob nx-pd-banner-blob--2"/>
+                            <div class="nx-pd-banner-content">
+                                <div class="nx-pd-banner-icon">
+                                    <i class="fa fa-folder-open"/>
+                                </div>
+                                <div class="nx-pd-banner-text">
+                                    <div class="nx-pd-banner-label">Project</div>
+                                    <div class="nx-pd-banner-name" t-esc="state.selectedProject.name"/>
+                                </div>
+                            </div>
+                            <button class="nx-pd-close" t-on-click="closePanel">
+                                <i class="fa fa-times"/>
+                            </button>
+                        </div>
+
+                        <!-- ▸ Completion Section -->
+                        <div class="nx-pd-body">
+
+                            <!-- Completion card -->
+                            <div class="nx-pd-completion-row">
+                                <!-- Circular ring -->
+                                <div class="nx-pd-ring-wrap">
+                                    <svg class="nx-pd-ring" viewBox="0 0 80 80">
+                                        <circle class="nx-pd-ring-track" cx="40" cy="40" r="33"/>
+                                        <circle class="nx-pd-ring-fill" cx="40" cy="40" r="33"
+                                                t-attf-style="stroke-dashoffset: #{207.3 - (207.3 * state.selectedProject.completionPercentage / 100)};"/>
+                                    </svg>
+                                    <div class="nx-pd-ring-label">
+                                        <span class="nx-pd-ring-pct">
+                                            <t t-esc="state.selectedProject.completionPercentage"/>
+                                        </span>
+                                        <span class="nx-pd-ring-unit">%</span>
+                                    </div>
+                                </div>
+
+                                <!-- Text + bar -->
+                                <div class="nx-pd-completion-text">
+                                    <div class="nx-pd-completion-title">Overall Completion</div>
+                                    <div class="nx-pd-completion-sub">
+                                        <t t-esc="state.selectedProject.completedTasks"/> of
+                                        <strong><t t-esc="state.selectedProject.taskCount"/></strong> tasks done
+                                    </div>
+                                    <div class="nx-progress nx-progress--thick mt-2 bg-white">
+                                        <div class="nx-progress-bar nx-progress-bar--animated"
+                                             t-attf-style="width:#{state.selectedProject.completionPercentage}%;"/>
+                                    </div>
+                                    <div class="nx-pd-completion-pills mt-2">
+                                        <span class="nx-pd-pill nx-pd-pill--new">
+                                            <t t-esc="state.selectedProject.newTasks"/> New
+                                        </span>
+                                        <span class="nx-pd-pill nx-pd-pill--open">
+                                            <t t-esc="state.selectedProject.openTasks"/> Open
+                                        </span>
+                                        <span class="nx-pd-pill nx-pd-pill--progress">
+                                            <t t-esc="state.selectedProject.inProgressTasks"/> In Progress
+                                        </span>
+                                        <span class="nx-pd-pill nx-pd-pill--done">
+                                            <t t-esc="state.selectedProject.completedTasks"/> Done
+                                        </span>
+                                        <t t-if="state.selectedProject.canceledTasks">
+                                            <span class="nx-pd-pill nx-pd-pill--canceled">
+                                                <t t-esc="state.selectedProject.canceledTasks"/> Canceled
+                                            </span>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Section label -->
+                            <div class="nx-pd-section-label">
+                                <span>Task Breakdown</span>
+                            </div>
+
+                            <!-- Stats Grid 2×2 + full-width hours -->
+                            <div class="nx-pd-stats">
+
+                                <div class="nx-pd-stat nx-pd-stat--total">
+                                    <div class="nx-pd-stat-icon-wrap">
+                                        <i class="fa fa-tasks"/>
+                                    </div>
+                                    <div class="nx-pd-stat-info">
+                                        <div class="nx-pd-stat-lbl">Total Tasks</div>
+                                        <div class="nx-pd-stat-val" t-esc="state.selectedProject.taskCount"/>
+                                    </div>
+                                </div>
+
+                                <div class="nx-pd-stat nx-pd-stat--new">
+                                    <div class="nx-pd-stat-icon-wrap">
+                                        <i class="fa fa-plus-circle"/>
+                                    </div>
+                                    <div class="nx-pd-stat-info">
+                                        <div class="nx-pd-stat-lbl">New</div>
+                                        <div class="nx-pd-stat-val" t-esc="state.selectedProject.newTasks"/>
+                                    </div>
+                                </div>
+
+                                <div class="nx-pd-stat nx-pd-stat--open">
+                                    <div class="nx-pd-stat-icon-wrap">
+                                        <i class="fa fa-circle-o"/>
+                                    </div>
+                                    <div class="nx-pd-stat-info">
+                                        <div class="nx-pd-stat-lbl">Open</div>
+                                        <div class="nx-pd-stat-val" t-esc="state.selectedProject.openTasks"/>
+                                    </div>
+                                </div>
+
+                                <div class="nx-pd-stat nx-pd-stat--progress">
+                                    <div class="nx-pd-stat-icon-wrap">
+                                        <i class="fa fa-spinner fa-pulse"/>
+                                    </div>
+                                    <div class="nx-pd-stat-info">
+                                        <div class="nx-pd-stat-lbl">In Progress</div>
+                                        <div class="nx-pd-stat-val" t-esc="state.selectedProject.inProgressTasks"/>
+                                    </div>
+                                </div>
+
+                                <div class="nx-pd-stat nx-pd-stat--done">
+                                    <div class="nx-pd-stat-icon-wrap">
+                                        <i class="fa fa-check-circle"/>
+                                    </div>
+                                    <div class="nx-pd-stat-info">
+                                        <div class="nx-pd-stat-lbl">Done</div>
+                                        <div class="nx-pd-stat-val" t-esc="state.selectedProject.completedTasks"/>
+                                    </div>
+                                </div>
+
+                                <div class="nx-pd-stat nx-pd-stat--canceled">
+                                    <div class="nx-pd-stat-icon-wrap">
+                                        <i class="fa fa-ban"/>
+                                    </div>
+                                    <div class="nx-pd-stat-info">
+                                        <div class="nx-pd-stat-lbl">Canceled</div>
+                                        <div class="nx-pd-stat-val" t-esc="state.selectedProject.canceledTasks"/>
+                                    </div>
+                                </div>
+
+                                 <div class="nx-pd-stat nx-pd-stat--hours">
+                                    <div class="nx-pd-stat-icon-wrap">
+                                        <i class="fa fa-clock-o"/>
+                                    </div>
+                                    <div class="nx-pd-stat-info">
+                                        <div class="nx-pd-stat-lbl">Total Hours Logged</div>
+                                        <div class="nx-pd-stat-val">
+                                            <t t-esc="state.selectedProject.totalHours"/>
+                                            <span class="nx-pd-stat-unit">h</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- ▸ Modal Footer -->
+                        <div class="nx-pd-modal-footer">
+                            <button class="nx-pd-dismiss-btn" t-on-click="closePanel">
+                                <i class="fa fa-times-circle"/>
+                                Close
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </t>
+
+        </div>
+    </t>
+</templates>

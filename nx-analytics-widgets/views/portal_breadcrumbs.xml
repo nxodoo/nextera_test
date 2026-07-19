@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!--
+    ================================================================
+    Define sidebar_pages ONCE at the top level of portal_layout
+    (inside the frontend_layout call), then use it everywhere.
+    ✅ Variable is always defined — no scope issues
+    ✅ Works on ALL routes (including non-CustomerPortal controllers)
+    ================================================================
+    -->
+    <template id="move_portal_breadcrumbs"
+              inherit_id="portal.portal_layout"
+              name="Move Portal Breadcrumbs">
+
+        <!-- Define sidebar_pages right after is_portal is set -->
+        <xpath expr="//t[@t-set='is_portal']" position="after">
+            <t t-set="sidebar_pages"
+               t-value="(
+                    'portal_my_leaves',
+                    'portal_my_allocations',
+                    'portal_leave_form',
+                    'portal_allocation_form',
+
+                    'portal_my_tasks_edit',
+                    'portal_my_tasks_close',
+                    'portal_task_form_edit',
+                    'portal_task_form_close',
+                    'portal_task_form_edit',
+                    'portal_task_form_close',
+
+                    'portal_my_expenses',
+                    'portal_expense_form','portal_expense_edit_form','portal_expense_view'
+               )"/>
+        </xpath>
+
+        <!-- Hide default breadcrumbs for sidebar pages -->
+        <xpath expr="//t[@t-call='portal.portal_breadcrumbs']"
+               position="replace">
+            <t t-if="not page_name or page_name not in sidebar_pages"
+               t-call="portal.portal_breadcrumbs"/>
+        </xpath>
+
+    </template>
+
+    <!--
+         ====================================================================
+         Move breadcrumbs for sidebar pages inside the sidebar layout content.
+
+         By default, portal.portal_breadcrumbs is rendered outside the
+         portal-sidebar layout. This inheritance injects the breadcrumbs
+         inside <main class="portal-sidebar__content"> so they appear
+         within the sidebar structure.
+
+         Rendering is restricted to pages listed in `sidebar_pages`
+         (which is defined globally in portal.portal_layout).
+         ====================================================================
+    -->
+    <template id="portal_sidebar_leave_breadcrumbs"
+              inherit_id="portal_my_tabs.portal_my_tabs_all_pages"
+              priority="50">
+
+        <xpath expr="//main[hasclass('portal-sidebar__content')]/t[@t-out='0']" position="before">
+            <t t-if="page_name and page_name in (sidebar_pages or ())"
+               t-call="portal.portal_breadcrumbs"/>
+        </xpath>
+
+    </template>
+
+</odoo>
+

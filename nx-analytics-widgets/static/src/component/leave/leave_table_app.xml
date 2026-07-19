@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     ROOT APP
+════════════════════════════════════════════════════════════════════════ -->
+    <t t-name="nx_analytics_widgets.LeaveTableApp">
+    <div class="nx-owl-root">
+
+        <!-- Error banner -->
+        <t t-if="state.error">
+            <div class="nx-owl-error alert alert-danger" t-esc="state.error"/>
+        </t>
+
+        <!-- Section header -->
+        <div class="nx-table-header-row">
+            <div class="nx-section-title mb-0">
+                <span class="title-dot"/>
+                Leave Requests
+                <span class="nx-count-badge" t-esc="state.total"/>
+            </div>
+            <a href="/my/leaves/new" class="nx-table-new-btn">
+                <i class="fa fa-plus"/> New Request
+            </a>
+        </div>
+
+        <!-- Filters bar -->
+        <LeaveFilters
+                stateFilter="state.stateFilter"
+                sortOrder="state.sortOrder"
+                search="state.search"
+                loading="state.loading"
+                onFilter.bind="onFilter"
+                onSort.bind="onSort"
+                onSearch.bind="onSearch"
+        />
+
+        <!-- Table -->
+        <LeaveTable
+                leaves="state.leaves"
+                loading="state.loading"
+                onCancel.bind="onCancel"
+        />
+
+        <!-- Pagination -->
+        <t t-if="state.pages > 1">
+            <LeavePagination
+                    page="state.page"
+                    pages="state.pages"
+                    total="state.total"
+                    pageSize="state.pageSize"
+                    onPageChange.bind="onPageChange"
+            />
+        </t>
+
+    </div>
+</t>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         FILTERS BAR
+    ════════════════════════════════════════════════════════════════════════ -->
+    <t t-name="nx_analytics_widgets.LeaveFilters">
+    <div t-att-class="'nx-owl-filters' + (props.loading ? ' nx-filters-loading' : '')">
+
+        <!-- State filter tabs -->
+        <div class="nx-filter-tabs" role="tablist">
+            <t t-foreach="filters" t-as="f" t-key="f.key">
+                <button
+                        role="tab"
+                        t-att-class="'nx-filter-tab' + (props.stateFilter === f.key ? ' active' : '')"
+                        t-att-disabled="props.loading"
+                        t-on-click="() => this.onFilterClick(f.key)"
+                        t-esc="f.label"
+                />
+            </t>
+            <!-- Inline spinner next to tabs while loading -->
+            <t t-if="props.loading">
+                <span class="nx-filter-spinner">
+                    <span class="nx-spinner nx-spinner--sm"/>
+                </span>
+            </t>
+        </div>
+
+        <!-- Right side: search + sort -->
+        <div class="nx-filter-actions">
+            <!-- Search input -->
+            <div class="nx-search-wrap">
+                <i t-att-class="'nx-search-icon fa ' + (props.loading ? 'fa-spinner fa-spin' : 'fa-search')"/>
+                <input
+                        type="text"
+                        class="nx-search-input"
+                        placeholder="Search by type or description…"
+                        t-att-value="props.search"
+                        t-att-disabled="props.loading"
+                        t-on-input="onSearchInput"
+                />
+            </div>
+
+            <!-- Sort toggle -->
+            <button class="nx-sort-btn" t-on-click="onSortClick"
+                    t-att-disabled="props.loading"
+                    t-att-title="props.sortOrder === 'desc' ? 'Newest first' : 'Oldest first'">
+                <i t-att-class="'fa ' + (props.sortOrder === 'desc' ? 'fa-sort-amount-desc' : 'fa-sort-amount-asc')"/>
+                <span t-esc="props.sortOrder === 'desc' ? 'Newest' : 'Oldest'"/>
+            </button>
+        </div>
+
+    </div>
+</t>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         TABLE WRAPPER
+    ════════════════════════════════════════════════════════════════════════ -->
+    <t t-name="nx_analytics_widgets.LeaveTable">
+    <div class="nx-table-wrap mb-4 nx-owl-table-wrap" t-att-class="props.loading ? 'nx-is-loading' : ''">
+
+        <!-- Loading overlay — sits on top of existing rows, no DOM removal -->
+        <t t-if="props.loading">
+            <div class="nx-loading-overlay">
+                <div class="nx-spinner"/>
+            </div>
+        </t>
+
+        <!-- Skeleton rows — only when loading AND no rows exist yet -->
+        <t t-if="props.loading and props.leaves.length === 0">
+            <div class="nx-skel-table-inner">
+                <div class="nx-skel-row" t-foreach="[1,2,3,4,5]" t-as="i" t-key="i">
+                    <div class="nx-skel-cell nx-skel-cell--sm"/>
+                    <div class="nx-skel-cell nx-skel-cell--lg"/>
+                    <div class="nx-skel-cell nx-skel-cell--md"/>
+                    <div class="nx-skel-cell nx-skel-cell--md"/>
+                    <div class="nx-skel-cell nx-skel-cell--sm"/>
+                </div>
+            </div>
+        </t>
+
+        <!-- Empty state — only after loading finished -->
+        <t t-if="!props.loading and props.leaves.length === 0">
+            <div class="nx-empty p-4">
+                <div class="nx-empty-icon"><i class="fa fa-calendar-o"/></div>
+                <h5 class="fw-bold mb-1">No leave requests found</h5>
+                <p class="text-muted nx-empty-desc">Try adjusting your filters or search query.</p>
+            </div>
+        </t>
+
+        <!-- Real table — always rendered when rows exist (overlay covers it during load) -->
+        <t t-if="props.leaves.length > 0">
+            <div class="table-responsive">
+                <table class="table nx-table">
+                    <thead>
+                        <tr>
+                            <th class="nx-th-idx">#</th>
+                            <th>Leave Type</th>
+                            <th>Period</th>
+                            <th class="text-center">Duration</th>
+                            <th class="text-center nx-th-status">Status</th>
+                            <th class="text-center nx-th-actions"/>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="props.leaves" t-as="leave" t-key="leave.id">
+                            <LeaveRow
+                                    leave="leave"
+                                    index="leave_index"
+                                    onCancel="props.onCancel"
+                            />
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+
+    </div>
+</t>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         TABLE ROW
+    ════════════════════════════════════════════════════════════════════════ -->
+    <t t-name="nx_analytics_widgets.LeaveRow">
+    <tr t-att-class="'nx-tr nx-tr-' + props.leave.state">
+
+        <!-- Index -->
+        <td class="nx-td-idx">
+            <span class="nx-row-num" t-esc="props.index + 1"/>
+        </td>
+
+        <!-- Type + description -->
+        <td class="nx-td-type">
+            <div class="nx-type-cell">
+                <div t-att-class="'nx-type-avatar nx-type-avatar-' + props.leave.state">
+                    <i class="fa fa-briefcase"/>
+                </div>
+                <div>
+                    <div class="nx-leave-type-name" t-esc="props.leave.leave_type"/>
+                    <div class="nx-leave-desc" t-esc="props.leave.description or 'No description'"/>
+                </div>
+            </div>
+        </td>
+
+        <!-- Period -->
+        <td class="nx-td-period">
+            <div class="nx-period-cell">
+                <div class="nx-period-row">
+                    <span class="nx-period-label">From</span>
+                    <span class="nx-period-date" t-esc="props.leave.date_from or '—'"/>
+                </div>
+                <div class="nx-period-arrow"><i class="fa fa-arrow-right"/></div>
+                <div class="nx-period-row">
+                    <span class="nx-period-label">To</span>
+                    <span class="nx-period-date" t-esc="props.leave.date_to or '—'"/>
+                </div>
+            </div>
+        </td>
+
+        <!-- Duration -->
+        <td class="text-center nx-td-duration">
+            <div class="nx-duration-stack">
+                <span class="nx-dur-days">
+                    <t t-esc="props.leave.days"/>
+                    <span class="nx-dur-unit">d</span>
+                </span>
+                <span class="nx-dur-hours" t-esc="props.leave.hours + 'h'"/>
+            </div>
+        </td>
+
+        <!-- Status pill -->
+        <td class="text-center nx-td-status">
+            <span t-att-class="'nx-pill nx-pill-' + props.leave.state">
+                <span class="dot"/>
+                <t t-esc="props.leave.state_label"/>
+            </span>
+        </td>
+
+        <!-- Actions -->
+        <td class="text-center nx-td-actions">
+            <t t-if="props.leave.can_cancel">
+                <button class="nx-btn-cancel" t-on-click="onCancelClick">
+                    <i class="fa fa-times me-1"/>Cancel
+                </button>
+            </t>
+        </td>
+
+    </tr>
+</t>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         PAGINATION
+    ════════════════════════════════════════════════════════════════════════ -->
+    <t t-name="nx_analytics_widgets.LeavePagination">
+    <div class="nx-pager mt-3">
+
+        <!-- Prev -->
+        <button class="nx-pager-btn" t-att-disabled="!hasPrev"
+                t-on-click="() => this.go(props.page - 1)">
+            <i class="fa fa-chevron-left"/>
+        </button>
+
+        <!-- Page bubbles -->
+        <t t-foreach="pageNumbers" t-as="n" t-key="n_index">
+            <t t-if="n === -1">
+                <span class="nx-pager-ellipsis">…</span>
+            </t>
+            <t t-else="">
+                <button
+                        t-att-class="'nx-pager-btn' + (n === props.page ? ' active' : '')"
+                        t-on-click="() => this.go(n)"
+                        t-esc="n"
+                />
+            </t>
+        </t>
+
+        <!-- Next -->
+        <button class="nx-pager-btn" t-att-disabled="!hasNext"
+                t-on-click="() => this.go(props.page + 1)">
+            <i class="fa fa-chevron-right"/>
+        </button>
+
+        <!-- Info text -->
+        <span class="nx-pager-info">
+            Page <strong t-esc="props.page"/> of <strong t-esc="props.pages"/>
+            — <t t-esc="props.total"/> total
+        </span>
+
+    </div>
+</t>
+
+</templates>
+

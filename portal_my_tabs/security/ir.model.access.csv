@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_portal_sidebar_group_admin,portal.sidebar.group admin,model_portal_sidebar_group,base.group_system,1,1,1,1
+access_portal_sidebar_item_admin,portal.sidebar.item admin,model_portal_sidebar_item,base.group_system,1,1,1,1
+access_portal_sidebar_group_portal,portal.sidebar.group portal,model_portal_sidebar_group,base.group_portal,1,0,0,0
+access_portal_sidebar_item_portal,portal.sidebar.item portal,model_portal_sidebar_item,base.group_portal,1,0,0,0
+access_portal_sidebar_group_public,portal.sidebar.group public,model_portal_sidebar_group,base.group_public,1,0,0,0
+access_portal_sidebar_item_public,portal.sidebar.item public,model_portal_sidebar_item,base.group_public,1,0,0,0

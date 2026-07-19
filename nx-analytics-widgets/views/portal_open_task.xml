@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════
+                              PAGE HEADER
+    ═══════════════════════════════════════════════ -->
+    <template id="nx_task_page_header" name="Page header for My Tasks Portal">
+        <div class="nx-page-header circle-head">
+            <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 nx-page-header-inner">
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <div class="nx-header-icon">
+                            <i class="fa fa-tasks nx-header-icon-i"/>
+                        </div>
+                        <div>
+                            <h2 class="mb-0">My Open Tasks</h2>
+                            <p>Track and manage your assigned tasks</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <a href="/my/close-tasks" class="nx-btn-white">
+                        <i class="fa fa-check-circle"/>Closed Tasks
+                    </a>
+                    <a href="/my/tasks" class="nx-btn-primary-solid">
+                        <i class="fa fa-list"/>All Tasks
+                    </a>
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+    <!-- ═══════════════════════════════════════════════
+        MAIN PORTAL TEMPLATE - Enhanced Portal Task List
+    ═══════════════════════════════════════════════ -->
+    <template id="nx_portal_open_tasks_list_override" name="Enhanced Portal Task List">
+        <t t-call="portal.portal_layout">
+            <div class="nx-tasks-portal nx-portal-layout">
+
+                <t t-call="nx-analytics-widgets.nx_task_page_header"/>
+
+                <!-- ═══════════════════════════════════════════════
+                     OWL DASHBOARD (Stat Cards + Project Cards + Flow + Chart)
+                ═══════════════════════════════════════════════ -->
+                <owl-component name="nx.TaskDashboardApp">
+                    <!-- Placeholder shown while the OWL component loads -->
+                    <div class="nx-task-dash-skeleton nx-owl-placeholder">
+                        <div class="nx-table-header-row mb-3">
+                            <div class="nx-section-title mb-0">
+                                <span class="title-dot"/>
+                                Projects
+                            </div>
+                        </div>
+                        <div class="nx-skel-cards-row">
+                            <div class="nx-skel-card"/>
+                            <div class="nx-skel-card"/>
+                            <div class="nx-skel-card"/>
+                        </div>
+                        <div class="nx-skel-flow"/>
+                        <div class="nx-skel-chart"/>
+                        <div class="nx-skel-footer">
+                            <div class="nx-spinner"/>
+                            <span>Loading task dashboard…</span>
+                        </div>
+                    </div>
+                </owl-component>
+
+
+                <!-- ═══════════════════════════════════════════════
+                     TASK TABLE
+                ═══════════════════════════════════════════════ -->
+                <div class="nx-table-section">
+                    <owl-component name="nx.OpenTaskTableApp">
+                        <!-- Placeholder shown while the OWL component loads -->
+                        <div class="nx-owl-placeholder">
+                            <div class="nx-table-header-row mb-3">
+                                <div class="nx-section-title">
+                                    <span class="title-dot"/>
+                                    Open Tasks
+                                </div>
+                            </div>
+                            <div class="nx-skel-table-inner">
+                                <div class="nx-skel-row" t-foreach="[1,2,3,4,5]" t-as="i" t-key="i">
+                                    <div class="nx-skel-cell nx-skel-cell--sm"/>
+                                    <div class="nx-skel-cell nx-skel-cell--lg"/>
+                                    <div class="nx-skel-cell nx-skel-cell--md"/>
+                                    <div class="nx-skel-cell nx-skel-cell--md"/>
+                                    <div class="nx-skel-cell nx-skel-cell--md"/>
+                                    <div class="nx-skel-cell nx-skel-cell--md"/>
+                                    <div class="nx-skel-cell nx-skel-cell--sm"/>
+                                </div>
+                            </div>
+                            <div class="nx-skel-footer">
+                                <div class="nx-spinner"/>
+                                <span>Loading open tasks…</span>
+                            </div>
+                        </div>
+                    </owl-component>
+                </div>
+
+            </div>
+        </t>
+    </template>
+</odoo>
+

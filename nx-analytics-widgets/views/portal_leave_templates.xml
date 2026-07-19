@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════
+                                  PAGE HEADER
+    ═══════════════════════════════════════════════ -->
+    <template id="nx_leave_page_header" name="Page header for My Leaves Portal">
+        <div class="nx-page-header circle-head">
+            <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 nx-page-header-inner">
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <div class="nx-header-icon">
+                            <i class="fa fa-calendar-check-o nx-header-icon-i"/>
+                        </div>
+                        <div>
+                            <h2 class="mb-0">My Leave Requests</h2>
+                            <p>Manage your time off and view leave balances</p>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <a href="/my/allocations" class="nx-btn-white">
+                        <i class="fa fa-list"/>Allocations
+                    </a>
+                    <a href="/my/allocations/new" class="nx-btn-white">
+                        <i class="fa fa-plus-circle"/>Request Allocation
+                    </a>
+                    <a href="/my/leaves/new" class="nx-btn-primary-solid">
+                        <i class="fa fa-plus"/>New Leave
+                    </a>
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+    <!-- ═══════════════════════════════════════════════
+         SUMMARY STAT CARDS  (analytics-widget style)
+    ═══════════════════════════════════════════════ -->
+    <template id="nx_summary_stat_cards" name="Summary stat cards for My Leaves Portal">
+        <div class="nx-analytics-widget nx-analytics-widget--enhanced h-100 circle-head">
+
+            <!-- Left content -->
+            <div class="nx-aw-left">
+                <!-- Title block with animated icon -->
+                <div class="nx-aw-header-row">
+                    <div class="nx-aw-icon-wrapper">
+                        <i class="fa fa-bar-chart nx-aw-header-icon"/>
+                    </div>
+                    <div>
+                        <div class="nx-aw-title">Leave Analytics</div>
+                        <div class="nx-aw-subtitle">
+                            <i class="fa fa-calendar-o"/>
+                            <t t-esc="'%.1f' % total_balance_days"/> days available
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section label -->
+                <div class="nx-aw-section-label">
+                    <span class="nx-aw-section-dot"/>
+                    Quick Overview
+                </div>
+
+                <!-- Enhanced 2 × 2 stat chips grid -->
+                <div class="nx-aw-grid nx-aw-grid--enhanced">
+                    <!-- Balance -->
+                    <div class="nx-aw-chip nx-aw-chip--balance" data-stat-type="balance">
+                        <div class="nx-aw-chip-icon">
+                            <i class="fa fa-wallet"/>
+                        </div>
+                        <div class="nx-aw-chip-content">
+                            <span class="nx-aw-chip-badge">
+                                <t t-esc="'%.1f' % total_balance_days"/>
+                            </span>
+                            <span class="nx-aw-chip-label">Balance</span>
+                        </div>
+                        <div class="nx-aw-chip-glow"/>
+                    </div>
+
+                    <!-- Pending -->
+                    <div class="nx-aw-chip nx-aw-chip--pending" data-stat-type="pending">
+                        <div class="nx-aw-chip-icon">
+                            <i class="fa fa-clock-o"/>
+                        </div>
+                        <div class="nx-aw-chip-content">
+                            <span class="nx-aw-chip-badge">
+                                <t t-esc="pending_count"/>
+                            </span>
+                            <span class="nx-aw-chip-label">Pending</span>
+                        </div>
+                        <div class="nx-aw-chip-glow"/>
+                    </div>
+
+                    <!-- Approved -->
+                    <div class="nx-aw-chip nx-aw-chip--approved" data-stat-type="approved">
+                        <div class="nx-aw-chip-icon">
+                            <i class="fa fa-check-circle"/>
+                        </div>
+                        <div class="nx-aw-chip-content">
+                            <span class="nx-aw-chip-badge">
+                                <t t-esc="approved_count"/>
+                            </span>
+                            <span class="nx-aw-chip-label">Approved</span>
+                        </div>
+                        <div class="nx-aw-chip-glow"/>
+                    </div>
+
+                    <!-- Total -->
+                    <div class="nx-aw-chip nx-aw-chip--total" data-stat-type="total">
+                        <div class="nx-aw-chip-icon">
+                            <i class="fa fa-list-alt"/>
+                        </div>
+                        <div class="nx-aw-chip-content">
+                            <span class="nx-aw-chip-badge">
+                                <t t-esc="total_leave_count"/>
+                            </span>
+                            <span class="nx-aw-chip-label">All-Time</span>
+                        </div>
+                        <div class="nx-aw-chip-glow"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right decorative sphere with pulse effect -->
+            <div class="nx-aw-right">
+                <div class="nx-aw-sphere nx-aw-sphere--pulse">
+                    <img class="nx-aw-sphere-img"
+                         src="/nx-analytics-widgets/static/src/img/card-website-analytics-1.png"
+                         alt="Analytics"/>
+                    <div class="nx-aw-sphere-ring"/>
+                    <div class="nx-aw-sphere-ring nx-aw-sphere-ring--2"/>
+                </div>
+            </div>
+
+        </div>
+    </template>
+
+
+    <!-- ═══════════════════════════════════════════════
+         LEAVE FLOW CHART  (analytics-widget style)
+    ═══════════════════════════════════════════════ -->
+    <template id="nx_leave_flowchart" name="Leave flow chart for My Leaves Portal">
+        <div class="nx-analytics-widget nx-analytics-widget--flow h-100">
+
+            <!-- Left content -->
+            <div class="nx-aw-left">
+                <!-- Title block -->
+                <div class="nx-aw-title">Leave Flow</div>
+                <div class="nx-aw-subtitle">Request lifecycle overview</div>
+
+                <!-- Section label -->
+                <div class="nx-aw-section-label">Status Pipeline</div>
+
+                <!-- Flow chart nodes -->
+                <div class="nx-flow">
+
+                    <!-- Draft -->
+                    <div class="nx-flow-node nx-flow-node--draft">
+                        <div class="nx-flow-node-icon">
+                            <i class="fa fa-pencil"/>
+                        </div>
+                        <div class="nx-flow-node-body">
+                            <div class="nx-flow-node-label">Draft</div>
+                            <div class="nx-flow-node-count">
+                                <t t-esc="draft_count"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="nx-flow-arrow">
+                        <div class="nx-flow-arrow-line"/>
+                        <i class="fa fa-chevron-right nx-flow-arrow-head"/>
+                    </div>
+
+                    <!-- Pending -->
+                    <div class="nx-flow-node nx-flow-node--pending">
+                        <div class="nx-flow-node-icon">
+                            <i class="fa fa-clock-o"/>
+                        </div>
+                        <div class="nx-flow-node-body">
+                            <div class="nx-flow-node-label">Pending</div>
+                            <div class="nx-flow-node-count">
+                                <t t-esc="pending_count"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="nx-flow-arrow">
+                        <div class="nx-flow-arrow-line"/>
+                        <i class="fa fa-chevron-right nx-flow-arrow-head"/>
+                    </div>
+
+                    <!-- Fork: Approved / Refused -->
+                    <div class="nx-flow-fork">
+                        <!-- Approved -->
+                        <div class="nx-flow-node nx-flow-node--approved">
+                            <div class="nx-flow-node-icon">
+                                <i class="fa fa-check"/>
+                            </div>
+                            <div class="nx-flow-node-body">
+                                <div class="nx-flow-node-label">Approved</div>
+                                <div class="nx-flow-node-count">
+                                    <t t-esc="approved_count"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Refused -->
+                        <div class="nx-flow-node nx-flow-node--refused">
+                            <div class="nx-flow-node-icon">
+                                <i class="fa fa-times"/>
+                            </div>
+                            <div class="nx-flow-node-body">
+                                <div class="nx-flow-node-label">Refused</div>
+                                <div class="nx-flow-node-count">
+                                    <t t-esc="refused_count"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /nx-flow -->
+
+            </div>
+            <!-- /nx-aw-left -->
+
+            <!-- Right decorative sphere (reuses existing styles) -->
+            <div class="nx-aw-right">
+                <div class="nx-aw-sphere nx-aw-sphere--flow">
+                    <img class="nx-aw-sphere-img"
+                         src="/nx-analytics-widgets/static/src/img/analytics_sphere.svg"
+                         alt=""/>
+                </div>
+            </div>
+
+        </div>
+    </template>
+
+
+    <!-- ═══════════════════════════════════════════════
+                     LEAVE BALANCE CARDS
+    ═══════════════════════════════════════════════ -->
+    <template id="nx_leave_balance_card" name="Leave balance card (for My Leaves Portal)">
+        <div class="nx-balance-cards-scroll">
+            <t t-foreach="leave_balances" t-as="lb">
+                <t t-if="lb['total_allocated_days'] &gt; 0">
+                    <div class="nx-balance-card-item">
+
+                        <div t-att-class="'nx-balance-card h-100 accent-' + (lb.get('accent') or 'success')">
+
+                            <!-- ── Gradient Header ── -->
+                            <div class="nx-bc-header d-flex justify-content-between flex-wrap">
+                                <!-- Decorative blobs -->
+                                <div class="nx-bc-blob nx-bc-blob--1"/>
+                                <div class="nx-bc-blob nx-bc-blob--2"/>
+
+                                <!-- Leave type badge + name -->
+                                <div class="nx-bc-badge-row">
+                                    <span class="nx-bc-icon-wrap">
+                                        <i class="fa fa-calendar nx-bc-icon"/>
+                                    </span>
+                                    <span class="nx-bc-type-name" t-esc="lb['name']"/>
+                                </div>
+
+                                <!-- Hero available days -->
+                                <div class="nx-bc-hero">
+                                    <span class="nx-bc-hero-num">
+                                        <t t-esc="'%g' % lb['available_days']"/>
+                                    </span>
+                                    <div class="nx-bc-hero-meta">
+                                        <span class="nx-bc-hero-unit">days</span>
+                                        <span class="nx-bc-hero-hours">
+                                            <i class="fa fa-clock-o"/>
+                                            <t t-esc="'%g' % lb['available_hours']"/>h left
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ── Body ── -->
+                            <div class="nx-bc-body">
+
+                                <!-- Progress section -->
+                                <div class="nx-bc-progress-section">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="nx-bc-progress-label">Balance used</span>
+                                        <span class="nx-bc-progress-pct">
+                                            <t t-esc="100 - lb['percentage_remaining']"/>%
+                                        </span>
+                                    </div>
+                                    <div class="nx-progress nx-progress--thick">
+                                        <div class="nx-progress-bar nx-progress-bar--animated"
+                                             t-attf-style="width:#{100 - lb['percentage_remaining']}%;"/>
+                                    </div>
+                                    <div class="nx-bc-progress-sub">
+                                        <t t-esc="lb['percentage_remaining']"/>% remaining
+                                    </div>
+                                </div>
+
+                                <!-- Stats tooltip row -->
+                                <div class="nx-bc-tip-row">
+                                    <span class="nx-bc-tip-btn"
+                                          t-attf-data-tooltip="Allocated: #{('%g' % lb['total_allocated_days'])}d / #{('%g' % lb['total_allocated_hours'])}h">
+                                        <i class="fa fa-plus-circle"/>
+                                        <span class="nx-bc-tip-lbl">Allocated</span>
+                                        <span class="nx-bc-tip-val">
+                                            <t t-esc="'%g' % lb['total_allocated_days']"/>d
+                                        </span>
+                                    </span>
+                                    <span class="nx-bc-tip-divider"/>
+                                    <span class="nx-bc-tip-btn"
+                                          t-attf-data-tooltip="Used: #{('%g' % lb['total_taken_days'])}d / #{('%g' % lb['total_taken_hours'])}h">
+                                        <i class="fa fa-minus-circle"/>
+                                        <span class="nx-bc-tip-lbl">Used</span>
+                                        <span class="nx-bc-tip-val">
+                                            <t t-esc="'%g' % lb['total_taken_days']"/>d
+                                        </span>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </div>
+
+    </template>
+
+    <template id="nx_portal_my_leaves_override" name="Enhanced My Leaves Portal">
+
+
+        <t t-call="portal.portal_layout">
+            <div class="nx-leaves-portal">
+
+                <t t-call="nx-analytics-widgets.nx_leave_page_header"/>
+                <div class="row g-4 mb-4 align-items-stretch mb-5">
+                    <!-- Analytics widget -->
+                    <div class="col-12 col-xl-4">
+                        <t t-call="nx-analytics-widgets.nx_summary_stat_cards"/>
+                    </div>
+                    <!-- Balance cards -->
+                    <div class="col-12 col-xl-8" t-if="leave_balances">
+                        <t t-call="nx-analytics-widgets.nx_leave_balance_card"/>
+                    </div>
+                </div>
+                
+
+                <!-- ═══════════════════════════════════════════════
+                     LEAVE REQUESTS TABLE  (OWL component)
+                ═══════════════════════════════════════════════ -->
+                <!-- OWL LeaveTableApp — mounted by Odoo's public_component_service
+                     after the full boot sequence. Handles: filter / sort /
+                     live-search / AJAX pagination / inline cancel. -->
+                <owl-component name="nx.LeaveTableApp">
+                    <!-- Placeholder shown while the OWL component loads -->
+                    <div class="nx-owl-placeholder ">
+                        <div class="nx-table-header-row">
+                            <div class="nx-section-title mb-0">
+                                <span class="title-dot"/>
+                                Leave Requests
+                            </div>
+                        </div>
+                        <!-- Skeleton filter bar -->
+                        <div class="nx-skel-filters">
+                            <div class="nx-skel-pill"/>
+                            <div class="nx-skel-pill"/>
+                            <div class="nx-skel-pill"/>
+                            <div class="nx-skel-pill nx-skel-pill--wide"/>
+                        </div>
+                        <!-- Skeleton table rows -->
+                        <div class="nx-skel-table">
+                            <t t-foreach="range(3)" t-as="i">
+                                <div class="nx-skel-row">
+                                    <div class="nx-skel-cell nx-skel-cell--sm"/>
+                                    <div class="nx-skel-cell nx-skel-cell--lg"/>
+                                    <div class="nx-skel-cell nx-skel-cell--md"/>
+                                    <div class="nx-skel-cell nx-skel-cell--md"/>
+                                    <div class="nx-skel-cell nx-skel-cell--sm"/>
+                                </div>
+                            </t>
+                        </div>
+                        <!-- Spinner at bottom -->
+                        <div class="nx-skel-footer">
+                            <div class="nx-spinner"/>
+                            <span>Loading leave requests…</span>
+                        </div>
+                    </div>
+                </owl-component>
+
+            </div>
+        </t>
+    </template>
+</odoo>
+

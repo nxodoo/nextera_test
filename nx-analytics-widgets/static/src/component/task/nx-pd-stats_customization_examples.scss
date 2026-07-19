@@ -1,0 +1,428 @@
+/* ════════════════════════════════════════════════════════════════
+   NX-PD-STATS - CUSTOMIZATION EXAMPLES
+   ════════════════════════════════════════════════════════════════ */
+
+/**
+ * هذا الملف يحتوي على أمثلة للتخصيص المتقدم لـ nx-pd-stats
+ * يمكنك نسخ ولصق أي من هذه الأمثلة في ملف task_dashboard.scss
+ */
+
+// ────────────────────────────────────────────────────────────────
+// 1. تخصيص سرعة الانيميشن
+// ────────────────────────────────────────────────────────────────
+
+// ✅ للانيميشن الأسرع (مناسب للشاشات السريعة)
+.nx-pd-stats {
+    animation-duration: 0.4s !important; // من 0.6s
+}
+
+.nx-pd-stat {
+    animation-duration: 0.3s !important; // من 0.5s
+    transition: all 0.2s !important;     // من 0.3s
+
+    &:nth-child(1) { animation-delay: 0.03s !important; }
+    &:nth-child(2) { animation-delay: 0.06s !important; }
+    &:nth-child(3) { animation-delay: 0.09s !important; }
+    &:nth-child(4) { animation-delay: 0.12s !important; }
+    &:nth-child(5) { animation-delay: 0.15s !important; }
+    &:nth-child(6) { animation-delay: 0.18s !important; }
+}
+
+// ✅ للانيميشن الأبطأ (مناسب للعروض التقديمية)
+.nx-pd-stats {
+    animation-duration: 1s !important;
+}
+
+.nx-pd-stat {
+    animation-duration: 0.8s !important;
+    transition: all 0.5s !important;
+
+    &:nth-child(1) { animation-delay: 0.1s !important; }
+    &:nth-child(2) { animation-delay: 0.2s !important; }
+    &:nth-child(3) { animation-delay: 0.3s !important; }
+    &:nth-child(4) { animation-delay: 0.4s !important; }
+    &:nth-child(5) { animation-delay: 0.5s !important; }
+    &:nth-child(6) { animation-delay: 0.6s !important; }
+}
+
+// ────────────────────────────────────────────────────────────────
+// 2. تخصيص تأثيرات Hover
+// ────────────────────────────────────────────────────────────────
+
+// ✅ تأثير hover أكثر دراماتيكية
+.nx-pd-stat {
+    &:hover {
+        transform: translateY(-8px) scale(1.05) !important;
+        box-shadow:
+            0 16px 48px rgba(0, 0, 0, 0.15),
+            0 8px 24px rgba(0, 0, 0, 0.1) !important;
+
+        .nx-pd-stat-icon-wrap {
+            transform: scale(1.25) rotate(10deg) !important;
+        }
+
+        .nx-pd-stat-val {
+            transform: scale(1.12) !important;
+        }
+    }
+}
+
+// ✅ تأثير hover بسيط (subtle)
+.nx-pd-stat {
+    &:hover {
+        transform: translateY(-2px) scale(1.01) !important;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08) !important;
+
+        .nx-pd-stat-icon-wrap {
+            transform: scale(1.08) rotate(2deg) !important;
+        }
+
+        .nx-pd-stat-val {
+            transform: scale(1.04) !important;
+        }
+    }
+}
+
+// ✅ تأثير "نبض" عند hover
+.nx-pd-stat {
+    &:hover {
+        animation: nxCardPulse 0.6s ease-in-out !important;
+    }
+}
+
+@keyframes nxCardPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+}
+
+// ────────────────────────────────────────────────────────────────
+// 3. تخصيص الألوان والتدرجات
+// ────────────────────────────────────────────────────────────────
+
+// ✅ نظام ألوان "Dark Mode"
+.nx-pd-stat {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+
+    &:hover {
+        background: #0f172a !important;
+        border-color: #475569 !important;
+    }
+}
+
+.nx-pd-stat-lbl {
+    color: #94a3b8 !important;
+}
+
+.nx-pd-stat-val {
+    color: #f1f5f9 !important;
+}
+
+.nx-pd-stat-unit {
+    color: #64748b !important;
+}
+
+// ✅ نظام ألوان "Pastel"
+.nx-pd-stat--total .nx-pd-stat-icon-wrap {
+    background: linear-gradient(135deg, #a5b4fc, #c7d2fe) !important;
+}
+
+.nx-pd-stat--open .nx-pd-stat-icon-wrap {
+    background: linear-gradient(135deg, #93c5fd, #bfdbfe) !important;
+}
+
+.nx-pd-stat--progress .nx-pd-stat-icon-wrap {
+    background: linear-gradient(135deg, #fcd34d, #fde68a) !important;
+}
+
+.nx-pd-stat--done .nx-pd-stat-icon-wrap {
+    background: linear-gradient(135deg, #6ee7b7, #a7f3d0) !important;
+}
+
+.nx-pd-stat--canceled .nx-pd-stat-icon-wrap {
+    background: linear-gradient(135deg, #fca5a5, #fecaca) !important;
+}
+
+.nx-pd-stat--hours .nx-pd-stat-icon-wrap {
+    background: linear-gradient(135deg, #c4b5fd, #ddd6fe) !important;
+}
+
+// ✅ نظام ألوان "Neon"
+.nx-pd-stat--total .nx-pd-stat-icon-wrap {
+    background: linear-gradient(135deg, #3b0764, #6b21a8) !important;
+    box-shadow: 0 0 24px rgba(107, 33, 168, 0.6) !important;
+}
+
+.nx-pd-stat--open .nx-pd-stat-icon-wrap {
+    background: linear-gradient(135deg, #075985, #0c4a6e) !important;
+    box-shadow: 0 0 24px rgba(7, 89, 133, 0.6) !important;
+}
+
+// ────────────────────────────────────────────────────────────────
+// 4. تخصيص أحجام الأيقونات والنصوص
+// ────────────────────────────────────────────────────────────────
+
+// ✅ أيقونات وأرقام أكبر
+.nx-pd-stat-icon-wrap {
+    width: 56px !important;
+    height: 56px !important;
+    font-size: 1.3rem !important;
+}
+
+.nx-pd-stat-val {
+    font-size: 2rem !important;
+}
+
+.nx-pd-stat-lbl {
+    font-size: 0.8rem !important;
+}
+
+// ✅ أيقونات وأرقام أصغر (compact)
+.nx-pd-stat-icon-wrap {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 0.85rem !important;
+}
+
+.nx-pd-stat-val {
+    font-size: 1.3rem !important;
+}
+
+.nx-pd-stat-lbl {
+    font-size: 0.65rem !important;
+}
+
+.nx-pd-stat {
+    padding: 0.7rem 0.9rem !important;
+}
+
+// ────────────────────────────────────────────────────────────────
+// 5. تخصيص شكل البطاقات
+// ────────────────────────────────────────────────────────────────
+
+// ✅ زوايا أكثر حدة
+.nx-pd-stat {
+    border-radius: 8px !important;
+}
+
+.nx-pd-stat-icon-wrap {
+    border-radius: 8px !important;
+}
+
+// ✅ زوايا دائرية جداً
+.nx-pd-stat {
+    border-radius: 24px !important;
+}
+
+.nx-pd-stat-icon-wrap {
+    border-radius: 18px !important;
+}
+
+// ✅ بطاقات بدون حدود (borderless)
+.nx-pd-stat {
+    border: none !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06) !important;
+
+    &:hover {
+        box-shadow:
+            0 12px 32px rgba(0, 0, 0, 0.12),
+            0 4px 16px rgba(0, 0, 0, 0.08) !important;
+    }
+}
+
+// ✅ بطاقات بحدود سميكة
+.nx-pd-stat {
+    border-width: 2.5px !important;
+
+    &:hover {
+        border-width: 3px !important;
+    }
+}
+
+// ────────────────────────────────────────────────────────────────
+// 6. تخصيص Layout (Grid)
+// ────────────────────────────────────────────────────────────────
+
+// ✅ تخطيط عمود واحد (للشاشات الصغيرة)
+.nx-pd-stats {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+}
+
+.nx-pd-stat--full {
+    grid-column: auto !important;
+}
+
+// ✅ تخطيط 3 أعمدة (للشاشات الكبيرة)
+@media (min-width: 1200px) {
+    .nx-pd-stats {
+        grid-template-columns: 1fr 1fr 1fr !important;
+    }
+
+    .nx-pd-stat--full {
+        grid-column: 1 / -1 !important;
+    }
+}
+
+// ✅ مسافات أكبر بين البطاقات
+.nx-pd-stats {
+    gap: 1.2rem !important;
+}
+
+// ✅ مسافات أصغر بين البطاقات
+.nx-pd-stats {
+    gap: 0.4rem !important;
+}
+
+// ────────────────────────────────────────────────────────────────
+// 7. إضافة تأثيرات إضافية
+// ────────────────────────────────────────────────────────────────
+
+// ✅ إضافة خطوط متحركة في الخلفية
+.nx-pd-stat {
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            45deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.05) 50%,
+            transparent 70%
+        );
+        animation: nxStatShine 3s infinite;
+    }
+}
+
+@keyframes nxStatShine {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+// ✅ إضافة "Ripple Effect" عند الضغط
+.nx-pd-stat {
+    &:active {
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 50%;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            animation: nxRipple 0.6s ease-out;
+        }
+    }
+}
+
+@keyframes nxRipple {
+    to {
+        inset: -10%;
+        opacity: 0;
+    }
+}
+
+// ✅ إضافة "Glitch Effect" للأرقام عند hover
+.nx-pd-stat:hover .nx-pd-stat-val {
+    animation: nxGlitch 0.3s ease;
+}
+
+@keyframes nxGlitch {
+    0%, 100% { transform: translate(0); }
+    25% { transform: translate(-2px, 1px); }
+    50% { transform: translate(2px, -1px); }
+    75% { transform: translate(-1px, -2px); }
+}
+
+// ────────────────────────────────────────────────────────────────
+// 8. تخصيص للطباعة (Print)
+// ────────────────────────────────────────────────────────────────
+
+@media print {
+    .nx-pd-stats {
+        animation: none !important;
+    }
+
+    .nx-pd-stat {
+        animation: none !important;
+        page-break-inside: avoid;
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+
+        &::before,
+        &::after {
+            display: none !important;
+        }
+    }
+
+    .nx-pd-stat-icon-wrap {
+        box-shadow: none !important;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+}
+
+// ────────────────────────────────────────────────────────────────
+// 9. تخصيص لـ Reduced Motion (Accessibility)
+// ────────────────────────────────────────────────────────────────
+
+@media (prefers-reduced-motion: reduce) {
+    .nx-pd-stats,
+    .nx-pd-stat {
+        animation: none !important;
+    }
+
+    .nx-pd-stat {
+        transition: opacity 0.2s ease !important;
+
+        &:hover {
+            transform: none !important;
+
+            .nx-pd-stat-icon-wrap,
+            .nx-pd-stat-val {
+                transform: none !important;
+            }
+        }
+    }
+
+    .nx-pd-stat-icon-wrap::before {
+        animation: none !important;
+    }
+}
+
+// ────────────────────────────────────────────────────────────────
+// 10. تخصيص حسب نوع البيانات (Dynamic Styling)
+// ────────────────────────────────────────────────────────────────
+
+// ✅ تمييز البطاقات ذات القيم العالية
+.nx-pd-stat[data-value-status="high"] {
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5) !important;
+    border-color: #6ee7b7 !important;
+
+    .nx-pd-stat-val {
+        color: #059669 !important;
+    }
+}
+
+// ✅ تمييز البطاقات ذات القيم المنخفضة
+.nx-pd-stat[data-value-status="low"] {
+    background: linear-gradient(135deg, #fef2f2, #fee2e2) !important;
+    border-color: #fca5a5 !important;
+
+    .nx-pd-stat-val {
+        color: #dc2626 !important;
+    }
+}
+
+// ✅ تمييز البطاقات ذات القيم الصفرية
+.nx-pd-stat[data-value="0"] {
+    opacity: 0.5;
+
+    &:hover {
+        opacity: 0.75;
+    }
+}

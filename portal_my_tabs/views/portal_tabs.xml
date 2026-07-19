@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="portal_activity_hide_top_header" inherit_id="website.layout" priority="96">
+        <xpath expr="//div[@id='wrapwrap']/header" position="attributes">
+            <attribute name="t-if">not (request and request.website and request.website.portal_mode == 'activity' and request.httprequest.path and request.httprequest.path.startswith('/my'))</attribute>
+        </xpath>
+    </template>
+
+    <template id="portal_activity_scope_wrapwrap" inherit_id="portal.frontend_layout" priority="96">
+        <xpath expr="//div[@id='wrapwrap']" position="attributes">
+            <attribute name="t-attf-class" add="#{request and request.website and request.website.portal_mode == 'activity' and request.httprequest.path and request.httprequest.path.startswith('/my') and 'nx-activity-portal-mode' or ''}" separator=" "/>
+        </xpath>
+    </template>
+
+    <template id="portal_activity_hide_breadcrumbs" inherit_id="portal.portal_layout" priority="96">
+        <xpath expr="//t[@t-call='portal.frontend_layout']" position="inside">
+            <t t-if="request and request.website and request.website.portal_mode == 'activity' and request.httprequest.path and request.httprequest.path.startswith('/my')"
+               t-set="no_breadcrumbs"
+               t-value="True"/>
+            <t t-if="request and request.website and request.website.portal_mode == 'activity' and request.httprequest.path and request.httprequest.path.startswith('/my')"
+               t-set="breadcrumbs_searchbar"
+               t-value="False"/>
+        </xpath>
+    </template>
+
+    <template id="portal_activity_home_cards" inherit_id="portal.portal_my_home" priority="96">
+        <xpath expr="//div[hasclass('o_portal_my_home')]" position="inside">
+            <t t-if="request and request.website and request.website.portal_mode == 'activity'">
+                <t t-set="nx_portal_partner" t-value="request.env.user.partner_id"/>
+                <t t-set="nx_portal_employee" t-value="request.env.user.employee_id or request.env['hr.employee'].sudo().search([('user_id', '=', request.env.user.id)], limit=1)"/>
+                <t t-set="nx_order_count" t-value="request.env['sale.order'].search_count([('message_partner_ids', 'child_of', [nx_portal_partner.commercial_partner_id.id]), ('state', '=', 'sale')])"/>
+                <t t-set="nx_invoice_count" t-value="request.env['account.move'].search_count([('state', 'not in', ('cancel', 'draft')), ('move_type', 'in', ('out_invoice', 'out_refund', 'out_receipt'))])"/>
+                <t t-set="nx_leave_count" t-value="nx_portal_employee and request.env['hr.leave'].sudo().search_count([('employee_id', '=', nx_portal_employee.id)]) or 0"/>
+                <t t-set="nx_expense_count" t-value="nx_portal_employee and request.env['hr.expense'].sudo().search_count([('employee_id', '=', nx_portal_employee.id)]) or 0"/>
+                <t t-set="nx_open_task_count" t-value="request.env['project.task'].sudo().search_count([('user_ids', '=', request.env.user.id), ('stage_id.fold', '=', False), ('state', 'not in', ['1_done', '1_canceled'])])"/>
+                <t t-set="nx_activity_count" t-value="request.env['mail.activity'].sudo().search_count([('user_id', '=', request.env.user.id), ('activity_type_id.is_portal', '=', True)])"/>
+
+                <section class="nx-portal-dashboard-cards">
+                    <div class="nx-portal-dashboard-grid">
+                        <a href="/my/orders" class="nx-portal-summary-card">
+                            <div class="nx-portal-summary-card__head">
+                                <span class="nx-portal-summary-card__icon"><i class="fa fa-shopping-bag"/></span>
+                                <span class="nx-portal-summary-card__badge">Orders</span>
+                            </div>
+                            <div class="nx-portal-summary-card__body">
+                                <h3 class="nx-portal-summary-card__title">Orders</h3>
+                                <p class="nx-portal-summary-card__text">Track confirmed sales orders in one place.</p>
+                            </div>
+                            <div class="nx-portal-summary-card__footer">
+                                <div class="nx-portal-summary-card__metric">
+                                    <strong><t t-esc="nx_order_count"/></strong>
+                                    <span>active orders</span>
+                                </div>
+                                <span class="nx-portal-summary-card__cta">Open</span>
+                            </div>
+                        </a>
+
+                        <a href="/my/invoices?filterby=invoices" class="nx-portal-summary-card">
+                            <div class="nx-portal-summary-card__head">
+                                <span class="nx-portal-summary-card__icon"><i class="fa fa-file-text-o"/></span>
+                                <span class="nx-portal-summary-card__badge">Invoices</span>
+                            </div>
+                            <div class="nx-portal-summary-card__body">
+                                <h3 class="nx-portal-summary-card__title">Invoices</h3>
+                                <p class="nx-portal-summary-card__text">View, download, and pay your customer invoices.</p>
+                            </div>
+                            <div class="nx-portal-summary-card__footer">
+                                <div class="nx-portal-summary-card__metric">
+                                    <strong><t t-esc="nx_invoice_count"/></strong>
+                                    <span>invoice records</span>
+                                </div>
+                                <span class="nx-portal-summary-card__cta">Open</span>
+                            </div>
+                        </a>
+
+                        <a href="/my/leaves" class="nx-portal-summary-card">
+                            <div class="nx-portal-summary-card__head">
+                                <span class="nx-portal-summary-card__icon"><i class="fa fa-calendar"/></span>
+                                <span class="nx-portal-summary-card__badge">Leave Requests</span>
+                            </div>
+                            <div class="nx-portal-summary-card__body">
+                                <h3 class="nx-portal-summary-card__title">Leave Requests</h3>
+                                <p class="nx-portal-summary-card__text">Check approved, pending, and past leave requests.</p>
+                            </div>
+                            <div class="nx-portal-summary-card__footer">
+                                <div class="nx-portal-summary-card__metric">
+                                    <strong><t t-esc="nx_leave_count"/></strong>
+                                    <span>leave records</span>
+                                </div>
+                                <span class="nx-portal-summary-card__cta">Open</span>
+                            </div>
+                        </a>
+
+                        <a href="/my/expenses" class="nx-portal-summary-card">
+                            <div class="nx-portal-summary-card__head">
+                                <span class="nx-portal-summary-card__icon"><i class="fa fa-credit-card"/></span>
+                                <span class="nx-portal-summary-card__badge">Expenses</span>
+                            </div>
+                            <div class="nx-portal-summary-card__body">
+                                <h3 class="nx-portal-summary-card__title">Expenses</h3>
+                                <p class="nx-portal-summary-card__text">Review the expense submissions tied to your employee profile.</p>
+                            </div>
+                            <div class="nx-portal-summary-card__footer">
+                                <div class="nx-portal-summary-card__metric">
+                                    <strong><t t-esc="nx_expense_count"/></strong>
+                                    <span>submitted expenses</span>
+                                </div>
+                                <span class="nx-portal-summary-card__cta">Open</span>
+                            </div>
+                        </a>
+
+                        <a href="/my/open-tasks" class="nx-portal-summary-card">
+                            <div class="nx-portal-summary-card__head">
+                                <span class="nx-portal-summary-card__icon"><i class="fa fa-tasks"/></span>
+                                <span class="nx-portal-summary-card__badge">Open Tasks</span>
+                            </div>
+                            <div class="nx-portal-summary-card__body">
+                                <h3 class="nx-portal-summary-card__title">Open Tasks</h3>
+                                <p class="nx-portal-summary-card__text">Jump back into the tasks assigned to you right now.</p>
+                            </div>
+                            <div class="nx-portal-summary-card__footer">
+                                <div class="nx-portal-summary-card__metric">
+                                    <strong><t t-esc="nx_open_task_count"/></strong>
+                                    <span>open tasks</span>
+                                </div>
+                                <span class="nx-portal-summary-card__cta">Open</span>
+                            </div>
+                        </a>
+
+                        <a href="/my/activities" class="nx-portal-summary-card">
+                            <div class="nx-portal-summary-card__head">
+                                <span class="nx-portal-summary-card__icon"><i class="fa fa-bolt"/></span>
+                                <span class="nx-portal-summary-card__badge">Open Activities</span>
+                            </div>
+                            <div class="nx-portal-summary-card__body">
+                                <h3 class="nx-portal-summary-card__title">Open Activities</h3>
+                                <p class="nx-portal-summary-card__text">Follow up on every portal activity still assigned to you.</p>
+                            </div>
+                            <div class="nx-portal-summary-card__footer">
+                                <div class="nx-portal-summary-card__metric">
+                                    <strong><t t-esc="nx_activity_count"/></strong>
+                                    <span>open activities</span>
+                                </div>
+                                <span class="nx-portal-summary-card__cta">Open</span>
+                            </div>
+                        </a>
+                    </div>
+                </section>
+            </t>
+        </xpath>
+    </template>
+
+    <!--
+    ================================================================
+    ENTRY POINT: portal_my_tabs.portal_my_tabs_all_pages
+    Inherits  : portal.portal_layout  (priority 200)
+    Purpose   : Replaces the default portal container with a full
+                sidebar layout on every /my/* route.
+
+    Composition map
+    ───────────────
+    portal_tabs.xml                 ← YOU ARE HERE (entry point)
+    ├── portal_sidebar_desktop.xml  ← desktop <aside>
+    │   ├── sidebar_logo
+    │   ├── sidebar_icon_layout
+    │   ├── sidebar_search
+    │   ├── sidebar_nav_groups      ← shared nav logic
+    │   └── sidebar_footer
+    │       └── sidebar_user_popover
+    ├── portal_sidebar_mobile.xml   ← mobile topbar + offcanvas
+    │   ├── sidebar_mobile_topbar
+    │   ├── sidebar_mobile_offcanvas
+    │   │   ├── sidebar_nav_groups  ← same component, no duplication
+    │   │   └── sidebar_footer
+    │   │       └── sidebar_user_popover
+    └── portal_sidebar_components.xml  ← all atomic sub-templates
+    ================================================================
+    -->
+    <template id="portal_my_tabs_all_pages"
+              inherit_id="portal.portal_layout"
+              priority="200">
+
+        <!--
+            XPath targets the main content container inside
+            o_portal_wrap without relying on fragile id attributes.
+            Using contains() keeps compatibility with layout changes.
+        -->
+<!--        <xpath expr="//div[contains(@class,'o_portal_wrap')]-->
+<!--                          /div[contains(@class,'container')]"-->
+<!--               position="replace">-->
+        <xpath expr="//div[contains(@class,'o_portal_wrap')]" position="replace">
+
+            <!-- Keep the warranty homepage on the default portal layout so its
+                 module-specific right sidebar can render unchanged. -->
+            <t t-if="request.httprequest.path.startswith('/my')
+                     and request.website.portal_mode == 'activity'">
+
+                <!--
+                    Lazy-load sidebar data: if the controller already
+                    injected sidebar_groups into the template context,
+                    we reuse it; otherwise we fetch it here.
+                -->
+                <t t-if="not sidebar_groups"
+                   t-set="sidebar_groups"
+                   t-value="request.env['portal.sidebar.item'].sudo()
+                                ._get_sidebar_data()"/>
+
+                <!-- ── Root layout wrapper ── -->
+                <div class="portal-sidebar-layout">
+
+                    <!-- 1. Mobile sticky top bar (hamburger + logo) -->
+                    <t t-call="portal_my_tabs.sidebar_mobile_topbar"/>
+
+                    <!-- 2. Desktop sidebar (hidden on mobile via CSS) -->
+                    <t t-call="portal_my_tabs.sidebar_desktop"/>
+
+                    <!-- 3. Mobile offcanvas panel (hidden on desktop via CSS) -->
+                    <t t-call="portal_my_tabs.sidebar_mobile_offcanvas"/>
+
+                    <!-- 4. Main content area — renders the child template -->
+                    <main class="portal-sidebar__content">
+                        <t t-out="0"/>
+                    </main>
+
+                </div>
+
+            </t>
+            <t t-else="">
+                <div id="wrap" class="o_portal_wrap">
+                    <div class="container pt-3 pb-5">
+                        <t t-if="my_details">
+                            <div class="wrapper col-12 d-flex flex-wrap justify-content-between align-items-center">
+                                <h3 class="my-3">My account</h3>
+                                <button class="btn py-0 d-flex align-items-center gap-2 d-lg-none ms-auto"
+                                        data-bs-toggle="offcanvas"
+                                        data-bs-target="#accountOffCanvas">
+                                    <img class="o_avatar rounded"
+                                         t-att-src="image_data_uri(user_id.partner_id.avatar_1024)" alt="Contact"/>
+                                </button>
+                            </div>
+                            <t t-if="request.website.portal_mode == 'warranty' and request.httprequest.path == '/my/home'">
+                                <div class="row justify-content-between">
+                                    <div class="o_portal_content col-12 col-lg-8 mb-5">
+                                        <t t-out="0"/>
+                                    </div>
+                                    <div class="d-none d-lg-flex justify-content-end col-lg-4">
+                                        <style>
+                                            .nx-portal-sidebar-shell {
+                                                position: sticky;
+                                                top: 1.25rem;
+                                                width: 100%;
+                                            }
+                                            @media (min-width: 992px) {
+                                                .o_portal_wrap .row.justify-content-between:has(#nx-portal-sidebar-toggle-home) > .o_portal_content {
+                                                    flex: 0 0 calc(100% - 23rem);
+                                                    max-width: calc(100% - 23rem);
+                                                    transition: flex-basis 0.2s ease, max-width 0.2s ease;
+                                                }
+                                                .o_portal_wrap .row.justify-content-between:has(#nx-portal-sidebar-toggle-home) > .d-none.d-lg-flex.justify-content-end.col-lg-4 {
+                                                    flex: 0 0 21rem;
+                                                    max-width: 21rem;
+                                                    transition: flex-basis 0.2s ease, max-width 0.2s ease;
+                                                }
+                                                .o_portal_wrap .row.justify-content-between:has(#nx-portal-sidebar-toggle-home:not(:checked)) > .o_portal_content {
+                                                    flex: 0 0 calc(100% - 8rem);
+                                                    max-width: calc(100% - 8rem);
+                                                }
+                                                .o_portal_wrap .row.justify-content-between:has(#nx-portal-sidebar-toggle-home:not(:checked)) > .d-none.d-lg-flex.justify-content-end.col-lg-4 {
+                                                    flex: 0 0 6rem;
+                                                    max-width: 6rem;
+                                                }
+                                            }
+                                            .nx-portal-sidebar-toggle {
+                                                position: absolute;
+                                                opacity: 0;
+                                                pointer-events: none;
+                                            }
+                                            .nx-portal-sidebar-panel {
+                                                position: relative;
+                                                width: 100%;
+                                            }
+                                            .nx-portal-sidebar-expanded,
+                                            .nx-portal-sidebar-collapsed {
+                                                transition: opacity 0.2s ease, transform 0.2s ease;
+                                            }
+                                            .nx-portal-sidebar-expanded {
+                                                display: block;
+                                                width: 100%;
+                                            }
+                                            .nx-portal-sidebar-expanded > * {
+                                                width: 100%;
+                                            }
+                                            .nx-portal-sidebar-collapsed {
+                                                display: none;
+                                            }
+                                            .nx-portal-sidebar-toggle-btn {
+                                                position: absolute;
+                                                top: -0.75rem;
+                                                inset-inline-end: 0.5rem;
+                                                z-index: 3;
+                                                width: 2.5rem;
+                                                height: 2.5rem;
+                                                border: 1px solid #dfe9ee;
+                                                border-radius: 12px;
+                                                background: rgba(255, 255, 255, 0.96);
+                                                color: #4c5f6b;
+                                                box-shadow: 0 6px 18px rgba(16, 24, 40, 0.08);
+                                                cursor: pointer;
+                                                display: inline-flex;
+                                                align-items: center;
+                                                justify-content: center;
+                                            }
+                                            .nx-portal-sidebar-toggle-btn .fa {
+                                                transition: transform 0.2s ease;
+                                            }
+                                            .nx-portal-sidebar-toggle:not(:checked) ~ .nx-portal-sidebar-panel .nx-portal-sidebar-expanded {
+                                                display: none;
+                                            }
+                                            .nx-portal-sidebar-toggle:not(:checked) ~ .nx-portal-sidebar-panel .nx-portal-sidebar-collapsed {
+                                                display: flex;
+                                            }
+                                            .nx-portal-sidebar-toggle:not(:checked) ~ .nx-portal-sidebar-toggle-btn .fa {
+                                                transform: rotate(180deg);
+                                            }
+                                            .nx-portal-sidebar-collapsed {
+                                                width: 6rem;
+                                                min-height: 32rem;
+                                                border: 1px solid #e3ecef;
+                                                border-radius: 20px;
+                                                background: #ffffff;
+                                                box-shadow: 0 10px 28px rgba(11, 30, 44, 0.06);
+                                                align-items: center;
+                                                justify-content: space-between;
+                                                flex-direction: column;
+                                                padding: 1rem 0.75rem;
+                                                margin-inline-start: auto;
+                                            }
+                                            .nx-portal-sidebar-mini-top,
+                                            .nx-portal-sidebar-mini-links,
+                                            .nx-portal-sidebar-mini-bottom {
+                                                display: flex;
+                                                align-items: center;
+                                                flex-direction: column;
+                                                gap: 0.75rem;
+                                            }
+                                            .nx-portal-sidebar-mini-divider {
+                                                width: 100%;
+                                                height: 1px;
+                                                background: #e8eef1;
+                                            }
+                                            .nx-portal-sidebar-mini-avatar {
+                                                width: 3rem;
+                                                height: 3rem;
+                                                border-radius: 999px;
+                                                border: 3px solid #d9eff0;
+                                                object-fit: cover;
+                                                background: #f8fcfc;
+                                            }
+                                            .nx-portal-sidebar-mini-link {
+                                                width: 3rem;
+                                                height: 3rem;
+                                                border-radius: 14px;
+                                                color: #6b7280;
+                                                background: transparent;
+                                                text-decoration: none;
+                                                display: inline-flex;
+                                                align-items: center;
+                                                justify-content: center;
+                                                transition: background 0.18s ease, color 0.18s ease;
+                                            }
+                                            .nx-portal-sidebar-mini-link:hover,
+                                            .nx-portal-sidebar-mini-link:focus {
+                                                background: #f4f7f8;
+                                                color: #0c6d71;
+                                            }
+                                            .nx-portal-sidebar-mini-link .fa {
+                                                font-size: 1.35rem;
+                                            }
+                                            .nx-portal-sidebar-mini-link.is-active {
+                                                background: #f4f7f8;
+                                                color: #0c6d71;
+                                            }
+                                        </style>
+                                        <div class="nx-portal-sidebar-shell">
+                                            <input type="checkbox" id="nx-portal-sidebar-toggle-home" class="nx-portal-sidebar-toggle" checked="checked"/>
+                                            <label for="nx-portal-sidebar-toggle-home" class="nx-portal-sidebar-toggle-btn" aria-label="Toggle sidebar">
+                                                <i class="fa fa-angle-double-left"/>
+                                            </label>
+                                            <div class="nx-portal-sidebar-panel">
+                                                <div class="nx-portal-sidebar-expanded">
+                                                    <t t-call="portal.side_content"/>
+                                                </div>
+                                                <div class="nx-portal-sidebar-collapsed">
+                                                    <div class="nx-portal-sidebar-mini-top">
+                                                        <img t-if="user_id.image_1920" t-att-src="image_data_uri(user_id.image_1920)" t-att-alt="user_id.name" class="nx-portal-sidebar-mini-avatar"/>
+                                                        <div t-else="" class="nx-portal-sidebar-mini-avatar"/>
+                                                        <a href="/my/home" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and request.httprequest.path == '/my/home' else ''}" title="Home" aria-label="Home">
+                                                            <i class="fa fa-home"/>
+                                                        </a>
+                                                    </div>
+                                                    <div class="nx-portal-sidebar-mini-links">
+                                                        <div class="nx-portal-sidebar-mini-divider"/>
+                                                        <a href="/my/tickets" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and ('/my/tickets' in request.httprequest.path or '/helpdesk/ticket' in request.httprequest.path) else ''}" title="Tickets" aria-label="Tickets">
+                                                            <i class="fa fa-ticket"/>
+                                                        </a>
+                                                        <a href="/my/orders" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and '/my/orders' in request.httprequest.path else ''}" title="Orders" aria-label="Orders">
+                                                            <i class="fa fa-shopping-bag"/>
+                                                        </a>
+                                                        <a href="/my/elearning" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and ('/my/elearning' in request.httprequest.path or '/slides' in request.httprequest.path) else ''}" title="E-Learning" aria-label="E-Learning">
+                                                            <i class="fa fa-graduation-cap"/>
+                                                        </a>
+                                                        <a href="/my/knowledge" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and ('/my/knowledge' in request.httprequest.path or '/knowledge' in request.httprequest.path) else ''}" title="Knowledge" aria-label="Knowledge">
+                                                            <i class="fa fa-book"/>
+                                                        </a>
+                                                        <a href="/my/warranties" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and '/my/warranties' in request.httprequest.path else ''}" title="Warranties" aria-label="Warranties">
+                                                            <i class="fa fa-shield"/>
+                                                        </a>
+                                                        <a href="/contactus" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and '/contactus' in request.httprequest.path else ''}" title="Contact Us" aria-label="Contact Us">
+                                                            <i class="fa fa-envelope"/>
+                                                        </a>
+                                                        <a href="/my/account" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and '/my/account' in request.httprequest.path else ''}" title="Edit Profile" aria-label="Edit Profile">
+                                                            <i class="fa fa-pencil"/>
+                                                        </a>
+                                                        <div class="nx-portal-sidebar-mini-divider"/>
+                                                    </div>
+                                                    <div class="nx-portal-sidebar-mini-bottom">
+                                                        <a href="/web/session/logout?redirect=/" class="nx-portal-sidebar-mini-link" title="Logout" aria-label="Logout">
+                                                            <i class="fa fa-sign-out"/>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="offcanvas offcanvas-start d-lg-none" id="accountOffCanvas">
+                                        <t t-call="portal.side_content">
+                                            <t t-set="isOffcanvas" t-value="true"/>
+                                        </t>
+                                    </div>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div class="row justify-content-between">
+                                    <div t-attf-class="o_portal_content col-12 col-lg-8 mb-5">
+                                        <t t-out="0"/>
+                                    </div>
+                                    <div class="d-none d-lg-flex justify-content-end col-lg-4">
+                                        <t t-call="portal.side_content"/>
+                                    </div>
+                                    <div class="offcanvas offcanvas-start d-lg-none" id="accountOffCanvas">
+                                        <t t-call="portal.side_content">
+                                            <t t-set="isOffcanvas" t-value="true"/>
+                                        </t>
+                                    </div>
+                                </div>
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <t t-out="0"/>
+                        </t>
+                    </div>
+                </div>
+            </t>
+
+        </xpath>
+
+    </template>
+
+    <template id="portal_my_orders_activity_restyle" inherit_id="sale.portal_my_orders" priority="60">
+        <xpath expr="//t[@t-call='portal.portal_table']" position="before">
+            <t t-if="request.website.portal_mode == 'activity' and orders">
+                <section class="nx-portal-analytics-hero">
+                    <div>
+                        <span class="nx-portal-analytics-hero__eyebrow">Portal Analytics</span>
+                        <h2 class="nx-portal-analytics-hero__title">Sales Orders</h2>
+                        <p class="nx-portal-analytics-hero__subtitle">
+                            Review every order in the same polished workspace used across the rest of the portal.
+                        </p>
+                    </div>
+                    <div class="nx-portal-analytics-hero__stat">
+                        <span class="nx-portal-analytics-hero__stat-value">
+                            <t t-esc="portal_orders_total"/>
+                        </span>
+                        <span class="nx-portal-analytics-hero__stat-label">Total orders</span>
+                    </div>
+                </section>
+            </t>
+        </xpath>
+
+        <xpath expr="//div[@t-if='not orders']" position="replace">
+            <t t-if="request.website.portal_mode == 'activity'">
+                <t t-if="not orders">
+                    <section class="nx-portal-analytics-hero">
+                        <div>
+                            <span class="nx-portal-analytics-hero__eyebrow">Portal Analytics</span>
+                            <h2 class="nx-portal-analytics-hero__title">Sales Orders</h2>
+                            <p class="nx-portal-analytics-hero__subtitle">
+                                Review every order in the same polished workspace used across the rest of the portal.
+                            </p>
+                        </div>
+                        <div class="nx-portal-analytics-hero__stat">
+                            <span class="nx-portal-analytics-hero__stat-value">0</span>
+                            <span class="nx-portal-analytics-hero__stat-label">Total orders</span>
+                        </div>
+                    </section>
+                    <div class="nx-portal-analytics-empty" role="alert">
+                        There are currently no sales orders for your account.
+                    </div>
+                </t>
+            </t>
+            <t t-else="">
+                <div t-if="not orders" class="alert alert-warning" role="alert">
+                    There are currently no sales orders for your account.
+                </div>
+            </t>
+        </xpath>
+
+        <xpath expr="//t[@t-call='portal.portal_table']" position="replace">
+            <t t-if="request.website.portal_mode == 'activity' and orders">
+                <div class="nx-portal-analytics-shell nx-portal-analytics-shell--table">
+                    <div class="table-responsive">
+                        <table class="table nx-portal-analytics-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <span class="d-none d-md-inline">Sales Order #</span>
+                                        <span class="d-block d-md-none">Ref.</span>
+                                    </th>
+                                    <th class="text-end">Order Date</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="orders" t-as="order">
+                                    <tr>
+                                        <td>
+                                            <a t-att-href="order.get_portal_url()" class="nx-portal-analytics-link">
+                                                <t t-out="order.name"/>
+                                            </a>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-field="order.date_order" t-options="{'widget': 'date'}"/>&amp;nbsp;
+                                            <span class="d-none d-md-inline" t-field="order.date_order" t-options="{'time_only': True}"/>
+                                        </td>
+                                        <td class="text-end fw-semibold">
+                                            <span t-field="order.amount_total"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+            <t t-elif="request.website.portal_mode not in ('activity', 'warranty') and orders" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>
+                            <span class="d-none d-md-inline">Sales Order #</span>
+                            <span class="d-block d-md-none">Ref.</span>
+                        </th>
+                        <th class="text-end">Order Date</th>
+                        <th class="text-end">Total</th>
+                    </tr>
+                </thead>
+                <t t-foreach="orders" t-as="order">
+                    <tr>
+                        <td><a t-att-href="order.get_portal_url()"><t t-out="order.name"/></a></td>
+                        <td class="text-end">
+                            <span t-field="order.date_order" t-options="{'widget': 'date'}"/>&amp;nbsp;
+                            <span class="d-none d-md-inline" t-field="order.date_order" t-options="{'time_only': True}"/>
+                        </td>
+                        <td class="text-end"><span t-field="order.amount_total"/></td>
+                    </tr>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_invoices_activity_restyle" inherit_id="account.portal_my_invoices" priority="60">
+        <xpath expr="//t[@t-if='not invoices']" position="before">
+            <t t-if="request.website.portal_mode == 'activity'">
+                <section class="nx-portal-analytics-hero nx-portal-analytics-hero--compact">
+                    <div>
+                        <span class="nx-portal-analytics-hero__eyebrow">Portal Analytics</span>
+                        <h2 class="nx-portal-analytics-hero__title">Invoices &amp; Bills</h2>
+                        <p class="nx-portal-analytics-hero__subtitle">
+                            Track invoice dates, due dates, balances, and payment actions in the same portal style.
+                        </p>
+                    </div>
+                    <div class="nx-portal-analytics-hero__stat">
+                        <span class="nx-portal-analytics-hero__stat-value">
+                            <t t-esc="len(invoices) if invoices else 0"/>
+                        </span>
+                        <span class="nx-portal-analytics-hero__stat-label">Total records</span>
+                    </div>
+                </section>
+            </t>
+        </xpath>
+
+        <xpath expr="//t[@t-if='not invoices']/p" position="replace">
+            <t t-if="request.website.portal_mode == 'activity'">
+                <div class="nx-portal-analytics-empty" role="alert">
+                    There are currently no invoices and payments for your account.
+                </div>
+            </t>
+            <t t-else="">
+                <p class="alert alert-warning">There are currently no invoices and payments for your account.</p>
+            </t>
+        </xpath>
+
+        <xpath expr="//t[@t-call='portal.portal_table']" position="replace">
+            <t t-if="request.website.portal_mode == 'activity' and invoices">
+                <div class="nx-portal-analytics-shell nx-portal-analytics-shell--table">
+                    <div class="table-responsive">
+                        <table class="table nx-portal-analytics-table nx-portal-analytics-table--invoices mb-0">
+                            <thead>
+                                <tr>
+                                    <th name="invoice_number">Invoice #</th>
+                                    <th name="invoice_date">Invoice Date</th>
+                                    <th name="due_date" class="d-none d-md-table-cell">Due Date</th>
+                                    <th name="amount_due" class="text-end">Amount Due</th>
+                                    <th name="status">Status</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="invoices" t-as="invoice_data">
+                                    <t t-set="invoice" t-value="invoice_data['invoice']"/>
+                                    <t t-set="tx_sudo" t-value="invoice.get_portal_last_transaction()"/>
+                                    <tr>
+                                        <td>
+                                            <a t-att-href="invoice.get_portal_url()" t-att-title="invoice.name" class="nx-portal-analytics-link">
+                                                <t t-out="invoice.name" t-if="invoice.name != '/'"/>
+                                                <em t-else="">Draft Invoice</em>
+                                            </a>
+                                        </td>
+                                        <td><span t-field="invoice.invoice_date"/></td>
+                                        <td class="d-none d-md-table-cell"
+                                            t-att-class="'nx-portal-analytics-date--danger' if invoice.invoice_date_due and invoice.invoice_date_due &lt; datetime.date.today() and invoice.payment_state in ['not_paid', 'partial'] else ''">
+                                            <span t-field="invoice.invoice_date_due"/>
+                                        </td>
+                                        <td class="text-end fw-semibold">
+                                            <span t-out="-invoice.amount_residual if invoice.move_type == 'out_refund' else invoice.amount_residual"
+                                                  t-options='{"widget": "monetary", "display_currency": invoice.currency_id}'/>
+                                        </td>
+                                        <td name="invoice_status">
+                                            <t t-if="invoice.state == 'posted'">
+                                                <span t-if="invoice.currency_id.is_zero(invoice.amount_residual)"
+                                                      class="nx-portal-analytics-status is-success">
+                                                    <i class="fa fa-fw fa-check" aria-label="Paid" title="Paid" role="img"/>
+                                                    <span>Paid</span>
+                                                </span>
+                                                <span t-elif="invoice.payment_state in ('paid', 'in_payment') and tx_sudo and tx_sudo.state == 'done'"
+                                                      class="nx-portal-analytics-status is-success">
+                                                    <i class="fa fa-fw fa-check" aria-label="Paid" title="Paid" role="img"/>
+                                                    <span>Paid</span>
+                                                </span>
+                                                <span t-elif="invoice.payment_state == 'in_payment' and not invoice.currency_id.is_zero(invoice.amount_residual)"
+                                                      class="nx-portal-analytics-status is-info">
+                                                    <i class="fa fa-fw fa-refresh" aria-label="Processing Payment" title="Processing Payment" role="img"/>
+                                                    <span>Processing Payment</span>
+                                                </span>
+                                                <span t-elif="invoice.payment_state == 'reversed'"
+                                                      class="nx-portal-analytics-status is-neutral">
+                                                    <i class="fa fa-fw fa-check" aria-label="Reversed" title="Reversed" role="img"/>
+                                                    <span>Reversed</span>
+                                                </span>
+                                                <span t-elif="invoice.payment_state in ('not_paid', 'partial') and tx_sudo and tx_sudo.state == 'authorized'"
+                                                      class="nx-portal-analytics-status is-info">
+                                                    <i class="fa fa-fw fa-check" aria-label="Authorized" title="Authorized" role="img"/>
+                                                    <span>Authorized</span>
+                                                </span>
+                                                <span t-elif="invoice.payment_state in ('not_paid', 'partial') and tx_sudo and tx_sudo.state == 'pending' and tx_sudo.provider_code not in ('none', 'custom')"
+                                                      class="nx-portal-analytics-status is-warning">
+                                                    <i class="fa fa-fw fa-clock-o" aria-label="Pending" title="Pending" role="img"/>
+                                                    <span>Pending</span>
+                                                </span>
+                                                <span class="nx-portal-analytics-status is-info">
+                                                    <i class="fa fa-fw fa-clock-o" aria-label="Opened" title="Opened" role="img"/>
+                                                    <span>Waiting for Payment</span>
+                                                </span>
+                                            </t>
+                                            <t t-elif="invoice.state == 'cancel'">
+                                                <span class="nx-portal-analytics-status is-danger">
+                                                    <i class="fa fa-fw fa-remove" aria-label="Cancelled" title="Cancelled" role="img"/>
+                                                    <span>Cancelled</span>
+                                                </span>
+                                            </t>
+                                        </td>
+                                        <td class="text-end">
+                                            <a t-if="invoice._has_to_be_paid()"
+                                               t-att-href="invoice.get_portal_url(anchor='portal_pay', query_string='&amp;payment=True')"
+                                               title="Pay Now"
+                                               aria-label="Pay now"
+                                               class="btn btn-sm nx-portal-analytics-pay"
+                                               role="button">
+                                                <i class="fa fa-arrow-circle-right"/>
+                                                <span class="d-none d-md-inline"> Pay Now</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+            <t t-elif="request.website.portal_mode not in ('activity', 'warranty') and invoices" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th name="invoice_number">Invoice #</th>
+                        <th name="invoice_date">Invoice Date</th>
+                        <th name="due_date" class="d-none d-md-table-cell">Due Date</th>
+                        <th name="amount_due" class="text-end pe-3">Amount Due</th>
+                        <th name="status">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="invoices" t-as="invoice_data">
+                        <t t-set="invoice" t-value="invoice_data['invoice']"/>
+                        <tr>
+                            <td>
+                                <a t-att-href="invoice.get_portal_url()" t-att-title="invoice.name">
+                                    <t t-out="invoice.name" t-if="invoice.name != '/'"/>
+                                    <em t-else="">Draft Invoice</em>
+                                </a>
+                            </td>
+                            <td><span t-field="invoice.invoice_date"/></td>
+                            <td class="d-none d-md-table-cell"
+                                t-att-class="'text-danger' if invoice.invoice_date_due and invoice.invoice_date_due &lt; datetime.date.today() and invoice.payment_state in ['not_paid', 'partial'] else ''">
+                                <span t-field="invoice.invoice_date_due"/>
+                            </td>
+                            <td class="text-end pe-3"><span t-out="-invoice.amount_residual if invoice.move_type == 'out_refund' else invoice.amount_residual" t-options='{"widget": "monetary", "display_currency": invoice.currency_id}'/></td>
+                            <td name="invoice_status">
+                                <t t-if="invoice.state == 'posted'" name="invoice_status_posted">
+                                    <span t-if="invoice.currency_id.is_zero(invoice.amount_residual)"
+                                          class="badge rounded-pill text-bg-success">
+                                        <i class="fa fa-fw fa-check" aria-label="Paid" title="Paid" role="img"/>
+                                        <span class="d-none d-md-inline"> Paid</span>
+                                    </span>
+                                    <span t-elif="invoice.payment_state == 'in_payment' and not invoice.currency_id.is_zero(invoice.amount_residual)"
+                                          class="badge rounded-pill text-bg-info">
+                                        <i class="fa fa-fw fa-check" aria-label="processing_payment" title="Processing Payment" role="img"/>
+                                        <span class="d-none d-md-inline"> Processing Payment</span>
+                                    </span>
+                                    <span t-elif="invoice.payment_state == 'reversed'"
+                                          class="badge rounded-pill text-bg-success">
+                                        <i class="fa fa-fw fa-check" aria-label="Reversed" title="Reversed" role="img"/>
+                                        <span class="d-none d-md-inline"> Reversed</span>
+                                    </span>
+                                    <span t-else="" class="badge rounded-pill text-bg-info" name="invoice_status_waiting_for_payment">
+                                        <i class="fa fa-fw fa-clock-o" aria-label="Opened" title="Opened" role="img"/>
+                                        <span class="d-none d-md-inline"> Waiting for Payment</span>
+                                    </span>
+                                </t>
+                                <t t-elif="invoice.state == 'cancel'">
+                                    <span class="badge rounded-pill text-bg-warning">
+                                        <i class="fa fa-fw fa-remove" aria-label="Cancelled" title="Cancelled" role="img"/>
+                                        <span class="d-none d-md-inline"> Cancelled</span>
+                                    </span>
+                                </t>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </xpath>
+    </template>
+
+</odoo>

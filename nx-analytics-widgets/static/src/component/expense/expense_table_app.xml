@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         ROOT APP
+    ════════════════════════════════════════════════════════════════════════ -->
+    <t t-name="nx_analytics_widgets.ExpenseTableApp">
+        <div class="nx-owl-root">
+
+            <!-- Error banner -->
+            <t t-if="state.error">
+                <div class="nx-owl-error alert alert-danger" t-esc="state.error"/>
+            </t>
+
+
+            <div class="nx-page-header circle-head">
+                    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 nx-page-header-inner">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <div class="nx-header-icon">
+                                    <i class="fa fa-money nx-header-icon-i"/>
+                                </div>
+                                <div>
+                                    <h2 class="mb-0 d-flex align-items-start">My Expenses  <span class="nx-count-badge"
+                                                                        t-esc="state.total"/></h2>
+                                    <p>Track and manage your expense reports</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2 align-items-center">
+                             <button class="nx-btn-white" t-on-click="onNewExpense"><i class="fa fa-plus"/> New
+                                 Expense</button>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- Filters bar -->
+            <ExpenseFilters
+                    stateFilter="state.stateFilter"
+                    sortKey="state.sortKey"
+                    sortOrder="state.sortOrder"
+                    search="state.search"
+                    loading="state.loading"
+                    onFilter.bind="onFilter"
+                    onSortKey.bind="onSortKey"
+                    onSortOrder.bind="onSortOrder"
+                    onApplySearch.bind="onApplySearch"
+            />
+
+            <!-- Table -->
+            <ExpenseTable
+                    expenses="state.expenses"
+                    loading="state.loading"
+                    onDelete.bind="onDelete"
+                    onView.bind="onViewExpense"
+                    onEdit.bind="onEditExpense"
+            />
+
+            <!-- Pagination -->
+            <t t-if="state.pages > 1">
+                <ExpensePagination
+                        page="state.page"
+                        pages="state.pages"
+                        total="state.total"
+                        pageSize="state.pageSize"
+                        onPageChange.bind="onPageChange"
+                />
+            </t>
+
+            <!-- Form Popup -->
+            <t t-if="showPopup">
+                <ExpenseFormPopup
+                        mode="state.popupMode"
+                        expenseId="state.popupExpenseId"
+                        employeeId="employeeId"
+                        onClose.bind="onClosePopup"
+                        onSaved.bind="onPopupSaved"
+                        onSwitchToEdit.bind="onSwitchToEdit"
+                />
+            </t>
+        </div>
+    </t>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         FILTERS BAR
+    ════════════════════════════════════════════════════════════════════════ -->
+    <t t-name="nx_analytics_widgets.ExpenseFilters">
+        <div t-att-class="'nx-owl-filters' + (props.loading ? ' nx-filters-loading' : '')">
+
+            <!-- State filter tabs -->
+            <div class="nx-filter-tabs" role="tablist">
+                <t t-foreach="filters" t-as="f" t-key="f.key">
+                    <button
+                            role="tab"
+                            t-att-class="'nx-filter-tab' + (props.stateFilter === f.key ? ' active' : '')"
+                            t-att-disabled="props.loading"
+                            t-on-click="() => this.onFilterClick(f.key)"
+                            t-esc="f.label"
+                    />
+                </t>
+                <t t-if="props.loading">
+                    <span class="nx-filter-spinner">
+                        <span class="nx-spinner nx-spinner--sm"/>
+                    </span>
+                </t>
+            </div>
+
+            <!-- Right side: search + sort -->
+            <div class="nx-filter-actions">
+                <!-- Search input -->
+                <div class="nx-search-wrap align-items-center">
+                    <i t-att-class="'nx-search-icon fa ' + (props.loading ? 'fa-spinner fa-spin' : 'fa-search')"/>
+                    <input
+                            type="text"
+                            class="nx-search-input"
+                            placeholder="Search by description or category…"
+                            t-att-value="local.search"
+                            t-att-disabled="props.loading"
+                            t-on-input="onSearchInput"
+                            t-on-keydown="onSearchKeydown"
+                    />
+                    <t t-if="local.search">
+                        <button class="nx-search-clear-btn"
+                                title="Clear"
+                                t-att-disabled="props.loading"
+                                t-on-click="onClearSearch">
+                            <i class="fa fa-times"/>
+                        </button>
+                    </t>
+                    <button class="nx-search-apply-btn"
+                            t-att-disabled="props.loading"
+                            t-on-click="onApplySearch">
+                        <i class="fa fa-search"/>
+                    </button>
+                </div>
+
+                <!-- Sort controls -->
+                <div class="d-flex gap-2 align-items-center">
+                    <select class="form-select form-select-sm" style="width: 140px;"
+                            t-att-disabled="props.loading"
+                            t-on-change="onSortKeyChange">
+                        <t t-foreach="sortOptions" t-as="opt" t-key="opt.key">
+                            <option t-att-value="opt.key"
+                                    t-att-selected="props.sortKey === opt.key"
+                                    t-esc="opt.label"/>
+                        </t>
+                    </select>
+
+                    <button class="nx-sort-btn" t-on-click="onToggleSortOrder"
+                            t-att-disabled="props.loading"
+                            t-att-title="props.sortOrder === 'desc' ? 'Descending' : 'Ascending'">
+                        <i t-att-class="'fa ' + (props.sortOrder === 'desc' ? 'fa-sort-amount-desc' : 'fa-sort-amount-asc')"/>
+                        <span t-esc="props.sortOrder === 'desc' ? 'Desc' : 'Asc'"/>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </t>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         TABLE WRAPPER
+    ════════════════════════════════════════════════════════════════════════ -->
+    <t t-name="nx_analytics_widgets.ExpenseTable">
+        <div class="nx-table-wrap mb-4 nx-owl-table-wrap" t-att-class="props.loading ? 'nx-is-loading' : ''">
+
+            <!-- Loading overlay -->
+            <t t-if="props.loading">
+                <div class="nx-loading-overlay">
+                    <div class="nx-spinner"/>
+                </div>
+            </t>
+
+            <!-- Skeleton rows -->
+            <t t-if="props.loading and props.expenses.length === 0">
+                <div class="nx-skel-table-inner">
+                    <div class="nx-skel-row" t-foreach="[1,2,3,4,5]" t-as="i" t-key="i">
+                        <div class="nx-skel-cell nx-skel-cell--sm"/>
+                        <div class="nx-skel-cell nx-skel-cell--md"/>
+                        <div class="nx-skel-cell nx-skel-cell--lg"/>
+                        <div class="nx-skel-cell nx-skel-cell--md"/>
+                        <div class="nx-skel-cell nx-skel-cell--md"/>
+                        <div class="nx-skel-cell nx-skel-cell--sm"/>
+                        <div class="nx-skel-cell nx-skel-cell--sm"/>
+                    </div>
+                </div>
+            </t>
+
+            <!-- Empty state -->
+            <t t-if="!props.loading and props.expenses.length === 0">
+                <div class="nx-empty p-4">
+                    <div class="nx-empty-icon"><i class="fa fa-money"/></div>
+                    <h5 class="fw-bold mb-1">No expenses found</h5>
+                    <p class="text-muted nx-empty-desc">Try adjusting your filters or search query.</p>
+                </div>
+            </t>
+
+            <!-- Real table -->
+            <t t-if="props.expenses.length > 0">
+                <div class="table-responsive">
+                    <table class="table nx-table">
+                        <thead>
+                            <tr>
+                                <th class="nx-th-idx">#</th>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th class="text-center">Paid By</th>
+                                <th class="text-end">Amount</th>
+                                <th class="text-center nx-th-status">Status</th>
+                                <th class="text-center nx-th-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="props.expenses" t-as="expense" t-key="expense.id">
+                                <ExpenseRow
+                                        expense="expense"
+                                        index="expense_index"
+                                        onDelete="props.onDelete"
+                                        onView="props.onView"
+                                        onEdit="props.onEdit"
+                                />
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+
+        </div>
+    </t>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         TABLE ROW
+    ════════════════════════════════════════════════════════════════════════ -->
+    <t t-name="nx_analytics_widgets.ExpenseRow">
+        <tr t-att-class="'nx-tr nx-tr-expense-' + props.expense.state">
+
+            <!-- Index -->
+            <td class="nx-td-idx">
+                <span class="nx-row-num" t-esc="props.index + 1"/>
+            </td>
+
+            <!-- Date -->
+            <td>
+                <span class="nx-expense-date">
+                    <i class="fa fa-calendar-o me-1"/>
+                    <t t-esc="props.expense.date or '—'"/>
+                </span>
+            </td>
+
+            <!-- Description (clickable → view popup) -->
+            <td class="nx-td-task">
+                <a href="#" class="nx-task-link d-flex align-items-center gap-2"
+                   t-att-title="props.expense.description or 'View Expense'"
+                   t-on-click.prevent="onViewClick">
+                    <span class="nx-task-icon nx-expense-icon">
+                        <i class="fa fa-money"/>
+                    </span>
+                    <span class="nx-task-name">
+                        <strong t-esc="props.expense.description or '—'"/>
+                        <span class="nx-task-category">
+                            <i class="fa fa-tag"/>
+                            <t t-esc="props.expense.category or '—'"/>
+                        </span>
+                    </span>
+                    <i class="fa fa-arrow-right nx-task-arrow ms-auto"/>
+                </a>
+            </td>
+
+            <!-- Paid By -->
+            <td class="text-center">
+                <span class="nx-expense-paid-by">
+                    <i t-att-class="'fa me-1 ' + paymentIcon"/>
+                    <t t-esc="props.expense.paid_by or '—'"/>
+                </span>
+            </td>
+
+            <!-- Amount -->
+            <td class="text-end">
+                <span class="nx-expense-amount">
+                    <strong t-esc="props.expense.amount"/>
+                    <span class="nx-expense-currency ms-1" t-esc="props.expense.currency"/>
+                </span>
+            </td>
+
+            <!-- Status pill -->
+            <td class="text-center nx-td-status">
+                <span t-att-class="'nx-pill nx-pill-expense-' + props.expense.state">
+                    <span class="dot"/>
+                    <t t-esc="props.expense.state_label"/>
+                </span>
+            </td>
+
+            <!-- Actions -->
+            <td class="text-center nx-td-actions">
+                <div class="d-flex align-items-center justify-content-center gap-1">
+                    <!-- View button -->
+                    <button class="nx-icon-btn nx-icon-btn--view"
+                            title="View Expense"
+                            t-on-click="onViewClick">
+                        <i class="fa fa-eye"/>
+                    </button>
+
+                    <!-- Edit button (only for draft) -->
+                    <t t-if="props.expense.can_edit">
+                        <button class="nx-icon-btn nx-icon-btn--edit"
+                                title="Edit Expense"
+                                t-on-click="onEditClick">
+                            <i class="fa fa-pencil"/>
+                        </button>
+                    </t>
+
+                    <!-- Delete button (only for draft/reported) -->
+                    <t t-if="props.expense.can_delete">
+                        <button class="nx-icon-btn nx-icon-btn--delete"
+                                title="Delete Expense"
+                                t-on-click="openConfirmModal">
+                            <i class="fa fa-trash"/>
+                        </button>
+                    </t>
+                </div>
+
+                <!-- Delete Confirmation Modal -->
+                <t t-if="state.showModal">
+                    <div class="nx-modal-backdrop" t-on-click="closeConfirmModal"/>
+                    <div class="nx-confirm-modal" role="dialog" aria-modal="true">
+                        <div class="nx-confirm-modal__header">
+                            <span class="nx-confirm-modal__icon nx-confirm-modal__icon--danger">
+                                <i class="fa fa-trash"/>
+                            </span>
+                            <h5 class="nx-confirm-modal__title">Delete Expense</h5>
+                        </div>
+                        <div class="nx-confirm-modal__body">
+                            <p>Are you sure you want to delete</p>
+                            <strong t-esc="props.expense.description"/>
+                            <p class="nx-confirm-modal__hint">This action cannot be undone.</p>
+                        </div>
+                        <div class="nx-confirm-modal__footer">
+                            <button class="nx-modal-btn nx-modal-btn--cancel"
+                                    t-on-click="closeConfirmModal">
+                                <i class="fa fa-times me-1"/>Cancel
+                            </button>
+                            <button class="nx-modal-btn nx-modal-btn--danger"
+                                    t-on-click="confirmDelete">
+                                <i class="fa fa-trash me-1"/>Delete
+                            </button>
+                        </div>
+                    </div>
+                </t>
+            </td>
+        </tr>
+    </t>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         FORM POPUP  (New / Edit / View)
+    ════════════════════════════════════════════════════════════════════════ -->
+    <t t-name="nx_analytics_widgets.ExpenseFormPopup">
+        <div class="nx-modal-backdrop nx-form-backdrop" t-on-click="onBackdropClick">
+            <div t-att-class="'nx-form-popup' + (props.mode === 'view' ? ' nx-form-popup--view' : '')"
+                 t-on-click.stop="closeTaxDropdown">
+
+                <!-- Header -->
+                <div class="nx-form-popup__header">
+                    <div class="d-flex align-items-center gap-2">
+                        <span t-att-class="'nx-form-popup__icon nx-form-popup__icon--' + props.mode">
+                            <i t-att-class="'fa ' + titleIcon"/>
+                        </span>
+                        <div>
+                            <h5 class="nx-form-popup__title" t-esc="title"/>
+                            <t t-if="props.mode === 'view' and state.state">
+                                <span t-att-class="'nx-pill nx-pill-expense-' + state.state + ' nx-form-popup__header-pill'">
+                                    <span class="dot"/>
+                                    <t t-esc="state.state_label"/>
+                                </span>
+                            </t>
+                        </div>
+                    </div>
+                    <button class="nx-form-popup__close" t-on-click="onClose" title="Close">
+                        <i class="fa fa-times"/>
+                    </button>
+                </div>
+
+                <!-- Loading state -->
+                <t t-if="state.loading">
+                    <div class="nx-form-popup__loading">
+                        <div class="nx-spinner"/>
+                        <span>Loading…</span>
+                    </div>
+                </t>
+
+                <!-- ═══════════ VIEW MODE BODY ═══════════ -->
+                <t t-if="!state.loading and isReadonly">
+                    <div class="nx-form-popup__body nx-view-body">
+
+                        <!-- Hero: description + amount -->
+                        <div class="nx-view-hero">
+                            <div class="nx-view-hero__icon">
+                                <i class="fa fa-money"/>
+                            </div>
+                            <div class="nx-view-hero__content">
+                                <div class="nx-view-hero__desc" t-esc="state.name or '—'"/>
+                                <div class="nx-view-hero__amount">
+                                    <span class="nx-view-hero__amount-value" t-esc="state.amount"/>
+                                    <span class="nx-view-hero__amount-currency" t-esc="state.currency_name"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info cards grid -->
+                        <div class="nx-view-grid">
+
+                            <!-- Date -->
+                            <div class="nx-view-card">
+                                <div class="nx-view-card__icon nx-view-card__icon--date">
+                                    <i class="fa fa-calendar"/>
+                                </div>
+                                <div class="nx-view-card__content">
+                                    <div class="nx-view-card__label">Expense Date</div>
+                                    <div class="nx-view-card__value" t-esc="state.date or '—'"/>
+                                </div>
+                            </div>
+
+                            <!-- Category -->
+                            <div class="nx-view-card">
+                                <div class="nx-view-card__icon nx-view-card__icon--category">
+                                    <i class="fa fa-tag"/>
+                                </div>
+                                <div class="nx-view-card__content">
+                                    <div class="nx-view-card__label">Category</div>
+                                    <div class="nx-view-card__value" t-esc="state.product_name or '—'"/>
+                                </div>
+                            </div>
+
+                            <!-- Paid By -->
+                            <div class="nx-view-card">
+                                <div class="nx-view-card__icon nx-view-card__icon--payment">
+                                    <i class="fa fa-credit-card"/>
+                                </div>
+                                <div class="nx-view-card__content">
+                                    <div class="nx-view-card__label">Paid By</div>
+                                    <div class="nx-view-card__value" t-esc="paymentModeLabel"/>
+                                </div>
+                            </div>
+
+                            <!-- Account -->
+                            <div class="nx-view-card">
+                                <div class="nx-view-card__icon nx-view-card__icon--account">
+                                    <i class="fa fa-book"/>
+                                </div>
+                                <div class="nx-view-card__content">
+                                    <div class="nx-view-card__label">Account</div>
+                                    <div class="nx-view-card__value" t-esc="state.account_name or '—'"/>
+                                </div>
+                            </div>
+
+                            <!-- Taxes (full width if has data) -->
+                            <div class="nx-view-card nx-view-card--full">
+                                <div class="nx-view-card__icon nx-view-card__icon--tax">
+                                    <i class="fa fa-percent"/>
+                                </div>
+                                <div class="nx-view-card__content">
+                                    <div class="nx-view-card__label">Included Taxes</div>
+                                    <div class="nx-view-card__value">
+                                        <t t-if="state.tax_names.length">
+                                            <t t-foreach="state.tax_names" t-as="tn" t-key="tn_index">
+                                                <span class="nx-tag"><t t-esc="tn"/></span>
+                                            </t>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="nx-view-none">No taxes applied</span>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Vendor (conditional) -->
+                            <t t-if="showVendor">
+                                <div class="nx-view-card nx-view-card--full">
+                                    <div class="nx-view-card__icon nx-view-card__icon--vendor">
+                                        <i class="fa fa-building-o"/>
+                                    </div>
+                                    <div class="nx-view-card__content">
+                                        <div class="nx-view-card__label">Vendor</div>
+                                        <div class="nx-view-card__value" t-esc="state.vendor_name or '—'"/>
+                                    </div>
+                                </div>
+                            </t>
+
+                        </div><!-- /nx-view-grid -->
+                    </div>
+
+                    <!-- View Footer -->
+                    <div class="nx-form-popup__footer">
+                        <button class="nx-modal-btn nx-modal-btn--cancel" t-on-click="onClose">
+                            <i class="fa fa-times me-1"/>Close
+                        </button>
+                        <t t-if="state.state === 'draft'">
+                            <button class="nx-modal-btn nx-modal-btn--edit" t-on-click="onSwitchToEdit">
+                                <i class="fa fa-pencil me-1"/>Edit
+                            </button>
+                        </t>
+                    </div>
+                </t>
+
+                <!-- ═══════════ EDIT / CREATE MODE BODY ═══════════ -->
+                <t t-if="!state.loading and !isReadonly">
+                    <div class="nx-form-popup__body">
+                        <div class="nx-form-grid">
+
+                            <!-- ── Description (full width) ───────────── -->
+                            <div class="nx-form-group nx-form-grid--full">
+                                <label class="nx-form-label">
+                                    <i class="fa fa-pencil-square-o"/>Description
+                                    <span class="nx-form-required">*</span>
+                                </label>
+                                <input type="text"
+                                       t-att-class="'nx-form-input' + (state.errors.name ? ' nx-form-input--error' : '')"
+                                       placeholder="e.g. Office supplies, Travel, ..."
+                                       t-att-value="state.name"
+                                       t-on-input="(ev) => this.onFieldChange('name', ev)"/>
+                                <t t-if="state.errors.name">
+                                    <div class="nx-form-error" t-esc="state.errors.name"/>
+                                </t>
+                            </div>
+
+                            <!-- ── Category (col 1) ───────────────────── -->
+                            <div class="nx-form-group">
+                                <label class="nx-form-label">
+                                    <i class="fa fa-tag"/>Category
+                                    <span class="nx-form-required">*</span>
+                                </label>
+                                <select t-att-class="'nx-form-select' + (state.errors.product_id ? ' nx-form-input--error' : '')"
+                                        t-on-change="(ev) => this.onFieldChange('product_id', ev)">
+                                    <option value="">— Select Category —</option>
+                                    <t t-foreach="state.categories" t-as="cat" t-key="cat.id">
+                                        <option t-att-value="cat.id"
+                                                t-att-selected="state.product_id === cat.id"
+                                                t-esc="cat.name"/>
+                                    </t>
+                                </select>
+                                <t t-if="state.errors.product_id">
+                                    <div class="nx-form-error" t-esc="state.errors.product_id"/>
+                                </t>
+                            </div>
+
+                            <!-- ── Expense Date (col 2) ───────────────── -->
+                            <div class="nx-form-group">
+                                <label class="nx-form-label">
+                                    <i class="fa fa-calendar"/>Expense Date
+                                    <span class="nx-form-required">*</span>
+                                </label>
+                                <input type="date"
+                                       t-att-class="'nx-form-input' + (state.errors.date ? ' nx-form-input--error' : '')"
+                                       t-att-value="state.date"
+                                       t-on-input="(ev) => this.onFieldChange('date', ev)"/>
+                                <t t-if="state.errors.date">
+                                    <div class="nx-form-error" t-esc="state.errors.date"/>
+                                </t>
+                            </div>
+
+                            <!-- ── Section: Amount ────────────────────── -->
+                            <div class="nx-form-divider">Amount</div>
+
+                            <!-- ── Total (col 1) ──────────────────────── -->
+                            <div class="nx-form-group">
+                                <label class="nx-form-label">
+                                    <i class="fa fa-money"/>Total
+                                    <span class="nx-form-required">*</span>
+                                </label>
+                                <input type="number" step="0.01" min="0"
+                                       t-att-class="'nx-form-input' + (state.errors.amount ? ' nx-form-input--error' : '')"
+                                       placeholder="0.00"
+                                       t-att-value="state.amount"
+                                       t-on-input="(ev) => this.onFieldChange('amount', ev)"/>
+                                <t t-if="state.errors.amount">
+                                    <div class="nx-form-error" t-esc="state.errors.amount"/>
+                                </t>
+                            </div>
+
+                            <!-- ── Currency (col 2) ───────────────────── -->
+                            <div class="nx-form-group">
+                                <label class="nx-form-label">
+                                    Currency
+                                    <span class="nx-form-required">*</span>
+                                </label>
+                                <select t-att-class="'nx-form-select' + (state.errors.currency_id ? ' nx-form-input--error' : '')"
+                                        t-on-change="(ev) => this.onFieldChange('currency_id', ev)">
+                                    <option value="">— Select —</option>
+                                    <t t-foreach="state.currencies" t-as="cur" t-key="cur.id">
+                                        <option t-att-value="cur.id"
+                                                t-att-selected="state.currency_id === cur.id"
+                                                t-esc="cur.name"/>
+                                    </t>
+                                </select>
+                                <t t-if="state.errors.currency_id">
+                                    <div class="nx-form-error" t-esc="state.errors.currency_id"/>
+                                </t>
+                            </div>
+
+                            <!-- ── Included Taxes (full width, select2) ─ -->
+                            <div class="nx-form-group nx-form-grid--full">
+                                <label class="nx-form-label">
+                                    <i class="fa fa-percent"/>Included Taxes
+                                </label>
+                                <div class="nx-multi-tag" t-on-click.stop="">
+                                    <div t-att-class="'nx-multi-tag__box' + (taxDropdownOpen ? ' nx-multi-tag__box--open' : '')"
+                                         t-on-click="onTaxBoxClick">
+                                        <t t-foreach="selectedTaxItems" t-as="st" t-key="st.id">
+                                            <span class="nx-multi-tag__chip">
+                                                <t t-esc="st.name"/>
+                                                <button class="nx-multi-tag__chip-remove"
+                                                        t-on-click.stop="() => this.removeTax(st.id)"
+                                                        title="Remove">
+                                                    <i class="fa fa-times"/>
+                                                </button>
+                                            </span>
+                                        </t>
+                                        <input type="text"
+                                               class="nx-multi-tag__input"
+                                               t-att-placeholder="selectedTaxItems.length ? '' : 'Search taxes...'"
+                                               t-att-value="state.taxSearch"
+                                               t-on-input="onTaxSearchInput"
+                                               t-on-focus="onTaxSearchFocus"/>
+                                    </div>
+                                    <t t-if="taxDropdownOpen">
+                                        <div class="nx-multi-tag__dropdown">
+                                            <t t-if="filteredTaxes.length === 0">
+                                                <div class="nx-multi-tag__empty">No taxes found</div>
+                                            </t>
+                                            <t t-foreach="filteredTaxes" t-as="tax" t-key="tax.id">
+                                                <button t-att-class="'nx-multi-tag__option' + (isTaxSelected(tax.id) ? ' nx-multi-tag__option--selected' : '')"
+                                                        t-on-click.stop="() => this.toggleTax(tax.id)">
+                                                    <span class="nx-multi-tag__check">
+                                                        <i class="fa fa-check"/>
+                                                    </span>
+                                                    <t t-esc="tax.name"/>
+                                                </button>
+                                            </t>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- ── Section: Accounting ────────────────── -->
+                            <div class="nx-form-divider">Accounting</div>
+
+                            <!-- ── Account (col 1) ────────────────────── -->
+                            <div class="nx-form-group">
+                                <label class="nx-form-label">
+                                    <i class="fa fa-book"/>Account
+                                </label>
+                                <select class="nx-form-select"
+                                        t-on-change="(ev) => this.onFieldChange('account_id', ev)">
+                                    <option value="">— Auto (default) —</option>
+                                    <t t-foreach="state.accounts" t-as="acc" t-key="acc.id">
+                                        <option t-att-value="acc.id"
+                                                t-att-selected="state.account_id === acc.id"
+                                                t-esc="acc.name"/>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <!-- ── Paid By (col 2) ────────────────────── -->
+                            <div class="nx-form-group">
+                                <label class="nx-form-label">
+                                    <i class="fa fa-credit-card"/>Paid By
+                                </label>
+                                <select class="nx-form-select"
+                                        t-on-change="(ev) => this.onFieldChange('payment_mode', ev)">
+                                    <option value="own_account"
+                                            t-att-selected="state.payment_mode === 'own_account'">
+                                        Employee (to reimburse)
+                                    </option>
+                                    <option value="company_account"
+                                            t-att-selected="state.payment_mode === 'company_account'">
+                                        Company
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- ── Vendor (full width, conditional) ───── -->
+                            <t t-if="showVendor">
+                                <div class="nx-form-group nx-form-grid--full">
+                                    <label class="nx-form-label">
+                                        <i class="fa fa-building-o"/>Vendor
+                                    </label>
+                                    <select class="nx-form-select"
+                                            t-on-change="(ev) => this.onFieldChange('vendor_id', ev)">
+                                        <option value="">— Select Vendor —</option>
+                                        <t t-foreach="state.vendors" t-as="v" t-key="v.id">
+                                            <option t-att-value="v.id"
+                                                    t-att-selected="state.vendor_id === v.id"
+                                                    t-esc="v.name"/>
+                                        </t>
+                                    </select>
+                                </div>
+                            </t>
+
+                        </div><!-- /nx-form-grid -->
+                    </div>
+
+                    <!-- Edit/Create Footer -->
+                    <div class="nx-form-popup__footer">
+                        <button class="nx-modal-btn nx-modal-btn--cancel" t-on-click="onClose">
+                            <i class="fa fa-times me-1"/>Cancel
+                        </button>
+                        <button class="nx-modal-btn nx-modal-btn--save"
+                                t-att-disabled="state.saving"
+                                t-on-click="onSave">
+                            <t t-if="state.saving">
+                                <span class="nx-spinner nx-spinner--sm me-1"/>Saving…
+                            </t>
+                            <t t-else="">
+                                <i class="fa fa-check me-1"/>
+                                <t t-if="props.mode === 'create'">Create</t>
+                                <t t-else="">Save Changes</t>
+                            </t>
+                        </button>
+                    </div>
+                </t>
+
+            </div>
+        </div>
+    </t>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         PAGINATION
+    ════════════════════════════════════════════════════════════════════════ -->
+    <t t-name="nx_analytics_widgets.ExpensePagination">
+        <div class="nx-pager mt-3">
+
+            <!-- Prev -->
+            <button class="nx-pager-btn" t-att-disabled="!hasPrev"
+                    t-on-click="() => this.go(props.page - 1)">
+                <i class="fa fa-chevron-left"/>
+            </button>
+
+            <!-- Page bubbles -->
+            <t t-foreach="pageNumbers" t-as="n" t-key="n_index">
+                <t t-if="n === -1">
+                    <span class="nx-pager-ellipsis">…</span>
+                </t>
+                <t t-else="">
+                    <button
+                            t-att-class="'nx-pager-btn' + (n === props.page ? ' active' : '')"
+                            t-on-click="() => this.go(n)"
+                            t-esc="n"
+                    />
+                </t>
+            </t>
+
+            <!-- Next -->
+            <button class="nx-pager-btn" t-att-disabled="!hasNext"
+                    t-on-click="() => this.go(props.page + 1)">
+                <i class="fa fa-chevron-right"/>
+            </button>
+
+            <!-- Info text -->
+            <span class="nx-pager-info">
+                Page <strong t-esc="props.page"/> of <strong t-esc="props.pages"/>
+                — <t t-esc="props.total"/> total
+            </span>
+
+        </div>
+    </t>
+
+</templates>
+

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!--
+    ============================================================
+    COMPONENT: portal_my_tabs.sidebar_desktop
+    Purpose  : Full desktop sidebar <aside> element.
+               Composed from reusable sub-components:
+               - sidebar_logo
+               - sidebar_search
+               - sidebar_nav_groups
+               - sidebar_footer
+    Visibility: hidden on mobile (d-none d-md-flex)
+    ============================================================
+    -->
+    <template id="sidebar_desktop" name="Sidebar: Desktop Aside">
+        <aside class="portal-sidebar d-none d-md-flex">
+            <div class="portal-sidebar__inner">
+
+                <!-- Top row: logo + collapse trigger button -->
+                <div class="portal-sidebar__top-row">
+                    <div class="portal-sidebar__logo">
+                        <t t-call="portal_my_tabs.sidebar_logo"/>
+                    </div>
+                    <button class="portal-sidebar__trigger"
+                            type="button"
+                            title="Toggle sidebar">
+                        <t t-call="portal_my_tabs.sidebar_icon_layout">
+                            <t t-set="size" t-value="'16'"/>
+                        </t>
+                    </button>
+                </div>
+
+                <!-- Search bar -->
+                <t t-call="portal_my_tabs.sidebar_search"/>
+
+                <!-- Navigation groups -->
+                <t t-call="portal_my_tabs.sidebar_nav_groups"/>
+
+                <!-- Footer: user card + popover -->
+                <t t-call="portal_my_tabs.sidebar_footer"/>
+
+            </div>
+        </aside>
+    </template>
+
+</odoo>
+

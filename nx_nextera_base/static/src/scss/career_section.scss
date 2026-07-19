@@ -1,0 +1,17 @@
+.o_section_toggle {
+    > div:first-child:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09) !important;
+        background: linear-gradient(135deg, #edf0f4 0%, #e4e8ee 100%) !important;
+    }
+}
+
+@keyframes nxSectionSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

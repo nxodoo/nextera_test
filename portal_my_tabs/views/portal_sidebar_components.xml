@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!--
+    ============================================================
+    COMPONENT: portal_my_tabs.sidebar_icon_layout
+    Purpose  : Renders the sidebar layout SVG icon (used in both
+               desktop trigger button and mobile topbar button).
+    ============================================================
+    -->
+    <template id="sidebar_icon_layout" name="Sidebar: Layout Icon">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             t-att-width="size or '16'"
+             t-att-height="size or '16'"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2"/>
+            <path d="M9 3v18"/>
+        </svg>
+    </template>
+
+
+    <!--
+    ============================================================
+    COMPONENT: portal_my_tabs.sidebar_logo
+    Purpose  : Shared logo anchor used in both desktop sidebar
+               and mobile offcanvas header.
+    ============================================================
+    -->
+    <template id="sidebar_logo" name="Sidebar: Logo">
+        <a href="/" class="portal-sidebar__logo-link">
+            <img src="/portal_my_tabs/static/img/img.png"
+                 alt="Logo"
+                 class="portal-sidebar__logo-img"/>
+        </a>
+    </template>
+
+
+    <!--
+    ============================================================
+    COMPONENT: portal_my_tabs.sidebar_search
+    Purpose  : Search input bar rendered inside the sidebar inner
+               body (desktop only).
+    ============================================================
+    -->
+    <template id="sidebar_search" name="Sidebar: Search Input">
+        <div class="portal-sidebar__search">
+            <svg class="portal-sidebar__search-icon"
+                 xmlns="http://www.w3.org/2000/svg"
+                 width="15" height="15"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input type="text"
+                   class="portal-sidebar__search-input"
+                   placeholder="Search..."/>
+            <kbd class="portal-sidebar__search-kbd">⌘K</kbd>
+            <button type="button"
+                    class="portal-sidebar__search-clear"
+                    title="Clear">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="14" height="14"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="m15 9-6 6"/>
+                    <path d="m9 9 6 6"/>
+                </svg>
+            </button>
+        </div>
+    </template>
+
+
+    <!--
+    ============================================================
+    COMPONENT: portal_my_tabs.sidebar_nav_groups
+    Purpose  : Renders the full dynamic navigation group list.
+               Shared between desktop sidebar and mobile offcanvas.
+    Requires : sidebar_groups (list of dicts from _get_sidebar_data)
+               request.httprequest.path (for active link detection)
+    ============================================================
+    -->
+    <template id="sidebar_nav_groups" name="Sidebar: Navigation Groups">
+        <t t-foreach="sidebar_groups" t-as="grp">
+
+            <!-- Separator between groups (skip before first group) -->
+            <div class="portal-sidebar__separator" t-if="not grp_first"/>
+
+            <div class="portal-sidebar__group">
+                <div class="portal-sidebar__group-label" t-out="grp['name']"/>
+
+                <nav class="portal-sidebar__nav">
+                    <t t-foreach="grp['items']" t-as="itm">
+
+                        <!-- Resolve the match path -->
+                        <t t-set="match_path" t-value="itm['url_match_prefix']"/>
+
+                        <!-- Determine active state -->
+                        <t t-if="itm['exact_match']">
+                            <t t-set="is_active"
+                               t-value="request.httprequest.path == match_path
+                                        or request.httprequest.path == match_path + '/home'"/>
+                        </t>
+                        <t t-else="">
+                            <t t-set="is_active"
+                               t-value="request.httprequest.path.startswith(match_path)"/>
+                        </t>
+
+                        <a t-attf-class="portal-sidebar__link #{'active' if is_active else ''}"
+                           t-att-href="itm['url']">
+                            <t t-out="itm['icon']"/>
+                            <span t-out="itm['name']"/>
+                        </a>
+
+                    </t>
+                </nav>
+            </div>
+
+        </t>
+    </template>
+
+
+    <!--
+    ============================================================
+    COMPONENT: portal_my_tabs.sidebar_user_popover
+    Purpose  : User card trigger button + popover menu panel.
+               Shared between desktop and mobile sidebars.
+    Requires : request.env.user (current logged-in portal user)
+    ============================================================
+    -->
+    <template id="sidebar_user_popover" name="Sidebar: User Popover">
+        <div class="portal-sidebar__user-wrapper">
+
+            <!-- Trigger button (avatar + name + chevron) -->
+            <button type="button" class="portal-sidebar__user-trigger">
+                <div class="portal-sidebar__user-avatar">
+                    <img t-att-src="image_data_uri(request.env.user.partner_id.avatar_128)"
+                         alt="Avatar"/>
+                </div>
+                <div class="portal-sidebar__user-info">
+                    <span class="portal-sidebar__user-name"
+                          t-out="request.env.user.name"/>
+                    <span class="portal-sidebar__user-email"
+                          t-out="request.env.user.email"/>
+                </div>
+                <svg class="portal-sidebar__user-chevron"
+                     xmlns="http://www.w3.org/2000/svg"
+                     width="16" height="16"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <path d="m7 15 5 5 5-5"/>
+                    <path d="m7 9 5-5 5 5"/>
+                </svg>
+            </button>
+
+            <!-- Popover panel -->
+            <div class="portal-sidebar__popover">
+
+                <!-- Popover header: avatar + identity -->
+                <div class="portal-sidebar__popover-header">
+                    <div class="portal-sidebar__user-avatar">
+                        <img t-att-src="image_data_uri(request.env.user.partner_id.avatar_128)"
+                             alt="Avatar"/>
+                    </div>
+                    <div class="portal-sidebar__user-info">
+                        <span class="portal-sidebar__user-name"
+                              t-out="request.env.user.name"/>
+                        <span class="portal-sidebar__user-email"
+                              t-out="request.env.user.email"/>
+                    </div>
+                </div>
+
+                <div class="portal-sidebar__popover-divider"/>
+
+                <!-- Primary actions -->
+                <nav class="portal-sidebar__popover-nav">
+                    <a href="/odoo" class="portal-sidebar__popover-item">
+                        <i class="fa fa-fw fa-th"/>
+                        <span>Apps</span>
+                    </a>
+                    <a href="/my/home" class="portal-sidebar__popover-item">
+                        <i class="fa fa-fw fa-id-card-o"/>
+                        <span>My Account</span>
+                    </a>
+                </nav>
+
+                <div class="portal-sidebar__popover-divider"/>
+
+                <!-- Danger zone: logout -->
+                <nav class="portal-sidebar__popover-nav">
+                    <a href="/web/session/logout?redirect=/"
+                       class="portal-sidebar__popover-item portal-sidebar__popover-item--danger">
+                        <i class="fa fa-fw fa-sign-out"/>
+                        <span>Logout</span>
+                    </a>
+                </nav>
+
+            </div>
+        </div>
+    </template>
+
+
+    <!--
+    ============================================================
+    COMPONENT: portal_my_tabs.sidebar_footer
+    Purpose  : Footer section appended at the bottom of any
+               sidebar inner body (desktop + mobile).
+               Contains separator + user popover.
+    ============================================================
+    -->
+    <template id="sidebar_footer" name="Sidebar: Footer">
+        <div class="portal-sidebar__footer">
+            <div class="portal-sidebar__separator"/>
+            <t t-call="portal_my_tabs.sidebar_user_popover"/>
+        </div>
+    </template>
+
+</odoo>
+

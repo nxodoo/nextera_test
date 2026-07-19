@@ -1,0 +1,1288 @@
+// ============================================================
+//  NX Task Dashboard – OWL component styles
+// ============================================================
+
+// ── Hide placeholder as soon as OWL mounts its root sibling
+.nx-owl-root ~ .nx-owl-placeholder,
+.nx-owl-placeholder:not(:only-child) {
+    display: none !important;
+}
+
+// ── Skeleton loading ────────────────────────────────────────
+.nx-task-dash-skeleton {
+    .nx-skel-cards-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .nx-skel-card {
+        flex: 1;
+        height: 220px;
+        border-radius: var(--nx-radius, 16px);
+        background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+        background-size: 200% 100%;
+        animation: nx-task-skel-shimmer 1.5s infinite;
+    }
+    .nx-skel-flow {
+        height: 90px;
+        border-radius: var(--nx-radius, 16px);
+        margin-bottom: 1.5rem;
+        background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+        background-size: 200% 100%;
+        animation: nx-task-skel-shimmer 1.5s infinite;
+    }
+    .nx-skel-chart {
+        height: 280px;
+        border-radius: var(--nx-radius, 16px);
+        background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+        background-size: 200% 100%;
+        animation: nx-task-skel-shimmer 1.5s infinite;
+    }
+    .nx-skel-footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        padding: 1.5rem 0;
+        color: #94a3b8;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+}
+
+@keyframes nx-task-skel-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+// ── Chart card ──────────────────────────────────────────────
+.nx-chart-card {
+    background: #fff;
+    border-radius: var(--nx-radius, 16px);
+    border: 1px solid var(--nx-gray-200, #e2e8f0);
+    box-shadow: var(--nx-shadow, 0 4px 24px rgba(79, 70, 229, 0.08));
+    padding: 1.5rem;
+    transition: box-shadow 0.25s ease;
+
+    &:hover {
+        box-shadow: var(--nx-shadow-hover, 0 8px 32px rgba(79, 70, 229, 0.18));
+    }
+}
+
+.nx-chart-container {
+    position: relative;
+    width: 100%;
+    height: 280px;
+}
+
+// ── Flow section ────────────────────────────────────────────
+.nx-task-flow-section {
+
+    .nx-flow-card {
+        background: #fff;
+        border-radius: var(--nx-radius, 16px);
+        border: 1px solid var(--nx-gray-200, #e2e8f0);
+        box-shadow: var(--nx-shadow, 0 4px 24px rgba(79, 70, 229, 0.08));
+        padding: 1.25rem 1.5rem;
+        transition: box-shadow 0.25s ease;
+
+        &:hover {
+            box-shadow: var(--nx-shadow-hover, 0 8px 32px rgba(79, 70, 229, 0.18));
+        }
+    }
+
+    .nx-flow {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .nx-flow-node {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.6rem 1rem;
+        border-radius: 12px;
+        background: var(--nx-gray-50, #f8fafc);
+        border: 1.5px solid var(--nx-gray-200, #e2e8f0);
+        transition: transform 0.2s, box-shadow 0.2s;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+    }
+
+    .nx-flow-node-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        color: #fff;
+        flex-shrink: 0;
+    }
+
+    .nx-flow-node--draft   .nx-flow-node-icon { background: linear-gradient(135deg, #94a3b8, #64748b); }
+    .nx-flow-node--pending .nx-flow-node-icon { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .nx-flow-node--approved .nx-flow-node-icon { background: linear-gradient(135deg, #10b981, #059669); }
+    .nx-flow-node--refused  .nx-flow-node-icon { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+    .nx-flow-node-body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .nx-flow-node-label {
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--nx-gray-600, #475569);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .nx-flow-node-count {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: var(--nx-gray-800, #1e293b);
+        line-height: 1.2;
+    }
+
+    .nx-flow-arrow {
+        display: flex;
+        align-items: center;
+        gap: 0.15rem;
+        color: var(--nx-gray-400, #94a3b8);
+    }
+
+    .nx-flow-arrow-line {
+        width: 24px;
+        height: 2px;
+        background: var(--nx-gray-200, #e2e8f0);
+        border-radius: 2px;
+    }
+
+    .nx-flow-arrow-head {
+        font-size: 0.65rem;
+    }
+
+    .nx-flow-fork {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+// ── Accent "primary" & "purple" (not in leave.scss) ─────────
+.nx-balance-card {
+    &.accent-primary {
+        background: linear-gradient(145deg, #4338ca 0%, #4f46e5 55%, #6366f1 100%);
+
+        &:hover {
+            box-shadow: 0 14px 40px rgba(79, 70, 229, 0.45);
+        }
+    }
+
+    &.accent-purple {
+        background: linear-gradient(145deg, #7e22ce 0%, #9333ea 55%, #a855f7 100%);
+
+        &:hover {
+            box-shadow: 0 14px 40px rgba(147, 51, 234, 0.45);
+        }
+    }
+}
+
+// ── Project Doughnut Chart ──────────────────────────────────
+.nx-project-chart-wrapper {
+    margin-bottom: 1rem;
+}
+
+.nx-project-chart-container {
+    position: relative;
+    width: 100%;
+    height: 320px;
+
+    canvas {
+        cursor: pointer;
+    }
+
+    @media (max-width: 576px) {
+        height: 260px;
+    }
+}
+
+.nx-project-chart-hint {
+    text-align: center;
+    margin-top: 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #6366f1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    width: 100%;
+    padding: 0.45rem 1rem;
+    background: #eef2ff;
+    border-radius: 999px;
+    border: 1px dashed #a5b4fc;
+    letter-spacing: 0.01em;
+    transition: background 0.2s, border-color 0.2s;
+
+    i {
+        font-size: 0.85rem;
+        color: #4f46e5;
+        animation: nxHintBounce 1.6s ease-in-out infinite;
+    }
+
+    &:hover {
+        background: #e0e7ff;
+        border-color: #818cf8;
+    }
+}
+
+@keyframes nxHintBounce {
+    0%, 100% { transform: translateY(0);    }
+    40%       { transform: translateY(-3px); }
+    60%       { transform: translateY(-1px); }
+}
+
+// ── Project Detail Popup Overlay ─────────────────────────────
+.nx-pd-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: nxOverlayIn 0.2s ease;
+    padding: 1rem;
+}
+
+@keyframes nxOverlayIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+// ── Popup Card ───────────────────────────────────────────────
+.nx-project-detail-panel {
+    background: #fff;
+    border-radius: 22px;
+    box-shadow:
+        0 40px 100px rgba(15, 23, 42, 0.3),
+        0 8px 32px rgba(79, 70, 229, 0.14);
+    width: 100%;
+    max-width: 750px;
+    max-height: 92vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: nxPdPopIn 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes nxPdPopIn {
+    from { opacity: 0; transform: scale(0.84) translateY(32px); }
+    to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+// ── Banner Header ────────────────────────────────────────────
+.nx-pd-banner {
+    position: relative;
+    overflow: hidden;
+    padding: 1.6rem 1.5rem 1.4rem;
+    background: linear-gradient(135deg, #312e81 0%, #4f46e5 45%, #7c3aed 100%);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.nx-pd-banner-blob {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.15;
+    pointer-events: none;
+
+    &--1 {
+        width: 160px;
+        height: 160px;
+        background: #fff;
+        top: -50px;
+        right: -40px;
+    }
+
+    &--2 {
+        width: 90px;
+        height: 90px;
+        background: #a5b4fc;
+        bottom: -30px;
+        left: 20px;
+    }
+}
+
+.nx-pd-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    z-index: 1;
+    flex: 1;
+    min-width: 0;
+}
+
+.nx-pd-banner-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #fff;
+    flex-shrink: 0;
+    backdrop-filter: blur(4px);
+}
+
+.nx-pd-banner-text {
+    min-width: 0;
+}
+
+.nx-pd-banner-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.65);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.2rem;
+}
+
+.nx-pd-banner-name {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.25;
+}
+
+// ── Close Button ─────────────────────────────────────────────
+.nx-pd-close {
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 0.75rem;
+    backdrop-filter: blur(4px);
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.28);
+        color: #fff;
+        transform: rotate(90deg);
+    }
+}
+
+// ── Body ─────────────────────────────────────────────────────
+.nx-pd-body {
+    padding: 1.4rem 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+
+    // Custom scrollbar
+    &::-webkit-scrollbar { width: 4px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 99px; }
+}
+
+// ── Completion Row (ring + bar + pills) ───────────────────────
+.nx-pd-completion-row {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.1rem 1.25rem;
+    background: linear-gradient(135deg, #f8faff 0%, #f1f5ff 100%);
+    border-radius: 16px;
+    border: 1px solid #e0e7ff;
+    margin-bottom: 1.25rem;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0; top: 0; bottom: 0;
+        width: 4px;
+        background: linear-gradient(180deg, #4f46e5, #8b5cf6);
+        border-radius: 4px 0 0 4px;
+    }
+}
+
+// SVG Ring – 80px
+.nx-pd-ring-wrap {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+}
+
+.nx-pd-ring {
+    width: 80px;
+    height: 80px;
+    transform: rotate(-90deg);
+
+    .nx-pd-ring-track {
+        fill: none;
+        stroke: #e0e7ff;
+        stroke-width: 7;
+    }
+
+    .nx-pd-ring-fill {
+        fill: none;
+        stroke: #3622b6;
+        stroke-width: 7;
+        stroke-linecap: round;
+        stroke-dasharray: 207.3;
+        transition: stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+}
+
+.nx-pd-ring-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nx-pd-ring-pct {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #1e293b;
+    line-height: 1;
+    letter-spacing: -0.5px;
+}
+
+.nx-pd-ring-unit {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: #64748b;
+    align-self: center;
+    margin-top: 3px;
+}
+
+.nx-pd-completion-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.nx-pd-completion-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #4f46e5;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.15rem;
+}
+
+.nx-pd-completion-sub {
+    font-size: 0.82rem;
+    color: #64748b;
+    font-weight: 500;
+    margin-bottom: 0;
+
+    strong {
+        color: #1e293b;
+        font-weight: 800;
+    }
+}
+
+// ── Completion Pills ──────────────────────────────────────────
+.nx-pd-completion-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.nx-pd-pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+
+    &--new     { background: #022a65; color: #ffffff; }
+    &--open     { background: #dbeafe; color: #1d4ed8; }
+    &--progress { background: #fef3c7; color: #b45309; }
+    &--done     { background: #d1fae5; color: #065f46; }
+    &--canceled { background: #fee2e2; color: #991b1b; }
+}
+
+// ── Section Label ─────────────────────────────────────────────
+.nx-pd-section-label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+
+    span {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+    }
+
+    &::before, &::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #f1f5f9;
+    }
+}
+
+// ── Stats Grid 2×2 + full ─────────────────────────────────────
+.nx-pd-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    animation: nxStatsSlideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+@keyframes nxStatsSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nx-pd-stat {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 1.2rem;
+    border-radius: 16px;
+    background: #fff;
+    border: 1.5px solid #e2e8f0;
+    overflow: hidden;
+    cursor: pointer;
+    transition:
+        transform 0.35s cubic-bezier(0.34, 0.56, 0.64, 1),
+        box-shadow 0.35s cubic-bezier(0.34, 0.56, 0.64, 1),
+        border-color 0.3s ease;
+    animation: nxStatFadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+    // Stagger animation delays - only on first load
+    &:nth-child(1) { animation-delay: 0.05s; }
+    &:nth-child(2) { animation-delay: 0.1s; }
+    &:nth-child(3) { animation-delay: 0.15s; }
+    &:nth-child(4) { animation-delay: 0.2s; }
+    &:nth-child(5) { animation-delay: 0.25s; }
+    &:nth-child(6) { animation-delay: 0.3s; }
+
+    // Prevent animation from running again after first load
+    &.nx-stat-loaded {
+        animation: none;
+    }
+
+    // Gradient accent bar (left edge)
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        transition: width 0.3s ease;
+    }
+
+    // Subtle glow effect on hover
+    &::after {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        border-radius: 16px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    &:hover {
+        border-color: transparent;
+        transform: translateY(-3px) scale(1.01);
+        box-shadow:
+            0 10px 28px rgba(0, 0, 0, 0.09),
+            0 4px 14px rgba(0, 0, 0, 0.05);
+
+        &::before {
+            width: 100%;
+        }
+
+        &::after {
+            opacity: 1;
+        }
+
+        .nx-pd-stat-icon-wrap {
+            transform: scale(1.12) rotate(3deg);
+        }
+
+        .nx-pd-stat-val {
+            transform: scale(1.05);
+        }
+    }
+
+    &--full {
+        grid-column: 1 / -1; // spans both columns
+        background: linear-gradient(135deg, #fafbff 0%, #f0f4ff 100%);
+        border-color: #dce5ff;
+
+        &:hover {
+            background: linear-gradient(135deg, #fff 0%, #f5f8ff 100%);
+        }
+    }
+
+    // Gradient accents & glows per type
+    &--total::before    { background: linear-gradient(180deg, #4f46e5, #6366f1); }
+    &--open::before     { background: linear-gradient(180deg, #3b82f6, #60a5fa); }
+    &--progress::before { background: linear-gradient(180deg, #f59e0b, #fbbf24); }
+    &--done::before     { background: linear-gradient(180deg, #10b981, #34d399); }
+    &--canceled::before { background: linear-gradient(180deg, #ef4444, #f87171); }
+    &--hours::before    { background: linear-gradient(180deg, #8b5cf6, #a78bfa); }
+
+    &--total::after    { box-shadow: inset 0 0 32px rgba(79, 70, 229, 0.15); }
+    &--open::after     { box-shadow: inset 0 0 32px rgba(59, 130, 246, 0.15); }
+    &--progress::after { box-shadow: inset 0 0 32px rgba(245, 158, 11, 0.15); }
+    &--done::after     { box-shadow: inset 0 0 32px rgba(16, 185, 129, 0.15); }
+    &--canceled::after { box-shadow: inset 0 0 32px rgba(239, 68, 68, 0.15); }
+    &--hours::after    { box-shadow: inset 0 0 32px rgba(139, 92, 246, 0.15); }
+}
+
+@keyframes nxStatFadeIn {
+    //from {
+    //    opacity: 0;
+    //    transform: translateY(10px);
+    //}
+    //to {
+    //    opacity: 1;
+    //    transform: translateY(0);
+    //}
+}
+
+.nx-pd-stat-icon-wrap {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: #fff;
+    flex-shrink: 0;
+    transition:
+        transform 0.35s cubic-bezier(0.34, 0.56, 0.64, 1),
+        box-shadow 0.3s ease;
+    z-index: 1;
+
+    // Subtle pulse animation
+    &::before {
+        content: '';
+        position: absolute;
+        inset: -4px;
+        border-radius: 16px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .nx-pd-stat:hover &::before {
+        opacity: 0.2;
+        animation: nxIconPulse 1.5s ease-in-out infinite;
+    }
+
+    .nx-pd-stat--total    & {
+        background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+        box-shadow: 0 6px 20px rgba(79, 70, 229, 0.3);
+    }
+    .nx-pd-stat--open     & {
+        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+    }
+    .nx-pd-stat--progress & {
+        background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+    }
+    .nx-pd-stat--done     & {
+        background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+    }
+    .nx-pd-stat--canceled & {
+        background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+    }
+    .nx-pd-stat--hours    & {
+        background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+    }
+
+    .nx-pd-stat--total    &::before { background: linear-gradient(135deg, #4f46e5, #6366f1); }
+    .nx-pd-stat--open     &::before { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
+    .nx-pd-stat--progress &::before { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+    .nx-pd-stat--done     &::before { background: linear-gradient(135deg, #10b981, #34d399); }
+    .nx-pd-stat--canceled &::before { background: linear-gradient(135deg, #ef4444, #f87171); }
+    .nx-pd-stat--hours    &::before { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+}
+
+@keyframes nxIconPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.2;
+    }
+    50% {
+        transform: scale(1.4);
+        opacity: 0;
+    }
+}
+
+.nx-pd-stat-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    z-index: 1;
+}
+
+.nx-pd-stat-lbl {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.15rem;
+    transition: color 0.3s ease;
+
+    .nx-pd-stat:hover & {
+        color: #475569;
+    }
+}
+
+.nx-pd-stat-val {
+    font-size: 1.65rem;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1.1;
+    letter-spacing: -0.8px;
+    transition:
+        transform 0.35s cubic-bezier(0.34, 0.56, 0.64, 1),
+        color 0.3s ease;
+    display: inline-block;
+    transform-origin: left center;
+}
+
+.nx-pd-stat-unit {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #94a3b8;
+    margin-left: 3px;
+    letter-spacing: 0;
+    transition: color 0.3s ease;
+
+    .nx-pd-stat:hover & {
+        color: #64748b;
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 576px) {
+    .nx-pd-stats {
+        gap: 0.6rem;
+    }
+
+    .nx-pd-stat {
+        padding: 0.9rem 1rem;
+        gap: 0.8rem;
+
+        &:hover {
+            transform: translateY(-2px) scale(1.01);
+        }
+    }
+
+    .nx-pd-stat-icon-wrap {
+        width: 42px;
+        height: 42px;
+        font-size: 1rem;
+    }
+
+    .nx-pd-stat-val {
+        font-size: 1.4rem;
+    }
+}
+
+// ── Modal Footer ──────────────────────────────────────────────
+.nx-pd-modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #f1f5f9;
+    background: #fafbff;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    border-radius: 0 0 22px 22px;
+}
+
+.nx-pd-dismiss-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 1.3rem;
+    border-radius: 10px;
+    border: 1.5px solid #e2e8f0;
+    background: #fff;
+    color: #64748b;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.01em;
+
+    i { font-size: 0.85rem; }
+
+    &:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+        color: #334155;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    &:active {
+        transform: translateY(0);
+        box-shadow: none;
+    }
+}
+
+// ── Reuse progress bar styles (if not already global) ───────
+.nx-progress {
+    width: 100%;
+    height: 6px;
+    background: #f1f5f9;
+    border-radius: 999px;
+    overflow: hidden;
+
+    &--thick {
+        height: 8px;
+    }
+}
+
+.nx-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #4f46e5, #8b5cf6);
+    border-radius: 999px;
+    transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+
+    &--animated {
+        position: relative;
+        overflow: hidden;
+
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                transparent 100%
+            );
+            animation: nxProgressShimmer 2s infinite;
+        }
+    }
+}
+
+@keyframes nxProgressShimmer {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+// ============================================================
+//  NX Task Summary – Chip color variants for deadline cards
+//  These extend the existing .nx-aw-chip system from leave.scss
+// ============================================================
+
+// ── Top row: stat cards + project chart side-by-side ────
+.nx-top-row {
+    align-items: stretch;            // equal-height columns
+
+    > [class*="col-"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    // Make the analytics widget fill the column height
+    .nx-analytics-widget {
+        flex: 1;
+    }
+
+    // Make the project chart card fill the remaining space
+    .nx-project-chart-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .nx-chart-card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nx-project-chart-container {
+            flex: 1;
+            min-height: 220px;
+        }
+    }
+}
+
+// ── Delayed (Red) ───────────────────────────────────────
+.nx-aw-chip--delayed .nx-aw-chip-icon {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+}
+
+// ── Today (Amber) ───────────────────────────────────────
+.nx-aw-chip--today .nx-aw-chip-icon {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+}
+
+// ── Future / Upcoming (Indigo-Blue) ─────────────────────
+.nx-aw-chip--future .nx-aw-chip-icon {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+}
+
+// ── No Deadline (Slate-Gray) ────────────────────────────
+.nx-aw-chip--nodeadline .nx-aw-chip-icon {
+    background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(148, 163, 184, 0.35);
+}
+
+// ============================================================
+//  Mini Task Pipeline  (inside gradient card)
+//  Glassmorphism nodes matching the purple analytics widget
+// ============================================================
+
+.nx-mini-pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+}
+
+// ── Individual node ─────────────────────────────────────
+.nx-mp-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.55rem 0.7rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    min-width: 62px;
+    text-align: center;
+    flex: 1;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.18);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+}
+
+// ── Icon circle ─────────────────────────────────────────
+.nx-mp-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: #fff;
+    transition: transform 0.3s ease;
+
+    .nx-mp-node:hover & {
+        transform: scale(1.15) rotate(5deg);
+    }
+
+    &--new      { background: rgba(255, 255, 255, 0.2); }
+    &--total    { background: rgba(59, 130, 246, 0.45); }
+    &--progress { background: rgba(251, 191, 36, 0.4); }
+    &--done     { background: rgba(16, 185, 129, 0.4); }
+    &--canceled { background: rgba(239, 68, 68, 0.4); }
+}
+
+// ── Count number ────────────────────────────────────────
+.nx-mp-count {
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: -0.3px;
+}
+
+// ── Label ───────────────────────────────────────────────
+.nx-mp-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+// ── Arrows between nodes ────────────────────────────────
+.nx-mp-arrow {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.55rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+// ── Fork (Done / Canceled stacked vertically) ───────────
+.nx-mp-fork {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+// ── Responsive ──────────────────────────────────────────
+@media (max-width: 576px) {
+    .nx-mini-pipeline {
+        gap: 0.25rem;
+    }
+    .nx-mp-node {
+        padding: 0.4rem 0.5rem;
+        min-width: 50px;
+    }
+    .nx-mp-count {
+        font-size: 1rem;
+    }
+}
+
+// ============================================================
+//  NX Task Dashboard – Compact size overrides
+//  Scoped to .nx-task-dashboard-owl to avoid affecting leave portal
+// ============================================================
+
+.nx-task-dashboard-owl {
+
+    // ── Analytics widget: tighter padding ───────────────────
+    .nx-analytics-widget {
+        padding: 0.75rem 0.9rem;
+        gap: 0.6rem;
+    }
+
+    // ── Header row ───────────────────────────────────────────
+    .nx-aw-header-row {
+        margin-bottom: 0.5rem;
+    }
+
+    .nx-aw-icon-wrapper {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+    }
+
+    .nx-aw-header-icon {
+        font-size: 0.95rem;
+    }
+
+    .nx-aw-title {
+        font-size: 0.88rem;
+        margin-bottom: 0;
+    }
+
+    .nx-aw-subtitle {
+        font-size: 0.73rem;
+        margin-bottom: 0.5rem;
+    }
+
+    // ── Section labels ───────────────────────────────────────
+    .nx-aw-section-label {
+        font-size: 0.62rem;
+        margin-bottom: 0.35rem;
+        margin-top: 0 !important;
+
+        &.mt-3 {
+            margin-top: 0.4rem !important;
+        }
+    }
+
+    // ── 2×2 chip grid → 4 in one row ────────────────────────
+    .nx-aw-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.4rem;
+    }
+
+    .nx-aw-chip {
+        padding: 0.3rem 0.45rem;
+        gap: 0.35rem;
+        border-radius: 8px;
+    }
+
+    .nx-aw-chip-icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        font-size: 0.65rem;
+    }
+
+    .nx-aw-chip-badge {
+        font-size: 0.85rem;
+        letter-spacing: -0.3px;
+    }
+
+    .nx-aw-chip-label {
+        font-size: 0.6rem;
+        letter-spacing: 0.03em;
+    }
+
+    // ── Decorative sphere ────────────────────────────────────
+    .nx-aw-right {
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+
+    .nx-aw-sphere {
+        width: 60px;
+        height: 60px;
+    }
+
+    .nx-aw-sphere-ring {
+        border-width: 1px;
+    }
+
+    // ── Mini pipeline ────────────────────────────────────────
+    .nx-mini-pipeline {
+        gap: 0.2rem;
+    }
+
+    .nx-mp-node {
+        padding: 0.35rem 0.45rem;
+        min-width: 48px;
+        border-radius: 8px;
+        gap: 0.12rem;
+    }
+
+    .nx-mp-icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        font-size: 0.6rem;
+    }
+
+    .nx-mp-count {
+        font-size: 0.9rem;
+        letter-spacing: -0.2px;
+    }
+
+    .nx-mp-label {
+        font-size: 0.52rem;
+    }
+
+    .nx-mp-arrow {
+        font-size: 0.45rem;
+    }
+
+    .nx-mp-fork {
+        gap: 0.2rem;
+    }
+
+    // ── Right column: Projects chart card ───────────────────
+    .nx-chart-card {
+        padding: 0.75rem 0.9rem;
+    }
+
+    .nx-aw-header-row.mb-3 {
+        margin-bottom: 0.5rem !important;
+    }
+
+    .nx-project-chart-container {
+        height: 150px;
+    }
+
+    .nx-project-chart-hint {
+        padding: 0.3rem 0.75rem;
+        font-size: 0.7rem;
+        margin-top: 0.5rem;
+    }
+}
+
+// ── Canceled Chip (Projects Overview header) ─────────────
+.nx-canceled-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.22);
+    border-radius: 99px;
+    padding: 0.3rem 0.75rem 0.3rem 0.6rem;
+    font-size: 0.78rem;
+    color: #dc2626;
+    cursor: default;
+    transition: all 0.25s ease;
+
+    &:hover {
+        background: rgba(239, 68, 68, 0.14);
+        border-color: rgba(239, 68, 68, 0.4);
+        transform: translateY(-1px);
+        box-shadow: 0 3px 12px rgba(239, 68, 68, 0.15);
+    }
+
+    &-icon {
+        font-size: 0.72rem;
+        opacity: 0.85;
+    }
+
+    &-count {
+        font-weight: 800;
+        font-size: 0.85rem;
+        letter-spacing: -0.02em;
+    }
+
+    &-label {
+        font-weight: 600;
+        opacity: 0.8;
+        letter-spacing: 0.01em;
+    }
+}

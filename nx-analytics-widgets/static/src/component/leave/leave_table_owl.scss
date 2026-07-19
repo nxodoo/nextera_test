@@ -1,0 +1,340 @@
+// ============================================================
+//  NX Leave Portal – OWL component styles
+//  File: leave_table_owl.scss
+// ============================================================
+
+// ── Filters bar ─────────────────────────────────────────────
+.nx-owl-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    transition: opacity 0.2s;
+
+    &.nx-filters-loading {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+}
+
+// Inline spinner next to filter tabs
+.nx-filter-spinner {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.35rem;
+}
+
+.nx-spinner--sm {
+    width: 18px;
+    height: 18px;
+    border-width: 2px;
+}
+
+.nx-filter-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.nx-filter-tab {
+    border: 1.5px solid var(--nx-gray-200);
+    background: #fff;
+    border-radius: 9px;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--nx-gray-600);
+    cursor: pointer;
+    transition: all 0.18s;
+
+    &:hover {
+        background: var(--nx-primary-light);
+        border-color: var(--nx-primary);
+        color: var(--nx-primary);
+    }
+
+    &.active {
+        background: var(--nx-primary);
+        border-color: var(--nx-primary);
+        color: #fff;
+    }
+}
+
+.nx-filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+// ── Search ──────────────────────────────────────────────────
+.nx-search-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.nx-search-icon {
+    //position: absolute;
+    //left: 0.65rem;
+    color: var(--nx-gray-400);
+    font-size: 0.78rem;
+    pointer-events: none;
+}
+
+.nx-search-input {
+    border: 1.5px solid var(--nx-gray-200);
+    border-radius: 9px;
+    padding: 0.35rem 0.75rem 0.35rem 2rem;
+    font-size: 0.82rem;
+    color: var(--nx-gray-800);
+    background: #fff;
+    width: 220px;
+    transition: border-color 0.2s;
+
+    &::placeholder { color: var(--nx-gray-400); }
+
+    &:focus {
+        outline: none;
+        border-color: var(--nx-primary);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+}
+
+// ── Sort button ─────────────────────────────────────────────
+.nx-sort-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: 1.5px solid var(--nx-gray-200);
+    background: #fff;
+    border-radius: 9px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--nx-gray-600);
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+
+    &:hover {
+        background: var(--nx-primary-light);
+        border-color: var(--nx-primary);
+        color: var(--nx-primary);
+    }
+}
+
+// ── Table loading state ──────────────────────────────────────
+.nx-owl-table-wrap {
+    position: relative;
+
+    &.nx-is-loading {
+        opacity: 0.55;
+        pointer-events: none;
+    }
+}
+
+.nx-loading-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.65);
+    z-index: 10;
+    border-radius: var(--nx-radius);
+}
+
+@keyframes nx-spin { to { transform: rotate(360deg); } }
+
+.nx-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--nx-gray-200);
+    border-top-color: var(--nx-primary);
+    border-radius: 50%;
+    animation: nx-spin 0.7s linear infinite;
+}
+
+// ── Skeleton rows inside OWL table (loading + empty) ─────────
+.nx-skel-table-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 0.5rem 0;
+
+    .nx-skel-row {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background: #fff;
+        border: 1px solid var(--nx-gray-100);
+        border-radius: var(--nx-radius-sm);
+    }
+
+    .nx-skel-cell {
+        height: 16px;
+        border-radius: 6px;
+        background: linear-gradient(90deg, var(--nx-gray-100) 25%, var(--nx-gray-50) 50%, var(--nx-gray-100) 75%);
+        background-size: 800px 100%;
+        animation: nx-shimmer 1.5s infinite ease-in-out;
+
+        &--sm { width: 40px; flex-shrink: 0; }
+        &--md { flex: 1; max-width: 160px; }
+        &--lg { flex: 2; }
+    }
+}
+
+@keyframes nx-shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+}
+
+// ── Actions column ───────────────────────────────────────────
+.nx-th-actions { width: 90px; }
+.nx-td-actions { width: 90px; }
+
+.nx-btn-cancel {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border: 1.5px solid var(--nx-danger);
+    background: #fff;
+    color: var(--nx-danger);
+    border-radius: 8px;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+
+    &:hover {
+        background: var(--nx-danger-light);
+    }
+}
+
+// ── Pager (overrides / extends existing .nx-pager) ───────────
+.nx-pager-btn {
+    min-width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: 1.5px solid var(--nx-gray-200);
+    background: #fff;
+    color: var(--nx-gray-600);
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0 0.5rem;
+
+    &:hover:not(:disabled):not(.active) {
+        background: var(--nx-primary-light);
+        border-color: var(--nx-primary);
+        color: var(--nx-primary);
+    }
+
+    &.active {
+        background: var(--nx-primary);
+        border-color: var(--nx-primary);
+        color: #fff;
+        cursor: default;
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+}
+
+.nx-pager-ellipsis {
+    font-size: 0.85rem;
+    color: var(--nx-gray-400);
+    padding: 0 0.2rem;
+    line-height: 34px;
+}
+
+// ── Error banner ─────────────────────────────────────────────
+.nx-owl-error {
+    border-radius: var(--nx-radius-sm);
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+// ── Skeleton placeholder (visible before OWL mounts) ─────────
+
+// Hide the placeholder as soon as OWL mounts its root sibling
+.nx-owl-root ~ .nx-owl-placeholder,
+.nx-owl-placeholder:not(:only-child) {
+    display: none !important;
+}
+
+.nx-owl-placeholder {
+    padding: 0;
+}
+
+.nx-skel-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.nx-skel-pill {
+    width: 70px;
+    height: 32px;
+    border-radius: 9px;
+    background: linear-gradient(90deg, var(--nx-gray-100) 25%, var(--nx-gray-50) 50%, var(--nx-gray-100) 75%);
+    background-size: 800px 100%;
+    animation: nx-shimmer 1.5s infinite ease-in-out;
+
+    &--wide {
+        width: 180px;
+        margin-left: auto;
+    }
+}
+
+.nx-skel-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+}
+
+.nx-skel-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: #fff;
+    border: 1px solid var(--nx-gray-100);
+    border-radius: var(--nx-radius-sm);
+}
+
+.nx-skel-cell {
+    height: 16px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--nx-gray-100) 25%, var(--nx-gray-50) 50%, var(--nx-gray-100) 75%);
+    background-size: 800px 100%;
+    animation: nx-shimmer 1.5s infinite ease-in-out;
+
+    &--sm { width: 40px; flex-shrink: 0; }
+    &--md { flex: 1; max-width: 160px; }
+    &--lg { flex: 2; }
+}
+
+.nx-skel-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 1rem 0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--nx-gray-400);
+}

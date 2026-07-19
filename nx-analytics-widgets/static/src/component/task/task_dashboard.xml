@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     ROOT DASHBOARD APP
+════════════════════════════════════════════════════════════════════════ -->
+    <t t-name="nx_analytics_widgets.TaskChartDashboardApp">
+    <div class="nx-task-dashboard-owl nx-owl-root">
+
+        <!-- Error banner -->
+        <t t-if="state.error">
+            <div class="alert alert-danger" t-esc="state.error"/>
+        </t>
+
+        <!-- Loading skeleton -->
+        <t t-if="state.loading">
+            <div class="nx-task-dash-skeleton">
+                <div class="nx-skel-cards-row">
+                    <div class="nx-skel-card" t-foreach="[1,2,3]" t-as="i" t-key="i"/>
+                </div>
+                <div class="nx-skel-flow"/>
+                <div class="nx-skel-chart"/>
+                <div class="nx-skel-footer">
+                    <div class="nx-spinner"/>
+                    <span>Loading task dashboard…</span>
+                </div>
+            </div>
+        </t>
+
+        <t t-if="!state.loading and !state.error">
+
+            <!-- ════════════════════════════════════════
+                 STAT CARDS  +  PROJECT CARDS  (one row)
+            ════════════════════════════════════════ -->
+            <div class="row g-2 mb-2 nx-top-row">
+
+                <!-- ── Left column: Deadline Stat Cards ── -->
+                <div class="col-lg-6">
+                    <div class="nx-analytics-widget nx-analytics-widget--enhanced h-100 circle-head">
+
+                        <!-- Left content -->
+                        <div class="nx-aw-left">
+                            <!-- Title block with animated icon -->
+                            <div class="nx-aw-header-row">
+                                <div class="nx-aw-icon-wrapper">
+                                    <i class="fa fa-calendar nx-aw-header-icon"/>
+                                </div>
+                                <div>
+                                    <div class="nx-aw-title">Task Deadlines</div>
+                                    <div class="nx-aw-subtitle">
+                                        <i class="fa fa-tasks"/> <t t-esc="state.pipeline.totalCount"/> open tasks
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Section label -->
+                            <div class="nx-aw-section-label">
+                                <span class="nx-aw-section-dot"/>
+                                Deadline Overview
+                            </div>
+
+                            <!-- Enhanced 2 × 2 stat chips grid -->
+                            <div class="nx-aw-grid nx-aw-grid--enhanced">
+                                <!-- Delayed Tasks -->
+                                <div class="nx-aw-chip nx-aw-chip--delayed" data-stat-type="delayed">
+                                    <div class="nx-aw-chip-icon">
+                                        <i class="fa fa-exclamation-triangle"/>
+                                    </div>
+                                    <div class="nx-aw-chip-content">
+                                        <span class="nx-aw-chip-badge">
+                                            <t t-esc="state.deadlines.delayed"/>
+                                        </span>
+                                        <span class="nx-aw-chip-label">Delayed</span>
+                                    </div>
+                                    <div class="nx-aw-chip-glow"/>
+                                </div>
+
+                                <!-- Today Tasks -->
+                                <div class="nx-aw-chip nx-aw-chip--today" data-stat-type="today">
+                                    <div class="nx-aw-chip-icon">
+                                        <i class="fa fa-clock-o"/>
+                                    </div>
+                                    <div class="nx-aw-chip-content">
+                                        <span class="nx-aw-chip-badge">
+                                            <t t-esc="state.deadlines.todayCount"/>
+                                        </span>
+                                        <span class="nx-aw-chip-label">Today</span>
+                                    </div>
+                                    <div class="nx-aw-chip-glow"/>
+                                </div>
+
+                                <!-- Future Tasks -->
+                                <div class="nx-aw-chip nx-aw-chip--future" data-stat-type="future">
+                                    <div class="nx-aw-chip-icon">
+                                        <i class="fa fa-calendar"/>
+                                    </div>
+                                    <div class="nx-aw-chip-content">
+                                        <span class="nx-aw-chip-badge">
+                                            <t t-esc="state.deadlines.upcoming"/>
+                                        </span>
+                                        <span class="nx-aw-chip-label">Upcoming</span>
+                                    </div>
+                                    <div class="nx-aw-chip-glow"/>
+                                </div>
+
+                                <!-- No Deadline -->
+                                <div class="nx-aw-chip nx-aw-chip--nodeadline" data-stat-type="nodeadline">
+                                    <div class="nx-aw-chip-icon">
+                                        <i class="fa fa-calendar-times-o"/>
+                                    </div>
+                                    <div class="nx-aw-chip-content">
+                                        <span class="nx-aw-chip-badge">
+                                            <t t-esc="state.deadlines.noDeadline"/>
+                                        </span>
+                                        <span class="nx-aw-chip-label">No Deadline</span>
+                                    </div>
+                                    <div class="nx-aw-chip-glow"/>
+                                </div>
+                            </div>
+
+                            <!-- ── Mini Task Pipeline ── -->
+                            <div class="nx-aw-section-label mt-3">
+                                <span class="nx-aw-section-dot"/>
+                                Task Pipeline
+                            </div>
+
+                            <div class="nx-mini-pipeline">
+                                <!-- New -->
+                                <div class="nx-mp-node">
+                                    <div class="nx-mp-icon nx-mp-icon--new"><i class="fa fa-plus"/></div>
+                                    <div class="nx-mp-count" t-esc="state.pipeline.newCount"/>
+                                    <div class="nx-mp-label">New</div>
+                                </div>
+
+                                <div class="nx-mp-arrow"><i class="fa fa-chevron-right"/></div>
+
+                                <!-- Total -->
+                                <div class="nx-mp-node">
+                                    <div class="nx-mp-icon nx-mp-icon--total"><i class="fa fa-tasks"/></div>
+                                    <div class="nx-mp-count" t-esc="state.pipeline.totalCount"/>
+                                    <div class="nx-mp-label">Total</div>
+                                </div>
+
+                                <div class="nx-mp-arrow"><i class="fa fa-chevron-right"/></div>
+
+                                <!-- In Progress -->
+                                <div class="nx-mp-node">
+                                    <div class="nx-mp-icon nx-mp-icon--progress"><i class="fa fa-spinner"/></div>
+                                    <div class="nx-mp-count" t-esc="state.pipeline.inProgressCount"/>
+                                    <div class="nx-mp-label">In Progress</div>
+                                </div>
+
+                                <div class="nx-mp-arrow"><i class="fa fa-chevron-right"/></div>
+
+                                <!-- Fork: Done / Canceled (stacked) -->
+                                <div class="nx-mp-fork">
+                                    <div class="nx-mp-node">
+                                        <div class="nx-mp-icon nx-mp-icon--done"><i class="fa fa-check"/></div>
+                                        <div class="nx-mp-count" t-esc="state.pipeline.doneCount"/>
+                                        <div class="nx-mp-label">Done</div>
+                                    </div>
+                                    <div class="nx-mp-node">
+                                        <div class="nx-mp-icon nx-mp-icon--canceled"><i class="fa fa-times"/></div>
+                                        <div class="nx-mp-count" t-esc="state.pipeline.canceledCount"/>
+                                        <div class="nx-mp-label">Canceled</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right decorative sphere with pulse effect -->
+                        <div class="nx-aw-right">
+                            <div class="nx-aw-sphere nx-aw-sphere--pulse">
+                                <img class="nx-aw-sphere-img"
+                                     src="/nx-analytics-widgets/static/src/img/card-website-analytics-1.png"
+                                     alt="Task Deadlines"/>
+                                <div class="nx-aw-sphere-ring"/>
+                                <div class="nx-aw-sphere-ring nx-aw-sphere-ring--2"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ── Right column: Project Doughnut Chart ── -->
+                <div class="col-lg-6">
+                    <TaskProjectsSection projects="state.projects"/>
+                </div>
+
+            </div>
+
+        </t>
+    </div>
+</t>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         CHART.JS  CANVAS
+    ════════════════════════════════════════════════════════════════════════ -->
+    <t t-name="nx_analytics_widgets.TaskChart">
+    <div class="nx-chart-container">
+        <canvas t-ref="chart"/>
+    </div>
+</t>
+
+</templates>
+

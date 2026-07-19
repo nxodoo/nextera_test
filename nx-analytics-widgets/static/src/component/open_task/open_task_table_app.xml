@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ROOT APP -->
+    <t t-name="nx_analytics_widgets.OpenTaskTableApp">
+        <div class="nx-owl-root">
+
+            <t t-if="state.error">
+                <div class="nx-owl-error alert alert-danger" t-esc="state.error"/>
+            </t>
+
+            <div class="nx-table-header-row">
+                <div class="nx-section-title mb-0">
+                    <span class="title-dot"/>
+                    Open Tasks
+                    <span class="nx-count-badge" t-esc="state.total"/>
+                </div>
+            </div>
+
+            <OpenTaskFilters
+                    filterKey="state.filterKey"
+                    sortKey="state.sortKey"
+                    sortOrder="state.sortOrder"
+                    search="state.search"
+                    loading="state.loading"
+                    onFilter.bind="onFilter"
+                    onSortKey.bind="onSortKey"
+                    onSortOrder.bind="onSortOrder"
+                    onApplySearch.bind="onApplySearch"
+            />
+
+            <OpenTaskTable
+                    tasks="state.tasks"
+                    loading="state.loading"
+                    onArchive.bind="onArchive"
+            />
+
+            <t t-if="state.pages > 1">
+                <OpenTaskPagination
+                        page="state.page"
+                        pages="state.pages"
+                        total="state.total"
+                        pageSize="state.pageSize"
+                        onPageChange.bind="onPageChange"
+                />
+            </t>
+        </div>
+    </t>
+
+
+    <!-- FILTERS -->
+    <t t-name="nx_analytics_widgets.OpenTaskFilters">
+        <div t-att-class="'nx-owl-filters' + (props.loading ? ' nx-filters-loading' : '')">
+
+            <div class="nx-filter-tabs" role="tablist">
+                <t t-foreach="filters" t-as="f" t-key="f.key">
+                    <button
+                            role="tab"
+                            t-att-class="'nx-filter-tab' + (props.filterKey === f.key ? ' active' : '')"
+                            t-att-disabled="props.loading"
+                            t-on-click="() => this.onFilterClick(f.key)"
+                            t-esc="f.label"
+                    />
+                </t>
+                <t t-if="props.loading">
+                    <span class="nx-filter-spinner">
+                        <span class="nx-spinner nx-spinner--sm"/>
+                    </span>
+                </t>
+            </div>
+
+            <div class="nx-filter-actions">
+                <div class="nx-search-wrap align-items-center">
+                    <i t-att-class="'nx-search-icon fa ' + (props.loading ? 'fa-spinner fa-spin' : 'fa-search')"/>
+                    <input
+                            type="text"
+                            class="nx-search-input"
+                            placeholder="Search by task or project…"
+                            t-att-value="local.search"
+                            t-att-disabled="props.loading"
+                            t-on-input="onSearchInput"
+                            t-on-keydown="onSearchKeydown"
+                    />
+                    <t t-if="local.search">
+                        <button class="nx-search-clear-btn"
+                                title="Clear"
+                                t-att-disabled="props.loading"
+                                t-on-click="onClearSearch">
+                            <i class="fa fa-times"/>
+                        </button>
+                    </t>
+                    <button class="nx-search-apply-btn"
+                            t-att-disabled="props.loading"
+                            t-on-click="onApplySearch">
+                        <i class="fa fa-search"/>
+                    </button>
+                </div>
+
+                <div class="d-flex gap-2 align-items-center">
+                    <select class="form-select form-select-sm" style="width: 160px;" t-att-disabled="props.loading"
+                            t-on-change="onSortKeyChange">
+                        <option value="deadline" t-att-selected="props.sortKey === 'deadline'">Deadline</option>
+                        <option value="assign_date"
+                                t-att-selected="props.sortKey === 'assign_date'">Assign Date</option>
+                        <option value="stage" t-att-selected="props.sortKey === 'stage'">Stage</option>
+                    </select>
+
+                    <button class="nx-sort-btn" t-on-click="onToggleSortOrder"
+                            t-att-disabled="props.loading"
+                            t-att-title="props.sortOrder === 'desc' ? 'Descending' : 'Ascending'">
+                        <i t-att-class="'fa ' + (props.sortOrder === 'desc' ? 'fa-sort-amount-desc' : 'fa-sort-amount-asc')"/>
+                        <span t-esc="props.sortOrder === 'desc' ? 'Desc' : 'Asc'"/>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </t>
+
+
+    <!-- TABLE -->
+    <t t-name="nx_analytics_widgets.OpenTaskTable">
+        <div class="nx-table-wrap mb-4 nx-owl-table-wrap" t-att-class="props.loading ? 'nx-is-loading' : ''">
+
+            <t t-if="props.loading">
+                <div class="nx-loading-overlay">
+                    <div class="nx-spinner"/>
+                </div>
+            </t>
+
+            <t t-if="props.loading and props.tasks.length === 0">
+                <div class="nx-skel-table-inner">
+                    <div class="nx-skel-row" t-foreach="[1,2,3,4,5]" t-as="i" t-key="i">
+                        <div class="nx-skel-cell nx-skel-cell--sm"/>
+                        <div class="nx-skel-cell nx-skel-cell--lg"/>
+                        <div class="nx-skel-cell nx-skel-cell--md"/>
+                        <div class="nx-skel-cell nx-skel-cell--md"/>
+                        <div class="nx-skel-cell nx-skel-cell--md"/>
+                        <div class="nx-skel-cell nx-skel-cell--md"/>
+                        <div class="nx-skel-cell nx-skel-cell--sm"/>
+                    </div>
+                </div>
+            </t>
+
+            <t t-if="!props.loading and props.tasks.length === 0">
+                <div class="nx-empty p-4">
+                    <div class="nx-empty-icon"><i class="fa fa-tasks"/></div>
+                    <h5 class="fw-bold mb-1">No open tasks found</h5>
+                    <p class="text-muted nx-empty-desc">Try adjusting your filters or search query.</p>
+                </div>
+            </t>
+
+            <t t-if="props.tasks.length > 0">
+                <div class="table-responsive">
+                    <table class="table nx-table">
+                        <thead>
+                            <tr>
+                                <th class="nx-th-idx">#</th>
+                                <th>Project</th>
+                                <th>Task</th>
+                                <th>Stage</th>
+                                <th>Status</th>
+                                <th>Assign Date → Deadline</th>
+                                <th class="text-center nx-th-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="props.tasks" t-as="task" t-key="task.id">
+                                <OpenTaskRow task="task" index="task_index" onArchive="props.onArchive"/>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+
+        </div>
+    </t>
+
+
+    <!-- ROW -->
+    <t t-name="nx_analytics_widgets.OpenTaskRow">
+        <tr class="nx-tr">
+            <td class="nx-td-idx">
+                <span class="nx-row-num" t-esc="props.index + 1"/>
+            </td>
+            <td>
+                <span class="nx-badge nx-badge--project">
+                    <i class="fa fa-folder-o me-1"/>
+                    <t t-esc="props.task.project or '—'"/>
+                </span>
+            </td>
+            <td class="nx-td-task">
+                <a
+                        t-att-href="'/my/open-task/' + props.task.id"
+                        t-att-title="props.task.task or 'View Task'"
+                        class="nx-task-link d-flex align-items-center gap-2">
+                    <span class="nx-task-icon">
+                        <i class="fa fa-tasks"/>
+                    </span>
+                    <span class="nx-task-name">
+                        <strong t-esc="props.task.task or '—'"/>
+                    </span>
+                    <i class="fa fa-arrow-right nx-task-arrow ms-auto"/>
+                </a>
+            </td>
+            <td>
+                <span t-att-class="'nx-stage-badge ' + stageCls">
+                    <span class="nx-stage-dot"/>
+                    <t t-esc="props.task.stage or '—'"/>
+                </span>
+            </td>
+            <td>
+                <span t-att-class="'nx-pill nx-pill-' + (props.task.state or 'default')">
+                    <span class="dot"/>
+                    <t t-esc="props.task.status or '—'"/>
+                </span>
+            </td>
+            <!-- Assign Date → Deadline (single column) -->
+            <td class="nx-td-period">
+                <div class="nx-period-cell">
+                    <div class="nx-period-row">
+                        <span class="nx-period-label">Assigned</span>
+                        <span class="nx-period-date" t-esc="props.task.assign_date or '—'"/>
+                    </div>
+                    <div class="nx-period-arrow"><i class="fa fa-arrow-right"/></div>
+                    <div class="nx-period-row">
+                        <span class="nx-period-label">
+                            <i t-att-class="'fa ' + deadlineInfo.icon + ' me-1'"/>Deadline
+                            <t t-if="deadlineInfo.cls === 'nx-date--overdue' or deadlineInfo.cls === 'nx-date--due-soon'">
+                                <span t-att-class="'nx-date-tag nx-date-tag--' + (deadlineInfo.cls === 'nx-date--overdue' ? 'overdue' : 'soon')">
+                                    <t t-if="deadlineInfo.cls === 'nx-date--overdue'">Overdue</t>
+                                    <t t-else="">Soon</t>
+                                </span>
+                            </t>
+                        </span>
+                        <span t-att-class="'nx-period-date nx-period-date--' + deadlineInfo.cls"
+                              t-esc="deadlineInfo.label"/>
+                    </div>
+                </div>
+            </td>
+            <td class="text-center nx-td-actions">
+                <div class="d-flex align-items-center gap-1">
+                     <!-- View button -->
+                    <a t-att-href="'/my/open-task/' + props.task.id"
+                       class="nx-icon-btn nx-icon-btn--view flex-1"
+                       title="View Task">
+                         <i class="fa fa-eye"/>
+                    </a>
+
+                    <!-- Archive trigger button -->
+                    <button class="nx-icon-btn nx-icon-btn--archive ms-2 flex-1"
+                            title="Archive Task"
+                            t-on-click="openConfirmModal">
+                     <i class="fa fa-archive"/>
+                    </button>
+                </div>
+
+
+                <!-- Bootstrap Confirmation Modal (inline, per-row) -->
+                <t t-if="state.showModal">
+                    <div class="nx-modal-backdrop" t-on-click="closeConfirmModal"/>
+                    <div class="nx-confirm-modal" role="dialog" aria-modal="true">
+                        <div class="nx-confirm-modal__header">
+                            <span class="nx-confirm-modal__icon">
+                                <i class="fa fa-archive"/>
+                            </span>
+                            <h5 class="nx-confirm-modal__title">Archive Task</h5>
+                        </div>
+                        <div class="nx-confirm-modal__body">
+                            <p>Are you sure you want to archive</p>
+                            <strong t-esc="props.task.task"/>
+                            <p class="nx-confirm-modal__hint">This task will be hidden from your open tasks list.</p>
+                        </div>
+                        <div class="nx-confirm-modal__footer">
+                            <button class="nx-modal-btn nx-modal-btn--cancel"
+                                    t-on-click="closeConfirmModal">
+                                <i class="fa fa-times me-1"/>Cancel
+                            </button>
+                            <button class="nx-modal-btn nx-modal-btn--confirm"
+                                    t-on-click="confirmArchive">
+                                <i class="fa fa-archive me-1"/>Archive
+                            </button>
+                        </div>
+                    </div>
+                </t>
+            </td>
+        </tr>
+    </t>
+
+
+    <!-- PAGINATION -->
+    <t t-name="nx_analytics_widgets.OpenTaskPagination">
+        <div class="nx-pager mt-3">
+            <button class="nx-pager-btn" t-att-disabled="!hasPrev" t-on-click="() => this.go(props.page - 1)">
+                <i class="fa fa-chevron-left"/>
+            </button>
+
+            <t t-foreach="pageNumbers" t-as="n" t-key="n_index">
+                <t t-if="n === -1">
+                    <span class="nx-pager-ellipsis">…</span>
+                </t>
+                <t t-else="">
+                    <button
+                            t-att-class="'nx-pager-btn' + (n === props.page ? ' active' : '')"
+                            t-on-click="() => this.go(n)"
+                            t-esc="n"
+                    />
+                </t>
+            </t>
+
+            <button class="nx-pager-btn" t-att-disabled="!hasNext" t-on-click="() => this.go(props.page + 1)">
+                <i class="fa fa-chevron-right"/>
+            </button>
+
+            <span class="nx-pager-info">
+                Page <strong t-esc="props.page"/> of <strong t-esc="props.pages"/>
+                — <t t-esc="props.total"/> total
+            </span>
+        </div>
+    </t>
+
+</templates>
+

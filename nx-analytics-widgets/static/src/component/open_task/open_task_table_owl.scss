@@ -1,0 +1,393 @@
+// ============================================================
+//  NX Open Task Portal – OWL component styles
+//  File: open_task_table_owl.scss
+// ============================================================
+
+// ── Stage badge ──────────────────────────────────────────────
+//
+//  Usage:  <span class="nx-stage-badge nx-stage--progress">In Progress</span>
+//
+//  Each variant carries its own color pair (bg + text) and a
+//  left-side coloured dot.  The dot is a child <span class="nx-stage-dot"/>.
+
+.nx-stage-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 99px;
+    padding: 0.28rem 0.7rem;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.025em;
+    white-space: nowrap;
+    transition: filter 0.15s;
+
+    .nx-stage-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        display: inline-block;
+    }
+}
+
+// ── Stage variants ──────────────────────────────────────────
+
+.nx-stage--default {
+    background: var(--nx-gray-100, #f3f4f6);
+    color:      var(--nx-gray-600, #4b5563);
+    .nx-stage-dot { background: var(--nx-gray-400, #9ca3af); }
+}
+
+.nx-stage--new {
+    background: #eff6ff;
+    color:      #1d4ed8;
+    .nx-stage-dot { background: #3b82f6; }
+}
+
+.nx-stage--progress {
+    background: #fefce8;
+    color:      #a16207;
+    .nx-stage-dot { background: #eab308; }
+}
+
+.nx-stage--review {
+    background: #f5f3ff;
+    color:      #6d28d9;
+    .nx-stage-dot { background: #8b5cf6; }
+}
+
+.nx-stage--done {
+    background: #f0fdf4;
+    color:      #15803d;
+    .nx-stage-dot { background: #22c55e; }
+}
+
+.nx-stage--blocked {
+    background: #fff1f2;
+    color:      #be123c;
+    .nx-stage-dot { background: #f43f5e; }
+}
+
+// ── Status pill (project.task state) ────────────────────────
+//
+//  Usage:  <span class="nx-pill nx-pill-01_in_progress">…</span>
+//
+//  Mirrors the nx-pill pattern from leave_table_owl.scss.
+//  State keys: 01_in_progress | 02_changes_requested | 03_approved
+//              04_waiting_normal | 1_done | 1_canceled | default
+
+// nx-pill base already defined in leave.scss – we only add the task variants.
+
+// In Progress  → yellow / amber
+.nx-pill-01_in_progress {
+    background: var(--nx-warning-light, #fffbeb);
+    color: #b45309;
+    .dot { background: var(--nx-warning, #f59e0b); }
+}
+
+// Changes Requested  → orange
+.nx-pill-02_changes_requested {
+    background: #fff7ed;
+    color: #c2410c;
+    .dot { background: #f97316; }
+}
+
+// Approved  → green
+.nx-pill-03_approved {
+    background: var(--nx-success-light, #f0fdf4);
+    color: #15803d;
+    .dot { background: var(--nx-success, #22c55e); }
+}
+
+// Waiting  → blue / info
+.nx-pill-04_waiting_normal {
+    background: var(--nx-info-light, #eff6ff);
+    color: #1d4ed8;
+    .dot { background: var(--nx-info, #3b82f6); }
+}
+
+// Done  → teal / emerald
+.nx-pill-1_done {
+    background: #f0fdfa;
+    color: #0f766e;
+    .dot { background: #14b8a6; }
+}
+
+// Canceled  → gray
+.nx-pill-1_canceled {
+    background: var(--nx-gray-100, #f3f4f6);
+    color: var(--nx-gray-500, #6b7280);
+    .dot { background: var(--nx-gray-400, #9ca3af); }
+}
+
+// Fallback  → gray
+.nx-pill-default {
+    background: var(--nx-gray-100, #f3f4f6);
+    color: var(--nx-gray-500, #6b7280);
+    .dot { background: var(--nx-gray-400, #9ca3af); }
+}
+
+
+// ── Deadline date text colour modifiers ──────────────────────
+//
+//  Applied on .nx-period-date--<state> to colour the deadline
+//  date text inside the shared nx-period-cell layout.
+
+.nx-period-date--nx-date--ok       { color: #15803d; font-weight: 700; }
+.nx-period-date--nx-date--due-soon { color: #b45309; font-weight: 700; }
+.nx-period-date--nx-date--overdue  { color: #be123c; font-weight: 700; }
+.nx-period-date--nx-date--none     { color: var(--nx-gray-400, #9ca3af); }
+
+// ── Deadline inline tag (Soon / Overdue) ─────────────────────
+.nx-date-tag {
+    display: inline-block;
+    font-size: 0.63rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+    line-height: 1.4;
+    vertical-align: middle;
+    margin-left: 0.2rem;
+
+    &--soon    { background: #fef3c7; color: #92400e; }
+    &--overdue { background: #ffe4e6; color: #9f1239; }
+}
+
+
+// ── Search bar ───────────────────────────────────────────────
+.nx-search-wrap {
+    display: inline-flex;
+    align-items: stretch;
+    background: #fff;
+    border: 1.5px solid var(--nx-gray-200, #e5e7eb);
+    border-radius: 10px;
+    overflow: hidden;
+    height: 36px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:focus-within {
+        border-color: var(--nx-primary, #4f46e5);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+    }
+}
+
+.nx-search-icon {
+    display: flex;
+    align-items: center;
+    padding: 0 0.4rem 0 0.7rem;
+    color: var(--nx-gray-400, #9ca3af);
+    font-size: 0.75rem;
+    pointer-events: none;
+    flex-shrink: 0;
+}
+
+.nx-search-input {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0 0.4rem;
+    font-size: 0.82rem;
+    color: var(--nx-gray-800, #1f2937);
+    width: 200px;
+    line-height: 1;
+
+    &::placeholder { color: var(--nx-gray-400, #9ca3af); }
+}
+
+.nx-search-clear-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    align-self: center;
+    margin-right: 0.25rem;
+    border: none;
+    background: var(--nx-gray-100, #f3f4f6);
+    color: var(--nx-gray-400, #9ca3af);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.62rem;
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+
+    &:hover { background: #fee2e2; color: #dc2626; }
+}
+
+.nx-search-apply-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    align-self: stretch;
+    padding: 0 0.9rem;
+    background: var(--nx-primary, #4f46e5);
+    color: #fff;
+    border: none;
+    border-left: 1.5px solid rgba(0,0,0,0.08);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.15s;
+    letter-spacing: 0.01em;
+
+    i { font-size: 0.72rem; }
+
+    &:hover:not(:disabled) { background: #4338ca; }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+// ── Action icon buttons ──────────────────────────────────────
+.nx-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s, transform 0.1s;
+    text-decoration: none;
+
+    &:active { transform: scale(0.93); }
+
+    &--view {
+        background: #eff6ff;
+        color: #2563eb;
+        &:hover { background: #dbeafe; color: #1d4ed8; }
+    }
+
+    &--archive {
+        background: #fff7ed;
+        color: #ea580c;
+        &:hover { background: #ffedd5; color: #c2410c; }
+    }
+}
+
+// ── Confirmation Modal ───────────────────────────────────────
+.nx-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(2px);
+    z-index: 1040;
+    animation: nx-fade-in 0.15s ease;
+}
+
+.nx-confirm-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1050;
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18);
+    overflow: hidden;
+    animation: nx-pop-in 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1.25rem 1.5rem 1rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    &__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: #fff7ed;
+        color: #ea580c;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    &__body {
+        padding: 1.1rem 1.5rem;
+        color: #475569;
+        font-size: 0.9rem;
+        line-height: 1.6;
+
+        p { margin: 0 0 0.25rem; }
+
+        strong {
+            display: block;
+            color: #0f172a;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    &__hint {
+        font-size: 0.78rem;
+        color: #94a3b8;
+        margin-top: 0.5rem !important;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.6rem;
+        padding: 1rem 1.5rem 1.25rem;
+        border-top: 1px solid #f1f5f9;
+    }
+}
+
+.nx-modal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 1.1rem;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+
+    &:active { transform: scale(0.95); }
+
+    &--cancel {
+        background: #f1f5f9;
+        color: #475569;
+        &:hover { background: #e2e8f0; }
+    }
+
+    &--confirm {
+        background: #ea580c;
+        color: #fff;
+        &:hover { background: #c2410c; }
+    }
+}
+
+@keyframes nx-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes nx-pop-in {
+    from { opacity: 0; transform: translate(-50%, -48%) scale(0.95); }
+    to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+
