@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequence for tax configuration version names -->
+        <record id="seq_nx_egypt_payroll_tax" model="ir.sequence">
+            <field name="name">Egypt Payroll Tax Version</field>
+            <field name="code">nx.egypt.payroll.tax</field>
+            <field name="prefix">EGY-TAX-</field>
+            <field name="padding">3</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+    </data>
+
+    <data>
+        <!-- Income Tax salary rule sourced from Egypt Payroll Tax -->
+        <record id="rule_egypt_income_tax" model="hr.salary.rule">
+            <field name="name">Income Tax</field>
+            <field name="code">EGY_TAX</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="struct_id" ref="hr_payroll.structure_002"/>
+            <field name="sequence">195</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Income Tax sourced from the active Egypt Payroll Tax version.
+# Tax is computed per employee from their own monthly gross salary.
+config = payslip.env['nx.egypt.payroll.tax']._get_active_version()
+monthly_gross = categories['GROSS'] or (contract.wage if contract else 0.0)
+tax = config.compute_monthly_tax_for(monthly_gross) if config else 0.0
+result = -tax
+result_name = 'Income Tax'
+            </field>
+        </record>
+    </data>
+</odoo>

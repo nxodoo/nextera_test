@@ -1,0 +1,131 @@
+<odoo>
+    <record id="view_hr_employee_form_inherit_iqama" model="ir.ui.view">
+        <field name="name">view.hr.employee.form.inherit.iqama</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+
+            <!-- ── Stat button: Residency/Iqama count ── -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_iqamas" type="object" class="oe_stat_button" icon="fa-id-card-o" groups="hr.group_hr_user,base.group_system">
+                    <field name="iqama_count" string="Residencies" widget="statinfo"/>
+                </button>
+            </xpath>
+
+            <!-- ── Hide original work-contact fields (we re-show them in our tab) ── -->
+            <xpath expr="//field[@name='work_email']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='work_phone']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='mobile_phone']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='category_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='company_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='employee_type']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='job_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='parent_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='coach_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- ── Insert our Details tab as the FIRST page in the notebook ── -->
+            <xpath expr="//notebook/page[1]" position="before">
+                <page name="employee_details_tab" string="Details">
+
+                    <group>
+                        <group string="Work Contact">
+                            <field name="work_email" widget="email"/>
+                            <field name="work_phone" widget="phone"/>
+                            <field name="mobile_phone" widget="phone"/>
+                            <field name="category_ids"
+                                   widget="many2many_tags"
+                                   options="{'color_field': 'color', 'no_create_edit': True}"
+                                   string="Tags"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="employee_type"/>
+                        </group>
+                        <group string="Organization">
+                            <field name="department_id"/>
+                            <field name="job_id"/>
+                            <field name="parent_id" string="Manager"/>
+                            <field name="coach_id"/>
+                        </group>
+                    </group>
+
+                </page>
+            </xpath>
+
+            <!-- ── Private Information: custom grid layout ── -->
+            <xpath expr="//page[@name='personal_information']//group[@name='emergency']" position="before">
+                <div class="nx_hr_private_info_layout">
+                    <div class="nx_hr_private_info_row nx_hr_private_info_row_top">
+                        <group string="Passport Info">
+                            <field name="ssnid"/>
+                            <field name="passport_id"/>
+                            <field name="passport_name_english"/>
+                            <field name="passport_name_arabic"/>
+                        </group>
+                        <group string="Emergency">
+                            <field name="emergency_contact"/>
+                            <field name="emergency_phone" class="o_force_ltr"/>
+                        </group>
+                    </div>
+                    <div class="nx_hr_private_info_row nx_hr_private_info_row_bottom">
+                        <group string="Family Status">
+                            <field name="marital"/>
+                            <field name="spouse_complete_name" invisible="marital not in ['married', 'cohabitant']"/>
+                            <field name="spouse_birthdate" invisible="marital not in ['married', 'cohabitant']"/>
+                            <field name="children"/>
+                        </group>
+                        <group string="Work Permit">
+                            <field name="visa_no"/>
+                            <field name="permit_no"/>
+                            <field name="visa_expire"/>
+                            <field name="work_permit_expiration_date"/>
+                            <field name="work_permit_name" invisible="1"/>
+                            <field name="has_work_permit" widget="work_permit_upload" filename="work_permit_name"/>
+                        </group>
+                    </div>
+                </div>
+            </xpath>
+
+            <!-- ── Hide duplicated fields already shown in our custom layout ── -->
+            <xpath expr="//page[@name='personal_information']//field[@name='ssnid']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='personal_information']//field[@name='passport_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- ── Add Residency Approvers into Work Info Approvers group ── -->
+            <xpath expr="//group[@name='managers']" position="inside">
+                <field name="residency_approver_ids"
+                       widget="many2many_avatar_user"
+                       string="Residency"
+                       groups="hr.group_hr_user,base.group_system"/>
+            </xpath>
+
+            <!-- ── Remove original emergency and work-permit groups ── -->
+            <xpath expr="//page[@name='personal_information']//group[@name='emergency']" position="replace"/>
+            <xpath expr="//page[@name='personal_information']//separator[@name='has_work_permit']/ancestor::group[1]" position="replace"/>
+
+        </field>
+    </record>
+</odoo>

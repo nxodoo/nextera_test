@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="web_login_nextera_layout" inherit_id="website.login_layout" priority="90">
+            <xpath expr="//t" position="replace">
+                <t t-call="website.layout">
+                    <t t-set="no_header" t-value="True"/>
+                    <t t-set="no_footer" t-value="True"/>
+                    <t t-set="pageName" t-value="'nx-enterprise-login-page'"/>
+                    <section class="nx-enterprise-login">
+                        <div class="nx-enterprise-login__shell">
+                            <aside class="nx-enterprise-login__showcase">
+                                <div class="nx-enterprise-login__showcase-inner">
+                                    <div class="nx-enterprise-login__brand-row">
+                                        <img src="/nx_warranty_sla/static/src/img/img.png" alt="NextEra" class="nx-enterprise-login__brand-mark"/>
+                                        <span class="nx-enterprise-login__portal-badge">Enterprise Portal</span>
+                                    </div>
+
+                                    <div class="nx-enterprise-login__eyebrow">
+                                        <span class="nx-enterprise-login__eyebrow-dot"/>
+                                        <span>Who we are</span>
+                                    </div>
+
+                                    <div class="nx-enterprise-login__hero">
+                                        Empower business with
+                                        <span>Digital Transformation.</span>
+                                    </div>
+
+                                    <p class="nx-enterprise-login__lead">
+                                        Innovative solutions crafted by 20+ years of experience across business sectors,
+                                        leading technology initiatives, and large-scale national and private sector programs.
+                                    </p>
+
+                                    <div class="nx-enterprise-login__tagline">
+                                        You're not just keeping up. You're ahead of the game.
+                                    </div>
+
+                                    <div class="nx-enterprise-login__stats">
+                                        <div class="nx-enterprise-login__stat-card">
+                                            <strong>20+</strong>
+                                            <span>Years</span>
+                                        </div>
+                                        <div class="nx-enterprise-login__stat-card">
+                                            <strong>15</strong>
+                                            <span>Sectors</span>
+                                        </div>
+                                        <div class="nx-enterprise-login__stat-card">
+                                            <strong>10</strong>
+                                            <span>Countries</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="nx-enterprise-login__partners">
+                                        <div class="nx-enterprise-login__partners-title">
+                                            Trusted Partners
+                                            <span>Powering our solutions</span>
+                                        </div>
+
+                                        <div class="nx-enterprise-login__partner-carousel" aria-label="Technology partners">
+                                            <div class="nx-enterprise-login__partner-track">
+                                                <t t-foreach="['sap', 'odoo', 'micro', 'micro_powerapps', 'creatio', 'elsa', 'nexthink', 'ivanti', 'dell', 'lenovo', 'Uipath', 'automation', 'ibm', 'flutter', 'dotnet', 'wordpress', 'bi']" t-as="partner">
+                                                    <span class="nx-enterprise-login__partner-logo"><img t-attf-src="/nx_warranty_sla/static/src/img/partners/#{partner}.#{'png' if partner == 'ibm' else 'jpg'}" t-att-alt="partner"/></span>
+                                                </t>
+                                                <t t-foreach="['sap', 'odoo', 'micro', 'micro_powerapps', 'creatio', 'elsa', 'nexthink', 'ivanti', 'dell', 'lenovo', 'Uipath', 'automation', 'ibm', 'flutter', 'dotnet', 'wordpress', 'bi']" t-as="partner">
+                                                    <span class="nx-enterprise-login__partner-logo" aria-hidden="true"><img t-attf-src="/nx_warranty_sla/static/src/img/partners/#{partner}.#{'png' if partner == 'ibm' else 'jpg'}" alt=""/></span>
+                                                </t>
+                                            </div>
+                                            <div class="nx-enterprise-login__partner-card">
+                                                <h4>ERP &amp; Business Apps</h4>
+                                                <div class="nx-enterprise-login__partner-logos">
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/sap.jpg" alt="SAP"/></span>
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/odoo.jpg" alt="Odoo"/></span>
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/micro.jpg" alt="MS Dynamics"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="nx-enterprise-login__partner-card">
+                                                <h4>Low Code</h4>
+                                                <div class="nx-enterprise-login__partner-logos">
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/micro_powerapps.jpg" alt="PowerApps"/></span>
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/creatio.jpg" alt="Creatio"/></span>
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/elsa.jpg" alt="Elsa"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="nx-enterprise-login__partner-card">
+                                                <h4>IT Management</h4>
+                                                <div class="nx-enterprise-login__partner-logos">
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/nexthink.jpg" alt="Nexthink"/></span>
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/ivanti.jpg" alt="Ivanti"/></span>
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/dell.jpg" alt="Dell"/></span>
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/lenovo.jpg" alt="Lenovo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="nx-enterprise-login__partner-card">
+                                                <h4>Automation</h4>
+                                                <div class="nx-enterprise-login__partner-logos">
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/Uipath.jpg" alt="UiPath"/></span>
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/automation.jpg" alt="Automation Anywhere"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="nx-enterprise-login__partner-card">
+                                                <h4>Workflow &amp; BPM</h4>
+                                                <div class="nx-enterprise-login__partner-logos">
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/elsa.jpg" alt="Elsa"/></span>
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/ibm.png" alt="IBM"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="nx-enterprise-login__partner-card">
+                                                <h4>Customizes &amp; AI</h4>
+                                                <div class="nx-enterprise-login__partner-logos">
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/flutter.jpg" alt="Flutter"/></span>
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/dotnet.jpg" alt=".NET"/></span>
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/wordpress.jpg" alt="WordPress"/></span>
+                                                    <span class="nx-enterprise-login__partner-logo"><img src="/nx_warranty_sla/static/src/img/partners/bi.jpg" alt="Power BI"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </aside>
+
+                            <div class="nx-enterprise-login__panel">
+                                <div class="nx-enterprise-login__panel-card">
+                                    <div class="nx-enterprise-login__panel-brand">
+                                        <img src="/nx_warranty_sla/static/src/img/img.png" alt="NextEra" class="nx-enterprise-login__panel-logo nx-enterprise-login__panel-logo--nextera"/>
+                                    </div>
+                                    <div class="oe_website_login_container" t-out="0"/>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="web_login_nextera_form" inherit_id="web.login" priority="95">
+            <xpath expr="//form[contains(@t-attf-class, 'oe_login_form')]" position="replace">
+                <form t-attf-class="oe_login_form nx-enterprise-login__form #{'' if login else 'd-none'}"
+                      role="form"
+                      t-attf-action="/web/login"
+                      method="post"
+                      onsubmit="this.action = '/web/login' + location.hash">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                    <div class="nx-enterprise-login__welcome">Welcome Back</div>
+                    <h1 class="nx-enterprise-login__title">Sign in to your workspace</h1>
+                    <p class="nx-enterprise-login__subtitle">
+                        Access your dashboard and continue driving growth.
+                    </p>
+
+                    <owl-component t-if="not login" name="web.user_switch"/>
+
+                    <div class="mb-3" t-if="databases and len(databases) &gt; 1">
+                        <label for="db" class="form-label">Database</label>
+                        <div class="input-group">
+                            <input type="text"
+                                   name="db"
+                                   t-att-value="request.db"
+                                   id="db"
+                                   class="form-control"
+                                   required="required"
+                                   readonly="readonly"/>
+                            <a role="button" href="/web/database/selector" class="btn btn-nx-login-secondary">Select</a>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 field-login">
+                        <label for="login" class="form-label">Email Address</label>
+                        <input type="text"
+                               name="login"
+                               t-att-value="login"
+                               id="login"
+                               class="form-control"
+                               placeholder="name@company.com"
+                               required="required"
+                               autocapitalize="off"
+                               autocomplete="username"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password"
+                               name="password"
+                               id="password"
+                               class="form-control"
+                               placeholder="Enter your password"
+                               required="required"
+                               autocomplete="current-password"
+                               t-att-autofocus="'autofocus' if login else None"
+                               maxlength="4096"/>
+                    </div>
+
+                    <p class="alert alert-danger" t-if="error" role="alert">
+                        <t t-esc="error"/>
+                    </p>
+                    <p class="alert alert-success" t-if="message" role="status">
+                        <t t-esc="message"/>
+                    </p>
+
+                    <div class="nx-enterprise-login__utility-row">
+                        <label class="nx-enterprise-login__remember">
+                            <input type="checkbox" class="form-check-input"/>
+                            <span>Remember me</span>
+                        </label>
+                        <a t-if="reset_password_enabled"
+                           tabindex="1"
+                           class="nx-enterprise-login__link"
+                           t-attf-href="/web/reset_password?{{ keep_query() }}">
+                            Forgot your password?
+                        </a>
+                    </div>
+
+                    <div class="oe_login_buttons nx-enterprise-login__actions">
+                        <button type="submit" class="btn btn-nx-login-primary">Sign In</button>
+                        <a t-if="signup_enabled"
+                           class="btn btn-nx-login-secondary"
+                           t-attf-href="/web/signup?{{ keep_query() }}">
+                            Register
+                        </a>
+                        <div class="o_login_auth"/>
+                    </div>
+
+                    <div t-if="debug" class="text-center mt-3">
+                        <button type="submit" name="redirect" value="/web/become" class="btn btn-link btn-sm">
+                            Log in as superuser
+                        </button>
+                    </div>
+
+                    <div class="nx-enterprise-login__support">
+                        For technical support and onboarding programs, reach out at
+                        <a href="mailto:info@nexteramea.com">info@nexteramea.com</a>
+                    </div>
+
+                    <input type="hidden" name="type" value="password"/>
+                    <input type="hidden" name="redirect" t-att-value="redirect or '/my/home'"/>
+                </form>
+            </xpath>
+        </template>
+
+        <template id="portal_side_name_dropdown" inherit_id="portal.side_content" priority="80">
+            <xpath expr="//div[hasclass('d-flex') and hasclass('flex-column') and hasclass('justify-content-center')]/h5" position="replace">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                    <div>
+                        <div class="d-flex align-items-center gap-2">
+                            <h5 class="mb-0" t-out="user_id.name"/>
+                            <div class="dropdown">
+                                <a href="#" class="text-decoration-none text-muted" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa fa-chevron-down small"/>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="/my/home">
+                                        <i class="fa fa-id-card-o me-2"/> My Account
+                                    </a>
+                                    <a class="dropdown-item" href="/web/session/logout?redirect=/">
+                                        <i class="fa fa-sign-out me-2"/> Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-muted small mt-1 d-flex align-items-start gap-1" t-if="user_id.partner_id.contact_address">
+                            <i class="fa fa-map-marker mt-1"/>
+                            <span t-out="user_id.partner_id.contact_address"/>
+                        </div>
+                    </div>
+                </t>
+                <t t-else="">
+                    <h5 class="mb-0" t-out="user_id.name"/>
+                    <div class="text-muted small mt-1" t-out="user_id.commercial_partner_id.name"/>
+                </t>
+            </xpath>
+            <xpath expr="//div[hasclass('o_portal_my_details')]" position="replace">
+                <t t-if="request.website.portal_mode != 'warranty'">
+                    <div class="o_portal_my_details">
+                        <div t-field="user_id.partner_id" t-options='{"widget": "contact", "fields": ["email", "phone", "address"]}'/>
+                    </div>
+                </t>
+            </xpath>
+            <xpath expr="//a[contains(@href, '/my/account') or contains(@href, '/my/details')]" position="replace">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                    <a href="/my/account" class="btn btn-link p-0 mt-3">
+                        <i class="fa fa-pencil me-1"/> Edit Profile
+                    </a>
+                </t>
+                <t t-else="">
+                    <a role="button" href="/my/account" class="btn btn-link p-0 mt-3"><i class="fa fa-pencil"/> Edit information</a>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="portal_my_details_remove_invoice_fields" inherit_id="account.portal_my_details_fields" priority="95">
+            <xpath expr="//small[contains(@class, 'form-text') and contains(., 'You can choose how you want us to send your invoices')]" position="replace"/>
+            <xpath expr="//select[@name='invoice_sending_method']/ancestor::div[hasclass('row')][1]" position="replace"/>
+            <xpath expr="//select[@name='invoice_edi_format']/ancestor::div[hasclass('row')][1]" position="replace"/>
+        </template>
+
+        <template id="portal_my_details_nextera_theme" inherit_id="portal.portal_my_details" priority="90">
+            <xpath expr="//t[@t-call='portal.portal_layout']" position="inside">
+                <t t-if="request.website.portal_mode == 'warranty'" t-set="no_breadcrumbs" t-value="True"/>
+            </xpath>
+            <xpath expr="//form[@action='/my/account']" position="before">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                    <style>
+                        .nx-account-card {
+                            border: 1px solid #dfe9ee;
+                            border-radius: 20px;
+                            background: #ffffff;
+                            box-shadow: 0 10px 28px rgba(11, 30, 44, 0.06);
+                            padding: 28px;
+                        }
+                        .nx-account-card .nx-account-eyebrow {
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 8px;
+                            border-radius: 999px;
+                            background: #edf7f8;
+                            color: #0c6d71;
+                            font-size: 0.85rem;
+                            font-weight: 700;
+                            padding: 7px 14px;
+                        }
+                        .nx-account-card h1 {
+                            color: #103543;
+                            font-size: clamp(2rem, 3.2vw, 2.7rem);
+                            font-weight: 800;
+                            letter-spacing: -0.03em;
+                        }
+                        .nx-account-card .nx-account-copy {
+                            color: #4d6674;
+                            font-size: 1rem;
+                            line-height: 1.7;
+                            max-width: 44rem;
+                        }
+                        .nx-account-card label,
+                        .nx-account-card .col-form-label {
+                            color: #103543;
+                            font-weight: 700;
+                            margin-bottom: 0.35rem;
+                        }
+                        .nx-account-card .form-control,
+                        .nx-account-card .form-select {
+                            min-height: 56px;
+                            border: 1px solid #d4e3e8;
+                            border-radius: 14px;
+                            background: #fbfdfd;
+                            box-shadow: none;
+                            color: #103543;
+                            font-size: 1.05rem;
+                        }
+                        .nx-account-card .form-control:focus,
+                        .nx-account-card .form-select:focus {
+                            border-color: #17a3a8;
+                            box-shadow: 0 0 0 0.25rem rgba(23, 163, 168, 0.12);
+                        }
+                        .nx-account-card .form-control[readonly],
+                        .nx-account-card .form-control:disabled,
+                        .nx-account-card .form-select:disabled {
+                            background: #f0f4f6;
+                            color: #7b8f9c;
+                        }
+                        .nx-account-card .btn {
+                            min-width: 136px;
+                            border-radius: 12px;
+                            font-weight: 700;
+                            padding: 0.8rem 1.2rem;
+                        }
+                        .nx-account-card .btn-primary {
+                            background: linear-gradient(130deg, #0f6c6f 0%, #17a3a8 100%);
+                            border-color: transparent;
+                        }
+                        .nx-account-card .btn-light {
+                            border: 1px solid #d4e3e8;
+                            background: #ffffff;
+                            color: #103543;
+                        }
+                        .nx-account-card .text-danger,
+                        .nx-account-card .invalid-feedback {
+                            color: #c14444 !important;
+                        }
+                        @media (max-width: 991.98px) {
+                            .nx-account-card {
+                                padding: 22px 18px;
+                            }
+                        }
+                    </style>
+                </t>
+            </xpath>
+            <xpath expr="//div[hasclass('row') and hasclass('o_portal_details')]" position="replace">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                    <div class="row o_portal_details">
+                        <div class="col-12">
+                            <div class="nx-account-card">
+                                <div class="nx-account-eyebrow mb-3">
+                                    <i class="fa fa-user-circle-o"/>
+                                    Profile Settings
+                                </div>
+                                <h1 class="mb-3">Edit Profile</h1>
+                                <p class="nx-account-copy mb-4">
+                                    Keep your contact details up to date so tickets, orders, and warranty communication reach the right person.
+                                </p>
+                                <div class="row">
+                                    <t t-call="portal.portal_my_details_fields"/>
+                                    <input type="hidden" name="redirect" t-att-value="redirect"/>
+                                </div>
+                                <div class="d-flex flex-wrap justify-content-end gap-2 mt-4">
+                                    <a href="/my/home" class="btn btn-light">Cancel</a>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="row o_portal_details">
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <t t-call="portal.portal_my_details_fields"/>
+                                <input type="hidden" name="redirect" t-att-value="redirect"/>
+                            </div>
+                            <div class="clearfix text-end mb-5">
+                                <a href="/my/" class="btn btn-light me-2">
+                                    Discard
+                                </a>
+                                <button type="submit" class="btn btn-primary float-end">
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="website_footer_nextera_theme" inherit_id="website.footer_custom" priority="90">
+            <xpath expr="//section[hasclass('s_text_block')]" position="replace">
+                <section class="s_text_block pt40 pb24 nx-footer-theme" data-snippet="s_text_block" data-name="Text">
+                    <t t-set="nx_footer_is_arabic" t-value="request and request.env and request.env.lang and request.env.lang.startswith('ar')"/>
+                    <div class="container">
+                        <div class="nx-footer-shell" t-attf-dir="#{'rtl' if nx_footer_is_arabic else 'ltr'}">
+                            <div class="row g-4">
+                                <div class="col-lg-5">
+                                    <div class="nx-footer-column nx-footer-brand-column">
+                                        <div class="nx-footer-kicker"><t t-esc="'حلول رقمية متكاملة' if nx_footer_is_arabic else 'Integrated Digital Solutions'"/></div>
+                                        <h3 class="nx-footer-brand-title">NextEra</h3>
+                                        <p class="nx-footer-lead">
+                                            <t t-esc="'العلاقة بين تطور الأعمال والتقدم التكنولوجي تزداد ترابطًا ونموًا بشكل مستمر.' if nx_footer_is_arabic else 'The relationship between business evolution and technological advancement is constantly growing.'"/>
+                                        </p>
+                                        <p class="nx-footer-story mb-0">
+                                            <strong><t t-esc="'عن NextEra:' if nx_footer_is_arabic else 'About NextEra:'"/></strong>
+                                            <t t-esc="'في NextEra نمكّن الشركات من التحول الرقمي عبر مجموعة متنوعة من الحلول المبتكرة المبنية على خبرة فريق تتجاوز 20 عامًا في قطاعات أعمال متعددة وتقنيات رائدة ومشروعات كبرى على مستوى القطاعين العام والخاص في عدة دول.' if nx_footer_is_arabic else 'At NextEra, we empower businesses with digital transformation through a diverse range of innovative solutions created by 20+ years of team experience across various business sectors, leading technologies, and major national &amp; private sector projects in multiple countries.'"/>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="nx-footer-column">
+                                        <h5 class="nx-footer-heading"><t t-esc="'روابط مهمة' if nx_footer_is_arabic else 'Useful Links'"/></h5>
+                                        <div class="nx-footer-links-grid">
+                                            <a href="/my/tickets"><t t-esc="'التذاكر' if nx_footer_is_arabic else 'Tickets'"/></a>
+                                            <a t-if="request and request.env and request.env.user and (request.env.user.has_group('base.group_user') or (request.env.user._fields.get('portal_ticket_role') and request.env.user.portal_ticket_role == 'admin'))" href="/my/orders"><t t-esc="'الطلبات' if nx_footer_is_arabic else 'Orders'"/></a>
+                                            <a href="/my/elearning"><t t-esc="'التعلم الإلكتروني' if nx_footer_is_arabic else 'E-Learning'"/></a>
+                                            <a href="/my/knowledge"><t t-esc="'المعرفة' if nx_footer_is_arabic else 'Knowledge'"/></a>
+                                            <a href="/my/warranties"><t t-esc="'الضمانات' if nx_footer_is_arabic else 'Warranties'"/></a>
+                                            <a href="/contactus"><t t-esc="'تواصل معنا' if nx_footer_is_arabic else 'Contact us'"/></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="nx-footer-column nx-footer-connect-column" id="connect">
+                                        <h5 class="nx-footer-heading"><t t-esc="'تواصل معنا' if nx_footer_is_arabic else 'Connect'"/></h5>
+                                        <a href="mailto:info@nexteramea.com" class="nx-footer-contact-link" t-att-title="'البريد الإلكتروني' if nx_footer_is_arabic else 'Email'">
+                                            <span class="nx-footer-icon"><i class="fa fa-envelope"/></span>
+                                            <span>info@nexteramea.com</span>
+                                        </a>
+                                        <a href="tel:+2023764470" class="nx-footer-contact-link o_force_ltr" t-att-title="'الهاتف' if nx_footer_is_arabic else 'Phone'">
+                                            <span class="nx-footer-icon"><i class="fa fa-phone"/></span>
+                                            <span>+20 23 764 470</span>
+                                        </a>
+                                        <div class="nx-footer-social-row">
+                                            <a href="https://www.linkedin.com/company/nexteramea/posts/?feedView=all" target="_blank" rel="noopener" class="nx-footer-social-link" t-att-title="'لينكدإن' if nx_footer_is_arabic else 'LinkedIn'" aria-label="LinkedIn">
+                                                <span class="nx-footer-icon"><i class="fa fa-linkedin"/></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </xpath>
+            <xpath expr="//section[hasclass('s_text_block')]" position="after">
+                <style>
+                    #footer .nx-footer-theme {
+                        position: relative;
+                        overflow: hidden;
+                        padding: 2.5rem 0 1.75rem;
+                        background:
+                            radial-gradient(circle at top left, rgba(41, 196, 204, 0.14), transparent 28%),
+                            linear-gradient(180deg, #0a2d3f 0%, #0b2534 100%);
+                        color: #eaf6f8;
+                    }
+                    #footer .nx-footer-theme::before {
+                        content: "";
+                        position: absolute;
+                        inset: 0;
+                        background: linear-gradient(120deg, rgba(255,255,255,0.04), transparent 45%, rgba(255,255,255,0.02));
+                        pointer-events: none;
+                    }
+                    #footer .nx-footer-shell {
+                        position: relative;
+                        z-index: 1;
+                    }
+                    #footer .nx-footer-column {
+                        height: 100%;
+                    }
+                    #footer .nx-footer-brand-column {
+                        max-width: 34rem;
+                    }
+                    #footer .nx-footer-kicker {
+                        display: inline-block;
+                        margin-bottom: 0.85rem;
+                        padding: 0.28rem 0.7rem;
+                        border-radius: 999px;
+                        background: rgba(157, 231, 234, 0.12);
+                        color: #8ee9ed;
+                        font-size: 0.68rem;
+                        font-weight: 700;
+                        letter-spacing: 0.08em;
+                        text-transform: uppercase;
+                    }
+                    #footer .nx-footer-brand-title {
+                        margin-bottom: 0.75rem;
+                        color: #ffffff;
+                        font-size: clamp(1.8rem, 2.6vw, 2.4rem);
+                        font-weight: 800;
+                        letter-spacing: -0.04em;
+                        line-height: 1;
+                    }
+                    #footer .nx-footer-lead,
+                    #footer .nx-footer-story {
+                        color: rgba(234, 246, 248, 0.84);
+                        font-size: 0.92rem;
+                        line-height: 1.65;
+                    }
+                    #footer .nx-footer-lead {
+                        margin-bottom: 0.9rem;
+                    }
+                    #footer .nx-footer-story strong {
+                        color: #ffffff;
+                    }
+                    #footer .nx-footer-heading {
+                        margin-bottom: 1rem;
+                        color: #ffffff;
+                        font-size: 0.98rem;
+                        font-weight: 700;
+                        letter-spacing: -0.01em;
+                    }
+                    #footer .nx-footer-theme a {
+                        color: #dff9fb;
+                        text-decoration: none;
+                    }
+                    #footer .nx-footer-theme a:hover {
+                        color: #8ee9ed;
+                    }
+                    #footer .nx-footer-links-grid {
+                        display: grid;
+                        gap: 0.55rem;
+                    }
+                    #footer .nx-footer-links-grid a {
+                        display: inline-flex;
+                        align-items: center;
+                        min-height: 1.8rem;
+                        color: rgba(234, 246, 248, 0.9);
+                        font-size: 0.9rem;
+                        line-height: 1.4;
+                    }
+                    #footer .nx-footer-connect-column {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 0.7rem;
+                    }
+                    #footer .nx-footer-contact-link,
+                    #footer .nx-footer-social-link {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 0.65rem;
+                        width: fit-content;
+                    }
+                    #footer .nx-footer-social-row {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.45rem;
+                        padding-top: 0.15rem;
+                    }
+                    #footer .nx-footer-icon {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 2rem;
+                        height: 2rem;
+                        border-radius: 999px;
+                        background: rgba(255,255,255,0.08);
+                        color: #8ee9ed;
+                        font-size: 0.78rem;
+                        flex: 0 0 auto;
+                    }
+                    #footer .o_footer_copyright {
+                        width: 100%;
+                    }
+                    #footer .o_footer_copyright .container,
+                    #footer .o_footer_copyright .container-fluid {
+                        width: 100%;
+                    }
+                    #footer .o_footer_copyright .row {
+                        row-gap: 0.5rem;
+                    }
+                    #footer .o_footer_copyright .row > div {
+                        display: flex;
+                        align-items: center;
+                        flex-wrap: wrap;
+                    }
+                    #footer .o_footer_copyright .js_language_selector .dropdown-toggle,
+                    #footer .o_footer_copyright .js_language_selector .dropdown-item,
+                    #footer .o_footer_copyright .js_language_selector .list-inline-item,
+                    #footer .o_footer_copyright .js_language_selector a,
+                    #footer .o_footer_copyright .js_language_selector a:link,
+                    #footer .o_footer_copyright .js_language_selector a:visited,
+                    #footer .o_footer_copyright .js_language_selector .js_change_lang {
+                        color: #f4fbfb !important;
+                    }
+                    #footer .o_footer_copyright .js_language_selector .dropdown-toggle:hover,
+                    #footer .o_footer_copyright .js_language_selector .dropdown-toggle:focus,
+                    #footer .o_footer_copyright .js_language_selector .dropdown-item:hover,
+                    #footer .o_footer_copyright .js_language_selector .dropdown-item:focus,
+                    #footer .o_footer_copyright .js_language_selector .list-inline-item:hover,
+                    #footer .o_footer_copyright .js_language_selector a:hover,
+                    #footer .o_footer_copyright .js_language_selector a:visited:hover,
+                    #footer .o_footer_copyright .js_language_selector .js_change_lang:hover,
+                    #footer .o_footer_copyright a.o_footer_copyright_name:hover {
+                        color: #17a3a8 !important;
+                    }
+                    #footer .o_footer_copyright .dropdown-item.active,
+                    #footer .o_footer_copyright .dropdown-item:active,
+                    #footer .o_footer_copyright .js_change_lang.active,
+                    #footer .o_footer_copyright a.o_footer_copyright_name {
+                        color: #f4fbfb !important;
+                        text-decoration: none;
+                    }
+                    #footer .nx-footer-theme [dir="rtl"] {
+                        text-align: right;
+                    }
+                    #footer .nx-footer-theme [dir="rtl"] .nx-footer-kicker {
+                        letter-spacing: 0.03em;
+                    }
+                    @media (max-width: 991.98px) {
+                        #footer .nx-footer-theme {
+                            padding: 2rem 0 1.5rem;
+                        }
+                        #footer .nx-footer-brand-column {
+                            max-width: none;
+                        }
+                        #footer .nx-footer-connect-column {
+                            align-items: flex-start;
+                        }
+                        #footer .o_footer_copyright .row > div {
+                            justify-content: flex-start !important;
+                        }
+                    }
+                    @media (max-width: 575.98px) {
+                        #footer .nx-footer-theme {
+                            padding: 1.75rem 0 1.3rem;
+                        }
+                        #footer .nx-footer-brand-title {
+                            font-size: 1.55rem;
+                        }
+                        #footer .nx-footer-contact-link {
+                            font-size: 0.88rem;
+                        }
+                    }
+                </style>
+            </xpath>
+        </template>
+
+        <template id="website_footer_copyright_nextera" inherit_id="website.footer_copyright_company_name" priority="95">
+            <xpath expr="//span[hasclass('o_footer_copyright_name')]" position="replace">
+                <t t-if="request and request.website and request.website.portal_mode == 'warranty'">
+                    <t t-set="nx_footer_is_arabic" t-value="request and request.env and request.env.lang and request.env.lang.startswith('ar')"/>
+                    <a href="/my/home" class="o_footer_copyright_name me-2" style="color: #f4fbfb !important; text-decoration: none;">
+                        <t t-esc="'حقوق النشر © NextEra' if nx_footer_is_arabic else 'Copyright © NextEra'"/>
+                    </a>
+                </t>
+                <span t-else="" class="o_footer_copyright_name me-2">Copyright &amp;copy; Company name</span>
+            </xpath>
+        </template>
+
+        <template id="portal_footer_language_selector_nextera" inherit_id="portal.footer_language_selector" priority="99">
+            <xpath expr="//t[@id='language_selector_call']" position="replace">
+                <t t-if="request and request.website and request.website.portal_mode == 'warranty'">
+                    <t t-if="len(frontend_languages) &gt; 1">
+                        <span class="js_language_selector d-print-none ms-2">
+                            <t t-set="active_lang" t-value="frontend_languages[lang]"/>
+                            <t t-foreach="frontend_languages.values()" t-as="lg">
+                                <a t-att-href="url_localized(lang_code=lg.code, prefetch_langs=True, force_default_lang=True)"
+                                   t-att-title="lg.name.split('/').pop()"
+                                   t-att-data-url_code="lg.url_code"
+                                   t-attf-class="js_change_lang #{active_lang == lg and 'active' or ''}"
+                                   t-att-style="'color: %s !important; text-decoration: none; font-weight: 500;' % ('#17a3a8' if active_lang == lg else '#f4fbfb')">
+                                    <t t-esc="lg.name.split('/').pop()"/>
+                                </a>
+                                <t t-if="not lg_last">
+                                    <span style="color: #f4fbfb !important; padding: 0 0.6rem;">|</span>
+                                </t>
+                            </t>
+                        </span>
+                    </t>
+                </t>
+                <t t-else="" id="language_selector_call" t-call="portal.language_selector">
+                    <t t-set="_div_classes" t-value="(_div_classes or '') + ' dropup'"/>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="website_footer_hide_brand_promotion" inherit_id="web.brand_promotion" priority="99">
+            <xpath expr="//div[hasclass('o_brand_promotion')]" position="replace">
+                <div class="o_brand_promotion d-none"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

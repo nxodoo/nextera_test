@@ -1,0 +1,96 @@
+<odoo>
+    <record id="view_hr_iqama_type_list" model="ir.ui.view">
+        <field name="name">view.hr.iqama.type.list</field>
+        <field name="model">hr.iqama.type</field>
+        <field name="arch" type="xml">
+            <list string="Residency/Visa Types">
+                <field name="name"/>
+                <field name="country_id"/>
+                <field name="duration"/>
+                <field name="active"/>
+                <field name="renewable"/>
+                <field name="expiry_notification_days"/>
+                <field name="estimated_cost_usd"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hr_iqama_type_search" model="ir.ui.view">
+        <field name="name">view.hr.iqama.type.search</field>
+        <field name="model">hr.iqama.type</field>
+        <field name="arch" type="xml">
+            <search string="Residency/Visa Types">
+                <field name="name"/>
+                <field name="country_id"/>
+                <field name="duration"/>
+                <field name="active"/>
+                <filter name="filter_type_active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="filter_type_inactive" string="Inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_country" string="Country" context="{'group_by': 'country_id'}"/>
+                    <filter name="group_by_duration" string="Duration" context="{'group_by': 'duration'}"/>
+                    <filter name="group_by_active" string="Active" context="{'group_by': 'active'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_hr_iqama_type_form" model="ir.ui.view">
+        <field name="name">view.hr.iqama.type.form</field>
+        <field name="model">hr.iqama.type</field>
+        <field name="arch" type="xml">
+            <form string="Residency/Visa Type">
+                <sheet>
+                    <div class="oe_title" style="margin-bottom: 12px;">
+                        <label for="reference" string="Reference"/>
+                        <h1 style="margin-top: 0; margin-bottom: 8px;">
+                            <field name="reference" readonly="1" nolabel="1"/>
+                        </h1>
+                        <label for="name" string="Type Name" style="margin-bottom: 2px;"/>
+                        <h2 style="margin-top: 0; margin-bottom: 0;">
+                            <field name="name" nolabel="1" placeholder="e.g. USA Residency Type"/>
+                        </h2>
+                    </div>
+                    <notebook>
+                        <page string="Details">
+                            <group>
+                                <group string="Type Information">
+                                    <field name="country_id"/>
+                                    <field name="duration"/>
+                                    <field name="active" widget="boolean_toggle"/>
+                                </group>
+                                <group string="General Properties">
+                                    <field name="expiry_notification_days"/>
+                                    <field name="renewable"/>
+                                    <field name="estimated_cost_usd"/>
+                                </group>
+                            </group>
+                            <group string="Additional Details">
+                                <field name="description"/>
+                                <field name="notes"/>
+                            </group>
+                        </page>
+                        <page string="Required Documents">
+                            <field name="required_document_ids">
+                                <list editable="bottom" string="Required Documents">
+                                    <field name="name"/>
+                                    <field name="reference"/>
+                                    <field name="description"/>
+                                    <field name="mandatory"/>
+                                    <field name="expiry_date_mandatory"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_iqama_type" model="ir.actions.act_window">
+        <field name="name">Residency/Visa Types</field>
+        <field name="res_model">hr.iqama.type</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hr_iqama_type_search"/>
+    </record>
+</odoo>

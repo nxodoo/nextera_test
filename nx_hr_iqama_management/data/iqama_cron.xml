@@ -1,0 +1,11 @@
+<odoo>
+    <record id="ir_cron_hr_iqama_expiry_notification" model="ir.cron">
+        <field name="name">Iqama Expiry Notification</field>
+        <field name="model_id" ref="model_hr_iqama"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_notify_expiring_iqamas()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

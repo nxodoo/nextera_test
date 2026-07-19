@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_project_form_internal_entry_restriction" model="ir.ui.view">
+        <field name="name">project.project.form.internal.entry.restriction</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='group_time_managment']" position="inside">
+                <setting string="Restricted Internal Entries"
+                         help="Only users with the Manage Internal Project Entries permission can manage timesheets on this project.">
+                    <field name="restricted_internal_entries"/>
+                </setting>
+            </xpath>
+
+            <xpath expr="//header" position="inside">
+                <button name="action_open_internal_mass_allocation_wizard"
+                        type="object"
+                        string="Mass Internal Allocation"
+                        class="btn-secondary"
+                        groups="nx_payroll_timesheet_work_entry.group_manage_internal_project_entries"
+                        invisible="not restricted_internal_entries"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

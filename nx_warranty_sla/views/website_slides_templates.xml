@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="website_slides_nextera_home_style" inherit_id="website_slides.courses_home" priority="95">
+            <xpath expr="//div[@id='wrap']" position="inside">
+                <style>
+                    .o_wslides_wrap {
+                        background:
+                            radial-gradient(circle at top left, rgba(69, 197, 204, 0.16), transparent 34%),
+                            linear-gradient(180deg, #f7fbfb 0%, #edf8f9 100%);
+                    }
+                    .o_wslides_wrap .s_banner {
+                        background: linear-gradient(135deg, #06373a 0%, #0c6d71 58%, #45c5cc 100%) !important;
+                        border-radius: 0 0 34px 34px;
+                        overflow: hidden;
+                        box-shadow: 0 24px 60px rgba(6, 55, 58, 0.18);
+                    }
+                    .o_wslides_wrap .s_banner h1,
+                    .o_wslides_wrap .s_banner h2,
+                    .o_wslides_wrap .s_banner p {
+                        color: #ffffff !important;
+                        text-shadow: none !important;
+                    }
+                    .o_wslides_wrap .o_wslides_home_nav .navbar,
+                    .o_wslides_wrap .o_wslides_course_nav .container,
+                    .o_wslides_wrap .o_wslides_home_aside_loggedin,
+                    .o_wslides_wrap .o_wslides_course_sidebar,
+                    .o_wslides_wrap .o_wslides_home_content_section,
+                    .o_wslides_wrap .o_wslides_tabs_content,
+                    .o_wslides_wrap .o_wslides_course_slides_list,
+                    .o_wslides_wrap .o_wslides_wrap .card,
+                    .o_wslides_wrap .alert {
+                        border: 1px solid #d5eaec;
+                        border-radius: 24px;
+                        background: rgba(255, 255, 255, 0.95);
+                        box-shadow: 0 18px 40px rgba(8, 61, 63, 0.08);
+                    }
+                    .o_wslides_wrap .o_wslides_home_nav {
+                        margin-top: -34px !important;
+                    }
+                    .o_wslides_wrap .o_wslides_home_nav .navbar {
+                        padding: 0.85rem 1rem;
+                    }
+                    .o_wslides_wrap .navbar-light .navbar-nav .nav-link,
+                    .o_wslides_wrap .o_wslides_home_content_section_title a,
+                    .o_wslides_wrap .o_wslides_course_nav a,
+                    .o_wslides_wrap a {
+                        color: #0c6d71;
+                    }
+                    .o_wslides_wrap .navbar-light .navbar-nav .nav-link:hover,
+                    .o_wslides_wrap .o_wslides_home_content_section_title a:hover,
+                    .o_wslides_wrap .o_wslides_course_nav a:hover,
+                    .o_wslides_wrap a:hover {
+                        color: #17a3a8;
+                    }
+                    .o_wslides_wrap .o_wslides_nav_navbar_right .form-control,
+                    .o_wslides_wrap .o_wslides_course_nav_search .form-control,
+                    .o_wslides_wrap .o_searchbar_form .search-query {
+                        min-height: 48px;
+                        border: 1px solid #cfe6e8 !important;
+                        border-radius: 16px !important;
+                        background: linear-gradient(180deg, #ffffff 0%, #f6fbfb 100%) !important;
+                        color: #214a4e !important;
+                        box-shadow: none !important;
+                    }
+                    .o_wslides_wrap .o_wslides_nav_navbar_right .btn,
+                    .o_wslides_wrap .o_wslides_course_nav_search .btn,
+                    .o_wslides_wrap .btn-info,
+                    .o_wslides_wrap .btn-primary,
+                    .o_wslides_wrap .btn-outline-primary,
+                    .o_wslides_wrap .o_wslides_js_course_join_link,
+                    .o_wslides_wrap .o_wslides_course_main .btn {
+                        border: 1px solid #0c6d71 !important;
+                        border-radius: 14px !important;
+                        background: linear-gradient(135deg, #0c6d71 0%, #17a3a8 100%) !important;
+                        color: #ffffff !important;
+                        box-shadow: 0 12px 26px rgba(12, 109, 113, 0.18);
+                    }
+                    .o_wslides_wrap .btn-info:hover,
+                    .o_wslides_wrap .btn-primary:hover,
+                    .o_wslides_wrap .btn-outline-primary:hover,
+                    .o_wslides_wrap .o_wslides_js_course_join_link:hover,
+                    .o_wslides_wrap .o_wslides_course_main .btn:hover {
+                        background: linear-gradient(135deg, #0a5b5e 0%, #11949a 100%) !important;
+                        color: #ffffff !important;
+                    }
+                    .o_wslides_wrap .alert-danger {
+                        border-color: #f2d4d8;
+                        background: #fff5f7;
+                        color: #7a3341;
+                    }
+                    .o_wslides_wrap h1,
+                    .o_wslides_wrap h2,
+                    .o_wslides_wrap h3,
+                    .o_wslides_wrap h4,
+                    .o_wslides_wrap h5,
+                    .o_wslides_wrap .h1,
+                    .o_wslides_wrap .h2,
+                    .o_wslides_wrap .h3,
+                    .o_wslides_wrap .h4,
+                    .o_wslides_wrap .h5 {
+                        color: #113f4b;
+                    }
+                    .o_wslides_wrap hr {
+                        border-color: #d8eaec;
+                    }
+                    .o_wslides_wrap .o_wslides_course_card,
+                    .o_wslides_wrap .card {
+                        border-radius: 24px !important;
+                        overflow: hidden;
+                    }
+                    .o_wslides_wrap .o_wslides_course_card .card-body,
+                    .o_wslides_wrap .card-body {
+                        padding: 1.25rem;
+                    }
+                </style>
+            </xpath>
+        </template>
+
+        <template id="website_slides_nextera_all_style" inherit_id="website_slides.courses_all" priority="95">
+            <xpath expr="//div[@id='wrap']" position="inside">
+                <style>
+                    .o_wslides_wrap .dropdown-menu {
+                        border: 1px solid #d6eaec;
+                        border-radius: 18px;
+                        box-shadow: 0 18px 36px rgba(11, 30, 44, 0.12);
+                    }
+                    .o_wslides_wrap .dropdown-item.active,
+                    .o_wslides_wrap .dropdown-item:active,
+                    .o_wslides_wrap .nav-link.active {
+                        background: linear-gradient(135deg, #0c6d71 0%, #17a3a8 100%) !important;
+                        color: #ffffff !important;
+                    }
+                </style>
+            </xpath>
+        </template>
+
+        <template id="website_slides_nextera_course_style" inherit_id="website_slides.course_main" priority="95">
+            <xpath expr="//div[@id='wrap']" position="inside">
+                <style>
+                    .o_wslides_course_header {
+                        background: linear-gradient(135deg, #06373a 0%, #0c6d71 58%, #45c5cc 100%) !important;
+                        border-radius: 0 0 34px 34px;
+                        box-shadow: 0 24px 60px rgba(6, 55, 58, 0.18);
+                    }
+                    .o_wslides_course_header .o_wslides_course_nav {
+                        background: rgba(255, 255, 255, 0.12);
+                        border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+                    }
+                    .o_wslides_course_header .o_wslides_course_nav a,
+                    .o_wslides_course_header h1,
+                    .o_wslides_course_header .breadcrumb-item,
+                    .o_wslides_course_header .breadcrumb-item a,
+                    .o_wslides_course_header .text-white,
+                    .o_wslides_course_header div[t-field='channel.description'] {
+                        color: #ffffff !important;
+                    }
+                    .o_wslides_course_header .o_wslides_course_pict {
+                        border-radius: 24px;
+                        overflow: hidden;
+                        box-shadow: 0 18px 34px rgba(5, 34, 36, 0.24);
+                    }
+                    .o_wslides_course_main {
+                        background:
+                            radial-gradient(circle at top left, rgba(69, 197, 204, 0.12), transparent 36%),
+                            linear-gradient(180deg, #f7fbfb 0%, #edf8f9 100%);
+                        padding-top: 1.5rem;
+                    }
+                    .o_wslides_course_main .nav-tabs {
+                        gap: 0.65rem;
+                        border-bottom: 0;
+                    }
+                    .o_wslides_course_main .nav-tabs .nav-link {
+                        border: 1px solid #d1e7e9;
+                        border-radius: 14px 14px 0 0;
+                        background: #edf7f8;
+                        color: #1b5359;
+                        font-weight: 700;
+                    }
+                    .o_wslides_course_main .nav-tabs .nav-link.active {
+                        border-color: #0c6d71;
+                        background: linear-gradient(135deg, #0c6d71 0%, #17a3a8 100%);
+                        color: #ffffff;
+                    }
+                    .o_wslides_course_main .o_wslides_channel_tag {
+                        border-radius: 999px;
+                    }
+                    .o_wslides_course_main .table th,
+                    .o_wslides_course_main .table td {
+                        border-color: #dbeaec;
+                    }
+                    .o_wslides_course_main .o_wslides_slides_list_slide,
+                    .o_wslides_course_main .list-group-item {
+                        border-color: #dbeaec;
+                    }
+                    .o_wslides_course_main .o_wslides_share.btn-link {
+                        color: #0c6d71 !important;
+                        background: transparent !important;
+                        border: 0 !important;
+                        box-shadow: none !important;
+                    }
+                </style>
+            </xpath>
+        </template>
+    </data>
+</odoo>

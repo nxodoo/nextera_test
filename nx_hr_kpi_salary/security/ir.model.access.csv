@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_kpi_evaluation_hr_user,access.hr.kpi.evaluation.hr.user,model_hr_kpi_evaluation,hr.group_hr_user,1,0,0,0
+access_hr_kpi_evaluation_hr_manager,access.hr.kpi.evaluation.hr.manager,model_hr_kpi_evaluation,hr.group_hr_manager,1,1,1,1
+access_hr_kpi_evaluation_payroll_manager,access.hr.kpi.evaluation.payroll.manager,model_hr_kpi_evaluation,hr_payroll.group_hr_payroll_manager,1,1,1,1
+access_hr_kpi_evaluation_line_hr_user,access.hr.kpi.evaluation.line.hr.user,model_hr_kpi_evaluation_line,hr.group_hr_user,1,0,0,0
+access_hr_kpi_evaluation_line_hr_manager,access.hr.kpi.evaluation.line.hr.manager,model_hr_kpi_evaluation_line,hr.group_hr_manager,1,1,1,1
+access_hr_kpi_evaluation_line_payroll_manager,access.hr.kpi.evaluation.line.payroll.manager,model_hr_kpi_evaluation_line,hr_payroll.group_hr_payroll_manager,1,1,1,1
+access_hr_payslip_kpi_missing_wizard_payroll_manager,access.hr.payslip.kpi.missing.wizard.payroll.manager,model_hr_payslip_kpi_missing_wizard,hr_payroll.group_hr_payroll_manager,1,1,1,1

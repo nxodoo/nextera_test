@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Payroll Configuration Settings
+        Adds "Minimum Timesheet Hours" inside the hr_payroll_settings block.
+        Only HR Managers (group_hr_payroll_manager) can modify this value.
+    -->
+    <record id="view_res_config_settings_inherit_both_work_entry" model="ir.ui.view">
+        <field name="name">res.config.settings.inherit.both.work.entry</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr_payroll.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//block[@id='hr_payroll_settings']" position="inside">
+                <setting string="Minimum Timesheet Hours"
+                         id="minimum_timesheet_hours_setting"
+                         title="Minimum daily timesheet hours to count a day as a full working day when the contract Work Entry Source is set to Both.">
+                    <field name="minimum_timesheet_hours" class="w-25"/>
+                    <span>Hours</span>
+                </setting>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,96 @@
+<odoo>
+    <record id="module_category_hr_iqama_management" model="ir.module.category">
+        <field name="name">Iqama Management</field>
+        <field name="description">Security groups for employee iqama management</field>
+        <field name="sequence">35</field>
+    </record>
+
+    <record id="group_hr_iqama_user" model="res.groups">
+        <field name="name">Iqama User</field>
+        <field name="category_id" ref="nx_hr_iqama_management.module_category_hr_iqama_management"/>
+        <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]"/>
+    </record>
+
+    <record id="group_hr_iqama_manager" model="res.groups">
+        <field name="name">Iqama Manager</field>
+        <field name="category_id" ref="nx_hr_iqama_management.module_category_hr_iqama_management"/>
+        <field name="implied_ids" eval="[(4, ref('nx_hr_iqama_management.group_hr_iqama_user'))]"/>
+    </record>
+
+    <record id="rule_hr_iqama_user_own" model="ir.rule">
+        <field name="name">Iqama user can access own iqamas</field>
+        <field name="model_id" ref="model_hr_iqama"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hr.group_hr_user'))]"/>
+    </record>
+
+    <record id="rule_hr_iqama_manager_all" model="ir.rule">
+        <field name="name">Iqama manager can access company iqamas</field>
+        <field name="model_id" ref="model_hr_iqama"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+
+    <record id="rule_hr_iqama_attachment_user_own" model="ir.rule">
+        <field name="name">Iqama user can access own iqama attachments</field>
+        <field name="model_id" ref="model_hr_iqama_attachment"/>
+        <field name="domain_force">[('iqama_id.employee_id.user_id', '=', user.id), ('iqama_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hr.group_hr_user'))]"/>
+    </record>
+
+    <record id="rule_hr_iqama_attachment_manager_all" model="ir.rule">
+        <field name="name">Iqama manager can access company iqama attachments</field>
+        <field name="model_id" ref="model_hr_iqama_attachment"/>
+        <field name="domain_force">[('iqama_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+
+    <record id="rule_hr_iqama_detail_line_multi_company" model="ir.rule">
+        <field name="name">Iqama detail lines multi company</field>
+        <field name="model_id" ref="model_hr_iqama_detail_line"/>
+        <field name="domain_force">[('iqama_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hr.group_hr_user')), (4, ref('base.group_system'))]"/>
+    </record>
+
+    <record id="rule_hr_iqama_approval_multi_company" model="ir.rule">
+        <field name="name">Iqama approvals multi company</field>
+        <field name="model_id" ref="model_hr_iqama_approval"/>
+        <field name="domain_force">[('iqama_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hr.group_hr_user')), (4, ref('base.group_system'))]"/>
+    </record>
+
+    <record id="rule_hr_iqama_history_multi_company" model="ir.rule">
+        <field name="name">Iqama history multi company</field>
+        <field name="model_id" ref="model_hr_iqama_history"/>
+        <field name="domain_force">[('iqama_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hr.group_hr_user')), (4, ref('base.group_system'))]"/>
+    </record>
+
+    <record id="rule_hr_iqama_family_member_multi_company" model="ir.rule">
+        <field name="name">Iqama family members multi company</field>
+        <field name="model_id" ref="model_hr_iqama_family_member"/>
+        <field name="domain_force">[('iqama_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+
+    <record id="rule_hr_iqama_family_document_multi_company" model="ir.rule">
+        <field name="name">Iqama family documents multi company</field>
+        <field name="model_id" ref="model_hr_iqama_family_document"/>
+        <field name="domain_force">[('iqama_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+
+    <record id="rule_hr_iqama_fee_line_multi_company" model="ir.rule">
+        <field name="name">Iqama fee lines multi company</field>
+        <field name="model_id" ref="model_hr_iqama_fee_line"/>
+        <field name="domain_force">[('iqama_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hr.group_hr_user')), (4, ref('base.group_system'))]"/>
+    </record>
+
+    <record id="rule_hr_iqama_timeline_multi_company" model="ir.rule">
+        <field name="name">Iqama timeline multi company</field>
+        <field name="model_id" ref="model_hr_iqama_timeline"/>
+        <field name="domain_force">[('iqama_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+</odoo>

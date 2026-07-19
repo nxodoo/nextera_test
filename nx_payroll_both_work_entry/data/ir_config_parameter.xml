@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!--
+        Default value for minimum_timesheet_hours.
+        'noupdate="1"' means this record is only created on first install
+        and will not be overwritten on module upgrade — preserving any
+        value an HR Manager has already configured.
+    -->
+    <record id="param_minimum_timesheet_hours" model="ir.config_parameter">
+        <field name="key">nx_payroll_both_work_entry.minimum_timesheet_hours</field>
+        <field name="value">8.0</field>
+    </record>
+
+</odoo>

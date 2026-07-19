@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_warranty_sla" model="ir.ui.view">
+        <field name="name">sale.order.form.warranty.sla</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="object" name="action_view_warranty_contracts" class="oe_stat_button" icon="fa-shield">
+                    <field name="warranty_contract_count" string="Warranty" widget="statinfo"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='product_uom_qty']" position="after">
+                <field name="product_has_warranty" column_invisible="1"/>
+                <field name="available_warranty_template_ids" column_invisible="1"/>
+                <field name="warranty_template_id" optional="show" invisible="not product_has_warranty"/>
+                <field name="warranty_certain_period" column_invisible="1"/>
+                <field name="warranty_start_date" optional="show" invisible="not warranty_certain_period" required="warranty_certain_period" force_save="1"/>
+                <field name="warranty_end_date" optional="show" invisible="not warranty_certain_period" required="warranty_certain_period" force_save="1"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form//field[@name='product_uom_qty']" position="after">
+                <field name="product_has_warranty" invisible="1"/>
+                <field name="available_warranty_template_ids" invisible="1"/>
+                <field name="warranty_template_id" invisible="not product_has_warranty"/>
+                <field name="warranty_certain_period" invisible="1"/>
+                <field name="warranty_start_date" invisible="not warranty_certain_period" required="warranty_certain_period" force_save="1"/>
+                <field name="warranty_end_date" invisible="not warranty_certain_period" required="warranty_certain_period" force_save="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,17 @@
+<odoo>
+    <menuitem
+        id="menu_hr_iqama_root"
+        name="Residencies"
+        parent="hr.menu_hr_root"
+        action="action_hr_iqama_all"
+        sequence="35"
+        groups="hr.group_hr_user,base.group_system"/>
+    <menuitem
+        id="menu_hr_iqama_configuration_root"
+        name="Residency/Visa Configuration"
+        parent="hr.menu_human_resources_configuration"
+        sequence="35"
+        groups="hr.group_hr_user,base.group_system"/>
+    <menuitem id="menu_hr_iqama_type" name="Residency/Visa Types" parent="menu_hr_iqama_configuration_root" action="action_hr_iqama_type" sequence="1" groups="hr.group_hr_user,base.group_system"/>
+    <menuitem id="menu_hr_iqama_notification_settings" name="Notification Settings" parent="menu_hr_iqama_configuration_root" action="action_hr_iqama_notification_settings" sequence="2" groups="hr.group_hr_user,base.group_system"/>
+</odoo>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <function model="hr.job" name="_sync_missing_position_levels"/>
+</odoo>

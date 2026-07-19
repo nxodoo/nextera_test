@@ -1,0 +1,29 @@
+<odoo>
+    <record id="view_res_config_settings_inherit_hr_iqama" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.hr.iqama</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Iqama Management" name="nx_hr_iqama_management">
+                    <block title="Notification Settings">
+                        <setting id="hr_iqama_notification_days_setting" string="Iqama Expiry Notifications">
+                            <field name="hr_iqama_notification_days_before_expiry"/>
+                            <div class="text-muted">
+                                Define how many days before expiry the system should notify the employee, direct manager, and HR manager.
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_hr_iqama_notification_settings" model="ir.actions.act_window">
+        <field name="name">Notification Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'nx_hr_iqama_management'}</field>
+    </record>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_warranty_contract_state_override_wizard_form" model="ir.ui.view">
+        <field name="name">warranty.contract.state.override.wizard.form</field>
+        <field name="model">warranty.contract.state.override.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Confirm Manual State Override" create="false" edit="false" delete="false">
+                <sheet>
+                    <group>
+                        <field name="contract_id"/>
+                        <field name="target_state"/>
+                        <field name="computed_state"/>
+                        <field name="message" nolabel="1" readonly="1" widget="text"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm_override" string="Keep Manual State" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

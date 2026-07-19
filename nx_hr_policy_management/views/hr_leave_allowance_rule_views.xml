@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_leave_allowance_rule_tree" model="ir.ui.view">
+        <field name="name">hr.leave.allowance.rule.list</field>
+        <field name="model">hr.leave.allowance.rule</field>
+        <field name="arch" type="xml">
+            <list string="Leave Allowance Rules">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="leave_type_id"/>
+                <field name="rule_scope"/>
+                <field name="gender" optional="hide"/>
+                <field name="min_years_of_service" optional="hide"/>
+                <field name="max_years_of_service" optional="hide"/>
+                <field name="allocated_days"/>
+                <field name="auto_allocation" optional="hide"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hr_leave_allowance_rule_form" model="ir.ui.view">
+        <field name="name">hr.leave.allowance.rule.form</field>
+        <field name="model">hr.leave.allowance.rule</field>
+        <field name="arch" type="xml">
+            <form string="Leave Allowance Rule">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="leave_type_id"/>
+                            <field name="rule_scope"/>
+                            <field name="gender" invisible="rule_scope != 'employee_condition'"/>
+                            <field name="auto_allocation" invisible="rule_scope != 'employee_condition'"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="min_years_of_service" invisible="rule_scope != 'service_years'" required="rule_scope == 'service_years'"/>
+                            <field name="max_years_of_service" invisible="rule_scope != 'service_years'"/>
+                            <field name="allocated_days"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_leave_allowance_rule_search" model="ir.ui.view">
+        <field name="name">hr.leave.allowance.rule.search</field>
+        <field name="model">hr.leave.allowance.rule</field>
+        <field name="arch" type="xml">
+            <search string="Leave Allowance Rules">
+                <field name="name"/>
+                <field name="leave_type_id"/>
+                <field name="company_id"/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_leave_type" string="Leave Type" context="{'group_by': 'leave_type_id'}"/>
+                    <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hr_leave_allowance_rule" model="ir.actions.act_window">
+        <field name="name">Leave Allowance Rules</field>
+        <field name="res_model">hr.leave.allowance.rule</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hr_leave_allowance_rule_search"/>
+    </record>
+
+    <menuitem
+        id="menu_hr_leave_allowance_rule"
+        name="Leave Allowance Rules"
+        parent="hr_holidays.menu_hr_holidays_management"
+        action="action_hr_leave_allowance_rule"
+        groups="hr_holidays.group_hr_holidays_user,hr_holidays.group_hr_holidays_manager"
+        sequence="25"/>
+</odoo>

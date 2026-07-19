@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_hr_payslip_form_inherit_timesheet_work_entry" model="ir.ui.view">
+        <field name="name">hr.payslip.form.inherit.timesheet.work.entry</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_refresh_timesheet_worked_days"
+                        type="object"
+                        string="Refresh Timesheet Hours"
+                        class="oe_highlight"
+                        invisible="contract_id.work_entry_source != 'timesheet' or state not in ('draft', 'verify')"
+                        groups="hr_payroll.group_hr_payroll_user"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

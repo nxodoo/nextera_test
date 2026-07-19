@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_leave_allowance" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.leave.allowance</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr_contract.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='hr_contract']" position="after">
+                <block title="Leave Allowance" id="leave_allowance">
+                    <setting
+                        id="leave_allowance_scheduler_enabled"
+                        string="Leave Allowance Scheduler"
+                        company_dependent="1"
+                        help="Automatically create annual leave allocations based on years of service.">
+                        <field name="leave_allowance_scheduler_enabled"/>
+                    </setting>
+                    <setting
+                        id="leave_allowance_scheduler_start_date"
+                        string="Scheduler Start Date"
+                        company_dependent="1"
+                        help="Allocations are only generated on or after this date."
+                        invisible="not leave_allowance_scheduler_enabled">
+                        <field name="leave_allowance_scheduler_start_date"/>
+                    </setting>
+                </block>
+                <block title="Holiday Greeting Emails" id="holiday_greeting_emails">
+                    <setting
+                        id="holiday_greeting_scheduler_enabled"
+                        string="Holiday Greeting Scheduler"
+                        company_dependent="1"
+                        help="Automatically send holiday greeting emails to active employees based on public holiday configuration.">
+                        <field name="holiday_greeting_scheduler_enabled"/>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

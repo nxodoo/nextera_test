@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_applicant_view_form_deadline" model="ir.ui.view">
+        <field name="name">hr.applicant.form.deadline</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='job_id']" position="attributes">
+                <attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>
+                <attribute name="context">{'nx_forbid_job_creation': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="application_deadline" readonly="1"/>
+                <field name="recruitment_state" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_applicant_view_tree_deadline" model="ir.ui.view">
+        <field name="name">hr.applicant.list.deadline</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.crm_case_tree_view_job"/>
+        <field name="arch" type="xml">
+            <field name="job_id" position="after">
+                <field name="application_deadline" optional="show"/>
+                <field name="recruitment_state" optional="show"/>
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_leave_allowance_rule_officer,hr.leave.allowance.rule officer,model_hr_leave_allowance_rule,hr_holidays.group_hr_holidays_user,1,0,0,0
+access_hr_leave_allowance_rule_manager,hr.leave.allowance.rule manager,model_hr_leave_allowance_rule,hr_holidays.group_hr_holidays_manager,1,1,1,1
+access_hr_holiday_greeting_template_officer,hr.holiday.greeting.template officer,model_hr_holiday_greeting_template,hr_holidays.group_hr_holidays_user,1,1,1,0
+access_hr_holiday_greeting_template_manager,hr.holiday.greeting.template manager,model_hr_holiday_greeting_template,hr_holidays.group_hr_holidays_manager,1,1,1,1
+access_hr_holiday_greeting_log_officer,hr.holiday.greeting.log officer,model_hr_holiday_greeting_log,hr_holidays.group_hr_holidays_user,1,0,0,0
+access_hr_holiday_greeting_log_manager,hr.holiday.greeting.log manager,model_hr_holiday_greeting_log,hr_holidays.group_hr_holidays_manager,1,0,0,1

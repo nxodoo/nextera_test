@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_warranty_contract_state_update" model="ir.cron">
+            <field name="name">Warranty Contract State Update</field>
+            <field name="model_id" ref="model_warranty_contract"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_update_warranty_states()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="priority">5</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        HR Contract Form — Work Entry Source "Both"
+        ============================================
+        Shows an informational banner when the contract's work_entry_source
+        is set to 'both', explaining the minimum-hours threshold logic.
+        The banner reads the current threshold from the system parameter so
+        it always reflects the live configuration.
+    -->
+    <record id="view_hr_contract_form_inherit_both_work_entry" model="ir.ui.view">
+        <field name="name">hr.contract.form.inherit.both.work.entry</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Make the work_entry_source field visible now that we have an extra choice -->
+            <xpath expr="//field[@name='work_entry_source']" position="attributes">
+                <attribute name="invisible">0</attribute>
+            </xpath>
+
+            <!--
+                Inject an info alert directly after the work_entry_source field
+                that is only visible when the source is 'both'.
+            -->
+            <xpath expr="//field[@name='work_entry_source']" position="after">
+                <div class="alert alert-info o_form_no_cog"
+                     role="alert"
+                     invisible="work_entry_source != 'both'">
+                    <strong>Both — Timesheet + Full Day Threshold</strong>
+                    <ul class="mb-0 mt4">
+                        <li>
+                            If daily timesheet hours
+                            <strong>≥ Minimum Timesheet Hours</strong>
+                            (configured in Payroll → Settings):
+                            the day is counted as a <strong>full working day</strong>
+                            and paid with the contract <strong>Daily Wage</strong>.
+                        </li>
+                        <li>
+                            If daily timesheet hours
+                            <strong>&lt; Minimum Timesheet Hours</strong>:
+                            only the <strong>actual hours logged</strong> are counted
+                            and paid with the employee <strong>Hourly Cost</strong>.
+                        </li>
+                        <li>
+                            When <strong>Both</strong> is selected, payroll keeps the
+                            contract on <strong>Fixed Wage</strong> with
+                            <strong>Schedule Pay = Daily</strong>.
+                        </li>
+                    </ul>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

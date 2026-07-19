@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===================== List ===================== -->
+    <record id="view_nx_egypt_payroll_tax_list" model="ir.ui.view">
+        <field name="name">nx.egypt.payroll.tax.list</field>
+        <field name="model">nx.egypt.payroll.tax</field>
+        <field name="arch" type="xml">
+            <list string="Egypt Payroll Tax Versions" decoration-success="state == 'active'"
+                  decoration-muted="state == 'inactive'">
+                <field name="name"/>
+                <field name="effective_date"/>
+                <field name="end_date"/>
+                <field name="total_exemption_limit"/>
+                <field name="created_by_id"/>
+                <field name="created_on"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'active'"
+                       decoration-info="state == 'draft'"
+                       decoration-muted="state == 'inactive'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===================== Form ===================== -->
+    <record id="view_nx_egypt_payroll_tax_form" model="ir.ui.view">
+        <field name="name">nx.egypt.payroll.tax.form</field>
+        <field name="model">nx.egypt.payroll.tax</field>
+        <field name="arch" type="xml">
+            <form string="Egypt Payroll Tax">
+                <header>
+                    <button name="action_activate" type="object" string="Activate"
+                            class="oe_highlight" invisible="state == 'active'"
+                            help="Move this version to Active."/>
+                    <button name="action_set_draft" type="object" string="Set to Draft"
+                            invisible="state != 'active'"/>
+                    <button name="action_create_new_version" type="object"
+                            string="Create New Version" class="btn-secondary"
+                            invisible="state != 'active'"
+                            help="Close this version and create a new Draft version."/>
+                    <button name="action_view_versions" type="object" string="Versions"
+                            class="btn-secondary"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,active,inactive"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Version name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="created_by_id"/>
+                            <field name="created_on"/>
+                            <field name="effective_date"/>
+                        </group>
+                        <group>
+                            <field name="end_date"/>
+                            <field name="total_exemption_limit"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <!-- ============ Tax Brackets ============ -->
+                        <page string="Tax Brackets" name="brackets">
+                            <div class="d-flex justify-content-between mb-2">
+                                <h3>Egyptian Tax Brackets Matrix (Annual)</h3>
+                                <button name="action_load_default_brackets" type="object"
+                                        string="Load Default Brackets" class="btn-link"
+                                        confirm="This will replace the current brackets with the default Egyptian matrix. Continue?"/>
+                            </div>
+                            <field name="bracket_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="rate"/>
+                                    <field name="amount_from"/>
+                                    <field name="amount_to"/>
+                                    <field name="col_600k"/>
+                                    <field name="col_700k"/>
+                                    <field name="col_800k"/>
+                                    <field name="col_900k"/>
+                                    <field name="col_1200k"/>
+                                    <field name="col_above"/>
+                                    <field name="is_active" widget="boolean_toggle"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                            <p class="text-muted">
+                                Only <b>Active</b> rows are used in the tax calculation.
+                                The <b>From</b>/<b>To</b> numeric bounds drive the progressive
+                                computation; the category columns are informational ranges
+                                entered manually.
+                            </p>
+                        </page>
+
+                        <!-- ============ Test Calculation ============ -->
+                        <page string="Test Calculation" name="test_calc">
+                            <group>
+                                <group string="Inputs">
+                                    <field name="test_monthly_gross"/>
+                                    <field name="test_annual_equivalent" readonly="1"/>
+                                    <field name="test_personal_exemption" readonly="1"/>
+                                    <field name="test_other_deductions"/>
+                                    <field name="test_additional_taxable"/>
+                                    <button name="action_run_simulation" type="object"
+                                            string="Run Simulation" class="oe_highlight"/>
+                                </group>
+                                <group string="Results">
+                                    <field name="res_annual_gross" readonly="1"/>
+                                    <field name="res_exemption_applied" readonly="1"/>
+                                    <field name="res_other_deductions_annual" readonly="1"/>
+                                    <field name="res_additional_taxable" readonly="1"/>
+                                    <field name="res_annual_taxable" readonly="1"/>
+                                    <field name="res_total_annual_tax" readonly="1"/>
+                                    <field name="res_monthly_tax" readonly="1"
+                                           class="oe_inline" style="font-weight:bold;"/>
+                                    <field name="res_net_salary" readonly="1"/>
+                                </group>
+                            </group>
+                            <div class="alert alert-info" role="alert">
+                                This tab is for <b>testing only</b>. On a Payslip, the
+                                <b>Income Tax (EGY_TAX)</b> rule computes each employee's tax
+                                automatically from their own gross salary using the active version.
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===================== Action ===================== -->
+    <record id="action_nx_egypt_payroll_tax" model="ir.actions.act_window">
+        <field name="name">Egypt Payroll Tax</field>
+        <field name="res_model">nx.egypt.payroll.tax</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first Egypt Payroll Tax version</p>
+            <p>Define the Egyptian income-tax brackets, manage versions and test the monthly tax calculation.</p>
+        </field>
+    </record>
+
+    <!-- ===================== Menu ===================== -->
+    <menuitem id="menu_nx_egypt_payroll_tax"
+              name="Egypt Payroll Tax"
+              parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration"
+              action="action_nx_egypt_payroll_tax"
+              sequence="90"/>
+
+</odoo>

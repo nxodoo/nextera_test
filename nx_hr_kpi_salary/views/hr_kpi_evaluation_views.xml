@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_kpi_evaluation_tree" model="ir.ui.view">
+        <field name="name">hr.kpi.evaluation.tree</field>
+        <field name="model">hr.kpi.evaluation</field>
+        <field name="arch" type="xml">
+            <list string="KPI Evaluations">
+                <field name="period_label" string="Month"/>
+                <field name="department_names" string="Department"/>
+                <field name="evaluated_by_id"/>
+                <field name="evaluation_date"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hr_kpi_evaluation_search" model="ir.ui.view">
+        <field name="name">hr.kpi.evaluation.search</field>
+        <field name="model">hr.kpi.evaluation</field>
+        <field name="arch" type="xml">
+            <search string="KPI Evaluations">
+                <field name="period_label" string="Month"/>
+                <field name="department_ids"/>
+                <field name="evaluated_by_id"/>
+                <field name="state"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_period" string="Month" context="{'group_by': 'period_label'}"/>
+                    <filter name="group_by_frequency" string="Frequency" context="{'group_by': 'frequency'}"/>
+                    <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_hr_kpi_evaluation_form" model="ir.ui.view">
+        <field name="name">hr.kpi.evaluation.form</field>
+        <field name="model">hr.kpi.evaluation</field>
+        <field name="arch" type="xml">
+            <form string="KPI Evaluation">
+                <header>
+                    <button name="action_confirm"
+                            type="object"
+                            string="Confirm"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_reset_to_draft"
+                            type="object"
+                            string="Reset To Draft"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,under_pay,paid"/>
+                </header>
+                <sheet>
+                    <group col="1" class="oe_title">
+                        <label for="reference" string="Reference"/>
+                        <h1>
+                            <field name="reference" readonly="1"/>
+                        </h1>
+                    </group>
+                    <notebook>
+                        <page string="Details">
+                            <group col="1">
+                                <field name="period_start" string="Month" readonly="state in ('under_pay', 'paid')"/>
+                                <field name="frequency" readonly="state in ('under_pay', 'paid')"/>
+                                <field name="quarterly_kpi_months" invisible="frequency != 'quarterly'" required="frequency == 'quarterly'" readonly="state in ('under_pay', 'paid')"/>
+                                <field name="evaluation_date" readonly="state in ('under_pay', 'paid')"/>
+                                <field name="evaluated_by_id" readonly="state in ('under_pay', 'paid')"/>
+                                <field name="department_ids"
+                                       widget="many2many_tags"
+                                       options="{'no_create': True}"
+                                       readonly="state in ('under_pay', 'paid')"/>
+                            </group>
+                        </page>
+                        <page string="Evaluation Lines">
+                            <field name="line_ids" nolabel="1" readonly="state in ('under_pay', 'paid')">
+                                <list string="Evaluation Lines" editable="bottom" delete="1" create="0">
+                                    <field name="employee_id" readonly="1"/>
+                                    <field name="department_id" readonly="1"/>
+                                    <field name="kpi_percentage"/>
+                                    <field name="payout_value" readonly="1"/>
+                                    <field name="notes"/>
+                                    <field name="line_state" string="Status" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_kpi_evaluation_line_tree" model="ir.ui.view">
+        <field name="name">hr.kpi.evaluation.line.tree</field>
+        <field name="model">hr.kpi.evaluation.line</field>
+        <field name="arch" type="xml">
+            <list string="KPI Evaluation Lines">
+                <field name="employee_id"/>
+                <field name="period_label" string="Month"/>
+                <field name="evaluation_date"/>
+                <field name="department_id"/>
+                <field name="kpi_percentage"/>
+                <field name="payout_value"/>
+                <field name="notes"/>
+                <field name="line_state" string="Status"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hr_kpi_evaluation_line_form" model="ir.ui.view">
+        <field name="name">hr.kpi.evaluation.line.form</field>
+        <field name="model">hr.kpi.evaluation.line</field>
+        <field name="arch" type="xml">
+            <form string="KPI Evaluation Line">
+                <sheet>
+                    <group col="2">
+                        <group string="Employee">
+                            <field name="employee_id" readonly="1"/>
+                            <field name="department_id" readonly="1"/>
+                            <field name="line_state" readonly="1"/>
+                        </group>
+                        <group string="Evaluation">
+                            <field name="evaluation_id" readonly="1"/>
+                            <field name="period_label" string="Month" readonly="1"/>
+                            <field name="evaluation_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group col="2">
+                        <group string="KPI Details">
+                            <field name="configured_kpi_type" readonly="1"/>
+                            <field name="configured_kpi_value" readonly="1"/>
+                            <field name="kpi_percentage" readonly="evaluation_id.state in ('under_pay', 'paid')"/>
+                            <field name="payout_value" readonly="1"/>
+                        </group>
+                        <group string="Notes">
+                            <field name="notes"
+                                   nolabel="1"
+                                   placeholder="No notes"
+                                   readonly="evaluation_id.state in ('under_pay', 'paid')"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_kpi_evaluation" model="ir.actions.act_window">
+        <field name="name">KPI Evaluations</field>
+        <field name="res_model">hr.kpi.evaluation</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hr_kpi_evaluation_search"/>
+        <field name="context">{'search_default_group_by_period': 1}</field>
+    </record>
+
+    <record id="action_hr_kpi_evaluation_line" model="ir.actions.act_window">
+        <field name="name">Employee KPI History</field>
+        <field name="res_model">hr.kpi.evaluation.line</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_hr_kpi_evaluation"
+              name="KPI Evaluations"
+              parent="hr.menu_hr_employee_payroll"
+              action="action_hr_kpi_evaluation"
+              sequence="90"
+              groups="hr.group_hr_user,hr.group_hr_manager,hr_payroll.group_hr_payroll_manager"/>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="salary_rule_employee_expense_allowance_template" model="hr.salary.rule">
+            <field name="name">Employee Expenses</field>
+            <field name="code">EXP</field>
+            <field name="struct_id" ref="hr_payroll.default_structure"/>
+            <field name="sequence">176</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+result = sum(
+    line.amount
+    for line in payslip.input_line_ids
+    if line.input_type_id.is_expense_allowance_managed
+)
+            </field>
+            <field name="note" type="html">
+                <p>Allowance from payslip inputs that are automatically filled with approved, unpaid employee expenses (nx_hr_payroll_expense_allowance).</p>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_expense_deduction" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.expense.deduction</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr_expense.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//setting[@id='hr_payroll_accountant']" position="after">
+                <setting id="auto_deduct_unpaid_expenses_setting"
+                         string="Auto Deduct Unpaid Expenses"
+                         company_dependent="1"
+                         help="Deduct approved unpaid expenses from employee payslips during salary computation.">
+                    <field name="auto_deduct_unpaid_expenses"/>
+                    <div class="content-group" invisible="not auto_deduct_unpaid_expenses">
+                        <div class="mt16">
+                            <field name="deduct_only_company_expenses"/>
+                        </div>
+                        <div class="mt16">
+                            <label for="expense_deduction_product_ids" class="o_light_label"/>
+                            <field name="expense_deduction_product_ids"
+                                   widget="many2many_tags"
+                                   placeholder="All expense categories"
+                                   options="{'no_create': True}"/>
+                        </div>
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

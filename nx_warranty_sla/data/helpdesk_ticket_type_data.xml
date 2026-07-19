@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="nx_helpdesk_ticket_type_other" model="nx.helpdesk.ticket.type">
+        <field name="name">Other</field>
+        <field name="sequence">1</field>
+        <field name="severity">low</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

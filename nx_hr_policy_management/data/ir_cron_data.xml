@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="ir_cron_leave_allowance_scheduler" model="ir.cron">
+        <field name="name">Leave Allowance Scheduler</field>
+        <field name="model_id" ref="model_hr_leave_allowance_rule"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_generate_leave_allowances()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+    <record id="ir_cron_holiday_greeting_scheduler" model="ir.cron">
+        <field name="name">Holiday Greeting Email Scheduler</field>
+        <field name="model_id" ref="model_hr_holiday_greeting_template"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_send_holiday_greeting_emails()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

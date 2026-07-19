@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_employee_form_inherit_kpi" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.kpi</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_kpi_evaluation_lines"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-line-chart"
+                        groups="hr.group_hr_user,hr.group_hr_manager">
+                    <field name="kpi_evaluation_line_count" string="KPI Evaluations" widget="statinfo"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

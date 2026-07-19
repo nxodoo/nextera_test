@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_warranty_contract_list" model="ir.ui.view">
+        <field name="name">warranty.contract.list</field>
+        <field name="model">warranty.contract</field>
+        <field name="arch" type="xml">
+            <list create="false">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="helpdesk_team_ids" widget="many2many_tags"/>
+                <field name="product_id"/>
+                <field name="warranty_template_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="total_allocated_minutes"/>
+                <field name="used_minutes"/>
+                <field name="remaining_minutes"/>
+                <field name="total_tickets"/>
+                <field name="used_tickets"/>
+                <field name="remaining_tickets"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_warranty_contract_form" model="ir.ui.view">
+        <field name="name">warranty.contract.form</field>
+        <field name="model">warranty.contract</field>
+        <field name="arch" type="xml">
+            <form create="false">
+                <header>
+                    <button name="action_set_draft" string="Set Draft" type="object" class="btn-secondary" invisible="state not in ('active', 'expired')"/>
+                    <button name="action_set_active" string="Set Active" type="object" class="btn-primary" invisible="state not in ('draft', 'need_to_be_extended', 'expired')"/>
+                    <button name="action_set_need_to_be_extended" string="Set Need To Be Extended" type="object" class="btn-secondary" invisible="state not in ('active', 'not_extended')"/>
+                    <button name="action_set_not_extended" string="Set Not Extended" type="object" class="btn-secondary" invisible="state != 'need_to_be_extended'"/>
+                    <button name="action_set_expired" string="Set Expired" type="object" class="btn-secondary" invisible="state != 'not_extended'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,need_to_be_extended,not_extended,expired"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_view_helpdesk_tickets" class="oe_stat_button" icon="fa-life-ring">
+                            <field name="ticket_count" string="Helpdesk Tickets" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <notebook>
+                        <page string="Overview">
+                            <group>
+                                <group>
+                                    <field name="name" readonly="1"/>
+                                    <field name="partner_id" readonly="state == 'active'"/>
+                                    <field name="warranty_template_id" readonly="state == 'active'"/>
+                                    <field name="duration_type" invisible="1"/>
+                                    <field name="warranty_certain_period" invisible="1"/>
+                                    <field name="product_id"/>
+                                </group>
+                                <group>
+                                    <field name="sale_order_id" readonly="1"/>
+                                    <field name="sale_order_line_id" readonly="1"/>
+                                    <field name="start_date" readonly="state == 'active'"/>
+                                    <field name="end_date" required="warranty_certain_period" readonly="state == 'active'"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Usage">
+                            <group>
+                                <group string="Minutes Tracking" invisible="duration_type == 'tickets_based'">
+                                    <field name="total_allocated_minutes" readonly="1"/>
+                                    <field name="used_minutes" readonly="1"/>
+                                    <field name="remaining_minutes" readonly="1"/>
+                                </group>
+                                <group string="Tickets Tracking" invisible="duration_type != 'tickets_based'">
+                                    <field name="total_tickets" readonly="1"/>
+                                    <field name="used_tickets" readonly="1"/>
+                                    <field name="remaining_tickets" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Warranty / SLA" name="warranty_sla">
+                            <group>
+                                <field name="product_warranty_template_ids" nolabel="1">
+                                    <list editable="bottom">
+                                        <field name="name"/>
+                                        <field name="duration_type"/>
+                                        <field name="duration_months" optional="show"/>
+                                        <field name="service_hours_per_day" optional="show"/>
+                                        <field name="service_days_per_week" optional="show"/>
+                                        <field name="active" optional="show"/>
+                                    </list>
+                                    <form string="Warranty Template">
+                                        <sheet>
+                                            <group>
+                                                <group>
+                                                    <field name="name"/>
+                                                    <field name="duration_type"/>
+                                                    <field name="active"/>
+                                                </group>
+                                                <group>
+                                                    <field name="duration_months"/>
+                                                    <field name="service_hours_per_day"/>
+                                                    <field name="service_days_per_week"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <field name="description"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Helpdesk" name="helpdesk">
+                            <group>
+                                <group>
+                                    <field name="helpdesk_team_ids" widget="many2many_tags" readonly="state == 'active'"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="History" name="history">
+                            <field name="history_tracking_value_ids" readonly="1" nolabel="1">
+                                <list create="false" delete="false" edit="false">
+                                    <field name="changed_on"/>
+                                    <field name="changed_by_id"/>
+                                    <field name="field_id" string="Field"/>
+                                    <field name="old_value_char" string="Old Value"/>
+                                    <field name="old_value_integer" optional="hide"/>
+                                    <field name="old_value_float" optional="hide"/>
+                                    <field name="old_value_datetime" optional="hide"/>
+                                    <field name="new_value_char" string="New Value"/>
+                                    <field name="new_value_integer" optional="hide"/>
+                                    <field name="new_value_float" optional="hide"/>
+                                    <field name="new_value_datetime" optional="hide"/>
+                                </list>
+                                <form string="History Entry" create="false" delete="false" edit="false">
+                                    <sheet>
+                                        <group>
+                                            <field name="changed_on" readonly="1"/>
+                                            <field name="changed_by_id" readonly="1"/>
+                                            <field name="field_id" readonly="1"/>
+                                        </group>
+                                        <group>
+                                            <field name="old_value_char" readonly="1"/>
+                                            <field name="new_value_char" readonly="1"/>
+                                            <field name="old_value_integer" readonly="1"/>
+                                            <field name="new_value_integer" readonly="1"/>
+                                            <field name="old_value_float" readonly="1"/>
+                                            <field name="new_value_float" readonly="1"/>
+                                            <field name="old_value_datetime" readonly="1"/>
+                                            <field name="new_value_datetime" readonly="1"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_warranty_contract" model="ir.actions.act_window">
+        <field name="name">Warranty Contracts</field>
+        <field name="res_model">warranty.contract</field>
+        <field name="view_mode">list,form</field>
+        <field name="groups_id" eval="[(6, 0, [ref('sales_team.group_sale_salesman')])]"/>
+    </record>
+
+    <menuitem
+        id="menu_warranty_contract"
+        name="Warranty Contracts"
+        parent="sale.menu_sale_report"
+        action="action_warranty_contract"
+        sequence="99"
+        groups="sales_team.group_sale_salesman"/>
+</odoo>

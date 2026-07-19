@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_contract_form_inherit_payroll_expense_allowance" model="ir.ui.view">
+        <field name="name">hr.contract.form.inherit.payroll.expense.allowance</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='information']" position="inside">
+                <group string="Payroll Expense Reimbursement" name="payroll_expense_allowance_contract">
+                    <field name="payroll_expense_reimburse_type_ids"
+                           widget="many2many_tags"
+                           placeholder="All types marked for payroll (if empty)"
+                           options="{'no_create': True}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

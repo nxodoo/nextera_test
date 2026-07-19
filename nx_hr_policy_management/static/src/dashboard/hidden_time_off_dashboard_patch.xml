@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-inherit="hr_holidays.TimeOffDashboard" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_timeoff_dashboard')]" position="inside">
+            <div class="o_hidden_timeoff_toggle d-flex align-items-center justify-content-center"
+                 t-if="state.hiddenHolidays.length"
+                 t-on-click="toggleHiddenRail">
+                <span class="o_hidden_timeoff_toggle_label">
+                    <t t-if="state.showHiddenRail">Hide Hidden Types</t>
+                    <t t-else="">Show Hidden Types</t>
+                </span>
+            </div>
+            <div t-if="state.hiddenHolidays.length and state.showHiddenRail" class="o_hidden_timeoff_rail">
+                <div class="o_hidden_timeoff_rail_scroller">
+                    <t t-foreach="state.hiddenHolidays" t-as="holiday" t-key="'hidden-' + holiday[3]">
+                        <div class="o_hidden_timeoff_card">
+                            <div class="o_hidden_timeoff_card_type">
+                                <t t-esc="holiday[0]"/>
+                            </div>
+                            <div class="o_hidden_timeoff_card_total">
+                                <t t-esc="holiday[1].virtual_remaining_leaves"/>
+                            </div>
+                            <div class="o_hidden_timeoff_card_unit">
+                                <t t-if="holiday[1].request_unit == 'hour'">Hours</t>
+                                <t t-else="">Days</t>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </xpath>
+    </t>
+</templates>

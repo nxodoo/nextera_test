@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_ticket_view_form_warranty_sla" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.warranty.sla</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='stage_id']" position="before">
+                <field name="can_edit_stage" invisible="1"/>
+                <field name="is_new_stage" invisible="1"/>
+                <field name="is_in_progress_stage" invisible="1"/>
+                <field name="is_solved_stage" invisible="1"/>
+                <field name="is_cancelled_stage" invisible="1"/>
+                <button name="action_set_new_stage"
+                        type="object"
+                        string="Set New"
+                        class="btn btn-secondary"
+                        invisible="not can_edit_stage or is_new_stage"/>
+                <button name="action_set_in_progress_stage"
+                        type="object"
+                        string="Set In Progress"
+                        class="btn btn-secondary"
+                        invisible="not can_edit_stage or is_in_progress_stage"/>
+                <button name="action_open_solved_feedback_wizard"
+                        type="object"
+                        string="Set Solved"
+                        class="btn btn-secondary"
+                        invisible="not can_edit_stage or is_new_stage or (not is_in_progress_stage and not is_cancelled_stage)"/>
+                <button name="action_open_cancelled_feedback_wizard"
+                        type="object"
+                        string="Set Cancelled"
+                        class="btn btn-secondary"
+                        invisible="not can_edit_stage or not is_solved_stage"/>
+            </xpath>
+            <xpath expr="//field[@name='stage_id']" position="attributes">
+                <attribute name="readonly">not can_edit_stage</attribute>
+                <attribute name="options">{'clickable': '1', 'fold_field': 'fold'}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">stage_id and not is_new_stage</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="secondary_user_id" readonly="stage_id and not is_new_stage"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="partner_commercial_id" invisible="1"/>
+                <field name="ticket_created_at" readonly="stage_id and not is_new_stage"/>
+                <field name="ticket_type_id" readonly="stage_id and not is_new_stage"/>
+                <field name="severity" readonly="1"/>
+                <field name="expected_close_date" readonly="1"/>
+                <field name="ticket_solved_at" invisible="not ticket_solved_at"/>
+                <field name="total_timesheet_hours" readonly="1" invisible="not show_total_timesheet_hours"/>
+            </xpath>
+            <xpath expr="//field[@name='team_id']" position="attributes">
+                <attribute name="readonly">stage_id and not is_new_stage</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="readonly">stage_id and not is_new_stage</attribute>
+            </xpath>
+            <xpath expr="//field[@name='priority']" position="attributes">
+                <attribute name="readonly">stage_id and not is_new_stage</attribute>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="attributes">
+                <attribute name="readonly">stage_id and not is_new_stage</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="readonly">stage_id and not is_new_stage</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_phone']" position="attributes">
+                <attribute name="readonly">stage_id and not is_new_stage</attribute>
+            </xpath>
+            <xpath expr="//field[@name='email_cc']" position="attributes">
+                <attribute name="readonly">stage_id and not is_new_stage</attribute>
+            </xpath>
+            <xpath expr="//field[@name='properties']" position="attributes">
+                <attribute name="readonly">stage_id and not is_new_stage</attribute>
+            </xpath>
+            <xpath expr="//page[@name='description']/field[@name='description']" position="attributes">
+                <attribute name="readonly">stage_id and not is_new_stage</attribute>
+            </xpath>
+<!--            <xpath expr="//label[@for='partner_phone']" position="replace"/>-->
+<!--            <xpath expr="//div[field[@name='partner_phone']]" position="replace"/>-->
+<!--            <xpath expr="//field[@name='email_cc']" position="replace"/>-->
+            <xpath expr="//notebook" position="inside">
+                <page string="Warranty" name="warranty_info">
+                    <group>
+                        <group>
+                            <field name="warranty_contract_id" readonly="stage_id and not is_new_stage"/>
+                            <field name="consume_warranty" readonly="stage_id and not is_new_stage"/>
+                        </group>
+                        <group>
+                            <field name="warranty_used_minutes" readonly="stage_id and not is_new_stage"/>
+                            <field name="warranty_ticket_consumed" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Info" name="contact_info">
+                    <group>
+                        <group>
+                            <field name="is_partner_phone_update" invisible="1"/>
+                            <label for="partner_phone" string="Phone"/>
+                            <div class="o_row o_row_readonly">
+                                <field name="partner_phone" widget="phone" string="Phone"/>
+                                <span class="fa fa-exclamation-triangle text-warning oe_edit_only"
+                                title="By saving this change, the customer phone number will also be updated." invisible="not is_partner_phone_update"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="email_cc" groups="base.group_no_one"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Final Feedback" name="final_feedback_page">
+                    <group>
+                        <field name="final_feedback" nolabel="1" readonly="1" placeholder="Final feedback will appear here after the ticket is solved or cancelled."/>
+                    </group>
+                </page>
+                <page string="Attachments" name="ticket_attachments">
+                    <div class="oe_title">
+                        <style>
+                            .nx-ticket-attachment-preview-grid {
+                                display: flex;
+                                flex-wrap: wrap;
+                                gap: 16px;
+                                align-items: flex-start;
+                            }
+                            .nx-ticket-attachment-preview-card {
+                                width: 220px;
+                            }
+                            .nx-ticket-attachment-preview-link {
+                                display: block;
+                                border: 1px solid #d8e6ea;
+                                border-radius: 14px;
+                                overflow: hidden;
+                                background: #fff;
+                                text-decoration: none;
+                            }
+                            .nx-ticket-attachment-preview-image {
+                                display: block;
+                                width: 100%;
+                                height: 180px;
+                                object-fit: cover;
+                                background: #f6f9fa;
+                            }
+                            .nx-ticket-attachment-preview-name {
+                                margin-top: 8px;
+                                color: #29434e;
+                                font-weight: 600;
+                                word-break: break-word;
+                            }
+                            .nx-ticket-attachment-file-card {
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 8px;
+                                padding: 12px 14px;
+                                border: 1px solid #d8e6ea;
+                                border-radius: 14px;
+                                color: #0c6d71;
+                                background: #fff;
+                                text-decoration: none;
+                                font-weight: 600;
+                            }
+                        </style>
+                        <field name="portal_attachment_preview_html" nolabel="1" readonly="1" widget="html"/>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="helpdesk_ticket_view_form_show_timesheets_tab" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.show.timesheets.tab</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_timesheet.helpdesk_ticket_view_form_inherit_helpdesk_timesheet"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='timesheets']" position="attributes">
+                <attribute name="invisible">False</attribute>
+                <attribute name="groups">base.group_user</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

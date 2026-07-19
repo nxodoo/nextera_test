@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_expense_allowance" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.expense.allowance</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr_payroll.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='hr_payroll_settings']" position="inside">
+                <setting id="payroll_expense_allowance_input_setting"
+                         string="Employee Expense Payroll Allowance"
+                         company_dependent="1"
+                         help="Default payslip input used to inject approved unpaid expenses before salary computation.">
+                    <field name="payroll_expense_allowance_input_type_id"
+                           options="{'no_create': True}"/>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

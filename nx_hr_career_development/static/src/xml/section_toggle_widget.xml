@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="nx_hr_career_development.SectionToggle">
+        <div t-ref="root"
+             class="o_section_toggle w-100"
+             style="user-select: none; margin-bottom: 2px; margin-top: 10px;">
+
+            <div class="d-flex align-items-center justify-content-between px-3 py-2"
+                 t-attf-style="
+                    background: linear-gradient(135deg, #f8f9fb 0%, #edf0f4 100%);
+                    cursor: pointer;
+                    border-left: 3.5px solid {{state.color}};
+                    border-radius: 6px;
+                    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+                    transition: box-shadow 0.2s ease, background 0.2s ease;
+                 "
+                 t-on-click="toggle">
+
+                <!-- Left -->
+                <div class="d-flex align-items-center gap-2">
+
+                    <div t-attf-style="
+                        width: 30px; height: 30px;
+                        border-radius: 8px;
+                        background: {{state.color}}15;
+                        display: flex; align-items: center; justify-content: center;
+                    ">
+                        <span t-attf-class="fa {{state.icon}}"
+                              t-attf-style="font-size: 0.95rem; color: {{state.color}};"/>
+                    </div>
+
+                    <span class="fw-bold"
+                          style="font-size: 0.92rem; color: #1e293b;">
+                        <t t-esc="state.title"/>
+                    </span>
+
+                </div>
+
+                <!-- Right -->
+                <span class="fa"
+                      t-att-class="state.isOpen ? 'fa-chevron-up' : 'fa-chevron-down'"
+                      style="color: #94a3b8; font-size: 0.78rem;"/>
+
+            </div>
+
+        </div>
+    </t>
+
+</templates>

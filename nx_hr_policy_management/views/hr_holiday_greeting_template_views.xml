@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_holiday_greeting_template_tree" model="ir.ui.view">
+        <field name="name">hr.holiday.greeting.template.tree</field>
+        <field name="model">hr.holiday.greeting.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="send_timing"/>
+                <field name="number_of_days"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hr_holiday_greeting_log_list" model="ir.ui.view">
+        <field name="name">hr.holiday.greeting.log.list</field>
+        <field name="model">hr.holiday.greeting.log</field>
+        <field name="arch" type="xml">
+            <list string="Greeting Logs" create="false" delete="false" edit="false">
+                <field name="employee_id"/>
+                <field name="state"/>
+                <field name="sent_datetime"/>
+                <field name="skip_reason"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hr_holiday_greeting_template_form" model="ir.ui.view">
+        <field name="name">hr.holiday.greeting.template.form</field>
+        <field name="model">hr.holiday.greeting.template</field>
+        <field name="arch" type="xml">
+            <form string="Holiday Greeting Email">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Holiday Greeting Name"/>
+                        </h1>
+                    </div>
+                    <notebook>
+                        <page string="Details">
+                            <group>
+                                <group>
+                                    <field name="company_id"/>
+                                    <field name="active"/>
+                                </group>
+                                <group>
+                                    <field name="send_timing"/>
+                                    <field name="number_of_days"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="subject_template"/>
+                                <field name="body_html" widget="html"/>
+                            </group>
+                            <group string="Supported Dynamic Fields">
+                                <div class="o_form_label">${employee_name}</div>
+                                <div class="o_form_label">${company_name}</div>
+                                <div class="o_form_label">${holiday_name}</div>
+                            </group>
+                        </page>
+                        <page string="Public Holidays">
+                            <field name="public_holiday_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="company_id"/>
+                                    <button
+                                        name="action_view_greeting_logs"
+                                        type="object"
+                                        string="View Logs"
+                                        icon="fa-list-alt"
+                                        class="btn-sm btn-secondary"
+                                    />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_holiday_greeting_template_search" model="ir.ui.view">
+        <field name="name">hr.holiday.greeting.template.search</field>
+        <field name="model">hr.holiday.greeting.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="company_id"/>
+                <filter name="filter_active" string="Active" domain="[('active', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hr_holiday_greeting_template" model="ir.actions.act_window">
+        <field name="name">Holiday Greeting Emails</field>
+        <field name="res_model">hr.holiday.greeting.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hr_holiday_greeting_template_search"/>
+    </record>
+
+    <menuitem
+        id="menu_hr_holiday_greeting_template"
+        name="Holiday Greeting Emails"
+        parent="hr_holidays.menu_hr_holidays_configuration"
+        action="action_hr_holiday_greeting_template"
+        sequence="45"/>
+</odoo>

@@ -1,0 +1,25 @@
+{
+    "name": "Payroll Employee Expense Allowance",
+    "version": "18.0.1.0.0",
+    "summary": "Post approved unpaid employee expenses to payslips via salary inputs and allowance rules",
+    "author": "Ahmed Tarek",
+    "license": "LGPL-3",
+    "depends": [
+        "hr_payroll",
+        "hr_contract",
+        "hr_expense",
+        "nx_hr_expense_line",
+    ],
+    "data": [
+        "data/hr_payslip_input_type_data.xml",
+        "data/hr_salary_rule_data.xml",
+        "views/hr_expense_line_type_views.xml",
+        "views/hr_expense_views.xml",
+        "views/hr_contract_views.xml",
+        "views/hr_payslip_views.xml",
+        "views/res_config_settings_views.xml",
+    ],
+    "installable": True,
+    "application": False,
+    "post_init_hook": "post_init_hook",
+}

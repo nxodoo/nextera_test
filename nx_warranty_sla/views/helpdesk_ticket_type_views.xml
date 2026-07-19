@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_nx_helpdesk_ticket_type_tree" model="ir.ui.view">
+        <field name="name">nx.helpdesk.ticket.type.list</field>
+        <field name="model">nx.helpdesk.ticket.type</field>
+        <field name="arch" type="xml">
+                <list editable="bottom">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="severity"/>
+                    <field name="priority"/>
+                    <field name="sla_policy_id"/>
+                    <field name="active"/>
+                </list>
+        </field>
+    </record>
+
+    <record id="view_nx_helpdesk_ticket_type_form" model="ir.ui.view">
+        <field name="name">nx.helpdesk.ticket.type.form</field>
+        <field name="model">nx.helpdesk.ticket.type</field>
+        <field name="arch" type="xml">
+            <form string="Ticket Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="severity"/>
+                            <field name="priority"/>
+                        </group>
+                        <group>
+                            <field name="sla_policy_id"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_nx_helpdesk_ticket_type" model="ir.actions.act_window">
+        <field name="name">Ticket Types</field>
+        <field name="res_model">nx.helpdesk.ticket.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="menu_nx_helpdesk_ticket_type"
+        name="Ticket Types"
+        parent="helpdesk.helpdesk_menu_config"
+        action="action_nx_helpdesk_ticket_type"
+        sequence="35"
+        groups="helpdesk.group_helpdesk_manager"
+    />
+</odoo>

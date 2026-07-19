@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_expense_view_form_inherit_payroll_allowance" model="ir.ui.view">
+        <field name="name">hr.expense.view.form.inherit.payroll.allowance</field>
+        <field name="model">hr.expense</field>
+        <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state'][contains(@statusbar_visible,'approved')]" position="attributes">
+                <attribute name="statusbar_visible">draft,reported,submitted,approved,payroll_pending,payroll_paid,done</attribute>
+            </xpath>
+            <xpath expr="/form/sheet" position="inside">
+                <widget name="web_ribbon"
+                        title="Payroll Allowance"
+                        bg_color="text-bg-info"
+                        invisible="not payroll_allowance_posted"/>
+                <widget name="web_ribbon"
+                        title="Paid via Payroll"
+                        bg_color="text-bg-success"
+                        invisible="not payroll_reimbursed_via_payroll"/>
+            </xpath>
+            <xpath expr="//field[@name='date']" position="after">
+                <field name="payroll_allowance_payslip_id"
+                       readonly="1"
+                       invisible="not payroll_allowance_payslip_id"
+                       options="{'no_create': True}"/>
+                <field name="payroll_allowance_posted" invisible="1"/>
+                <field name="payroll_reimbursed_via_payroll" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_expense_view_search_inherit_payroll_allowance" model="ir.ui.view">
+        <field name="name">hr.expense.view.search.inherit.payroll.allowance</field>
+        <field name="model">hr.expense</field>
+        <field name="inherit_id" ref="hr_expense.hr_expense_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='approved']" position="after">
+                <filter string="In Payroll Allowance"
+                        name="payroll_allowance_linked"
+                        domain="[('payroll_allowance_payslip_id', '!=', False)]"/>
+                <filter string="Paid via Payroll"
+                        name="payroll_reimbursed_via_payroll"
+                        domain="[('payroll_reimbursed_via_payroll', '=', True)]"/>
+            </xpath>
+            <xpath expr="//search/group" position="inside">
+                <filter string="Allowance Payslip"
+                        name="group_by_payroll_allowance_payslip_id"
+                        context="{'group_by': 'payroll_allowance_payslip_id'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        The base leave request form keeps holiday_status_id inside
+        <group name="col_left">. We append the sub leave info fields
+        directly after it so they are visible when the employee selects
+        a sub leave type.
+    -->
+
+    <!-- ── Leave Request Form View: Show sub leave info ──────────────────── -->
+    <record id="view_hr_leave_form_sub_leave" model="ir.ui.view">
+        <field name="name">hr.leave.form.sub.leave</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='col_left']/field[@name='holiday_status_id']"
+                   position="after">
+                <field name="is_sub_leave" invisible="1"/>
+                <field name="parent_allocation_id" invisible="1"/>
+                <field name="sub_leave_remaining_display"
+                       string="Sub Leave Remaining (Days)"
+                       readonly="1"
+                       invisible="not is_sub_leave"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

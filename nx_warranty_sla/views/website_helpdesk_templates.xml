@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="nx_website_helpdesk_all_team_restyle" inherit_id="website_helpdesk.helpdesk_all_team" priority="90">
+            <xpath expr="//t[@t-call='website.layout']/*" position="replace">
+                <div id="wrap" class="oe_structure">
+                <section class="container py-5 nx-helpdesk-home-shell">
+                    <style>
+                        .nx-helpdesk-home-shell {
+                            padding-top: 2.25rem !important;
+                            padding-bottom: 3rem !important;
+                        }
+                        .nx-helpdesk-home-hero {
+                            position: relative;
+                            overflow: hidden;
+                            margin-bottom: 1.5rem;
+                            padding: 1.8rem 2rem;
+                            border: 1px solid #d8eaec;
+                            border-radius: 28px;
+                            background:
+                                radial-gradient(circle at top right, rgba(69, 197, 204, 0.18), transparent 30%),
+                                linear-gradient(135deg, #06373a 0%, #0c6d71 58%, #45c5cc 100%);
+                            box-shadow: 0 24px 52px rgba(8, 61, 63, 0.12);
+                            color: #ffffff;
+                        }
+                        .nx-helpdesk-home-hero::after {
+                            content: "";
+                            position: absolute;
+                            right: -48px;
+                            top: -48px;
+                            width: 190px;
+                            height: 190px;
+                            border-radius: 50%;
+                            background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 70%);
+                        }
+                        .nx-helpdesk-home-kicker {
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 0.45rem;
+                            padding: 0.45rem 0.9rem;
+                            border-radius: 999px;
+                            background: rgba(255, 255, 255, 0.14);
+                            color: #e4fafb;
+                            font-size: 0.78rem;
+                            font-weight: 800;
+                            letter-spacing: 0.12em;
+                            text-transform: uppercase;
+                        }
+                        .nx-helpdesk-home-title {
+                            margin: 1rem 0 0.6rem;
+                            color: #ffffff;
+                            font-size: clamp(2.5rem, 5vw, 4.8rem);
+                            font-weight: 800;
+                            letter-spacing: -0.04em;
+                            line-height: 0.95;
+                        }
+                        .nx-helpdesk-home-subtitle {
+                            max-width: 44rem;
+                            margin: 0;
+                            color: rgba(255, 255, 255, 0.88);
+                            font-size: 1.04rem;
+                            line-height: 1.7;
+                        }
+                        .nx-helpdesk-team-grid {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                            gap: 1rem;
+                        }
+                        .nx-helpdesk-team-card {
+                            position: relative;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 0.9rem;
+                            min-height: 220px;
+                            padding: 1.5rem;
+                            border: 1px solid #dcebed;
+                            border-radius: 24px;
+                            background:
+                                radial-gradient(circle at top right, rgba(69, 197, 204, 0.12), transparent 34%),
+                                linear-gradient(180deg, #ffffff 0%, #fbfefe 100%);
+                            box-shadow: 0 18px 38px rgba(8, 61, 63, 0.08);
+                            text-decoration: none !important;
+                            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+                        }
+                        .nx-helpdesk-team-card:hover {
+                            transform: translateY(-3px);
+                            border-color: #bfe1e4;
+                            box-shadow: 0 24px 42px rgba(8, 61, 63, 0.11);
+                        }
+                        .nx-helpdesk-team-icon {
+                            width: 58px;
+                            height: 58px;
+                            border-radius: 18px;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            background: linear-gradient(135deg, #0c6d71 0%, #17a3a8 100%);
+                            color: #ffffff;
+                            font-size: 1.3rem;
+                            box-shadow: 0 12px 26px rgba(12, 109, 113, 0.18);
+                        }
+                        .nx-helpdesk-team-name {
+                            margin: 0;
+                            color: #113f4b;
+                            font-size: 1.45rem;
+                            font-weight: 800;
+                            line-height: 1.2;
+                        }
+                        .nx-helpdesk-team-copy {
+                            margin: 0;
+                            color: #5c737d;
+                            line-height: 1.65;
+                            font-size: 0.97rem;
+                        }
+                        .nx-helpdesk-team-action {
+                            margin-top: auto;
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 0.55rem;
+                            color: #0c6d71;
+                            font-weight: 800;
+                            font-size: 0.96rem;
+                        }
+                        .nx-helpdesk-team-action i {
+                            transition: transform 0.18s ease;
+                        }
+                        .nx-helpdesk-team-card:hover .nx-helpdesk-team-action i {
+                            transform: translateX(3px);
+                        }
+                    </style>
+
+                    <div class="nx-helpdesk-home-hero">
+                        <span class="nx-helpdesk-home-kicker">
+                            <i class="fa fa-life-ring"/>
+                            Support Portal
+                        </span>
+                        <h1 class="nx-helpdesk-home-title">Help Center</h1>
+                        <p class="nx-helpdesk-home-subtitle">Choose the support team you need and jump directly into the right knowledge base, guidance, and customer support flow.</p>
+                    </div>
+
+                    <div class="nx-helpdesk-team-grid">
+                        <a t-foreach="teams" t-as="team" t-att-href="team.website_url" class="nx-helpdesk-team-card">
+                            <span class="nx-helpdesk-team-icon">
+                                <i class="fa fa-compass"/>
+                            </span>
+                            <h2 class="nx-helpdesk-team-name" t-out="team.name"/>
+                            <p class="nx-helpdesk-team-copy">Explore team-specific guides, articles, and support resources in a cleaner branded workspace.</p>
+                            <span class="nx-helpdesk-team-action">
+                                Open support space
+                                <i class="fa fa-arrow-right"/>
+                            </span>
+                        </a>
+                    </div>
+                </section>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="nx_website_helpdesk_knowledge_base_restyle" inherit_id="website_helpdesk.knowledge_base" priority="90">
+            <xpath expr="//div[@id='o_knowledge_base_sections']" position="attributes">
+                <attribute name="class">row g-3 mt-1 nx-helpdesk-kb-sections</attribute>
+            </xpath>
+            <xpath expr="//h1" position="attributes">
+                <attribute name="class">mb-3 nx-helpdesk-kb-title</attribute>
+            </xpath>
+            <xpath expr="//div[@id='o_knowledge_base_sections']" position="before">
+                <style>
+                    .nx-helpdesk-kb-title {
+                        margin-top: 2rem !important;
+                        margin-bottom: 1.25rem !important;
+                        color: #113f4b;
+                        font-size: clamp(2.3rem, 4.4vw, 4rem);
+                        font-weight: 800;
+                        letter-spacing: -0.03em;
+                    }
+                    .nx-helpdesk-kb-title,
+                    .o_helpdesk_knowledge_search,
+                    .nx-helpdesk-kb-sections,
+                    .nx-helpdesk-kb-sections + * {
+                        max-width: 100%;
+                    }
+                    .o_helpdesk_knowledge_search {
+                        margin-bottom: 1.4rem !important;
+                        padding: 1.15rem 1.25rem;
+                        border: 1px solid #d8eaec;
+                        border-radius: 24px;
+                        background:
+                            radial-gradient(circle at top right, rgba(69, 197, 204, 0.14), transparent 32%),
+                            linear-gradient(180deg, #ffffff 0%, #f7fbfb 100%);
+                        box-shadow: 0 18px 40px rgba(8, 61, 63, 0.08);
+                    }
+                    .o_helpdesk_knowledge_search .search-query,
+                    .o_helpdesk_knowledge_search .form-control {
+                        min-height: 58px;
+                        border: 1px solid #cfe6e8;
+                        border-radius: 18px;
+                        background: linear-gradient(180deg, #ffffff 0%, #fbfefe 100%);
+                        color: #214a4e;
+                        font-size: 1.02rem;
+                        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+                    }
+                    .o_helpdesk_knowledge_search .search-query:focus,
+                    .o_helpdesk_knowledge_search .form-control:focus {
+                        border-color: #18a1a7;
+                        box-shadow: 0 0 0 0.24rem rgba(24, 161, 167, 0.14);
+                    }
+                    .o_helpdesk_knowledge_search .btn-primary {
+                        min-height: 58px;
+                        border: 1px solid #0c6d71 !important;
+                        border-radius: 18px !important;
+                        background: linear-gradient(135deg, #0c6d71 0%, #17a3a8 100%) !important;
+                        color: #ffffff !important;
+                        font-weight: 800;
+                        box-shadow: 0 16px 32px rgba(12, 109, 113, 0.18);
+                    }
+                    .o_helpdesk_knowledge_search .btn-primary:hover,
+                    .o_helpdesk_knowledge_search .btn-primary:focus {
+                        border-color: #0a5e61 !important;
+                        background: linear-gradient(135deg, #0a5e61 0%, #12979d 100%) !important;
+                        color: #ffffff !important;
+                    }
+                    .o_helpdesk_knowledge_search .btn-outline-secondary {
+                        min-height: 58px;
+                        padding-left: 1.35rem;
+                        padding-right: 1.35rem;
+                        border: 1px solid #cfe2e5;
+                        border-radius: 18px;
+                        background: #ffffff;
+                        color: #1b5258;
+                        font-weight: 700;
+                    }
+                    .o_helpdesk_knowledge_search .btn-outline-secondary:hover,
+                    .o_helpdesk_knowledge_search .btn-outline-secondary:focus {
+                        border-color: #17a3a8;
+                        background: #eef8f8;
+                        color: #0c6d71;
+                    }
+                    .nx-helpdesk-kb-sections {
+                        --kb-gap: 1.25rem;
+                        margin-top: 0.25rem !important;
+                        margin-bottom: 3rem !important;
+                    }
+                    .nx-helpdesk-kb-sections > div,
+                    .nx-helpdesk-kb-sections > section,
+                    .nx-helpdesk-kb-sections > article {
+                        margin-bottom: var(--kb-gap);
+                    }
+                    .nx-helpdesk-kb-sections .card,
+                    .nx-helpdesk-kb-sections .o_knowledge_card,
+                    .nx-helpdesk-kb-sections .o_helpdesk_knowledge_card {
+                        border: 1px solid #dcebed;
+                        border-radius: 24px !important;
+                        background:
+                            radial-gradient(circle at top right, rgba(69, 197, 204, 0.12), transparent 30%),
+                            linear-gradient(180deg, #ffffff 0%, #fbfefe 100%);
+                        box-shadow: 0 18px 38px rgba(8, 61, 63, 0.08);
+                        overflow: hidden;
+                    }
+                    .nx-helpdesk-kb-sections .card-body,
+                    .nx-helpdesk-kb-sections .o_knowledge_card_body,
+                    .nx-helpdesk-kb-sections .o_helpdesk_knowledge_card_body {
+                        padding: 1.35rem;
+                    }
+                    .nx-helpdesk-kb-sections .card-title,
+                    .nx-helpdesk-kb-sections h2,
+                    .nx-helpdesk-kb-sections h3,
+                    .nx-helpdesk-kb-sections h4,
+                    .nx-helpdesk-kb-sections h5 {
+                        color: #113f4b;
+                        font-weight: 800;
+                    }
+                    .nx-helpdesk-kb-sections .list-group-item,
+                    .nx-helpdesk-kb-sections .o_knowledge_item,
+                    .nx-helpdesk-kb-sections .o_helpdesk_knowledge_item {
+                        border: 1px solid #edf3f5 !important;
+                        border-radius: 16px !important;
+                        background: #f8fbfc !important;
+                        margin-bottom: 0.7rem;
+                        color: #214651 !important;
+                        font-weight: 600;
+                    }
+                    .nx-helpdesk-kb-sections .list-group-item:hover,
+                    .nx-helpdesk-kb-sections .o_knowledge_item:hover,
+                    .nx-helpdesk-kb-sections .o_helpdesk_knowledge_item:hover {
+                        border-color: #bfe1e4 !important;
+                        background: #eff8f9 !important;
+                        color: #0c6d71 !important;
+                    }
+                    .nx-helpdesk-kb-sections .btn-secondary {
+                        min-height: 56px;
+                        padding: 0.85rem 1.4rem;
+                        border: 1px solid #0f1f3a !important;
+                        border-radius: 18px !important;
+                        background: linear-gradient(135deg, #18263f 0%, #27324c 100%) !important;
+                        color: #ffffff !important;
+                        font-weight: 800;
+                        box-shadow: 0 16px 30px rgba(15, 31, 58, 0.16);
+                    }
+                    .nx-helpdesk-kb-sections .btn-secondary:hover,
+                    .nx-helpdesk-kb-sections .btn-secondary:focus {
+                        background: linear-gradient(135deg, #10192d 0%, #1c2740 100%) !important;
+                        color: #ffffff !important;
+                    }
+                    .o_helpdesk_knowledge_search .btn,
+                    .o_helpdesk_knowledge_search a.btn,
+                    .nx-helpdesk-kb-sections .btn,
+                    .nx-helpdesk-kb-sections a.btn {
+                        text-decoration: none !important;
+                    }
+                    @media (max-width: 767.98px) {
+                        .o_helpdesk_knowledge_search {
+                            padding: 1rem;
+                            border-radius: 20px;
+                        }
+                    }
+                </style>
+            </xpath>
+        </template>
+
+<!--        <template id="nx_website_helpdesk_navbar_restyle" inherit_id="website_helpdesk.navbar" priority="90">-->
+<!--            <xpath expr="//button[@type='submit']" position="replace">-->
+<!--                <button type="submit" class="btn btn-primary w-100">-->
+<!--                    <i class="fa fa-search me-2"/>-->
+<!--                    Search-->
+<!--                </button>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//div[hasclass('col-md-4') and hasclass('text-md-end')]" position="replace">-->
+<!--                <div class="col-md-4 text-md-end d-flex justify-content-md-end gap-2 flex-wrap">-->
+<!--                    <a t-if="request and request.env and request.env.user and (request.env.user.has_group('base.group_user') or (request.env.user._fields.get('portal_ticket_role') and request.env.user.portal_ticket_role == 'admin'))"-->
+<!--                       href="/my/orders"-->
+<!--                       class="btn btn-outline-secondary">-->
+<!--                        Orders-->
+<!--                    </a>-->
+<!--                    <a t-att-href="'/helpdesk/%s?contact_form=1' % team.id" class="btn btn-outline-secondary">-->
+<!--                        Contact Support-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--            </xpath>-->
+<!--        </template>-->
+
+        <template id="nx_website_helpdesk_footer_restyle" inherit_id="website_helpdesk.footer" priority="90">
+            <xpath expr="//div[hasclass('d-flex') and hasclass('gap-2')]" position="replace"/>
+        </template>
+
+        <template id="nx_website_helpdesk_team_safe_form_view" inherit_id="website_helpdesk.team" priority="95">
+            <xpath expr="//div[hasclass('mt-4')]" position="replace">
+                <div class="mt-4">
+                    <t t-set="nx_team_form_view" t-value="team.sudo().website_form_view_id"/>
+                    <t t-if="nx_team_form_view and nx_team_form_view.key" t-call="{{ nx_team_form_view.key }}"/>
+                    <t t-else="" t-call="website_helpdesk.ticket_submit_form"/>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

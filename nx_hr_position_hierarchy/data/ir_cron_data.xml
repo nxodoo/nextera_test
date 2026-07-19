@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="ir_cron_expire_recruitment_jobs" model="ir.cron">
+        <field name="name">Expire Recruitment Jobs After Deadline</field>
+        <field name="model_id" ref="hr_recruitment.model_hr_job"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_expire_jobs_after_deadline()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_employee_job_history_user,hr.employee.job.history user,model_hr_employee_job_history,hr.group_hr_user,1,1,1,1
+access_hr_employee_education_user,hr.employee.education user,model_hr_employee_education,hr.group_hr_user,1,1,1,1
+access_hr_employee_previous_job_user,hr.employee.previous.job user,model_hr_employee_previous_job,hr.group_hr_user,1,1,1,1

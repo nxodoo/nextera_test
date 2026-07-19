@@ -1,0 +1,2992 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="website_contactus_nextera_theme" inherit_id="website.contactus" priority="95">
+            <xpath expr="//t[@t-call='website.layout']" position="inside">
+                <t t-set="contact_error" t-value="request.params.get('error')"/>
+            </xpath>
+            <xpath expr="//section[hasclass('s_title')]" position="attributes">
+                <attribute name="class">s_title parallax s_parallax_is_fixed pt24 pb24 nx-contact-hero</attribute>
+            </xpath>
+            <xpath expr="//section[hasclass('s_title')]//div[hasclass('o_we_bg_filter')]" position="attributes">
+                <attribute name="class">o_we_bg_filter nx-contact-hero-filter</attribute>
+            </xpath>
+            <xpath expr="//section[hasclass('s_text_block')]" position="attributes">
+                <attribute name="class">s_text_block pt40 pb40 o_colored_level nx-contact-main</attribute>
+            </xpath>
+            <xpath expr="//section[hasclass('s_website_form')]" position="replace">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                    <div class="nx-contact-form-shell">
+                    <t t-if="contact_error">
+                        <div class="alert alert-danger border-0 shadow-sm" role="alert">
+                            <t t-if="contact_error == 'no_default_team'">No default Contact Us team is configured in Helpdesk yet.</t>
+                            <t t-elif="contact_error == 'missing_subject'">Subject is required.</t>
+                            <t t-elif="contact_error == 'missing_description'">Description is required.</t>
+                            <t t-else="">We could not submit your request. Please try again.</t>
+                        </div>
+                    </t>
+                    <div class="container px-0">
+                        <form id="contactus_form" action="/contactus/submit" method="post" class="nx-contact-direct-form">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <div class="row s_col_no_bgcolor">
+                                <div class="mb-3 col-lg-6">
+                                    <label class="s_website_form_label" style="width: 200px" for="contact1">
+                                        <span class="s_website_form_label_content">Name</span>
+                                        <span class="s_website_form_mark"> *</span>
+                                    </label>
+                                    <input id="contact1" type="text" class="form-control" name="name" required=""
+                                        t-att-value="request.params.get('name') or (request.env.user.sudo().partner_id.name if request.env.user and request.env.user.id != request.website.user_id.id else ((request.env['website.visitor']._get_visitor_from_request().partner_id.name) or ''))"/>
+                                </div>
+                                <div class="mb-3 col-lg-6">
+                                    <label class="s_website_form_label" style="width: 200px" for="contact2">
+                                        <span class="s_website_form_label_content">Phone Number</span>
+                                    </label>
+                                    <input id="contact2" type="tel" class="form-control" name="phone"
+                                        t-att-value="request.params.get('phone') or (request.env.user.sudo().partner_id.phone if request.env.user and request.env.user.id != request.website.user_id.id else ((request.env['website.visitor']._get_visitor_from_request().partner_id.phone) or ''))"/>
+                                </div>
+                                <div class="mb-3 col-lg-6">
+                                    <label class="s_website_form_label" style="width: 200px" for="contact3">
+                                        <span class="s_website_form_label_content">Email</span>
+                                        <span class="s_website_form_mark"> *</span>
+                                    </label>
+                                    <input id="contact3" type="email" class="form-control" name="email_from" required=""
+                                        t-att-value="request.params.get('email_from') or (request.env.user.sudo().partner_id.email if request.env.user and request.env.user.id != request.website.user_id.id else ((request.env['website.visitor']._get_visitor_from_request().partner_id.email) or ''))"/>
+                                </div>
+                                <div class="mb-3 col-lg-6">
+                                    <label class="s_website_form_label" style="width: 200px" for="contact4">
+                                        <span class="s_website_form_label_content">Company</span>
+                                    </label>
+                                    <input id="contact4" type="text" class="form-control" name="company"
+                                        t-att-value="request.params.get('company') or (request.env.user.sudo().partner_id.commercial_partner_id.name if request.env.user and request.env.user.id != request.website.user_id.id else ((request.env['website.visitor']._get_visitor_from_request().partner_id.commercial_partner_id.name) or ''))"/>
+                                </div>
+                                <div class="mb-3 col-12">
+                                    <label class="s_website_form_label" style="width: 200px" for="contact5">
+                                        <span class="s_website_form_label_content">Subject</span>
+                                        <span class="s_website_form_mark"> *</span>
+                                    </label>
+                                    <input id="contact5" type="text" class="form-control" name="subject" required="" t-att-value="request.params.get('subject', '')"/>
+                                </div>
+                                <div class="mb-3 col-12">
+                                    <label class="s_website_form_label" style="width: 200px" for="contact6">
+                                        <span class="s_website_form_label_content">Question</span>
+                                        <span class="s_website_form_mark"> *</span>
+                                    </label>
+                                    <textarea id="contact6" class="form-control" name="description" required="" rows="8"><t t-esc="request.params.get('description', '')"/></textarea>
+                                </div>
+                                <div class="mb-0 py-2 col-12 text-end" data-name="Submit Button">
+                                    <button type="submit" class="btn btn-primary nx-contact-submit-btn">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                </t>
+            </xpath>
+            <xpath expr="//section[hasclass('s_text_block')]//div[hasclass('col-lg-4') and hasclass('offset-lg-1') and hasclass('mt-4') and hasclass('mt-lg-0')]" position="replace">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                    <div class="col-lg-4 offset-lg-1 mt-4 mt-lg-0">
+                        <div class="nx-contact-side-card">
+                            <h5>NextEra</h5>
+                            <ul class="list-unstyled mb-0 ps-0">
+                                <li><i class="fa fa-phone fa-fw me-2"/><span class="o_force_ltr">+202 376 4470</span></li>
+                                <li><i class="fa fa-envelope fa-fw me-2"/><span><a href="mailto:info@nexteramea.com">info@nexteramea.com</a></span></li>
+                                <li><i class="fa fa-linkedin fa-fw me-2"/><span><a href="https://www.linkedin.com/company/nexteramea/posts/?feedView=all" target="_blank" rel="noopener">LinkedIn</a></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </t>
+            </xpath>
+            <xpath expr="//section[hasclass('s_text_block')]" position="after">
+                <style>
+                    .nx-contact-hero {
+                        background: linear-gradient(120deg, #083d3f 0%, #0f6c6f 62%, #17a3a8 100%);
+                    }
+                    .nx-contact-hero h1 {
+                        color: #ffffff !important;
+                        font-weight: 800;
+                        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+                    }
+                    .nx-contact-hero .s_parallax_bg {
+                        opacity: 0.35;
+                    }
+                    .nx-contact-hero-filter {
+                        background: rgba(3, 33, 47, 0.58) !important;
+                    }
+                    .nx-contact-main .lead {
+                        color: #1a2f3d;
+                    }
+                    .nx-contact-main .nx-contact-form-shell .form-control:focus {
+                        border-color: #1aa2a7;
+                        box-shadow: 0 0 0 0.2rem rgba(26, 162, 167, 0.18);
+                    }
+                    .nx-contact-main .s_website_form_send.btn-primary {
+                        background: #0c6d71;
+                        border-color: #0c6d71;
+                        border-radius: 10px;
+                    }
+                    .nx-contact-main .s_website_form_send.btn-primary:hover {
+                        background: #0e8084;
+                        border-color: #0e8084;
+                    }
+                    .nx-contact-main .nx-contact-submit-btn {
+                        background: #0c6d71;
+                        border-color: #0c6d71;
+                        border-radius: 10px;
+                        min-width: 140px;
+                    }
+                    .nx-contact-main .nx-contact-submit-btn:hover,
+                    .nx-contact-main .nx-contact-submit-btn:focus {
+                        background: #0e8084;
+                        border-color: #0e8084;
+                    }
+                    .nx-contact-side-card {
+                        border: 1px solid #deeaee;
+                        border-radius: 14px;
+                        background: #f8fcfc;
+                        padding: 18px 20px;
+                        box-shadow: 0 4px 14px rgba(11, 80, 84, 0.08);
+                    }
+                    .nx-contact-side-card h5 {
+                        font-weight: 700;
+                        color: #0c6d71;
+                    }
+                    .nx-contact-side-card li {
+                        margin-bottom: 0.6rem;
+                        color: #214357;
+                    }
+                    .nx-contact-side-card a {
+                        color: #0f5f63;
+                        text-decoration: none;
+                    }
+                    .nx-contact-side-card a:hover {
+                        color: #0c8085;
+                    }
+                </style>
+            </xpath>
+        </template>
+
+        <record id="website.contactus_thanks" model="website.page">
+            <field name="arch" type="xml">
+                <t name="Thanks (Contact us)" t-name="website.contactus_thanks">
+                    <t t-call="website.layout">
+                        <t t-set="ticket_number" t-value="request.params.get('ticket_number')"/>
+                        <div id="wrap" class="oe_structure oe_empty">
+                            <section class="s_text_block pt40 pb56 o_colored_level nx-contact-thanks-section" data-snippet="s_text_block">
+                                <div class="container s_allow_columns">
+                                    <div class="row align-items-center gy-4">
+                                        <div class="col-lg-7">
+                                            <div class="nx-contact-thanks-card text-center text-lg-start">
+                                                <div class="nx-contact-thanks-icon mx-auto mx-lg-0 mb-4">
+                                                    <i class="fa fa-paper-plane" role="presentation"/>
+                                                </div>
+                                                <div class="nx-contact-thanks-eyebrow">Message Received</div>
+                                                <h1 class="fw-bolder mb-3">Thank You!</h1>
+                                                <p class="lead mb-2">Your message has been sent successfully to the NextEra team.</p>
+                                                <t t-if="ticket_number">
+                                                    <div class="nx-contact-thanks-ticket mb-3">
+                                                        Ticket Number: <strong><t t-esc="ticket_number"/></strong>
+                                                    </div>
+                                                </t>
+                                                <p class="mb-4 nx-contact-thanks-copy">We will review it and get back to you shortly using the details you shared.</p>
+                                                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
+                                                    <a href="/my/home" class="btn btn-primary nx-contact-thanks-btn">Go to Homepage</a>
+                                                    <a href="/contactus" class="btn btn-outline-primary nx-contact-thanks-btn-outline">Send Another Message</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 offset-lg-1">
+                                            <div class="nx-contact-thanks-side-card">
+                                                <div class="nx-contact-thanks-side-label">NextEra Contact Details</div>
+                                                <h5>NextEra</h5>
+                                                <ul class="list-unstyled mb-0 ps-0">
+                                                    <li><i class="fa fa-phone fa-fw me-2"/><a href="tel:+2023764470" class="o_force_ltr">+202 376 4470</a></li>
+                                                    <li><i class="fa fa-envelope fa-fw me-2"/><a href="mailto:info@nexteramea.com">info@nexteramea.com</a></li>
+                                                    <li><i class="fa fa-linkedin fa-fw me-2"/><a href="https://www.linkedin.com/company/nexteramea/posts/?feedView=all" target="_blank" rel="noopener">LinkedIn</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <style>
+                                .nx-contact-thanks-section {
+                                    background:
+                                        radial-gradient(circle at top left, rgba(23, 163, 168, 0.08) 0%, rgba(23, 163, 168, 0) 34%),
+                                        linear-gradient(180deg, #ffffff 0%, #f6fbfc 100%);
+                                }
+                                .nx-contact-thanks-card {
+                                    border: 1px solid #deeaee;
+                                    border-radius: 24px;
+                                    background: #ffffff;
+                                    padding: 2.25rem;
+                                    box-shadow: 0 18px 48px rgba(7, 58, 61, 0.1);
+                                }
+                                .nx-contact-thanks-icon {
+                                    width: 84px;
+                                    height: 84px;
+                                    border-radius: 50%;
+                                    display: inline-flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    background: linear-gradient(135deg, #0c6d71 0%, #17a3a8 100%);
+                                    color: #ffffff;
+                                    font-size: 2rem;
+                                    box-shadow: 0 12px 28px rgba(12, 109, 113, 0.22);
+                                }
+                                .nx-contact-thanks-eyebrow {
+                                    color: #0c6d71;
+                                    font-size: 0.82rem;
+                                    font-weight: 800;
+                                    letter-spacing: 0.1em;
+                                    text-transform: uppercase;
+                                    margin-bottom: 0.7rem;
+                                }
+                                .nx-contact-thanks-card h1 {
+                                    color: #15202b;
+                                    font-size: clamp(2.6rem, 6vw, 4.2rem);
+                                    line-height: 1;
+                                }
+                                .nx-contact-thanks-copy {
+                                    color: #476173;
+                                    font-size: 1.02rem;
+                                }
+                                .nx-contact-thanks-ticket {
+                                    display: inline-flex;
+                                    align-items: center;
+                                    gap: 0.45rem;
+                                    border: 1px solid #cfe5e7;
+                                    border-radius: 999px;
+                                    background: #f3fbfb;
+                                    color: #0c6d71;
+                                    font-size: 0.98rem;
+                                    font-weight: 700;
+                                    padding: 0.7rem 1rem;
+                                }
+                                .nx-contact-thanks-btn,
+                                .nx-contact-thanks-btn-outline {
+                                    border-radius: 12px;
+                                    font-weight: 700;
+                                    padding: 0.85rem 1.35rem;
+                                }
+                                .nx-contact-thanks-btn {
+                                    background: #0c6d71;
+                                    border-color: #0c6d71;
+                                }
+                                .nx-contact-thanks-btn:hover,
+                                .nx-contact-thanks-btn:focus {
+                                    background: #095256;
+                                    border-color: #095256;
+                                }
+                                .nx-contact-thanks-btn-outline {
+                                    border-color: #0c6d71;
+                                    color: #0c6d71;
+                                }
+                                .nx-contact-thanks-btn-outline:hover,
+                                .nx-contact-thanks-btn-outline:focus {
+                                    background: #eef8f8;
+                                    border-color: #0c6d71;
+                                    color: #095256;
+                                }
+                                .nx-contact-thanks-side-card {
+                                    border: 1px solid #deeaee;
+                                    border-radius: 18px;
+                                    background: linear-gradient(180deg, #ffffff 0%, #f7fbfc 100%);
+                                    padding: 1.5rem;
+                                    box-shadow: 0 10px 28px rgba(7, 58, 61, 0.08);
+                                }
+                                .nx-contact-thanks-side-label {
+                                    color: #17a3a8;
+                                    font-size: 0.78rem;
+                                    font-weight: 800;
+                                    letter-spacing: 0.08em;
+                                    text-transform: uppercase;
+                                    margin-bottom: 0.6rem;
+                                }
+                                .nx-contact-thanks-side-card h5 {
+                                    color: #103543;
+                                    font-weight: 800;
+                                    margin-bottom: 1rem;
+                                }
+                                .nx-contact-thanks-side-card li {
+                                    color: #214357;
+                                    margin-bottom: 0.75rem;
+                                }
+                                .nx-contact-thanks-side-card a {
+                                    color: #0f5f63;
+                                    text-decoration: none;
+                                }
+                                .nx-contact-thanks-side-card a:hover {
+                                    color: #0c8085;
+                                }
+                                @media (max-width: 991.98px) {
+                                    .nx-contact-thanks-card,
+                                    .nx-contact-thanks-side-card {
+                                        padding: 1.5rem;
+                                    }
+                                }
+                            </style>
+                        </div>
+                        <input t-if="website.plausible_shared_key" type="hidden" class="js_plausible_push" data-event-name="Lead Generation" data-event-params="{&quot;CTA&quot;: &quot;Contact Us&quot;}"/>
+                    </t>
+                </t>
+            </field>
+        </record>
+
+        <template id="portal_my_elearning" name="My E-Learning">
+            <t t-call="portal.portal_layout">
+                <t t-set="nx_is_arabic" t-value="nx_is_arabic"/>
+                <t t-if="request.website.portal_mode == 'warranty'" t-set="no_breadcrumbs" t-value="True"/>
+                <t t-if="request.website.portal_mode == 'warranty'" t-set="breadcrumbs_searchbar" t-value="False"/>
+
+                <style>
+                    .nx-elearn-hero {
+                        border-radius: 18px;
+                        background: radial-gradient(circle at top right, #7de2e5 0%, #0c6d71 45%, #073a3d 100%);
+                        color: #fff;
+                        box-shadow: 0 12px 32px rgba(7, 58, 61, 0.18);
+                    }
+                    .nx-elearn-card {
+                        border: 1px solid #e2ebef;
+                        border-radius: 14px;
+                        background: #fff;
+                        box-shadow: 0 4px 12px rgba(16, 24, 40, 0.04);
+                    }
+                    .nx-elearn-title {
+                        color: #103543;
+                        font-weight: 700;
+                    }
+                    .nx-elearn-meta {
+                        color: #5f7280;
+                    }
+                    .nx-elearn-card .btn.btn-primary {
+                        background: linear-gradient(135deg, #0c6d71 0%, #17a3a8 100%);
+                        border-color: #0c6d71;
+                        color: #ffffff;
+                        border-radius: 10px;
+                        font-weight: 700;
+                        box-shadow: 0 8px 18px rgba(12, 109, 113, 0.18);
+                    }
+                    .nx-elearn-card .btn.btn-primary:hover,
+                    .nx-elearn-card .btn.btn-primary:focus {
+                        background: linear-gradient(135deg, #0a5d61 0%, #13949a 100%);
+                        border-color: #0a5d61;
+                        color: #ffffff;
+                    }
+                </style>
+
+                <div class="container o_portal_wrap mt-4 mb-5">
+                    <section class="nx-elearn-hero p-4 p-lg-5 mb-4">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                            <div>
+                                <h2 class="mb-1">E-Learning Hub</h2>
+                                <p class="mb-0">Access only the courses assigned to your contact and continue your learning journey.</p>
+                            </div>
+                            <div class="text-end">
+                                <div class="h2 mb-0"><t t-esc="len(enrolled_courses) if enrolled_courses else 0"/></div>
+                                <small><t t-esc="'الدورات المسجل بها' if nx_is_arabic else 'Enrolled courses'"/></small>
+                            </div>
+                        </div>
+                    </section>
+
+                    <t t-if="not elearning_installed">
+                        <div class="alert alert-info border-0 shadow-sm">
+                            E-Learning module is not installed.
+                        </div>
+                    </t>
+
+                    <t t-if="elearning_installed">
+                        <h4 class="mb-3">My Assigned Courses</h4>
+                        <div class="row g-3 mb-4">
+                            <t t-if="not enrolled_courses">
+                                <div class="col-12">
+                                    <div class="alert alert-info border-0 shadow-sm mb-0">No e-learning courses are assigned to this contact yet.</div>
+                                </div>
+                            </t>
+                            <t t-foreach="enrolled_courses" t-as="course">
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="nx-elearn-card h-100 p-3">
+                                        <h5 class="nx-elearn-title mb-2"><t t-esc="course.name"/></h5>
+                                        <div class="nx-elearn-meta mb-3">
+                                            <span><t t-esc="course.total_slides or 0"/> lessons</span>
+                                        </div>
+                                        <a t-att-href="course.website_url or ('/slides/%s' % course.id)" class="btn btn-primary btn-sm">
+                                            <t t-esc="'فتح الدورة' if nx_is_arabic else 'Open Course'"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+
+        <template id="portal_my_knowledge" name="My Knowledge">
+            <t t-call="portal.portal_layout">
+                <t t-if="request.website.portal_mode == 'warranty'" t-set="no_breadcrumbs" t-value="True"/>
+                <t t-if="request.website.portal_mode == 'warranty'" t-set="breadcrumbs_searchbar" t-value="False"/>
+
+                <style>
+                    .nx-knowledge-hero {
+                        border-radius: 18px;
+                        background: radial-gradient(circle at top right, #7de2e5 0%, #0c6d71 45%, #073a3d 100%);
+                        color: #fff;
+                        box-shadow: 0 12px 32px rgba(7, 58, 61, 0.18);
+                    }
+                    .nx-knowledge-card {
+                        border: 1px solid #e2ebef;
+                        border-radius: 14px;
+                        background: #fff;
+                        box-shadow: 0 4px 12px rgba(16, 24, 40, 0.04);
+                    }
+                    .nx-knowledge-team-card {
+                        border: 1px solid #d9e6ea;
+                        border-radius: 14px;
+                        background: linear-gradient(180deg, #ffffff 0%, #f8fbfc 100%);
+                        box-shadow: 0 4px 10px rgba(16, 24, 40, 0.04);
+                    }
+                    .nx-knowledge-team-card .nx-knowledge-open-btn {
+                        background: #0c6d71;
+                        border-color: #0c6d71;
+                        color: #fff;
+                    }
+                    .nx-knowledge-team-card .nx-knowledge-open-btn:hover,
+                    .nx-knowledge-team-card .nx-knowledge-open-btn:focus {
+                        background: #095256;
+                        border-color: #095256;
+                        color: #fff;
+                    }
+                </style>
+
+                <div class="container o_portal_wrap mt-4 mb-5">
+                    <section class="nx-knowledge-hero p-4 p-lg-5 mb-4">
+                        <div>
+                            <div>
+                                <h2 class="mb-1">Knowledge Hub</h2>
+                                <p class="mb-0">Browse articles, guides, and answers from your support knowledge base.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="nx-knowledge-card p-4">
+                        <t t-if="knowledge_teams">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                                <h5 class="mb-0">Connected Teams</h5>
+                                <span class="text-muted"><t t-esc="len(knowledge_teams)"/> team(s)</span>
+                            </div>
+                            <div class="row g-3">
+                                <t t-foreach="knowledge_teams" t-as="knowledge_item">
+                                    <div class="col-12 col-lg-6">
+                                        <div class="nx-knowledge-team-card p-3 h-100 d-flex justify-content-between align-items-center gap-3">
+                                            <div>
+                                                <h6 class="mb-1"><t t-esc="knowledge_item['team'].name"/></h6>
+                                                <p class="text-muted mb-0">This team is linked to your portal knowledge.</p>
+                                            </div>
+                                            <a t-att-href="knowledge_item['url']" class="btn fw-bold nx-knowledge-open-btn">
+                                                <i class="fa fa-book me-1"/> Open Knowledge
+                                            </a>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="alert alert-info mb-0">
+                                No website-published helpdesk team with Knowledge is configured yet.
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="portal_my_warranties" name="My Warranties">
+            <t t-call="portal.portal_layout">
+                <t t-set="nx_is_arabic" t-value="nx_is_arabic"/>
+                <t t-if="request.website.portal_mode == 'warranty'" t-set="no_breadcrumbs" t-value="True"/>
+                <t t-if="request.website.portal_mode == 'warranty'" t-set="breadcrumbs_searchbar" t-value="False"/>
+
+                <style>
+                    .nx-warranty-hero {
+                        border-radius: 18px;
+                        background: radial-gradient(circle at top right, #7de2e5 0%, #0c6d71 45%, #073a3d 100%);
+                        color: #fff;
+                        box-shadow: 0 12px 32px rgba(7, 58, 61, 0.18);
+                    }
+                    .nx-warranty-card {
+                        border: 1px solid #e7ecef;
+                        border-radius: 14px;
+                        box-shadow: 0 3px 10px rgba(16, 24, 40, 0.04);
+                    }
+                    .nx-muted {
+                        color: #607080;
+                    }
+                    .nx-label {
+                        font-size: 0.78rem;
+                        color: #617083;
+                        text-transform: uppercase;
+                        letter-spacing: 0.04em;
+                    }
+                    .nx-value {
+                        font-size: 1.05rem;
+                        font-weight: 700;
+                        color: #15202b;
+                    }
+                    .nx-progress {
+                        height: 11px;
+                        border-radius: 999px;
+                        background-color: #e9eef2;
+                    }
+                    .nx-progress .progress-bar {
+                        background: linear-gradient(90deg, #0a8f94 0%, #22b0b6 100%);
+                    }
+                    .nx-ticket-list {
+                        margin: 0;
+                        padding-left: 1rem;
+                    }
+                    .nx-badge {
+                        border-radius: 999px;
+                        padding: 0.35rem 0.7rem;
+                        font-size: 0.78rem;
+                        font-weight: 700;
+                        text-transform: lowercase;
+                    }
+                    .nx-badge.active { background: #e7f8f0; color: #0f7a42; }
+                    .nx-badge.expired { background: #fde8e8; color: #b42318; }
+                    .nx-badge.need_to_be_extended { background: #fff4d6; color: #9a6700; }
+                    .nx-badge.not_extended { background: #eef2f6; color: #475467; }
+                    .nx-badge.draft { background: #eef2f6; color: #475467; }
+                    .nx-warranty-collapse > summary {
+                        list-style: none;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        gap: 0.75rem;
+                    }
+                    .nx-warranty-collapse > summary::-webkit-details-marker {
+                        display: none;
+                    }
+                    .nx-chevron {
+                        font-size: 0.9rem;
+                        color: #607080;
+                        transition: transform 0.2s ease;
+                    }
+                    .nx-warranty-collapse[open] .nx-chevron {
+                        transform: rotate(90deg);
+                    }
+                </style>
+
+                <div class="container o_portal_wrap mt-4 mb-5">
+                    <section class="nx-warranty-hero p-4 p-lg-5 mb-4">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                            <div>
+                                <h2 class="mb-1">Warranty Overview</h2>
+                                <p class="mb-0">Track service hours, ticket quotas, and contract status.</p>
+                            </div>
+                            <div class="text-end">
+                                <div class="h2 mb-0"><t t-esc="len(warranties)"/></div>
+                                <small><t t-esc="'إجمالي العقود' if nx_is_arabic else 'Total contracts'"/></small>
+                            </div>
+                        </div>
+                    </section>
+
+                    <t t-if="not warranties">
+                        <div class="alert alert-info border-0 shadow-sm">No warranties found.</div>
+                    </t>
+
+                    <t t-foreach="warranties" t-as="row">
+                        <article class="nx-warranty-card mb-3 p-3 p-md-4">
+                            <details class="nx-warranty-collapse">
+                                <summary>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fa fa-chevron-right nx-chevron"/>
+                                        <h5 class="mb-0"><t t-esc="row['contract'].name"/></h5>
+                                    </div>
+                                    <span t-attf-class="nx-badge #{row['contract'].state}">
+                                        <t t-if="nx_is_arabic and row['contract'].state == 'draft'">مسودة</t>
+                                        <t t-elif="nx_is_arabic and row['contract'].state == 'active'">نشط</t>
+                                        <t t-elif="nx_is_arabic and row['contract'].state == 'need_to_be_extended'">بحاجة إلى تمديد</t>
+                                        <t t-elif="nx_is_arabic and row['contract'].state == 'not_extended'">غير ممدد</t>
+                                        <t t-elif="nx_is_arabic and row['contract'].state == 'expired'">منتهي</t>
+                                        <t t-else=""><t t-esc="row['contract'].state"/></t>
+                                    </span>
+                                </summary>
+
+                                <div class="mt-3">
+                                    <div class="nx-muted mb-3">
+                                        <t t-esc="'النوع:' if nx_is_arabic else 'Type:'"/>
+                                        <strong><t t-esc="row['template_name']"/></strong>
+                                    </div>
+
+                                    <div class="row g-3 mb-2">
+                                        <div class="col-6 col-lg-4">
+                                            <div class="nx-label">Helpdesk Teams</div>
+                                            <div class="nx-value"><t t-esc="row['helpdesk_team_names'] or '-'"/></div>
+                                        </div>
+                                        <div class="col-6 col-lg-4">
+                                            <div class="nx-label">Start Date</div>
+                                            <div class="nx-value"><t t-esc="row['start_date']"/></div>
+                                        </div>
+                                        <div class="col-6 col-lg-4">
+                                            <div class="nx-label">End Date</div>
+                                            <div class="nx-value"><t t-esc="row['end_date'] or '-'"/></div>
+                                        </div>
+                                        <div class="col-6 col-lg-4">
+                                            <div class="nx-label">Sale Order</div>
+                                            <div class="nx-value">
+                                                <t t-if="row['sale_order_name']"><t t-esc="row['sale_order_name']"/></t>
+                                                <t t-else="">-</t>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-lg-4">
+                                            <div class="nx-label"><t t-esc="'إجمالي الساعات المخصصة' if nx_is_arabic else 'Total Allocated Hours'"/></div>
+                                            <div class="nx-value"><t t-esc="row['total_hours']"/></div>
+                                        </div>
+                                        <div class="col-6 col-lg-4">
+                                            <div class="nx-label">Used Hours</div>
+                                            <div class="nx-value"><t t-esc="row['used_hours']"/></div>
+                                        </div>
+                                        <div class="col-6 col-lg-4">
+                                            <div class="nx-label">Remaining Hours</div>
+                                            <div class="nx-value"><t t-esc="row['remaining_hours']"/></div>
+                                        </div>
+                                    </div>
+
+                                    <t t-if="row['is_tickets_based']">
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-4">
+                                                <div class="nx-label"><t t-esc="'إجمالي التذاكر' if nx_is_arabic else 'Total Tickets'"/></div>
+                                                <div class="nx-value"><t t-esc="row['total_tickets']"/></div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="nx-label">Used Tickets</div>
+                                                <div class="nx-value"><t t-esc="row['used_tickets']"/></div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="nx-label">Remaining Tickets</div>
+                                                <div class="nx-value"><t t-esc="row['remaining_tickets']"/></div>
+                                            </div>
+                                        </div>
+                                    </t>
+
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span class="nx-label">Progress</span>
+                                            <span class="nx-muted"><t t-esc="str(round(row['progress'], 2)) + '%'"/></span>
+                                        </div>
+                                        <div class="progress nx-progress">
+                                            <div class="progress-bar" role="progressbar" t-att-style="'width: ' + str(round(row['progress'], 2)) + '%;'" t-att-aria-valuenow="row['progress']" aria-valuemin="0" aria-valuemax="100"/>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="nx-label mb-1">Related Tickets (<t t-esc="row['ticket_count']"/>)</div>
+                                        <t t-if="row['tickets']">
+                                            <ul class="nx-ticket-list">
+                                                <t t-foreach="row['tickets']" t-as="t">
+                                                    <li>
+                                                        <strong><t t-esc="t.name"/></strong>
+                                                        <span class="nx-muted"> - <t t-esc="t.stage_id.name"/></span>
+                                                    </li>
+                                                </t>
+                                            </ul>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="nx-muted">No related tickets.</div>
+                                        </t>
+                                    </div>
+                                </div>
+                            </details>
+                        </article>
+                    </t>
+                </div>
+            </t>
+        </template>
+
+        <template id="portal_my_orders_restyle" inherit_id="sale.portal_my_orders" priority="40">
+            <xpath expr="//t[@t-call='portal.portal_layout']" position="inside">
+                <t t-set="nx_is_arabic" t-value="nx_is_arabic"/>
+                <t t-if="request.website.portal_mode == 'warranty'" t-set="no_breadcrumbs" t-value="True"/>
+                <t t-if="request.website.portal_mode == 'warranty'" t-set="breadcrumbs_searchbar" t-value="False"/>
+            </xpath>
+            <xpath expr="//div[@t-if='not orders']" position="before">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                    <style>
+                        .nx-orders-hero {
+                            border-radius: 18px;
+                            background: radial-gradient(circle at top right, #7de2e5 0%, #0c6d71 45%, #073a3d 100%);
+                            color: #fff;
+                            box-shadow: 0 12px 32px rgba(7, 58, 61, 0.18);
+                        }
+                        .nx-orders-shell {
+                            border: 1px solid #e7ecef;
+                            border-radius: 14px;
+                            box-shadow: 0 3px 10px rgba(16, 24, 40, 0.04);
+                            background: #fff;
+                            overflow: hidden;
+                        }
+                        .nx-orders-table {
+                            margin-bottom: 0;
+                        }
+                        .nx-orders-table thead th {
+                            background: #f2f7f8;
+                            color: #214251;
+                            font-weight: 700;
+                            border-bottom: 1px solid #deeaee;
+                        }
+                        .nx-orders-table tbody tr:hover {
+                            background: #f8fcfc;
+                        }
+                        .nx-orders-table td,
+                        .nx-orders-table th {
+                            padding: 0.85rem 0.9rem;
+                            vertical-align: middle;
+                        }
+                        .nx-order-link {
+                            color: #0c6d71;
+                            font-weight: 700;
+                            text-decoration: none;
+                        }
+                        .nx-order-link:hover {
+                            color: #095256;
+                            text-decoration: underline;
+                        }
+                        .nx-orders-empty {
+                            border: 1px solid #f4e0b4;
+                            background: #fffaf0;
+                            color: #7d5b12;
+                            border-radius: 12px;
+                        }
+                        .o_portal_wrap .breadcrumb,
+                        .portal-sidebar-layout .portal-sidebar__content .breadcrumb {
+                            display: none !important;
+                        }
+                    </style>
+                    <section class="nx-orders-hero p-4 p-lg-5 mb-4">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                            <div>
+                                <h2 class="mb-1">Orders Overview</h2>
+                                <p class="mb-0">Review order references, dates, and totals in one clean view.</p>
+                            </div>
+                            <div class="text-end">
+                                <div class="h2 mb-0"><t t-esc="portal_orders_total"/></div>
+                                <small><t t-esc="'إجمالي الطلبات' if nx_is_arabic else 'Total orders'"/></small>
+                            </div>
+                        </div>
+                    </section>
+                </t>
+            </xpath>
+
+            <xpath expr="//div[@t-if='not orders']" position="replace">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                    <div t-if="not orders" class="alert nx-orders-empty" role="alert">
+                        There are currently no sales orders for your account.
+                    </div>
+                </t>
+                <t t-else="">
+                    <div t-if="not orders" class="alert alert-warning" role="alert">
+                        There are currently no sales orders for your account.
+                    </div>
+                </t>
+            </xpath>
+
+            <xpath expr="//t[@t-call='portal.portal_table']" position="replace">
+                <t t-if="request.website.portal_mode == 'warranty' and orders">
+                    <div class="nx-orders-shell">
+                        <div class="table-responsive">
+                            <table class="table table-sm nx-orders-table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <span class="d-none d-md-inline">Sales Order #</span>
+                                            <span class="d-block d-md-none">Ref.</span>
+                                        </th>
+                                        <th class="text-end">Order Date</th>
+                                        <th class="text-end"><t t-esc="'الإجمالي' if nx_is_arabic else 'Total'"/></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="orders" t-as="order">
+                                        <tr>
+                                            <td><a t-att-href="order.get_portal_url()" class="nx-order-link"><t t-out="order.name"/></a></td>
+                                            <td class="text-end">
+                                                <span t-field="order.date_order" t-options="{'widget': 'date'}"/>&amp;nbsp;
+                                                <span class="d-none d-md-inline" t-field="order.date_order" t-options="{'time_only': True}"/>
+                                            </td>
+                                            <td class="text-end"><span t-field="order.amount_total"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+                <t t-elif="request.website.portal_mode != 'warranty' and orders" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th>
+                                <span class="d-none d-md-inline">Sales Order #</span>
+                                <span class="d-block d-md-none">Ref.</span>
+                            </th>
+                            <th class="text-end">Order Date</th>
+                            <th class="text-end">Total</th>
+                        </tr>
+                    </thead>
+                    <t t-foreach="orders" t-as="order">
+                        <tr>
+                            <td><a t-att-href="order.get_portal_url()"><t t-out="order.name"/></a></td>
+                            <td class="text-end">
+                                <span t-field="order.date_order" t-options="{'widget': 'date'}"/>&amp;nbsp;
+                                <span class="d-none d-md-inline" t-field="order.date_order" t-options="{'time_only': True}"/>
+                            </td>
+                            <td class="text-end"><span t-field="order.amount_total"/></td>
+                        </tr>
+                    </t>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="sale_order_detail_restyle" inherit_id="sale.sale_order_portal_template" priority="40">
+            <xpath expr="//t[@t-call='portal.portal_layout']" position="inside">
+                <t t-if="request.website.portal_mode == 'warranty'" t-set="no_breadcrumbs" t-value="True"/>
+            </xpath>
+            <xpath expr="//div[hasclass('o_portal_sale_sidebar')]" position="attributes">
+                <attribute name="t-attf-class">{{ 'row o_portal_sale_sidebar nx-order-detail-shell' if request.website.portal_mode == 'warranty' else 'row o_portal_sale_sidebar' }}</attribute>
+            </xpath>
+            <xpath expr="//div[@id='quote_content']" position="attributes">
+                <attribute name="t-attf-class">{{ 'col-12 mt-0' if request.website.portal_mode == 'warranty' else 'col-12 col-lg-8 col-xxl-9 mt-5 mt-lg-0' }}</attribute>
+            </xpath>
+            <xpath expr="//div[hasclass('o_portal_sale_sidebar')]" position="before">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                <style>
+                    .nx-order-detail-shell {
+                        display: block;
+                    }
+                    .nx-order-detail-shell > .d-flex.col-lg-4.col-xxl-3.d-print-none {
+                        display: none !important;
+                    }
+                    .nx-order-detail-shell #quote_content {
+                        background: transparent;
+                        max-width: 100%;
+                        flex: 0 0 100%;
+                        width: 100%;
+                    }
+                    .nx-order-detail-shell #introduction {
+                        border: 1px solid #d9eaec !important;
+                        border-radius: 24px;
+                        padding: 1.35rem 1.6rem !important;
+                        margin-bottom: 1.15rem;
+                        background:
+                            radial-gradient(circle at top right, rgba(69, 197, 204, 0.16), transparent 30%),
+                            linear-gradient(180deg, #ffffff 0%, #f7fbfb 100%);
+                        color: #123f4a;
+                        box-shadow: 0 16px 34px rgba(8, 61, 63, 0.08);
+                    }
+                    .nx-order-detail-shell #introduction #intro_row {
+                        align-items: center;
+                    }
+                    .nx-order-detail-shell #introduction h2,
+                    .nx-order-detail-shell #introduction em {
+                        color: #123f4a !important;
+                        font-weight: 800;
+                    }
+                    .nx-order-detail-shell #introduction h2 {
+                        margin: 0;
+                        font-size: clamp(1.7rem, 2.9vw, 2.6rem);
+                        line-height: 1.08;
+                    }
+                    .nx-order-detail-shell #content > #informations > div[id='sale_info'],
+                    .nx-order-detail-shell #content > #informations > div[id='customer_info'],
+                    .nx-order-detail-shell #content > #informations > div[id='sale_invoices'] {
+                        display: flex;
+                        flex-direction: column;
+                        border: 1px solid #deebed;
+                        border-radius: 22px;
+                        background: linear-gradient(180deg, #ffffff 0%, #fbfefe 100%);
+                        box-shadow: 0 14px 30px rgba(8, 61, 63, 0.06);
+                        padding: 0.95rem 1.1rem;
+                        min-height: 150px;
+                        height: 150px;
+                    }
+                    .nx-order-detail-shell #content > #informations {
+                        align-items: stretch;
+                    }
+                    .nx-order-detail-shell #content > #informations h5,
+                    .nx-order-detail-shell #details h4,
+                    .nx-order-detail-shell #sale_order_communication h3 {
+                        color: #103543;
+                        font-weight: 800;
+                    }
+                    .nx-order-detail-shell #content > #informations hr,
+                    .nx-order-detail-shell #terms hr,
+                    .nx-order-detail-shell section.mt-4 hr {
+                        border-color: #e4eef1;
+                        opacity: 1;
+                        margin-top: 0.55rem !important;
+                        margin-bottom: 0.75rem !important;
+                    }
+                    .nx-order-detail-shell #sale_info_table {
+                        margin-bottom: 0;
+                    }
+                    .nx-order-detail-shell #sale_info_table th,
+                    .nx-order-detail-shell #sale_info_table td {
+                        padding-top: 0.15rem;
+                        padding-bottom: 0.15rem;
+                        font-size: 0.96rem;
+                    }
+                    .nx-order-detail-shell #customer_info .o_portal_address,
+                    .nx-order-detail-shell #customer_info address {
+                        margin-bottom: 0;
+                        line-height: 1.45;
+                        font-size: 0.96rem;
+                    }
+                    .nx-order-detail-shell #details {
+                        border: 1px solid #deebed;
+                        border-radius: 24px;
+                        background: linear-gradient(180deg, #ffffff 0%, #fbfefe 100%);
+                        box-shadow: 0 16px 34px rgba(8, 61, 63, 0.07);
+                        padding: 1.4rem 1.5rem;
+                    }
+                    .nx-order-detail-shell h2,
+                    .nx-order-detail-shell h3,
+                    .nx-order-detail-shell h4 {
+                        color: #103543;
+                        font-weight: 800;
+                    }
+                    .nx-order-detail-shell .table {
+                        border-radius: 18px;
+                        overflow: hidden;
+                    }
+                    .nx-order-detail-shell .table thead th {
+                        background: #eef7f8;
+                        color: #214251;
+                        border-bottom: 1px solid #deeaee;
+                        font-weight: 800;
+                    }
+                    .nx-order-detail-shell #sales_order_table {
+                        margin-bottom: 1rem;
+                    }
+                    .nx-order-detail-shell #sales_order_table tbody tr:hover {
+                        background: #f8fcfc;
+                    }
+                    .nx-order-detail-shell #total > div {
+                        border: 1px solid #d8eaec;
+                        border-radius: 22px;
+                        background:
+                            radial-gradient(circle at top right, rgba(69, 197, 204, 0.12), transparent 35%),
+                            linear-gradient(180deg, #ffffff 0%, #f8fcfc 100%);
+                        padding: 1rem 1.2rem;
+                        box-shadow: 0 16px 30px rgba(8, 61, 63, 0.06);
+                    }
+                    .nx-order-detail-shell #sale_order_communication {
+                        border: 1px solid #deebed;
+                        border-radius: 24px;
+                        background: linear-gradient(180deg, #ffffff 0%, #fbfefe 100%);
+                        box-shadow: 0 16px 34px rgba(8, 61, 63, 0.07);
+                        padding: 1.35rem 1.5rem;
+                    }
+                    .nx-order-detail-shell #sale_order_communication hr {
+                        display: none;
+                    }
+                    .nx-order-detail-shell .o_mail_thread,
+                    .nx-order-detail-shell .o_portal_chatter {
+                        background: transparent;
+                    }
+                    .nx-order-detail-shell .o_portal_chatter_composer {
+                        border: 1px solid #ddecef;
+                        border-radius: 20px;
+                        background: linear-gradient(180deg, #fbfefe 0%, #f4fbfb 100%);
+                        padding: 1rem;
+                    }
+                    .nx-order-detail-shell .o_portal_chatter_composer_body {
+                        border-color: #cfe6e8 !important;
+                        border-radius: 18px !important;
+                        background: #ffffff;
+                        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+                    }
+                    .nx-order-detail-shell .o_portal_chatter_composer textarea {
+                        min-height: 132px;
+                        background: transparent;
+                    }
+                    .nx-order-detail-shell .btn-primary,
+                    .nx-order-detail-shell .o_portal_chatter_composer_btn {
+                        min-height: 46px;
+                        padding: 0.72rem 1.2rem;
+                        border: 1px solid #0c6d71 !important;
+                        border-radius: 16px !important;
+                        background: linear-gradient(135deg, #0c6d71 0%, #17a3a8 100%) !important;
+                        color: #ffffff !important;
+                        font-weight: 800;
+                        box-shadow: 0 14px 28px rgba(12, 109, 113, 0.18);
+                    }
+                    .nx-order-detail-shell .btn-light {
+                        border-color: #d7e4e9;
+                    }
+                    .nx-order-detail-shell .alert {
+                        border-radius: 16px;
+                    }
+                    @media (max-width: 991.98px) {
+                        .nx-order-detail-shell #introduction,
+                        .nx-order-detail-shell #details,
+                        .nx-order-detail-shell #sale_order_communication {
+                            padding: 1rem !important;
+                        }
+                        .nx-order-detail-shell #content > #informations > div[id='sale_info'],
+                        .nx-order-detail-shell #content > #informations > div[id='customer_info'],
+                        .nx-order-detail-shell #content > #informations > div[id='sale_invoices'] {
+                            padding: 0.9rem 1rem;
+                            min-height: auto;
+                            height: auto;
+                        }
+                    }
+                </style>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="helpdesk_ticket_list_restyle" inherit_id="helpdesk.portal_helpdesk_ticket" priority="40">
+            <xpath expr="//t[@t-call='portal.portal_layout']" position="inside">
+                <t t-set="nx_is_arabic" t-value="nx_is_arabic"/>
+                <t t-if="request.website.portal_mode == 'warranty'" t-set="no_breadcrumbs" t-value="True"/>
+                <t t-if="request.website.portal_mode == 'warranty'">
+                <style>
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_navbar .o_portal_submenu.breadcrumb,
+                    .nx-warranty-portal-mode .o_portal_wrap .breadcrumb {
+                        display: none !important;
+                    }
+                    /* Hide breadcrumb entirely in warranty mode even with portal_my_tabs wrapper. */
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .breadcrumb,
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .o_portal_submenu.breadcrumb {
+                        display: none !important;
+                    }
+                    .nx-ticket-list-hero {
+                        border-radius: 18px;
+                        background: radial-gradient(circle at top right, #7de2e5 0%, #0c6d71 45%, #073a3d 100%);
+                        color: #fff;
+                        box-shadow: 0 12px 32px rgba(7, 58, 61, 0.18);
+                    }
+                    .o_portal_wrap .o_portal_my_doc_table {
+                        border: 1px solid #e2ebef;
+                        border-radius: 14px;
+                        overflow: hidden;
+                        background: #fff;
+                        box-shadow: 0 4px 12px rgba(16, 24, 40, 0.04);
+                    }
+                    .o_portal_wrap .o_portal_my_doc_table thead th {
+                        background: #f2f7f8;
+                        color: #214251;
+                        font-weight: 700;
+                        border-bottom: 1px solid #deeaee;
+                    }
+                    .o_portal_wrap .o_portal_my_doc_table tbody tr:hover {
+                        background: #f8fcfc;
+                    }
+                    .o_portal_wrap .o_portal_my_doc_table td a {
+                        color: #0c6d71;
+                        font-weight: 700;
+                        text-decoration: none;
+                    }
+                    .o_portal_wrap .o_portal_my_doc_table td a:hover {
+                        color: #095256;
+                        text-decoration: underline;
+                    }
+                    .o_portal_wrap .nx-stage-badge {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 999px;
+                        padding: 0.35rem 0.85rem;
+                        font-size: 0.82rem;
+                        font-weight: 700;
+                        letter-spacing: 0.01em;
+                        border: 1px solid transparent;
+                        min-width: 6.5rem;
+                    }
+                    .o_portal_wrap .nx-stage-badge.stage-progress {
+                        background: #eef6ff;
+                        color: #195b9b;
+                        border-color: #cfe1fb;
+                    }
+                    .o_portal_wrap .nx-stage-badge.stage-new {
+                        background: #fff4e8;
+                        color: #b85a00;
+                        border-color: #f7d8b5;
+                    }
+                    .o_portal_wrap .nx-stage-badge.stage-solved {
+                        background: #e9f9ef;
+                        color: #177245;
+                        border-color: #bfe7ce;
+                    }
+                    .o_portal_wrap .nx-stage-badge.stage-cancelled {
+                        background: #fdecec;
+                        color: #b42318;
+                        border-color: #f6c7c3;
+                    }
+                    .o_portal_wrap .nx-stage-badge.stage-default {
+                        background: #f3f5f7;
+                        color: #516170;
+                        border-color: #dde4ea;
+                    }
+                    .o_portal_wrap .nx-priority-badge,
+                    .o_portal_wrap .nx-severity-badge {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 999px;
+                        padding: 0.3rem 0.75rem;
+                        font-size: 0.8rem;
+                        font-weight: 700;
+                        border: 1px solid transparent;
+                        min-width: 5.5rem;
+                    }
+                    .o_portal_wrap .nx-priority-badge.priority-high,
+                    .o_portal_wrap .nx-severity-badge.severity-high {
+                        background: #fdecec;
+                        color: #b42318;
+                        border-color: #f6c7c3;
+                    }
+                    .o_portal_wrap .nx-priority-badge.priority-medium,
+                    .o_portal_wrap .nx-severity-badge.severity-medium {
+                        background: #fff4e8;
+                        color: #b85a00;
+                        border-color: #f7d8b5;
+                    }
+                    .o_portal_wrap .nx-priority-badge.priority-low,
+                    .o_portal_wrap .nx-severity-badge.severity-low {
+                        background: #eef6ff;
+                        color: #195b9b;
+                        border-color: #cfe1fb;
+                    }
+                    /* Same ticket-list theming when portal_my_tabs layout wrapper is active. */
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .o_portal_my_doc_table {
+                        border: 1px solid #e1ebef;
+                        border-radius: 18px;
+                        overflow: hidden;
+                        background: #ffffff;
+                        box-shadow: 0 16px 36px rgba(8, 45, 48, 0.06);
+                    }
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .o_portal_my_doc_table thead th {
+                        border-bottom: 1px solid #dfe9ed;
+                        color: #355665;
+                        font-weight: 700;
+                        font-size: 0.82rem;
+                    }
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .o_portal_my_doc_table tbody tr:hover {
+                        background: #f6fbfc;
+                    }
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .o_portal_my_doc_table td a {
+                        color: #113f4b;
+                        text-decoration: none;
+                        font-weight: 600;
+                    }
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .o_portal_my_doc_table td a:hover {
+                        color: #0c6d71;
+                        text-decoration: underline;
+                    }
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .nx-stage-badge {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 999px;
+                        padding: 0.3rem 0.75rem;
+                        font-size: 0.78rem;
+                        font-weight: 700;
+                        border: 1px solid transparent;
+                        min-width: 5.5rem;
+                    }
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .nx-stage-badge.stage-progress {
+                        background: #eef6ff;
+                        color: #195b9b;
+                        border-color: #cfe1fb;
+                    }
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .nx-stage-badge.stage-new {
+                        background: #fff4e8;
+                        color: #b85a00;
+                        border-color: #f7d8b5;
+                    }
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .nx-stage-badge.stage-solved {
+                        background: #e9f9ef;
+                        color: #177245;
+                        border-color: #bfe7ce;
+                    }
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .nx-stage-badge.stage-cancelled {
+                        background: #fdecec;
+                        color: #b42318;
+                        border-color: #f6c7c3;
+                    }
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .nx-stage-badge.stage-default {
+                        background: #f3f5f7;
+                        color: #516170;
+                        border-color: #dde4ea;
+                    }
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .nx-severity-badge {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 999px;
+                        padding: 0.3rem 0.75rem;
+                        font-size: 0.8rem;
+                        font-weight: 700;
+                        border: 1px solid transparent;
+                        min-width: 5.5rem;
+                    }
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .nx-severity-badge.severity-high {
+                        background: #fdecec;
+                        color: #b42318;
+                        border-color: #f6c7c3;
+                    }
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .nx-severity-badge.severity-medium {
+                        background: #fff4e8;
+                        color: #b85a00;
+                        border-color: #f7d8b5;
+                    }
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .nx-severity-badge.severity-low {
+                        background: #eef6ff;
+                        color: #195b9b;
+                        border-color: #cfe1fb;
+                    }
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-menu,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .o-dropdown--menu,
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .o_portal_search_panel .dropdown-menu,
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .o_portal_search_panel .o-dropdown--menu {
+                        border: 1px solid #d6eaec !important;
+                        border-radius: 14px !important;
+                        background: #ffffff !important;
+                        box-shadow: 0 14px 30px rgba(11, 30, 44, 0.10) !important;
+                        padding: 0.35rem !important;
+                    }
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-item,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-item-text,
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .o_portal_search_panel .dropdown-item,
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .o_portal_search_panel .dropdown-item-text {
+                        border-radius: 10px !important;
+                        color: #214251 !important;
+                        font-weight: 600 !important;
+                    }
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-item:hover,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-item:focus,
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .o_portal_search_panel .dropdown-item:hover,
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .o_portal_search_panel .dropdown-item:focus {
+                        background: #f1fbfb !important;
+                        color: #0c6d71 !important;
+                    }
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-item.active,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-item:active,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-item.selected,
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .o_portal_search_panel .dropdown-item.active,
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .o_portal_search_panel .dropdown-item:active,
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .o_portal_search_panel .dropdown-item.selected {
+                        background: linear-gradient(135deg, #0c6d71 0%, #17a3a8 100%) !important;
+                        color: #ffffff !important;
+                    }
+                    .o_portal_wrap .alert-info {
+                        border: 1px solid #f4e0b4;
+                        background: #fffaf0;
+                        color: #7d5b12;
+                        border-radius: 12px;
+                    }
+                    .o_portal_wrap .nx-ticket-list-hero .nx-magnetic-btn {
+                        position: relative;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 0.35rem;
+                        border-radius: 20px;
+                        background: radial-gradient(circle at center, rgba(255,255,255,0.14), rgba(255,255,255,0) 68%);
+                    }
+                    .o_portal_wrap .nx-ticket-list-hero .nx-magnetic-btn::before {
+                        content: "";
+                        position: absolute;
+                        inset: 0.35rem;
+                        border-radius: 18px;
+                        background: radial-gradient(circle at center, rgba(110, 241, 244, 0.28), transparent 70%);
+                        opacity: 0;
+                        transform: scale(0.92);
+                        transition: opacity 0.22s ease, transform 0.22s ease;
+                        pointer-events: none;
+                    }
+                    .o_portal_wrap .nx-ticket-list-hero .nx-magnetic-btn.is-magnetic-hover::before {
+                        opacity: 1;
+                        transform: scale(1.08);
+                    }
+                    .o_portal_wrap .nx-ticket-list-hero .nx-magnetic-btn-inner {
+                        position: relative;
+                        z-index: 1;
+                        will-change: transform;
+                        transition: transform 0.12s ease-out;
+                    }
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .btn,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .btn-light,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .btn-secondary,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-toggle,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .form-select,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel input.form-control {
+                        border-color: #d6eaec !important;
+                        background: #ffffff !important;
+                        color: #214251 !important;
+                        box-shadow: none !important;
+                    }
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .btn:hover,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .btn:focus,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-toggle:hover,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-toggle:focus {
+                        border-color: #0c6d71 !important;
+                        color: #0c6d71 !important;
+                    }
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-item.active,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-item:active {
+                        background: #e7f7f8 !important;
+                        color: #0c6d71 !important;
+                    }
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-menu {
+                        border: 1px solid #d6eaec !important;
+                        border-radius: 12px !important;
+                        background: #ffffff !important;
+                        box-shadow: 0 10px 22px rgba(8, 61, 63, 0.12) !important;
+                        --bs-dropdown-link-active-bg: #dff4f6 !important;
+                        --bs-dropdown-link-active-color: #0a666a !important;
+                        --bs-dropdown-link-hover-bg: #f1fafb !important;
+                        --bs-dropdown-link-hover-color: #0c6d71 !important;
+                    }
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-menu .dropdown-item {
+                        color: #214251 !important;
+                        font-weight: 600;
+                    }
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-menu .dropdown-item:hover,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-menu .dropdown-item:focus {
+                        background: #f1fafb !important;
+                        color: #0c6d71 !important;
+                    }
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-menu .dropdown-item.active,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-menu .dropdown-item:active,
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-menu .dropdown-item[aria-selected='true'],
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_search_panel .dropdown-menu .dropdown-item.selected {
+                        background: #dff4f6 !important;
+                        color: #0a666a !important;
+                    }
+                    /* Fallback selectors for theme-specific active classes */
+                    .o_portal_wrap .o_portal_search_panel .dropdown-item.active,
+                    .o_portal_wrap .o_portal_search_panel .dropdown-item:active,
+                    .o_portal_wrap .o_portal_search_panel .dropdown-item[aria-selected='true'] {
+                        background: #dff4f6 !important;
+                        color: #0a666a !important;
+                    }
+                    /* Hard override against generic frontend dropdown active palette (purple). */
+                    .nx-warranty-portal-mode #wrapwrap .o_portal_navbar .dropdown-menu .dropdown-item.active,
+                    .nx-warranty-portal-mode #wrapwrap .o_portal_navbar .dropdown-menu .dropdown-item:active,
+                    .nx-warranty-portal-mode #wrapwrap .o_portal_navbar .dropdown-menu .dropdown-item[aria-selected='true'],
+                    .nx-warranty-portal-mode #wrapwrap .o_portal_navbar .dropdown-menu .dropdown-item.selected {
+                        background: #dff4f6 !important;
+                        background-color: #dff4f6 !important;
+                        background-image: none !important;
+                        color: #0a666a !important;
+                        box-shadow: none !important;
+                    }
+                    .nx-warranty-portal-mode #wrapwrap .o_portal_navbar .dropdown-menu .dropdown-item:hover,
+                    .nx-warranty-portal-mode #wrapwrap .o_portal_navbar .dropdown-menu .dropdown-item:focus {
+                        background: #f1fafb !important;
+                        background-color: #f1fafb !important;
+                        background-image: none !important;
+                        color: #0c6d71 !important;
+                        box-shadow: none !important;
+                    }
+                    /* Disable row links only on warranty ticket list table, not all portal tables/tabs. */
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_my_doc_table[data-nx-stage-colors='1'] td a {
+                        pointer-events: none;
+                        cursor: default;
+                    }
+                    .nx-warranty-portal-mode .o_portal_wrap .o_portal_my_doc_table[data-nx-stage-colors='1'] td a:hover {
+                        text-decoration: none;
+                    }
+                    .o_portal_wrap .nx-ticket-list-hero .nx-magnetic-btn .btn {
+                        border-radius: 16px;
+                        font-weight: 700;
+                        padding: 0.95rem 1.4rem;
+                        min-width: 13rem;
+                        box-shadow: 0 14px 30px rgba(4, 26, 28, 0.16);
+                    }
+                    /* Force warranty ticket CTA style over portal_my_tabs button overrides. */
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .nx-ticket-list-hero .nx-magnetic-btn .btn.btn-light,
+                    .nx-warranty-portal-mode .o_portal_wrap .nx-ticket-list-hero .nx-magnetic-btn .btn.btn-light {
+                        border: 1px solid rgba(255, 255, 255, 0.52) !important;
+                        background: rgba(255, 255, 255, 0.94) !important;
+                        color: #0c4f53 !important;
+                        box-shadow: 0 14px 30px rgba(4, 26, 28, 0.16) !important;
+                    }
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .nx-ticket-list-hero .nx-magnetic-btn .btn.btn-light:hover,
+                    .nx-warranty-portal-mode .portal-sidebar-layout .portal-sidebar__content .nx-ticket-list-hero .nx-magnetic-btn .btn.btn-light:focus,
+                    .nx-warranty-portal-mode .o_portal_wrap .nx-ticket-list-hero .nx-magnetic-btn .btn.btn-light:hover,
+                    .nx-warranty-portal-mode .o_portal_wrap .nx-ticket-list-hero .nx-magnetic-btn .btn.btn-light:focus {
+                        background: #ffffff !important;
+                        border-color: #ffffff !important;
+                        color: #08393c !important;
+                    }
+                </style>
+                </t>
+            </xpath>
+            <xpath expr="//div[@t-if='not grouped_tickets']" position="before">
+                <t t-if="request.params.get('created')">
+                    <div class="alert alert-success rounded-3 border-0">
+                        Ticket created successfully.
+                    </div>
+                </t>
+                <t t-if="request.params.get('error')">
+                    <div class="alert alert-warning rounded-3 border-0">
+                        Could not create ticket. Please try again.
+                    </div>
+                </t>
+                <t t-if="request.website.portal_mode == 'warranty' and not grouped_tickets">
+                    <section class="nx-ticket-list-hero p-4 p-lg-5 mb-4">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                            <div>
+                                <h2 class="mb-1">Tickets Overview</h2>
+                                <p class="mb-0">Track all support requests and follow their stage changes.</p>
+                            </div>
+                            <div class="text-end">
+                                <div class="h2 mb-0">0</div>
+                                <small><t t-esc="'إجمالي التذاكر' if nx_is_arabic else 'Total tickets'"/></small>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <span class="nx-magnetic-btn" data-magnetic-strength="0.32" data-magnetic-shift="16">
+                                <a href="/my/tickets/new" class="btn btn-light nx-magnetic-btn-inner">
+                                    <i class="fa fa-plus me-1"/>
+                                    <t t-esc="'إنشاء تذكرة' if nx_is_arabic else 'Create Ticket'"/>
+                                </a>
+                            </span>
+                        </div>
+                    </section>
+                </t>
+            </xpath>
+            <xpath expr="//t[@t-call='portal.portal_table']" position="before">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                    <section class="nx-ticket-list-hero p-4 p-lg-5 mb-4">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                            <div>
+                                <h2 class="mb-1">Tickets Overview</h2>
+                                <p class="mb-0">Track all support requests and follow their stage changes.</p>
+                            </div>
+                            <div class="text-end">
+                                <div class="h2 mb-0"><t t-esc="pager.get('total', 0) if pager else 0"/></div>
+                                <small><t t-esc="'إجمالي التذاكر' if nx_is_arabic else 'Total tickets'"/></small>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <span class="nx-magnetic-btn" data-magnetic-strength="0.32" data-magnetic-shift="16">
+                                <a href="/my/tickets/new" class="btn btn-light nx-magnetic-btn-inner">
+                                    <i class="fa fa-plus me-1"/>
+                                    <t t-esc="'إنشاء تذكرة' if nx_is_arabic else 'Create Ticket'"/>
+                                </a>
+                            </span>
+                        </div>
+                    </section>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="helpdesk_ticket_portal_total_time_list" inherit_id="helpdesk.portal_helpdesk_ticket" priority="45">
+            <xpath expr="//thead" position="attributes">
+                <attribute name="data-nx-legacy-time-spent">1</attribute>
+            </xpath>
+        </template>
+
+        <template id="helpdesk_ticket_list_stage_colors" inherit_id="helpdesk.portal_helpdesk_ticket" priority="46">
+            <xpath expr="//thead" position="attributes">
+                <attribute name="data-nx-stage-colors">1</attribute>
+            </xpath>
+        </template>
+
+        <template id="helpdesk_ticket_list_columns_restyle" inherit_id="helpdesk.portal_helpdesk_ticket" priority="44">
+            <xpath expr="//th[@id='ticket_user_header']/.." position="replace">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                    <tr>
+                        <th>Ticket</th>
+                        <th class="text-end" t-if="groupby != 'create_date'">Reported on</th>
+                        <th class="text-end">Solved on</th>
+                        <th class="text-end">Severity</th>
+                        <th class="text-end">Expected Closing Time</th>
+                        <th class="text-end">Total Time (h)</th>
+                        <th t-if="groupby != 'stage_id'" class="text-end">Stage</th>
+                    </tr>
+                </t>
+                <t t-else="">
+                    <tr>
+                        <th>Ticket</th>
+                        <th class="text-end" t-if="groupby != 'create_date'">Reported on</th>
+                        <th id="ticket_user_header" t-if="groupby != 'user_id'" class="ps-5">Assigned to</th>
+                        <th t-if="groupby != 'stage_id'" colspan="5" class="text-end">Stage</th>
+                    </tr>
+                </t>
+            </xpath>
+            <xpath expr="//tbody/tr[hasclass('table-light')]" position="replace">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                    <tr t-if="not groupby =='none'" class="table-light">
+                        <th t-if="groupby == 'stage_id'" colspan="7">
+                            <span t-field="tickets[0].stage_id.name"/>
+                        </th>
+                        <th t-if="groupby == 'user_id'" colspan="7">
+                            <span t-if="tickets[0].user_id" t-out="tickets[0].user_id.name"/>
+                            <span t-else=""><t t-esc="'غير مسند' if nx_is_arabic else 'Unassigned'"/></span>
+                        </th>
+                        <th t-if="groupby == 'team_id'" colspan="7">
+                            <span t-field="tickets[0].team_id.name"/>
+                        </th>
+                        <th t-if="groupby == 'create_date'" colspan="7">
+                            <span t-field="tickets[0].create_date"/>
+                        </th>
+                        <th t-if="groupby == 'kanban_state'" colspan="7">
+                            <span t-if="tickets[0].kanban_state == 'normal'"><t t-esc="'قيد التنفيذ' if nx_is_arabic else 'In Progress'"/></span>
+                            <span t-elif="tickets[0].kanban_state == 'blocked'"><t t-esc="'محظور' if nx_is_arabic else 'Blocked'"/></span>
+                            <span t-else="tickets[0].kanban_state"><t t-esc="'جاهز' if nx_is_arabic else 'Ready'"/></span>
+                        </th>
+                        <th t-if="groupby == 'partner_id'" colspan="7">
+                            <span t-if="tickets[0].partner_id" t-field="tickets[0].partner_id.name"/>
+                            <span t-else=""><t t-esc="'بدون عميل' if nx_is_arabic else 'No Customer'"/></span>
+                        </th>
+                    </tr>
+                </t>
+                <t t-else="">
+                    <tr t-if="not groupby =='none'" class="table-light">
+                        <th t-if="groupby == 'stage_id'" colspan="5">
+                            <span t-field="tickets[0].stage_id.name"/>
+                        </th>
+                        <th t-if="groupby == 'user_id'" colspan="5">
+                            <span t-if="tickets[0].user_id" t-out="tickets[0].user_id.name"/>
+                            <span t-else="">Unassigned</span>
+                        </th>
+                        <th t-if="groupby == 'team_id'" colspan="6">
+                            <span t-field="tickets[0].team_id.name"/>
+                        </th>
+                        <th t-if="groupby == 'create_date'" colspan="5">
+                            <span t-field="tickets[0].create_date"/>
+                        </th>
+                        <th t-if="groupby == 'kanban_state'" colspan="6">
+                            <span t-if="tickets[0].kanban_state == 'normal'">In Progress</span>
+                            <span t-elif="tickets[0].kanban_state == 'blocked'">Blocked</span>
+                            <span t-else="tickets[0].kanban_state">Ready</span>
+                        </th>
+                        <th t-if="groupby == 'partner_id'" colspan="6">
+                            <span t-if="tickets[0].partner_id" t-field="tickets[0].partner_id.name"/>
+                            <span t-else="">No Customer</span>
+                        </th>
+                    </tr>
+                </t>
+            </xpath>
+            <xpath expr="//td[@id='ticket_user_body']/.." position="replace">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                    <tr>
+                        <td class="text-start">
+                            <a t-attf-href="/helpdesk/ticket/#{ticket.id}">
+                                <small>#</small><t t-out="ticket.ticket_ref"/><span class="ms-2" t-att-title="ticket.name" t-field="ticket.name"/>
+                            </a>
+                        </td>
+                        <td class="text-end" t-if="groupby != 'create_date'">
+                            <span t-field="ticket.create_date" t-options='{"widget": "datetime", "hide_seconds": True}'/>
+                        </td>
+                        <td class="text-end">
+                            <t t-if="ticket.ticket_solved_at">
+                                <span t-field="ticket.ticket_solved_at"/>
+                            </t>
+                            <t t-elif="ticket.close_date">
+                                <span t-field="ticket.close_date" t-options='{"widget": "datetime", "hide_seconds": True}'/>
+                            </t>
+                            <t t-else="">-</t>
+                        </td>
+                        <td class="text-end">
+                            <span t-attf-class="nx-severity-badge #{'severity-high' if ticket.severity == 'high' else ('severity-medium' if ticket.severity == 'medium' else 'severity-low')}">
+                                <t t-esc="'عالٍ' if (nx_is_arabic and ticket.severity == 'high') else ('متوسط' if (nx_is_arabic and ticket.severity == 'medium') else ('منخفض' if nx_is_arabic else ('High' if ticket.severity == 'high' else ('Medium' if ticket.severity == 'medium' else 'Low'))))"/>
+                            </span>
+                        </td>
+                        <td class="text-end">
+                            <t t-if="ticket.portal_expected_resolution_time">
+                                <span t-field="ticket.portal_expected_resolution_time"/>
+                            </t>
+                            <t t-else="">-</t>
+                        </td>
+                        <td class="text-end">
+                            <t t-if="ticket.show_total_timesheet_hours">
+                                <t t-esc="'%.2f' % (ticket.total_timesheet_hours or 0.0)"/>
+                            </t>
+                            <t t-else="">-</t>
+                        </td>
+                        <td t-if="groupby != 'stage_id'" class="text-end">
+                            <t t-set="stage_name_lower" t-value="(ticket.stage_id.name or '').strip().lower()"/>
+                            <span t-esc="ticket.stage_id.name"
+                                  t-attf-class="nx-stage-badge #{'stage-cancelled' if 'cancel' in stage_name_lower else ('stage-solved' if ('solved' in stage_name_lower or 'done' in stage_name_lower or ticket.stage_id.fold) else ('stage-progress' if ('progress' in stage_name_lower or 'work' in stage_name_lower) else ('stage-new' if 'new' in stage_name_lower else 'stage-default')))}"/>
+                        </td>
+                    </tr>
+                </t>
+                <t t-else="">
+                    <tr>
+                        <td class="text-start"><a t-attf-href="/helpdesk/ticket/#{ticket.id}"><small>#</small><t t-out="ticket.ticket_ref"/><span class="ms-2" t-att-title="ticket.name" t-field="ticket.name"/></a></td>
+                        <td class="text-end" t-if="groupby != 'create_date'">
+                            <span t-field="ticket.create_date" t-options='{"widget": "datetime", "hide_seconds": True}'/>
+                        </td>
+                        <td id="ticket_user_body" t-if="groupby != 'user_id'" class="ps-5 lh-1">
+                            <img t-if="ticket.user_id" class="o_avatar o_portal_contact_img rounded" t-attf-src="#{image_data_uri(ticket.user_id.sudo().avatar_128)}" alt="Contact"/>
+                            <span t-field="ticket.user_id"/>
+                        </td>
+                        <td t-if="groupby != 'stage_id'" class="text-end">
+                            <span t-attf-class="badge rounded-pill fw-normal #{'text-bg-success' if ticket.stage_id.fold else 'text-bg-primary'}" t-esc="ticket.stage_id.name"/>
+                        </td>
+                    </tr>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="helpdesk_ticket_detail_restyle" inherit_id="helpdesk.tickets_followup" priority="40">
+            <xpath expr="//t[@t-call='portal.portal_layout']" position="inside">
+                <t t-if="request.website.portal_mode == 'warranty'" t-set="no_breadcrumbs" t-value="True"/>
+            </xpath>
+            <xpath expr="//t[@t-call='portal.portal_layout']" position="inside">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                    <ul class="nav">
+                        <li id="nav-header" style="display:none;"></li>
+                    </ul>
+                </t>
+            </xpath>
+            <xpath expr="//div[contains(@class, 'o_project_portal_sidebar')]" position="before">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                <style>
+                    .nx-ticket-detail-shell .o_portal_sidebar_content {
+                        border: 1px solid #dfe9ee;
+                        border-radius: 22px;
+                        background: linear-gradient(180deg, #ffffff 0%, #f8fcfc 100%);
+                        box-shadow: 0 16px 34px rgba(11, 30, 44, 0.08);
+                        padding: 18px;
+                    }
+                    .nx-ticket-detail-shell #ticket_content {
+                        position: relative;
+                        overflow: hidden;
+                        border: 1px solid #dfe9ee;
+                        border-radius: 28px;
+                        background: linear-gradient(180deg, #ffffff 0%, #f7fbfb 100%);
+                        box-shadow: 0 26px 56px rgba(11, 30, 44, 0.10);
+                        padding: 24px;
+                    }
+                    .nx-ticket-detail-shell #card_header {
+                        margin: 0 0 18px;
+                        padding: 1.35rem 1.5rem;
+                        border: 1px solid #d8eaec;
+                        border-radius: 24px;
+                        background:
+                            radial-gradient(circle at top right, rgba(69, 197, 204, 0.18), transparent 30%),
+                            linear-gradient(135deg, #f9fdfd 0%, #eef9fa 100%);
+                        box-shadow: 0 16px 34px rgba(8, 61, 63, 0.07);
+                    }
+                    .nx-ticket-detail-shell #card_body {
+                        border: 1px solid #dcebed;
+                        border-radius: 24px;
+                        background: rgba(255, 255, 255, 0.98);
+                        box-shadow: 0 18px 40px rgba(8, 61, 63, 0.08);
+                        padding: 1.6rem;
+                    }
+                    .nx-ticket-detail-shell #card_body > .row {
+                        margin: 0 0 0.9rem;
+                        padding: 0.95rem 0;
+                        border-bottom: 1px solid #e8f0f2;
+                    }
+                    .nx-ticket-detail-shell #card_body > .row:last-child {
+                        margin-bottom: 0;
+                        border-bottom: 0;
+                    }
+                    .nx-ticket-detail-shell .badge {
+                        border-radius: 999px;
+                    }
+                    .nx-ticket-detail-shell .text-muted,
+                    .nx-ticket-detail-shell #card_header small {
+                        color: #5a727c !important;
+                    }
+                    .nx-ticket-detail-shell .nx-stage-badge {
+                        display: inline-flex;
+                        align-items: center;
+                        border-radius: 999px;
+                        padding: 0.35rem 0.85rem;
+                        font-size: 0.82rem;
+                        font-weight: 700;
+                        letter-spacing: 0.01em;
+                        border: 1px solid transparent;
+                    }
+                    .nx-ticket-detail-shell .nx-stage-badge.stage-progress {
+                        background: #eef6ff;
+                        color: #195b9b;
+                        border-color: #cfe1fb;
+                    }
+                    .nx-ticket-detail-shell .nx-stage-badge.stage-new {
+                        background: #fff4e8;
+                        color: #b85a00;
+                        border-color: #f7d8b5;
+                    }
+                    .nx-ticket-detail-shell .nx-stage-badge.stage-solved {
+                        background: #e9f9ef;
+                        color: #177245;
+                        border-color: #bfe7ce;
+                    }
+                    .nx-ticket-detail-shell .nx-stage-badge.stage-cancelled {
+                        background: #fdecec;
+                        color: #b42318;
+                        border-color: #f6c7c3;
+                    }
+                    .nx-ticket-detail-shell .nx-stage-badge.stage-default {
+                        background: #f3f5f7;
+                        color: #516170;
+                        border-color: #dde4ea;
+                    }
+                    .nx-ticket-detail-shell .nx-priority-badge,
+                    .nx-ticket-detail-shell .nx-severity-badge {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 999px;
+                        padding: 0.3rem 0.75rem;
+                        font-size: 0.8rem;
+                        font-weight: 700;
+                        border: 1px solid transparent;
+                        min-width: 5.5rem;
+                    }
+                    .nx-ticket-detail-shell .nx-priority-badge.priority-high,
+                    .nx-ticket-detail-shell .nx-severity-badge.severity-high {
+                        background: #fdecec;
+                        color: #b42318;
+                        border-color: #f6c7c3;
+                    }
+                    .nx-ticket-detail-shell .nx-priority-badge.priority-medium,
+                    .nx-ticket-detail-shell .nx-severity-badge.severity-medium {
+                        background: #fff4e8;
+                        color: #b85a00;
+                        border-color: #f7d8b5;
+                    }
+                    .nx-ticket-detail-shell .nx-priority-badge.priority-low,
+                    .nx-ticket-detail-shell .nx-severity-badge.severity-low {
+                        background: #eef6ff;
+                        color: #195b9b;
+                        border-color: #cfe1fb;
+                    }
+                    .nx-ticket-detail-shell h3,
+                    .nx-ticket-detail-shell h4,
+                    .nx-ticket-detail-shell h5 {
+                        color: #103543;
+                        font-weight: 700;
+                    }
+                    .nx-ticket-detail-shell #card_header h3 {
+                        color: #0f3d47;
+                        font-size: clamp(1.7rem, 2.7vw, 2.5rem);
+                        font-weight: 800;
+                        line-height: 1.08;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-header-kicker {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 0.45rem;
+                        padding: 0.42rem 0.85rem;
+                        border-radius: 999px;
+                        background: rgba(12, 109, 113, 0.08);
+                        color: #0c6d71;
+                        font-size: 0.78rem;
+                        font-weight: 800;
+                        letter-spacing: 0.12em;
+                        text-transform: uppercase;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-header-meta {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 1rem;
+                        margin-top: 0.9rem;
+                        color: #325764;
+                        font-weight: 700;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-header-meta strong {
+                        color: #0c6d71;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-header-metrics {
+                        display: grid;
+                        grid-template-columns: repeat(4, minmax(0, 1fr));
+                        gap: 0.9rem;
+                        margin-top: 1.25rem;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-metric {
+                        border: 1px solid #d5e7e9;
+                        border-radius: 18px;
+                        background: rgba(255, 255, 255, 0.82);
+                        padding: 0.9rem 1rem;
+                        box-shadow: 0 10px 20px rgba(8, 61, 63, 0.05);
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-metric-label {
+                        display: block;
+                        color: #5a727c;
+                        font-size: 0.78rem;
+                        font-weight: 800;
+                        letter-spacing: 0.08em;
+                        text-transform: uppercase;
+                        margin-bottom: 0.4rem;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-metric-value {
+                        color: #163f4b;
+                        font-size: 1rem;
+                        font-weight: 800;
+                        line-height: 1.25;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-summary-grid {
+                        display: grid;
+                        grid-template-columns: repeat(2, minmax(0, 1fr));
+                        gap: 1rem;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-summary-card {
+                        border: 1px solid #dcebed;
+                        border-radius: 20px;
+                        background: linear-gradient(180deg, #ffffff 0%, #f8fcfc 100%);
+                        box-shadow: 0 12px 24px rgba(8, 61, 63, 0.05);
+                        padding: 1.1rem 1.2rem;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-summary-card.nx-ticket-summary-card-wide {
+                        grid-column: 1 / -1;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-summary-label {
+                        display: block;
+                        color: #5a727c;
+                        font-size: 0.78rem;
+                        font-weight: 800;
+                        letter-spacing: 0.08em;
+                        text-transform: uppercase;
+                        margin-bottom: 0.45rem;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-summary-value {
+                        color: #153f4b;
+                        font-size: 1.02rem;
+                        font-weight: 700;
+                        line-height: 1.45;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-summary-value p:last-child {
+                        margin-bottom: 0;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-attachments {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 0.7rem;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-attachment-link {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        max-width: 100%;
+                        padding: 0.72rem 0.95rem;
+                        border: 1px solid #d5e7e9;
+                        border-radius: 16px;
+                        background: linear-gradient(180deg, #ffffff 0%, #f7fbfb 100%);
+                        color: #0c6d71;
+                        font-weight: 700;
+                        text-decoration: none;
+                        box-shadow: 0 8px 18px rgba(8, 61, 63, 0.05);
+                        transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-attachment-link:hover,
+                    .nx-ticket-detail-shell .nx-ticket-attachment-link:focus {
+                        border-color: #18a1a7;
+                        color: #0a5e61;
+                        text-decoration: none;
+                        transform: translateY(-1px);
+                        box-shadow: 0 12px 24px rgba(8, 61, 63, 0.08);
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-attachment-link span {
+                        min-width: 0;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-attachment-modal {
+                        position: fixed;
+                        inset: 0;
+                        z-index: 1055;
+                        display: none;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 1.5rem;
+                        background: rgba(8, 24, 34, 0.72);
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-attachment-modal.is-open {
+                        display: flex;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-attachment-modal-dialog {
+                        position: relative;
+                        width: min(960px, 100%);
+                        max-height: 90vh;
+                        border-radius: 24px;
+                        border: 1px solid rgba(205, 232, 235, 0.85);
+                        background: #ffffff;
+                        box-shadow: 0 24px 60px rgba(8, 24, 34, 0.28);
+                        overflow: hidden;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-attachment-modal-header {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        gap: 1rem;
+                        padding: 1rem 1.25rem;
+                        border-bottom: 1px solid #e3eff1;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-attachment-modal-title {
+                        color: #143f4b;
+                        font-weight: 800;
+                        word-break: break-word;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-attachment-modal-close {
+                        min-width: 44px;
+                        min-height: 44px;
+                        border: 1px solid #d5e7e9;
+                        border-radius: 999px;
+                        background: #ffffff;
+                        color: #143f4b;
+                        font-size: 1.2rem;
+                        line-height: 1;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-attachment-modal-body {
+                        max-height: calc(90vh - 78px);
+                        padding: 1rem;
+                        overflow: auto;
+                        background: #f7fbfb;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-attachment-modal-image,
+                    .nx-ticket-detail-shell .nx-ticket-attachment-modal-frame {
+                        display: block;
+                        width: 100%;
+                        border: 0;
+                        border-radius: 18px;
+                        background: #ffffff;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-attachment-modal-image {
+                        max-height: calc(90vh - 140px);
+                        object-fit: contain;
+                        margin: 0 auto;
+                    }
+                    .nx-ticket-detail-shell .nx-ticket-attachment-modal-frame {
+                        min-height: 70vh;
+                    }
+                    .nx-ticket-detail-shell #card_body strong {
+                        color: #143f4b;
+                        font-weight: 800;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat {
+                        position: relative;
+                        margin-top: 1.35rem;
+                        border: 1px solid #dcebed;
+                        border-radius: 28px;
+                        background:
+                            radial-gradient(circle at top right, rgba(69, 197, 204, 0.12), transparent 34%),
+                            linear-gradient(180deg, #ffffff 0%, #f7fbfb 100%);
+                        box-shadow: 0 18px 40px rgba(8, 61, 63, 0.08);
+                        padding: 1.4rem 1.5rem;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat > h3,
+                    .nx-ticket-detail-shell #ticket_chat > .nx-ticket-chat-title {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.7rem;
+                        margin: 0 0 1.25rem;
+                        color: #113f4b;
+                        font-size: clamp(1.8rem, 3vw, 2.6rem);
+                        font-weight: 800;
+                        letter-spacing: -0.03em;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat > h3::before,
+                    .nx-ticket-detail-shell #ticket_chat > .nx-ticket-chat-title::before {
+                        content: "";
+                        width: 0.95rem;
+                        height: 0.95rem;
+                        flex: 0 0 0.95rem;
+                        border-radius: 999px;
+                        background: linear-gradient(135deg, #0c6d71 0%, #45c5cc 100%);
+                        box-shadow: 0 0 0 0.32rem rgba(12, 109, 113, 0.10);
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter {
+                        margin-top: 0;
+                        border: 0;
+                        border-radius: 0;
+                        background: transparent;
+                        box-shadow: none;
+                        padding: 0;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter h4,
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter .h4 {
+                        color: #113f4b;
+                        font-size: clamp(1.5rem, 2.5vw, 2.4rem);
+                        font-weight: 800;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter h4::after,
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter .h4::after {
+                        content: "";
+                        display: block;
+                        width: 72px;
+                        height: 4px;
+                        margin-top: 0.75rem;
+                        border-radius: 999px;
+                        background: linear-gradient(135deg, #0c6d71 0%, #45c5cc 100%);
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-top,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-content {
+                        padding-left: 0;
+                        padding-right: 0;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-top {
+                        position: static !important;
+                        background: transparent;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-topbar {
+                        gap: 0.55rem;
+                        margin-bottom: 0.65rem;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-sendMessage,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-logNote,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-activity {
+                        min-height: 44px;
+                        padding: 0.72rem 1.15rem;
+                        border-radius: 16px;
+                        font-weight: 700;
+                        transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-sendMessage.btn-primary,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-logNote.btn-primary {
+                        border: 1px solid #0c6d71 !important;
+                        background: linear-gradient(135deg, #063a3d 0%, #0c6d71 52%, #19aeb3 100%) !important;
+                        background-color: #0c6d71 !important;
+                        color: #ffffff !important;
+                        box-shadow: 0 14px 28px rgba(12, 109, 113, 0.16);
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-sendMessage.btn-primary:hover,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-sendMessage.btn-primary:focus,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-logNote.btn-primary:hover,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-logNote.btn-primary:focus {
+                        border-color: #0a5e61 !important;
+                        background: linear-gradient(135deg, #053133 0%, #0a5e61 52%, #149ca1 100%) !important;
+                        background-color: #0a5e61 !important;
+                        color: #ffffff !important;
+                        transform: translateY(-1px);
+                        box-shadow: 0 18px 32px rgba(12, 109, 113, 0.22);
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-sendMessage.btn-secondary,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-logNote.btn-secondary,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-activity.btn-secondary {
+                        border: 1px solid #cfe6e8;
+                        background: linear-gradient(180deg, #ffffff 0%, #f4fbfb 100%);
+                        color: #1e4f58;
+                        box-shadow: none;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-sendMessage.btn-secondary:hover,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-logNote.btn-secondary:hover,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-activity.btn-secondary:hover {
+                        border-color: #18a1a7;
+                        background: #eef8f8;
+                        color: #0c6d71;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter_composer,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer {
+                        margin-top: 1rem;
+                        padding: 1rem;
+                        border: 1px solid #dcebed;
+                        border-radius: 20px;
+                        background: linear-gradient(180deg, #fbfefe 0%, #f3fbfb 100%);
+                        box-shadow: 0 14px 30px rgba(8, 61, 63, 0.06);
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .btn-primary,
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter_composer_btn,
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter .o_portal_chatter_composer_btn.btn.btn-primary,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer-send.btn.btn-primary,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer-send.btn.btn-primary.btn-sm {
+                        --bs-btn-color: #ffffff;
+                        --bs-btn-bg: #0c6d71;
+                        --bs-btn-border-color: #0c6d71;
+                        --bs-btn-hover-color: #ffffff;
+                        --bs-btn-hover-bg: #0a5e61;
+                        --bs-btn-hover-border-color: #0a5e61;
+                        --bs-btn-focus-shadow-rgb: 12, 109, 113;
+                        --bs-btn-active-color: #ffffff;
+                        --bs-btn-active-bg: #0a5e61;
+                        --bs-btn-active-border-color: #0a5e61;
+                        --bs-btn-disabled-color: #ffffff;
+                        --bs-btn-disabled-bg: #7aaeb1;
+                        --bs-btn-disabled-border-color: #7aaeb1;
+                        min-height: 48px;
+                        padding: 0.75rem 1.3rem;
+                        border: 1px solid #0c6d71 !important;
+                        border-radius: 16px !important;
+                        background-color: #0c6d71 !important;
+                        background-image: linear-gradient(135deg, #063a3d 0%, #0c6d71 52%, #19aeb3 100%) !important;
+                        background-color: #0c6d71 !important;
+                        color: #ffffff !important;
+                        font-weight: 800;
+                        letter-spacing: 0.01em;
+                        box-shadow: 0 16px 30px rgba(12, 109, 113, 0.20);
+                        transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .btn-primary:hover,
+                    .nx-ticket-detail-shell #ticket_chat .btn-primary:focus,
+                    .nx-ticket-detail-shell #ticket_chat .btn-primary:active,
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter_composer_btn:hover,
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter_composer_btn:focus,
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter_composer_btn:active,
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter .o_portal_chatter_composer_btn.btn.btn-primary:hover,
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter .o_portal_chatter_composer_btn.btn.btn-primary:focus,
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter .o_portal_chatter_composer_btn.btn.btn-primary:active,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer-send.btn.btn-primary:hover,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer-send.btn.btn-primary:focus,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer-send.btn.btn-primary:active {
+                        border-color: #0a5e61 !important;
+                        background-color: #0a5e61 !important;
+                        background-image: linear-gradient(135deg, #053133 0%, #0a5e61 52%, #149ca1 100%) !important;
+                        background-color: #0a5e61 !important;
+                        color: #ffffff !important;
+                        transform: translateY(-1px);
+                        box-shadow: 0 20px 34px rgba(12, 109, 113, 0.24);
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter_composer textarea,
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter_composer input[type="text"],
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer-bg {
+                        border: 1px solid #cfe6e8;
+                        border-radius: 18px;
+                        background: linear-gradient(180deg, #ffffff 0%, #f8fcfc 100%);
+                        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer-bg {
+                        margin: 0.25rem 0.35rem;
+                        border-color: #cfe6e8 !important;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer-bg:has(textarea:focus) {
+                        border-color: #18a1a7 !important;
+                        box-shadow: 0 0 0 0.24rem rgba(24, 161, 167, 0.14);
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter_composer textarea:focus,
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter_composer input[type="text"]:focus {
+                        border-color: #18a1a7;
+                        box-shadow: 0 0 0 0.24rem rgba(24, 161, 167, 0.14);
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer-input {
+                        min-height: 110px;
+                        border: 0;
+                        background: transparent;
+                        box-shadow: none;
+                        color: #214a4e;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer-input:focus {
+                        outline: 0;
+                        box-shadow: none;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer .text-muted,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer .small.text-muted,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer-footer .text-muted {
+                        color: #5d7380 !important;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter_composer .btn,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer-actions .btn,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-attachFiles {
+                        letter-spacing: 0.01em;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter_composer .o_portal_chatter_attachment_btn,
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter_composer .o-mail-Chatter-attachFiles,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer-attachFiles,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer .fa-smile-o,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-attachFiles {
+                        color: #0c6d71 !important;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer-attachFiles,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer .btn.rounded-circle,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-attachFiles {
+                        background: rgba(12, 109, 113, 0.08);
+                        border-radius: 999px !important;
+                        opacity: 1 !important;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer-attachFiles:hover,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Composer .btn.rounded-circle:hover,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Chatter-attachFiles:hover {
+                        background: rgba(12, 109, 113, 0.14);
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Thread {
+                        padding-left: 0;
+                        padding-right: 0;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-DateSection {
+                        margin: 0.85rem 0;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-DateSection .o-discuss-separator {
+                        border-top-color: #dcebed;
+                        opacity: 1;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-DateSection span {
+                        color: #6a8088 !important;
+                        font-weight: 700;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter_message {
+                        border: 1px solid #e2eef0;
+                        border-radius: 18px;
+                        background: linear-gradient(180deg, #ffffff 0%, #fbfefe 100%);
+                        padding: 0.8rem;
+                        box-shadow: 0 10px 22px rgba(8, 61, 63, 0.05);
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Message {
+                        border: 0;
+                        border-radius: 20px;
+                        background: transparent;
+                        padding: 0.35rem 0;
+                        box-shadow: none;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Message:hover {
+                        background: rgba(238, 248, 249, 0.55);
+                        transform: translateY(-1px);
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Message-avatarContainer {
+                        width: 44px;
+                        height: 44px;
+                        border-radius: 14px;
+                        overflow: hidden;
+                        box-shadow: 0 8px 18px rgba(8, 61, 63, 0.10);
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Message-author strong {
+                        color: #113f4b;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Message-date {
+                        color: #6a8088 !important;
+                        opacity: 1;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Message-body:not(.o-note) {
+                        border: 1px solid #dcebed;
+                        border-radius: 18px !important;
+                        background: linear-gradient(180deg, #ffffff 0%, #f8fcfc 100%);
+                        box-shadow: 0 8px 18px rgba(8, 61, 63, 0.05);
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Message.o-selfAuthored .o-mail-Message-body:not(.o-note) {
+                        border-color: #c9e8ea;
+                        background: linear-gradient(180deg, #eff9fa 0%, #e6f6f7 100%);
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Message-body a {
+                        color: #0c6d71;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Thread-jumpPresent,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Thread-loadOlder .btn,
+                    .nx-ticket-detail-shell #ticket_chat .o-mail-Thread .btn-link {
+                        color: #0c6d71;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .o_portal_chatter_attachment {
+                        border-radius: 14px;
+                    }
+                    .nx-ticket-detail-shell #ticket_chat .btn-light {
+                        border-color: #d7e4e9;
+                    }
+                    @media (max-width: 767.98px) {
+                        .nx-ticket-detail-shell #ticket_content {
+                            padding: 14px;
+                            border-radius: 22px;
+                        }
+                        .nx-ticket-detail-shell #card_header {
+                            padding: 1.2rem 1rem;
+                        }
+                        .nx-ticket-detail-shell #card_body,
+                        .nx-ticket-detail-shell #ticket_chat {
+                            padding: 1rem;
+                            border-radius: 18px;
+                        }
+                        .nx-ticket-detail-shell #ticket_chat > h3,
+                        .nx-ticket-detail-shell #ticket_chat > .nx-ticket-chat-title {
+                            font-size: 1.9rem;
+                        }
+                        .nx-ticket-detail-shell .nx-ticket-header-metrics,
+                        .nx-ticket-detail-shell .nx-ticket-summary-grid {
+                            grid-template-columns: 1fr;
+                        }
+                    }
+                </style>
+                </t>
+            </xpath>
+            <xpath expr="//div[hasclass('o_project_portal_sidebar')]/t[@t-call='portal.portal_record_sidebar']" position="replace">
+                <t t-if="request.website.portal_mode == 'warranty'"/>
+                <t t-else="" t-call="portal.portal_record_sidebar">
+                    <t t-set="classes" t-value="'col-lg-4 col-xxl-3 d-print-none'"/>
+
+                    <t t-set="entries">
+                        <div class="d-flex flex-column">
+                            <div t-if="ticket.team_id.allow_portal_ticket_closing and not ticket.stage_id.fold and not ticket.closed_by_partner" class="flex-grow-1">
+                                <div class="d-grid flex-sm-nowrap">
+                                    <button class="btn btn-light pt-1" data-bs-target="#helpdesk_ticket_close_modal" data-bs-toggle="modal">
+                                        Close Ticket
+                                    </button>
+                                </div>
+
+                                <div class="modal" tabindex="-1" role="dialog" id="helpdesk_ticket_close_modal">
+                                    <div class="modal-dialog mt-5" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Close ticket</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>We hope to have addressed your request satisfactorily. If you no longer need our assistance, please close this ticket. Thank you for your collaboration.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a role="button" class="btn btn-primary" t-att-href="'/my/ticket/close/%s/%s' % (ticket.id, ticket.access_token)">Close Ticket</a>
+                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Discard</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="ticket-nav" class="flex-grow-1 p-0" t-ignore="true" role="complementary">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item" id="nav-header">
+                                        <a class="nav-link p-0" href="#card_header">
+                                            Ticket
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" id="nav-chat">
+                                        <a class="nav-link p-0" href="#ticket_chat">
+                                            History
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div id="ticket-links" t-if="ticket_link_section" class="flex-grow-1" t-ignore="true" role="complementary" invisible="1">
+                                <ul class="nav flex-column">
+                                    <t t-foreach="sorted(ticket_link_section, key=lambda r: r['sequence'])" t-as="ticket_link">
+                                        <li class="nav-item">
+                                            <a class="nav-link p-0" t-att-href="ticket_link['access_url']">
+                                                <t t-out="ticket_link['title']"/>
+                                            </a>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+
+                            <div t-if="ticket.user_id or ticket.partner_id" class="mt-4">
+                                <div t-attf-class="col-12 col-md-12" t-if="ticket.user_id">
+                                    <h6>
+                                        <small class="text-muted">Assigned to</small>
+                                    </h6>
+                                    <t t-call="portal.portal_my_contact">
+                                        <t t-set="_contactAvatar" t-value="image_data_uri(ticket.user_id.avatar_128)"/>
+                                        <t t-set="_contactName" t-value="ticket.user_id.name"/>
+                                    </t>
+                                </div>
+                                <div t-attf-class="col-12 col-md-12 {{ 'mt-3' if ticket.user_id.name else '' }}" t-if="ticket.partner_id">
+                                     <h6>
+                                        <small class="text-muted">Customer</small>
+                                    </h6>
+                                    <t t-call="portal.portal_my_contact">
+                                        <t t-set="_contactAvatar" t-value="image_data_uri(ticket.partner_id.avatar_128)"/>
+                                        <t t-set="_contactName" t-value="ticket.partner_id.display_name"/>
+                                        <a t-attf-href="mailto:{{ticket.partner_id.email}}" t-if="ticket.partner_id.email"><div t-field="ticket.partner_id" t-options='{"widget": "contact", "fields": ["email"]}'/></a>
+                                        <a t-attf-href="tel:{{ticket.partner_id.phone}}" t-if="ticket.partner_id.phone"><div t-field="ticket.partner_id" t-options='{"widget": "contact", "fields": ["phone"]}'/></a>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </xpath>
+            <xpath expr="//div[hasclass('o_project_portal_sidebar')]" position="attributes">
+                <attribute name="t-attf-class">{{ 'row mt16 o_project_portal_sidebar nx-ticket-detail-shell' if request.website.portal_mode == 'warranty' else 'row mt16 o_project_portal_sidebar' }}</attribute>
+            </xpath>
+            <xpath expr="//div[@id='ticket_content']" position="attributes">
+                <attribute name="t-attf-class">{{ 'o_portal_content col-12 mt-0' if request.website.portal_mode == 'warranty' else 'o_portal_content col-12 col-lg-8 col-xxl-9 mt-5 mt-lg-0' }}</attribute>
+            </xpath>
+            <xpath expr="//div[@id='ticket_chat']" position="attributes">
+                <attribute name="t-attf-class">{{ 'nx-ticket-chat-section' if request.website.portal_mode == 'warranty' else '' }}</attribute>
+            </xpath>
+            <xpath expr="//div[@id='ticket_chat']/h3" position="attributes">
+                <attribute name="t-attf-class">{{ 'nx-ticket-chat-title' if request.website.portal_mode == 'warranty' else '' }}</attribute>
+            </xpath>
+        </template>
+
+        <template id="helpdesk_ticket_portal_total_time_detail" inherit_id="helpdesk.tickets_followup" priority="45">
+            <xpath expr="//div[@id='card_header']/div[hasclass('row') and hasclass('gs-0')]/div[hasclass('col-md')]/h5" position="replace">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                    <div class="row justify-content-between align-items-start g-3">
+                        <div class="col-md-9">
+                            <div class="nx-ticket-header-kicker">
+                                <i class="fa fa-life-ring"/>
+                                <t t-esc="'Ticket Detail' if not nx_is_arabic else 'تفاصيل التذكرة'"/>
+                            </div>
+                            <h3 class="mb-0">
+                                <span t-field="ticket.name"/>
+                            </h3>
+                            <div class="nx-ticket-header-meta">
+                                <span>
+                                    <t t-esc="'Ticket Number' if not nx_is_arabic else 'رقم التذكرة'"/>:
+                                    <strong>#<span t-field="ticket.ticket_ref"/></strong>
+                                </span>
+                            </div>
+                            <div class="nx-ticket-header-metrics">
+                                <div class="nx-ticket-metric">
+                                    <span class="nx-ticket-metric-label"><t t-esc="'Assigned Team' if not nx_is_arabic else 'الفريق المسؤول'"/></span>
+                                    <div class="nx-ticket-metric-value">
+                                        <t t-if="ticket.team_id">
+                                            <span t-field="ticket.team_id.name"/>
+                                        </t>
+                                        <t t-else="">-</t>
+                                    </div>
+                                </div>
+                                <div class="nx-ticket-metric">
+                                    <span class="nx-ticket-metric-label"><t t-esc="'Severity' if not nx_is_arabic else 'الحدة'"/></span>
+                                    <div class="nx-ticket-metric-value">
+                                        <span t-attf-class="nx-severity-badge #{'severity-high' if ticket.severity == 'high' else ('severity-medium' if ticket.severity == 'medium' else 'severity-low')}">
+                                            <t t-esc="'عالٍ' if (nx_is_arabic and ticket.severity == 'high') else ('متوسط' if (nx_is_arabic and ticket.severity == 'medium') else ('منخفض' if nx_is_arabic else ('High' if ticket.severity == 'high' else ('Medium' if ticket.severity == 'medium' else 'Low'))))"/>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="nx-ticket-metric" t-if="not ticket.stage_id.fold">
+                                    <span class="nx-ticket-metric-label"><t t-esc="'Expected Closing Time' if not nx_is_arabic else 'وقت الإغلاق المتوقع'"/></span>
+                                    <div class="nx-ticket-metric-value">
+                                        <t t-if="ticket.portal_expected_resolution_time">
+                                            <span t-field="ticket.portal_expected_resolution_time"/>
+                                        </t>
+                                        <t t-else="">-</t>
+                                    </div>
+                                </div>
+                                <div class="nx-ticket-metric" t-if="ticket.show_total_timesheet_hours">
+                                    <span class="nx-ticket-metric-label"><t t-esc="'Time Spent' if not nx_is_arabic else 'الوقت المستغرق'"/></span>
+                                    <div class="nx-ticket-metric-value">
+                                        <t t-esc="'%.2f h' % (ticket.total_timesheet_hours or 0.0)"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-auto text-md-end">
+                            <small class="d-block mb-2"><t t-esc="'Stage' if not nx_is_arabic else 'المرحلة'"/>:</small>
+                            <t t-set="stage_name_lower" t-value="(ticket.stage_id.name or '').strip().lower()"/>
+                            <small t-field="ticket.stage_id.name"
+                                   t-attf-class="nx-stage-badge #{'stage-cancelled' if 'cancel' in stage_name_lower else ('stage-solved' if ('solved' in stage_name_lower or 'done' in stage_name_lower or ticket.stage_id.fold) else ('stage-progress' if ('progress' in stage_name_lower or 'work' in stage_name_lower) else ('stage-new' if 'new' in stage_name_lower else 'stage-default')))}"
+                                   title="Current stage of this ticket"/>
+                        </div>
+                    </div>
+                </t>
+                <t t-else="">
+                    <h5 class="row justify-content-between">
+                        <div class="col-md-9 text-truncate">
+                            <span t-field="ticket.name" class="h3"/>
+                            <small class="text-muted"> (#<span t-field="ticket.ticket_ref"/>)</small>
+                        </div>
+                        <div class="col col-auto">
+                            <small>Stage:</small>
+                            <small t-field="ticket.stage_id.name" t-attf-class="badge rounded-pill smaller #{'text-bg-info' if ticket.stage_id.fold else 'text-bg-light bg-200'}" title="Current stage of this ticket"/>
+                        </div>
+                    </h5>
+                </t>
+            </xpath>
+            <xpath expr="//div[@id='card_body']/div[strong[contains(normalize-space(.), 'Reported on')]]" position="before">
+                <t t-if="request.website.portal_mode == 'warranty'">
+                <t t-set="ticket_attachments" t-value="request.env['ir.attachment'].sudo().search([('res_model', '=', 'helpdesk.ticket'), ('res_id', '=', ticket.id)])"/>
+                <div class="nx-ticket-summary-grid">
+                    <div t-if="not is_html_empty(ticket.description)" class="nx-ticket-summary-card nx-ticket-summary-card-wide" name="description">
+                        <span class="nx-ticket-summary-label">Description</span>
+                        <div class="nx-ticket-summary-value" t-field="ticket.description"/>
+                    </div>
+                    <div t-if="ticket.final_feedback" class="nx-ticket-summary-card nx-ticket-summary-card-wide" name="final_feedback">
+                        <span class="nx-ticket-summary-label"><t t-esc="'Final Feedback' if not nx_is_arabic else 'الملاحظات النهائية'"/></span>
+                        <div class="nx-ticket-summary-value" t-field="ticket.final_feedback"/>
+                    </div>
+                    <div t-if="ticket_attachments" class="nx-ticket-summary-card nx-ticket-summary-card-wide">
+                        <span class="nx-ticket-summary-label"><t t-esc="'Attachments' if not nx_is_arabic else 'المرفقات'"/></span>
+                        <div class="nx-ticket-summary-value nx-ticket-attachments">
+                            <t t-foreach="ticket_attachments" t-as="attachment">
+                                <button type="button"
+                                   class="nx-ticket-attachment-link"
+                                   t-att-data-preview-url="'/my/tickets/attachment/%s?inline=1' % attachment.id"
+                                   t-att-data-mimetype="attachment.mimetype or ''"
+                                   t-att-data-name="attachment.name"
+                                   t-att-title="attachment.name">
+                                    <i class="fa fa-paperclip"/>
+                                    <span t-esc="attachment.name"/>
+                                </button>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="nx-ticket-summary-card">
+                        <span class="nx-ticket-summary-label">Reported On</span>
+                        <div class="nx-ticket-summary-value">
+                            <span t-field="ticket.create_date" t-options='{"widget": "datetime", "hide_seconds": True}'/>
+                        </div>
+                    </div>
+                    <div class="nx-ticket-summary-card">
+                        <span class="nx-ticket-summary-label">Solved On</span>
+                        <div class="nx-ticket-summary-value">
+                            <t t-if="ticket.ticket_solved_at">
+                                <span t-field="ticket.ticket_solved_at"/>
+                            </t>
+                            <t t-else="">-</t>
+                        </div>
+                    </div>
+                </div>
+                <div class="nx-ticket-attachment-modal" id="nx_ticket_attachment_modal" aria-hidden="true">
+                    <div class="nx-ticket-attachment-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="nx_ticket_attachment_modal_title">
+                        <div class="nx-ticket-attachment-modal-header">
+                            <div class="nx-ticket-attachment-modal-title" id="nx_ticket_attachment_modal_title">Attachment Preview</div>
+                            <button type="button" class="nx-ticket-attachment-modal-close" aria-label="Close">&#215;</button>
+                        </div>
+                        <div class="nx-ticket-attachment-modal-body"/>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    <![CDATA[
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const modal = document.getElementById("nx_ticket_attachment_modal");
+                        if (!modal) {
+                            return;
+                        }
+                        const modalBody = modal.querySelector(".nx-ticket-attachment-modal-body");
+                        const modalTitle = modal.querySelector(".nx-ticket-attachment-modal-title");
+                        const closeButton = modal.querySelector(".nx-ticket-attachment-modal-close");
+                        const attachmentButtons = document.querySelectorAll(".nx-ticket-attachment-link[data-preview-url]");
+
+                        const closeModal = function () {
+                            modal.classList.remove("is-open");
+                            modal.setAttribute("aria-hidden", "true");
+                            modalBody.innerHTML = "";
+                        };
+
+                        attachmentButtons.forEach(function (button) {
+                            button.addEventListener("click", function () {
+                                const previewUrl = button.dataset.previewUrl;
+                                const mimetype = button.dataset.mimetype || "";
+                                const name = button.dataset.name || "Attachment";
+                                modalTitle.textContent = name;
+                                if (mimetype.startsWith("image/")) {
+                                    modalBody.innerHTML = '<img class="nx-ticket-attachment-modal-image" src="' + previewUrl + '" alt="' + name + '"/>';
+                                } else {
+                                    modalBody.innerHTML = '<iframe class="nx-ticket-attachment-modal-frame" src="' + previewUrl + '" title="' + name + '"></iframe>';
+                                }
+                                modal.classList.add("is-open");
+                                modal.setAttribute("aria-hidden", "false");
+                            });
+                        });
+
+                        closeButton.addEventListener("click", closeModal);
+                        modal.addEventListener("click", function (event) {
+                            if (event.target === modal) {
+                                closeModal();
+                            }
+                        });
+                        document.addEventListener("keydown", function (event) {
+                            if (event.key === "Escape" && modal.classList.contains("is-open")) {
+                                closeModal();
+                            }
+                        });
+                    });
+                    ]]>
+                </script>
+                </t>
+            </xpath>
+            <xpath expr="//div[@id='card_body']/div[strong[contains(normalize-space(.), 'Reported on')]]" position="replace">
+                <t t-if="request.website.portal_mode == 'warranty'"/>
+                <div t-else="" class="row mb-4">
+                    <strong class="col-lg-3">Reported on</strong>
+                    <span class="col-lg-9" t-field="ticket.create_date" t-options='{"widget": "datetime", "hide_seconds": True}'/>
+                </div>
+            </xpath>
+            <xpath expr="//div[@id='card_body']/div[@name='description' and hasclass('mt-3')]" position="replace">
+                <t t-if="request.website.portal_mode == 'warranty'"/>
+                <div t-else="" t-if="not is_html_empty(ticket.description)" class="row mt-3" name="description">
+                    <div class="col-lg-12" t-field="ticket.description"/>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="helpdesk_ticket_portal_hide_timesheet_lines" inherit_id="helpdesk_sale_timesheet.tickets_followup_timesheet" priority="60">
+            <xpath expr="//section[@id='details']" position="replace">
+                <t t-if="request.website.portal_mode != 'warranty'">
+                    <section id="details" style="page-break-inside: auto;" class="mt32" t-if="timesheets and ticket.sale_line_id.product_template_id.service_policy not in ['delivered_milestones', 'delivered_manual']">
+                        <h3 id="details">Timesheets</h3>
+
+                        <table class="table table-sm table-striped" id="timesheet_table">
+                            <t t-set="display_sol" t-value="False"/>
+                            <t t-foreach="timesheets" t-as="timesheet">
+                                <t t-if="timesheet.so_line != ticket.sale_line_id">
+                                    <t t-set="display_sol" t-value="True"/>
+                                </t>
+                            </t>
+                            <thead class="bg-100">
+                                <tr>
+                                    <th class="text-start">Date</th>
+                                    <th class="text-start">Employee</th>
+                                    <th class="text-start">Description</th>
+                                    <th t-if="display_sol" class="text-start">Sales Order Item</th>
+                                    <th class="text-end">Time Spent</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="timesheets" t-as="line">
+                                    <tr valign="middle">
+                                        <td><span t-field="line.date"/></td>
+                                        <td><span t-field="line.employee_id"/></td>
+                                        <td><span t-field="line.name"/></td>
+                                        <td t-if="display_sol">
+                                            <t t-if="line.so_line"><a t-att-href="'/my/orders/%s' % line.so_line.order_id.id"><span t-field="line.so_line"/></a></t>
+                                            <t t-else=""><t t-out="line.so_line.display_name"/></t>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-if="is_uom_day" t-esc="convert_hours_to_days(line.unit_amount)" t-options='{"widget": "timesheet_uom"}'/>
+                                            <span t-else="" t-field="line.unit_amount" t-options='{"widget": "float_time"}'/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3"></th>
+                                    <th class="text-end">
+                                        <div>
+                                            <t t-set="total_timesheet_amount" t-value="sum(timesheets.mapped('unit_amount'))"/>
+                                            <div>
+                                                Total Time Spent:
+                                                <span t-if="is_uom_day" t-esc="convert_hours_to_days(total_timesheet_amount)"/>
+                                                <span t-else="" t-esc="round(total_timesheet_amount, 2)" t-options='{"widget": "float_time"}'/>
+                                            </div>
+                                        </div>
+                                        <div t-if="ticket.remaining_hours_available">
+                                            <div>
+                                                Time Remaining on SO:
+                                                <span t-if="is_uom_day" t-esc="convert_hours_to_days(ticket.remaining_hours_so)" t-options='{"widget": "timesheet_uom"}'/>
+                                                <span t-else="" t-esc="ticket.remaining_hours_so" t-options='{"widget": "float_time"}'/>
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </section>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="portal_ticket_new" name="Portal New Ticket">
+            <t t-call="portal.portal_layout">
+                <t t-set="nx_is_arabic" t-value="nx_is_arabic"/>
+                <t t-if="request.website.portal_mode == 'warranty'" t-set="no_breadcrumbs" t-value="True"/>
+
+                <div class="container o_portal_wrap mt-4 mb-5">
+                    <style>
+                        .nx-ticket-new-shell {
+                            position: relative;
+                        }
+                        .nx-ticket-new-shell .nx-ticket-new-card {
+                            position: relative;
+                            overflow: hidden;
+                            border: 1px solid #d8eaec;
+                            border-radius: 28px;
+                            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, #f7fbfb 100%);
+                            box-shadow: 0 26px 56px rgba(8, 61, 63, 0.10);
+                        }
+                        .nx-ticket-new-shell .nx-ticket-new-card::before {
+                            content: "";
+                            position: absolute;
+                            inset: 0 0 auto 0;
+                            height: 210px;
+                            background: linear-gradient(135deg, #06373a 0%, #0c6d71 58%, #45c5cc 100%);
+                            opacity: 0.98;
+                        }
+                        .nx-ticket-new-shell .nx-ticket-new-card::after {
+                            content: "";
+                            position: absolute;
+                            top: 22px;
+                            right: -60px;
+                            width: 220px;
+                            height: 220px;
+                            border-radius: 50%;
+                            background: radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 68%);
+                        }
+                        .nx-ticket-new-shell .nx-ticket-new-content {
+                            position: relative;
+                            z-index: 1;
+                            padding: 2rem;
+                        }
+                        .nx-ticket-new-shell .nx-ticket-new-hero {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: flex-end;
+                            gap: 1.5rem;
+                            margin-bottom: 2rem;
+                            padding-bottom: 1.25rem;
+                            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+                        }
+                        .nx-ticket-new-shell .nx-ticket-new-kicker {
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 0.45rem;
+                            padding: 0.45rem 0.9rem;
+                            border-radius: 999px;
+                            background: rgba(255, 255, 255, 0.14);
+                            color: #dff9fa;
+                            font-size: 0.78rem;
+                            font-weight: 700;
+                            letter-spacing: 0.12em;
+                            text-transform: uppercase;
+                        }
+                        .nx-ticket-new-shell .nx-ticket-new-title {
+                            margin: 0.9rem 0 0.45rem;
+                            color: #ffffff;
+                            font-size: clamp(2rem, 3.3vw, 3rem);
+                            font-weight: 800;
+                            line-height: 1;
+                        }
+                        .nx-ticket-new-shell .nx-ticket-new-subtitle {
+                            margin: 0;
+                            max-width: 42rem;
+                            color: rgba(255, 255, 255, 0.88);
+                            font-size: 1rem;
+                            line-height: 1.7;
+                        }
+                        .nx-ticket-new-shell .nx-ticket-new-badge {
+                            min-width: 190px;
+                            padding: 1rem 1.15rem;
+                            border: 1px solid rgba(255, 255, 255, 0.18);
+                            border-radius: 22px;
+                            background: rgba(255, 255, 255, 0.12);
+                            color: #ffffff;
+                            backdrop-filter: blur(10px);
+                        }
+                        .nx-ticket-new-shell .nx-ticket-new-badge-label {
+                            display: block;
+                            margin-bottom: 0.35rem;
+                            color: rgba(255, 255, 255, 0.78);
+                            font-size: 0.78rem;
+                            font-weight: 700;
+                            letter-spacing: 0.12em;
+                            text-transform: uppercase;
+                        }
+                        .nx-ticket-new-shell .nx-ticket-new-badge-value {
+                            display: block;
+                            font-size: 1.15rem;
+                            font-weight: 800;
+                        }
+                        .nx-ticket-new-shell .nx-ticket-new-form-grid {
+                            display: grid;
+                            gap: 1rem;
+                        }
+                        .nx-ticket-new-shell .nx-ticket-form-section {
+                            border: 1px solid #dbeaec;
+                            border-radius: 24px;
+                            background: #ffffff;
+                            box-shadow: 0 14px 30px rgba(12, 61, 63, 0.06);
+                            padding: 1.25rem;
+                        }
+                        .nx-ticket-new-shell .nx-ticket-form-section-title {
+                            margin: 0 0 0.35rem;
+                            color: #113f4b;
+                            font-size: 1.1rem;
+                            font-weight: 800;
+                        }
+                        .nx-ticket-new-shell .nx-ticket-form-section-note {
+                            margin: 0 0 1.1rem;
+                            color: #5d7380;
+                            font-size: 0.95rem;
+                        }
+                        .nx-ticket-new-shell .form-label {
+                            margin-bottom: 0.45rem;
+                            color: #1b4952;
+                            font-size: 0.95rem;
+                            font-weight: 700;
+                        }
+                        .nx-ticket-new-shell .form-control,
+                        .nx-ticket-new-shell .form-select {
+                            min-height: 56px;
+                            border: 1px solid #cfe6e8;
+                            border-radius: 18px;
+                            background: linear-gradient(180deg, #ffffff 0%, #f8fcfc 100%);
+                            color: #214a4e;
+                            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+                            transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+                        }
+                        .nx-ticket-new-shell textarea.form-control {
+                            min-height: 140px;
+                            resize: vertical;
+                            padding-top: 1rem;
+                        }
+                        .nx-ticket-new-shell .form-control:focus,
+                        .nx-ticket-new-shell .form-select:focus {
+                            border-color: #18a1a7;
+                            box-shadow: 0 0 0 0.24rem rgba(24, 161, 167, 0.14);
+                            transform: translateY(-1px);
+                        }
+                        .nx-ticket-new-shell .form-control[readonly] {
+                            background: linear-gradient(180deg, #f4f8f9 0%, #eef5f6 100%);
+                            color: #58717a;
+                        }
+                        .nx-ticket-new-shell .nx-ticket-inline-help {
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 0.45rem;
+                            margin-top: 0.75rem;
+                            color: #5f7882;
+                            font-size: 0.9rem;
+                        }
+                        .nx-ticket-new-shell .alert-warning {
+                            border: 1px solid #f3dcab;
+                            border-radius: 20px;
+                            background: linear-gradient(180deg, #fff7e6 0%, #fff2d4 100%);
+                            color: #8c5a00;
+                            box-shadow: none;
+                        }
+                        .nx-ticket-new-shell .nx-ticket-actions {
+                            display: flex;
+                            flex-wrap: wrap;
+                            align-items: center;
+                            gap: 0.85rem;
+                            margin-top: 1.5rem;
+                        }
+                        .nx-ticket-new-shell .nx-ticket-submit-btn {
+                            min-height: 56px;
+                            padding: 0.95rem 1.55rem;
+                            border: 1px solid #0c6d71;
+                            border-radius: 18px;
+                            background: linear-gradient(135deg, #0c6d71 0%, #17a3a8 100%);
+                            color: #ffffff;
+                            font-size: 1rem;
+                            font-weight: 800;
+                            box-shadow: 0 18px 36px rgba(12, 109, 113, 0.22);
+                            transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+                        }
+                        .nx-ticket-new-shell .nx-ticket-submit-btn:hover,
+                        .nx-ticket-new-shell .nx-ticket-submit-btn:focus {
+                            color: #ffffff;
+                            filter: saturate(1.05);
+                            transform: translateY(-1px);
+                            box-shadow: 0 22px 40px rgba(12, 109, 113, 0.26);
+                        }
+                        .nx-ticket-new-shell .nx-ticket-cancel-btn {
+                            min-height: 56px;
+                            padding: 0.95rem 1.4rem;
+                            border: 1px solid #d4e4e6;
+                            border-radius: 18px;
+                            background: #ffffff;
+                            color: #28545f;
+                            font-weight: 700;
+                        }
+                        @media (max-width: 991.98px) {
+                            .nx-ticket-new-shell .nx-ticket-new-hero {
+                                flex-direction: column;
+                                align-items: flex-start;
+                            }
+                            .nx-ticket-new-shell .nx-ticket-new-badge {
+                                min-width: 0;
+                                width: 100%;
+                            }
+                        }
+                    </style>
+                    <div class="nx-ticket-new-shell">
+                        <div class="nx-ticket-new-card">
+                            <div class="nx-ticket-new-content">
+                                <div class="nx-ticket-new-hero">
+                                    <div>
+                                        <span class="nx-ticket-new-kicker">
+                                            <i class="fa fa-life-ring"/>
+                                            <t t-esc="'دعم العملاء' if nx_is_arabic else 'Customer Support'"/>
+                                        </span>
+                                        <h1 class="nx-ticket-new-title"><t t-esc="'أنشئ تذكرة جديدة' if nx_is_arabic else 'Create a New Ticket'"/></h1>
+                                        <p class="nx-ticket-new-subtitle"><t t-esc="'شارك فريقنا كل التفاصيل التي تحتاجها وسنوجّه الطلب إلى الفريق الصحيح بسرعة.' if nx_is_arabic else 'Tell our team what you need and we will route your request to the right helpdesk team fast.'"/></p>
+                                    </div>
+                                    <div class="nx-ticket-new-badge">
+                                        <span class="nx-ticket-new-badge-label"><t t-esc="'الفريق الحالي' if nx_is_arabic else 'Assigned Team'"/></span>
+                                        <span class="nx-ticket-new-badge-value" id="nx_ticket_selected_team_label"><t t-esc="teams.filtered(lambda t: t.id == selected_team_id)[:1].name if selected_team_id else (teams[:1].name if teams else ('غير متاح' if nx_is_arabic else 'Unavailable'))"/></span>
+                                    </div>
+                                </div>
+                            <t t-if="error">
+                                <div class="alert alert-warning rounded-3 border-0 mb-3">
+                                    <t t-if="error == 'missing_subject'">Please add a subject.</t>
+                                    <t t-elif="error == 'missing_ticket_type'">Please select an issue type.</t>
+                                    <t t-elif="error == 'no_team'">No portal helpdesk team is configured.</t>
+                                    <t t-elif="error == 'no_contract_team'">No helpdesk team is linked to your active warranty contract.</t>
+                                    <t t-else="">Could not create ticket.</t>
+                                </div>
+                            </t>
+
+                            <form action="/my/tickets/create" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="nx-ticket-new-form-grid">
+                                    <div class="nx-ticket-form-section">
+                                        <h3 class="nx-ticket-form-section-title"><t t-esc="'تفاصيل الطلب' if nx_is_arabic else 'Request Details'"/></h3>
+                                        <p class="nx-ticket-form-section-note"><t t-esc="'اكتب موضوعًا واضحًا، اختر نوع المشكلة، ثم أضف الوصف المختصر أو الكامل حسب الحاجة.' if nx_is_arabic else 'Add a clear subject, choose the issue type, then describe what you need in as much detail as necessary.'"/></p>
+                                        <div class="row g-3">
+                                            <div class="col-12">
+                                                <label class="form-label"><t t-esc="'الموضوع' if nx_is_arabic else 'Subject'"/></label>
+                                                <input type="text" name="subject" class="form-control" required="1" t-att-placeholder="'مثال: مشكلة في تفعيل الضمان' if nx_is_arabic else 'Example: Warranty activation issue'"/>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label"><t t-esc="'نوع المشكلة' if nx_is_arabic else 'Issue Type'"/></label>
+                                                <select name="ticket_type_id" class="form-select" required="1">
+                                                    <option value=""><t t-esc="'اختر نوع المشكلة' if nx_is_arabic else 'Select issue type'"/></option>
+                                                    <t t-foreach="ticket_types" t-as="ticket_type_option">
+                                                        <option t-att-value="ticket_type_option.id"><t t-esc="ticket_type_option.name"/></option>
+                                                    </t>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label"><t t-esc="'الفريق' if nx_is_arabic else 'Team'"/></label>
+                                                <select name="team_id" id="nx_ticket_team_select" class="form-select" t-att-disabled="'disabled' if not teams else None">
+                                                    <t t-foreach="teams" t-as="team">
+                                                        <option t-att-value="team.id" t-att-selected="team.id == selected_team_id"><t t-esc="team.name"/></option>
+                                                    </t>
+                                                </select>
+                                                <t t-if="not teams">
+                                                    <small class="nx-ticket-inline-help"><i class="fa fa-info-circle"/><t t-esc="'لا توجد لدى شركتك حتى الآن اتفاقية ضمان نشطة مرتبطة بفريق مكتب المساعدة.' if nx_is_arabic else 'Your company does not have an active warranty contract linked to a helpdesk team yet.'"/></small>
+                                                </t>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label"><t t-esc="'الوصف' if nx_is_arabic else 'Description'"/></label>
+                                                <textarea name="description" class="form-control" rows="4" t-att-placeholder="'اشرح المشكلة أو الطلب بالتفصيل، وأضف أي خطوات أو معلومات مفيدة.' if nx_is_arabic else 'Describe the issue or request in detail, including any useful steps or context.'"/>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label"><t t-esc="'المرفقات' if nx_is_arabic else 'Attachments'"/></label>
+                                                <input type="file" name="attachment" class="form-control" multiple="multiple"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="nx-ticket-actions">
+                                    <button type="submit" class="btn nx-ticket-submit-btn" t-att-disabled="'disabled' if not teams else None">
+                                        <i class="fa fa-paper-plane me-1"/>
+                                        <t t-esc="'إرسال' if nx_is_arabic else 'Submit'"/>
+                                    </button>
+                                    <a href="/my/tickets" class="btn nx-ticket-cancel-btn"><t t-esc="'إلغاء' if nx_is_arabic else 'Cancel'"/></a>
+                                </div>
+                            </form>
+                            <script type="text/javascript">
+                                <![CDATA[
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    const teamSelect = document.getElementById("nx_ticket_team_select");
+                                    const teamLabel = document.getElementById("nx_ticket_selected_team_label");
+                                    if (!teamSelect || !teamLabel) {
+                                        return;
+                                    }
+
+                                    const syncSelectedTeamLabel = function () {
+                                        const selectedOption = teamSelect.options[teamSelect.selectedIndex];
+                                        if (selectedOption) {
+                                            teamLabel.textContent = selectedOption.textContent.trim();
+                                        }
+                                    };
+
+                                    teamSelect.addEventListener("change", syncSelectedTeamLabel);
+                                    syncSelectedTeamLabel();
+                                });
+                                ]]>
+                            </script>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="portal_searchbar_active_color_fix_warranty_safe" inherit_id="portal.portal_searchbar" priority="999">
+            <xpath expr="//div[@aria-labelledby='portal_searchbar_sortby']/t/a" position="attributes">
+                <attribute name="t-att-style">(request and request.website and request.website.portal_mode == 'warranty') and ((sortby == option) and 'background:#dff4f6; background-image:none; color:#0a666a;' or 'background:#ffffff; background-image:none; color:#214251;') or ''</attribute>
+            </xpath>
+            <xpath expr="//div[@aria-labelledby='portal_searchbar_filters']/t/a" position="attributes">
+                <attribute name="t-att-style">(request and request.website and request.website.portal_mode == 'warranty') and ((filterby == option) and 'background:#dff4f6; background-image:none; color:#0a666a;' or 'background:#ffffff; background-image:none; color:#214251;') or ''</attribute>
+            </xpath>
+            <xpath expr="//div[@aria-labelledby='portal_searchbar_groupby']/t/a" position="attributes">
+                <attribute name="t-att-style">(request and request.website and request.website.portal_mode == 'warranty') and ((groupby == option) and 'background:#dff4f6; background-image:none; color:#0a666a;' or 'background:#ffffff; background-image:none; color:#214251;') or ''</attribute>
+            </xpath>
+            <xpath expr="//form[hasclass('o_portal_search_panel')]//div[hasclass('dropdown-menu')]/t/a" position="attributes">
+                <attribute name="t-att-style">(request and request.website and request.website.portal_mode == 'warranty') and ((search_in == input_value['input']) and 'background:#dff4f6; background-image:none; color:#0a666a;' or 'background:#ffffff; background-image:none; color:#214251;') or ''</attribute>
+            </xpath>
+        </template>
+    </data>
+</odoo>

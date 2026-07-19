@@ -1,0 +1,15 @@
+<odoo>
+    <record id="rule_hr_kpi_evaluation_hr_user" model="ir.rule">
+        <field name="name">HR users can access KPI evaluations</field>
+        <field name="model_id" ref="model_hr_kpi_evaluation"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('hr.group_hr_user'))]"/>
+    </record>
+
+    <record id="rule_hr_kpi_evaluation_line_hr_user" model="ir.rule">
+        <field name="name">HR users can access KPI evaluation lines</field>
+        <field name="model_id" ref="model_hr_kpi_evaluation_line"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('hr.group_hr_user'))]"/>
+    </record>
+</odoo>

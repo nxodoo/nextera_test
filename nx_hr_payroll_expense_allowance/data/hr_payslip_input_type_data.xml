@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="hr_payslip_input_type_expense_allowance" model="hr.payslip.input.type">
+            <field name="name">Employee Expenses</field>
+            <field name="code">EXP</field>
+            <field name="is_expense_allowance_managed">True</field>
+        </record>
+    </data>
+</odoo>

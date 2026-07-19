@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_payslip_form_inherit_expense_allowance" model="ir.ui.view">
+        <field name="name">hr.payslip.form.inherit.expense.allowance</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="object"
+                        class="oe_stat_button"
+                        name="action_open_payroll_allowance_expenses"
+                        icon="fa-money"
+                        invisible="payroll_allowance_expense_count == 0">
+                    <field name="payroll_allowance_expense_count" widget="statinfo" string="Allowance Expenses"/>
+                </button>
+            </xpath>
+            <xpath expr="//page[@name='salary_computation']" position="after">
+                <page string="Payroll Expense Allowance" name="payroll_expense_allowance">
+                    <group col="4">
+                        <field name="payroll_allowance_total" readonly="1"/>
+                        <field name="payroll_allowance_expense_count" readonly="1"/>
+                    </group>
+                    <field name="payroll_allowance_expense_ids" readonly="1" nolabel="1">
+                        <list string="Expenses" create="0" delete="0">
+                            <field name="date"/>
+                            <field name="name"/>
+                            <field name="product_id"/>
+                            <field name="total_amount" sum="Total Amount"/>
+                            <field name="sheet_id" string="Report"/>
+                            <field name="state"/>
+                            <field name="payroll_allowance_posted" column_invisible="1"/>
+                            <field name="payroll_reimbursed_via_payroll"/>
+                        </list>
+                        <form string="Expense">
+                            <group col="4">
+                                <field name="date"/>
+                                <field name="name"/>
+                                <field name="product_id"/>
+                                <field name="total_amount"/>
+                                <field name="sheet_id"/>
+                                <field name="state"/>
+                                <field name="payroll_allowance_payslip_id"/>
+                                <field name="payroll_reimbursed_via_payroll"/>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="nx_hr_employee_summary.EmployeeSummary">
+        <div class="nx_summary_root w-100">
+
+            <!-- ============================================================ -->
+            <!-- 1. EXECUTIVE RECOMMENDATION  (always visible)               -->
+            <!-- ============================================================ -->
+            <t t-if="part === 'exec'">
+                <div class="nx_card nx_card_exec">
+                    <div class="nx_card_head nx_head_green">
+                        <i class="fa fa-check-circle"/>
+                        <span>Executive Recommendation</span>
+                    </div>
+                    <div class="nx_exec_body">
+                        <div class="nx_exec_tile">
+                            <div class="nx_tile_label"><i class="fa fa-calendar"/> Contract End Date</div>
+                            <div class="nx_tile_value"><t t-esc="data.exec.end_date"/></div>
+                        </div>
+                        <div class="nx_exec_tile">
+                            <div class="nx_tile_label"><i class="fa fa-clock-o"/> Days Remaining</div>
+                            <div class="nx_tile_value nx_days_value"><t t-esc="data.exec.days_remaining"/></div>
+                        </div>
+                        <div t-attf-class="nx_exec_tile nx_rec_tile {{ recommendationClass }}">
+                            <div class="nx_tile_label"><i class="fa fa-bullseye"/> System Recommendation</div>
+                            <div class="nx_rec_value"><i class="fa fa-check-circle"/> <t t-esc="data.exec.recommendation"/></div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+
+            <!-- ============================================================ -->
+            <!-- 2. CAREER JOURNEY & COMPENSATION PROGRESSION                -->
+            <!-- ============================================================ -->
+            <t t-if="part === 'career'">
+                <div class="nx_card">
+                    <div class="nx_card_inner">
+                        <div class="nx_stat_row">
+                            <div class="nx_stat_card nx_stat_blue">
+                                <div class="nx_stat_title">Years of Service</div>
+                                <div class="nx_stat_num"><t t-esc="data.career.years"/></div>
+                            </div>
+                            <div class="nx_stat_card nx_stat_purple">
+                                <div class="nx_stat_title">Promotions</div>
+                                <div class="nx_stat_num"><t t-esc="data.career.promotions"/></div>
+                            </div>
+                            <div class="nx_stat_card nx_stat_indigo">
+                                <div class="nx_stat_title">Transfers</div>
+                                <div class="nx_stat_num"><t t-esc="data.career.transfers"/></div>
+                            </div>
+                            <div class="nx_stat_card nx_stat_plain">
+                                <div class="nx_stat_title2">Last Title Change</div>
+                                <div class="nx_stat_date"><t t-esc="data.career.last_title_change"/></div>
+                            </div>
+                            <div class="nx_stat_card nx_stat_plain">
+                                <div class="nx_stat_title2">Last Dept. Change</div>
+                                <div class="nx_stat_date"><t t-esc="data.career.last_dept_change"/></div>
+                            </div>
+                            <div class="nx_stat_card nx_stat_plain">
+                                <div class="nx_stat_title2">Last Renewal</div>
+                                <div class="nx_stat_date"><t t-esc="data.career.last_renewal"/></div>
+                            </div>
+                        </div>
+
+                        <div class="nx_section_sub">Career Milestones &amp; Salary History</div>
+
+                        <div class="nx_timeline">
+                            <div class="nx_timeline_line"/>
+                            <t t-foreach="data.milestones" t-as="m" t-key="m_index">
+                                <div class="nx_tl_node">
+                                    <div class="nx_tl_dot" t-attf-style="background:{{ m.color }};">
+                                        <span t-if="m.movement_type === 'hire'" class="nx_tl_badge_txt">START</span>
+                                        <i t-else="" t-attf-class="fa {{ m.icon }}"/>
+                                    </div>
+                                    <div class="nx_tl_title"><t t-esc="m.title"/></div>
+                                    <div class="nx_tl_date"><t t-esc="m.date"/></div>
+                                    <div class="nx_tl_move" t-attf-style="color:{{ m.color }};"><t t-esc="m.movement"/></div>
+                                    <div class="nx_tl_salary" t-attf-style="border-color:{{ m.color }}33;color:{{ m.color }};">
+                                        <t t-esc="m.salary_label"/>
+                                    </div>
+                                    <div t-if="m.pct" t-attf-class="nx_tl_pct {{ pctClass(m.pct) }}">
+                                        <t t-esc="pctLabel(m.pct)"/>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </t>
+
+            <!-- ============================================================ -->
+            <!-- 3. COMPENSATION GROWTH HISTORY                              -->
+            <!-- ============================================================ -->
+            <t t-if="part === 'compensation'">
+                <div class="nx_card">
+                    <div class="nx_card_inner">
+                        <div class="nx_comp_current">
+                            <span class="nx_active_badge">ACTIVE</span>
+                            <div class="nx_comp_current_title">Current Compensation</div>
+                            <div class="nx_comp_current_grid">
+                                <div>
+                                    <div class="nx_comp_lbl">Monthly Cost to Company</div>
+                                    <div class="nx_comp_big"><t t-esc="data.compensation.monthly"/></div>
+                                </div>
+                                <div>
+                                    <div class="nx_comp_lbl">Annual Cost to Company</div>
+                                    <div class="nx_comp_big"><t t-esc="data.compensation.annual"/></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="nx_comp_timeline_box">
+                            <div class="nx_section_sub">Salary Progression Timeline</div>
+                            <t t-foreach="data.milestones" t-as="m" t-key="m_index">
+                                <div class="nx_bar_row">
+                                    <div class="nx_bar_date"><t t-esc="m.date"/></div>
+                                    <div class="nx_bar_track">
+                                        <div class="nx_bar_fill" t-attf-style="width:{{ m.width }}%;background:{{ m.color }};">
+                                            <span class="nx_bar_sal"><t t-esc="m.salary_full"/></span>
+                                            <span class="nx_bar_role"><t t-esc="m.title"/></span>
+                                            <span t-if="m.pct" class="nx_bar_pct"><t t-esc="pctLabel(m.pct)"/></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+
+                        <div class="nx_comp_footer">
+                            <div class="nx_foot_card nx_foot_green">
+                                <div class="nx_foot_lbl">Total Growth (<t t-esc="data.compensation.years"/> years)</div>
+                                <div class="nx_foot_val"><t t-esc="pctLabel(data.compensation.growth_pct)"/></div>
+                            </div>
+                            <div class="nx_foot_card nx_foot_blue">
+                                <div class="nx_foot_lbl">Starting Salary</div>
+                                <div class="nx_foot_val"><t t-esc="data.compensation.starting_k"/></div>
+                            </div>
+                            <div class="nx_foot_card nx_foot_cyan">
+                                <div class="nx_foot_lbl">Current Salary</div>
+                                <div class="nx_foot_val"><t t-esc="data.compensation.current_k"/></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+
+            <!-- ============================================================ -->
+            <!-- 4. ATTENDANCE & OPERATIONAL RECORD                          -->
+            <!-- ============================================================ -->
+            <t t-if="part === 'attendance'">
+                <div class="nx_card">
+                    <div class="nx_card_inner">
+                        <div class="nx_att_overview">
+                            <div class="nx_att_ring" t-attf-style="background:conic-gradient({{ data.attendance.ring_color }} {{ data.attendance.pct }}%, #E5E7EB 0);">
+                                <div class="nx_att_ring_inner">
+                                    <div class="nx_att_pct" t-attf-style="color:{{ data.attendance.ring_color }};"><t t-esc="data.attendance.pct"/>%</div>
+                                    <div class="nx_att_pct_lbl" t-attf-style="color:{{ data.attendance.ring_color }};">Attendance</div>
+                                </div>
+                            </div>
+                            <div class="nx_att_meta">
+                                <div class="nx_att_title">Attendance Overview (<t t-esc="data.attendance.period"/>)</div>
+                                <div class="nx_att_stats">
+                                    <span>Total Working Days: <b><t t-esc="data.attendance.total"/></b></span>
+                                    <span>Present Days: <b class="nx_txt_blue"><t t-esc="data.attendance.present"/></b></span>
+                                    <span>Absent Days: <b class="nx_txt_orange"><t t-esc="data.attendance.absent"/></b></span>
+                                </div>
+                            </div>
+                            <span class="nx_excellent_badge" t-attf-style="background:{{ data.attendance.rating_color }};"><t t-esc="data.attendance.rating"/></span>
+                        </div>
+
+                        <div class="nx_att_cards">
+                            <div class="nx_att_card nx_att_amber">
+                                <div class="nx_att_card_lbl">Sick Leave</div>
+                                <div class="nx_att_card_num"><t t-esc="data.attendance.sick"/></div>
+                                <div class="nx_att_card_sub">days (YTD)</div>
+                            </div>
+                            <div class="nx_att_card nx_att_blue">
+                                <div class="nx_att_card_lbl">Annual Leave</div>
+                                <div class="nx_att_card_num"><t t-esc="data.attendance.annual"/></div>
+                                <div class="nx_att_card_sub">days (used)</div>
+                            </div>
+                            <div class="nx_att_card nx_att_gray">
+                                <div class="nx_att_card_lbl">Unpaid Leave</div>
+                                <div class="nx_att_card_num"><t t-esc="data.attendance.unpaid"/></div>
+                                <div class="nx_att_card_sub">days</div>
+                            </div>
+                            <div class="nx_att_card nx_att_orange">
+                                <div class="nx_att_card_lbl">Late Arrivals</div>
+                                <div class="nx_att_card_num"><t t-esc="data.attendance.late"/></div>
+                                <div class="nx_att_card_sub">instances</div>
+                            </div>
+                            <div class="nx_att_card nx_att_green">
+                                <div class="nx_att_card_lbl">Disciplinary</div>
+                                <div class="nx_att_card_num"><t t-esc="data.attendance.warnings"/></div>
+                                <div class="nx_att_card_sub">warnings</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+
+        </div>
+    </t>
+
+</templates>

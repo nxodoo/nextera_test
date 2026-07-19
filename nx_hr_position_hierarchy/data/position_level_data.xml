@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="position_level_ceo" model="hr.position.level">
+        <field name="name">Level 1 - CEO</field>
+        <field name="code">CEO</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="position_level_assistant" model="hr.position.level">
+        <field name="name">Assistant</field>
+        <field name="code">ASSISTANT</field>
+        <field name="sequence">15</field>
+        <field name="is_assistant">1</field>
+    </record>
+
+    <record id="position_level_director" model="hr.position.level">
+        <field name="name">Level 2 - Director</field>
+        <field name="code">DIRECTOR</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="position_level_department_manager" model="hr.position.level">
+        <field name="name">Level 3 - Department Manager</field>
+        <field name="code">DEPARTMENT_MANAGER</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="position_level_team_leader" model="hr.position.level">
+        <field name="name">Level 4 - Team Leader</field>
+        <field name="code">TEAM_LEADER</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="position_level_senior_employee" model="hr.position.level">
+        <field name="name">Level 5 - Senior Employee</field>
+        <field name="code">SENIOR_EMPLOYEE</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="position_level_employee" model="hr.position.level">
+        <field name="name">Level 6 - Employee</field>
+        <field name="code">EMPLOYEE</field>
+        <field name="sequence">60</field>
+    </record>
+</odoo>

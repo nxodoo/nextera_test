@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add a "Company Moves" section inside the Resume tab -->
+    <record id="view_employee_form_resume_career_moves" model="ir.ui.view">
+        <field name="name">hr.employee.form.resume.career.moves</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_skills.hr_employee_view_form"/>
+        <field name="priority">40</field>
+        <field name="arch" type="xml">
+
+            <xpath expr="//page[@name='skills_resume']/div[hasclass('row')]" position="after">
+
+                <widget name="section_toggle" data-default-open="false"/>
+                <div class="closed-section" style="display:none;">
+                    <div class="nx_section_meta"
+                         data-title="Company Moves (Promotions &amp; Transfers)"
+                         data-icon="fa-exchange"
+                         data-color="#8B5CF6"
+                         style="display:none;"/>
+                    <field name="nx_career_move_ids" nolabel="1"
+                           context="{'default_employee_id': id}">
+                        <list editable="bottom">
+                            <field name="date"/>
+                            <field name="move_type"/>
+                            <field name="from_job_id"/>
+                            <field name="to_job_id"/>
+                            <field name="from_department_id"/>
+                            <field name="to_department_id"/>
+                            <field name="currency_id" column_invisible="1"/>
+                            <field name="salary"/>
+                            <field name="pct_increase" string="% vs Prev." readonly="1"/>
+                            <field name="note" optional="show"/>
+                        </list>
+                    </field>
+                </div>
+
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

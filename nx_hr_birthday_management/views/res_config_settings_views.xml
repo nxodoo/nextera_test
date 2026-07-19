@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_res_config_settings_form_birthday_management" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.hr.birthday.management</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='hr']/block[@name='employees_setting_container']" position="after">
+                <block title="Birthday Management" name="birthday_management_setting_container">
+                    <setting
+                        id="birthday_management_enabled_setting"
+                        string="Enable Birthday Management"
+                        help="Enable employee birthday reminders, automatic greeting emails, and missing email follow-up activities."
+                    >
+                        <field name="birthday_management_enabled"/>
+                    </setting>
+
+                    <setting
+                        id="birthday_reminder_manager_setting"
+                        string="Birthday Reminder Manager"
+                        help="Select the HR user who receives monthly birthday reminders and missing email activities."
+                        invisible="not birthday_management_enabled"
+                    >
+                        <field
+                            name="birthday_reminder_manager_id"
+                            domain="[('share', '=', False)]"
+                            options="{'no_create': True}"
+                        />
+                    </setting>
+
+                    <setting
+                        id="send_monthly_birthday_reminder_setting"
+                        string="Send Monthly Birthday Reminder"
+                        help="Send a reminder on the first day of every month with employee birthdays for that month."
+                        invisible="not birthday_management_enabled"
+                    >
+                        <field name="send_monthly_birthday_reminder"/>
+                    </setting>
+
+                    <setting
+                        id="send_automatic_birthday_greeting_setting"
+                        string="Send Automatic Birthday Greeting to Employees"
+                        help="Send the configured greeting email automatically to the employee work email on the birthday."
+                        invisible="not birthday_management_enabled"
+                    >
+                        <field name="send_automatic_birthday_greeting"/>
+                    </setting>
+
+                    <setting
+                        id="birthday_greeting_template_setting"
+                        string="Birthday Greeting Email Template"
+                        help="Choose the email template used for birthday greetings."
+                        invisible="not birthday_management_enabled or not send_automatic_birthday_greeting"
+                    >
+                        <field
+                            name="birthday_greeting_template_id"
+                            domain="[('model', '=', 'hr.employee')]"
+                            options="{'no_create': True}"
+                        />
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

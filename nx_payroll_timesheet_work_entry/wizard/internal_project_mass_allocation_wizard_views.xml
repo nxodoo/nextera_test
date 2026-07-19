@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_internal_project_mass_allocation_wizard_form" model="ir.ui.view">
+        <field name="name">nx.internal.project.mass.allocation.wizard.form</field>
+        <field name="model">nx.internal.project.mass.allocation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Internal Project Mass Allocation">
+                <group>
+                    <group>
+                        <field name="project_id"/>
+                        <field name="task_id"/>
+                        <field name="activity_type"/>
+                        <field name="description"/>
+                    </group>
+                    <group>
+                        <field name="date"/>
+                        <field name="number_of_hours"/>
+                    </group>
+                </group>
+                <group string="Target Employees">
+                    <group>
+                        <field name="department_id"/>
+                    </group>
+                    <group>
+                        <field name="employee_ids" widget="many2many_tags"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

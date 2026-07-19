@@ -1,0 +1,377 @@
+<odoo>
+    <record id="view_hr_iqama_list" model="ir.ui.view">
+        <field name="name">view.hr.iqama.list</field>
+        <field name="model">hr.iqama</field>
+        <field name="arch" type="xml">
+            <list string="Residency/Visa Requests">
+                <field name="employee_name" width="180"/>
+                <field name="department_id" width="150"/>
+                <field name="iqama_type_id" width="170"/>
+                <field name="iqama_type_country_id" width="130"/>
+                <field name="application_date" width="110"/>
+                <field name="last_updated_on" width="150"/>
+                <field name="request_number" optional="hide"/>
+                <field name="company_id" width="140"/>
+                <field name="state" width="120"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hr_iqama_search" model="ir.ui.view">
+        <field name="name">view.hr.iqama.search</field>
+        <field name="model">hr.iqama</field>
+        <field name="arch" type="xml">
+            <search string="Residency/Visa Requests">
+                <field name="request_number"/>
+                <field name="employee_id"/>
+                <field name="iqama_type_id"/>
+                <field name="iqama_type_country_id"/>
+                <field name="iqama_number"/>
+                <field name="department_id"/>
+                <field name="company_id"/>
+                <field name="state"/>
+                <filter name="filter_new" string="New" domain="[('state', '=', 'new')]"/>
+                <filter name="filter_under_review" string="Under Review" domain="[('state', '=', 'under_review')]"/>
+                <filter name="filter_under_processing" string="Under Processing" domain="[('state', '=', 'under_processing')]"/>
+                <filter name="filter_active" string="Active" domain="[('state', '=', 'active')]"/>
+                <filter name="filter_cancelled" string="Cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <filter name="filter_rejected" string="Rejected" domain="[('state', '=', 'rejected')]"/>
+                <filter name="filter_expired" string="Expired" domain="[('state', '=', 'expired')]"/>
+                <filter name="filter_expiring_soon" string="Expiring Soon" domain="[('is_expiring_soon', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_by_type" string="Residency/Visa Type" context="{'group_by': 'iqama_type_id'}"/>
+                    <filter name="group_by_type_country" string="Country" context="{'group_by': 'iqama_type_country_id'}"/>
+                    <filter name="group_by_department" string="Department" context="{'group_by': 'department_id'}"/>
+                    <filter name="group_by_company" string="Company" context="{'group_by': 'company_id'}"/>
+                    <filter name="group_by_state" string="Stage" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_hr_iqama_detail_line_form" model="ir.ui.view">
+        <field name="name">view.hr.iqama.detail.line.form</field>
+        <field name="model">hr.iqama.detail.line</field>
+        <field name="arch" type="xml">
+            <form string="IQAMA Details">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="person_name" readonly="1"/>
+                            <field name="type_label" readonly="1"/>
+                            <field name="iqama_number" required="1"/>
+                            <field name="serial_number" required="1"/>
+                            <field name="issue_date" required="1"/>
+                            <field name="issue_place" required="1"/>
+                        </group>
+                        <group>
+                            <field name="expiry_date" required="1"/>
+                            <field name="hijri_expiry_date_display" readonly="1"/>
+                            <field name="arrival_date"/>
+                            <field name="currently_in_kingdom"/>
+                            <field name="requires_travel"/>
+                            <field name="multiple_entry_exit"/>
+                            <field name="iqama_cost"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_iqama_form" model="ir.ui.view">
+        <field name="name">view.hr.iqama.form</field>
+        <field name="model">hr.iqama</field>
+        <field name="arch" type="xml">
+            <form string="Residency/Visa Request">
+                <header>
+                    <button name="action_submit_for_review" string="Submit for Review" type="object" class="oe_highlight" invisible="state != 'new'"/>
+                    <button name="action_approve" string="Approve" type="object" class="oe_highlight" invisible="state != 'under_review' or not current_user_can_approve"/>
+                    <button name="action_activate" string="Activate" type="object" class="oe_highlight" invisible="state != 'under_processing'"/>
+                    <button name="action_reject" string="Reject" type="object" invisible="state == 'under_review' and not current_user_can_reject or state not in ('under_review', 'under_processing')"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state in ('cancelled', 'rejected', 'expired', 'active')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,under_review,under_processing,active" invisible="state in ('cancelled', 'rejected', 'expired')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,under_review,under_processing,active,cancelled" invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,under_review,under_processing,active,rejected" invisible="state != 'rejected'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,under_review,under_processing,active,expired" invisible="state != 'expired'"/>
+                </header>
+                <sheet>
+                    <field name="approval_required" invisible="1"/>
+                    <field name="current_user_can_approve" invisible="1"/>
+                    <field name="current_user_can_reject" invisible="1"/>
+                    <div class="oe_title">
+                        <h1>
+                            <span invisible="request_number">New</span>
+                            <field name="request_number" readonly="1" nolabel="1" class="oe_inline" invisible="not request_number"/>
+                        </h1>
+                        <div class="text-muted" invisible="not iqama_type_id">
+                            <span>Residency/Visa Type: </span>
+                            <field name="iqama_type_id" readonly="1" nolabel="1" class="oe_inline"/>
+                        </div>
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_attachments" type="object" class="oe_stat_button" icon="fa-paperclip">
+                            <field name="attachment_count" string="Attachments" widget="statinfo"/>
+                        </button>
+                        <button name="action_create_travel_request" string="Create Travel Request" type="object" class="oe_stat_button" icon="fa-plane" invisible="not requires_travel"/>
+                        <button name="action_view_travel_request" type="object" class="oe_stat_button" icon="fa-plane" invisible="travel_request_count == 0">
+                            <field name="travel_request_count" string="Travel Requests" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <notebook>
+                        <page string="Employee Data" name="employee_data_tab">
+
+                            <!-- ── Details section ───────────────────────────────── -->
+                            <widget name="section_toggle" data-default-open="true"/>
+                            <div class="closed-section" style="display: none;">
+                                <div class="nx_section_meta"
+                                     data-title="Details"
+                                     data-icon="fa-id-card"
+                                     data-color="#374151"
+                                     style="display: none;"/>
+                                <group string="Start Request" invisible="state != 'new' or (employee_id and iqama_type_id)">
+                                    <group>
+                                        <field name="request_country_id"/>
+                                        <field name="iqama_type_id"/>
+                                        <field name="includes_family"/>
+                                    </group>
+                                    <group>
+                                        <field name="employee_id"/>
+                                        <field name="application_date"/>
+                                    </group>
+                                </group>
+                                <group invisible="not employee_id or not iqama_type_id" col="3">
+                                    <group string="Request Submission" colspan="1">
+                                        <field name="created_on" readonly="1"/>
+                                        <field name="last_updated_on" readonly="1"/>
+                                        <field name="application_date" readonly="1"/>
+                                        <field name="iqama_type_country_id" readonly="1"/>
+                                        <field name="includes_family" readonly="1"/>
+                                    </group>
+                                    <group string="Employee Data" colspan="2" col="2">
+                                        <group>
+                                            <field name="employee_name" readonly="1"/>
+                                            <field name="passport_number" readonly="1"/>
+                                            <field name="passport_name_english" readonly="1"/>
+                                            <field name="passport_name_arabic" readonly="1"/>
+                                            <field name="department_id" readonly="1"/>
+                                            <field name="company_id" readonly="1"/>
+                                        </group>
+                                        <group>
+                                            <field name="job_title" readonly="1"/>
+                                            <field name="nationality_id" readonly="1"/>
+                                            <field name="religion" readonly="1"/>
+                                            <field name="date_of_birth" readonly="1"/>
+                                            <field name="passport_profession" readonly="1"/>
+                                        </group>
+                                    </group>
+                                </group>
+                            </div>
+
+                            <!-- ── Required Documents section ─────────────────────── -->
+                            <widget name="section_toggle" data-default-open="true"
+                                    invisible="state == 'new' and (not employee_id or not iqama_type_id)"/>
+                            <div class="closed-section" style="display: none;"
+                                 invisible="state == 'new' and (not employee_id or not iqama_type_id)">
+                                <div class="nx_section_meta"
+                                     data-title="Required Documents"
+                                     data-icon="fa-file-text-o"
+                                     data-color="#0D9488"
+                                     style="display: none;"/>
+                                <field name="attachment_ids">
+                                    <list editable="bottom" delete="0">
+                                        <field name="required_document_id"/>
+                                        <field name="document_name"/>
+                                        <field name="description"/>
+                                        <field name="mandatory"/>
+                                        <field name="expiry_date"/>
+                                        <field name="attachment_filename"/>
+                                        <field name="attachment" filename="attachment_filename" widget="iqama_drag_drop_binary"/>
+                                        <field name="upload_date"/>
+                                        <field name="status" readonly="1"/>
+                                        <field name="is_manual_line" column_invisible="1"/>
+                                        <button name="action_remove_manual_line"
+                                                type="object"
+                                                icon="fa-trash"
+                                                string="Delete"
+                                                invisible="not is_manual_line"/>
+                                    </list>
+                                </field>
+                            </div>
+
+                        </page>
+                        <page string="Family Members" name="family_members_tab" invisible="not includes_family">
+                            <field name="family_member_ids" context="{'default_iqama_id': id}">
+                                <list>
+                                    <control>
+                                        <button name="action_open_family_member_create_wizard"
+                                                type="object"
+                                                string="Add a line"/>
+                                    </control>
+                                    <field name="passport_number"/>
+                                    <field name="passport_name" string="Passport Name (EN)"/>
+                                    <field name="arabic_name" string="Passport Name (AR)"/>
+                                    <field name="passport_profession" string="Profession"/>
+                                    <field name="name" string="Relation"/>
+                                    <field name="nationality_id"/>
+                                    <field name="date_of_birth"/>
+                                    <field name="religion"/>
+                                    <field name="document_progress_display" readonly="1" string="Required Documents"/>
+                                    <button name="action_open_required_documents_wizard"
+                                            type="object"
+                                            string="Add Required Documents"
+                                            class="oe_highlight"
+                                            icon="fa-folder-open"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="IQAMA Details" name="iqama_details_tab" invisible="state not in ('under_processing', 'active')">
+                            <field name="detail_line_ids" nolabel="1" class="o_iqama_details_equal_spacing">
+                                <list create="0" delete="0">
+                                    <field name="person_name" string="Name"/>
+                                    <field name="type_label" string="Type"/>
+                                    <field name="iqama_number" string="Visa Number"/>
+                                    <field name="expiry_date"/>
+                                    <field name="hijri_expiry_date_display" string="Hijri Expiry Date"/>
+                                    <button name="action_open_details_form"
+                                            type="object"
+                                            string="View"
+                                            class="oe_highlight"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Fees" name="fees_tab" invisible="state in ('new', 'under_review')">
+                            <field name="travel_expense_ids" readonly="1" context="{'default_iqama_request_id': id}">
+                                <list create="0" delete="0" edit="0">
+                                    <field name="date" string="Expense Date"/>
+                                    <field name="name" string="Description"/>
+                                    <field name="employee_id"/>
+                                    <field name="payment_mode" string="Paid By"/>
+                                    <field name="activity_state" string="Activities"/>
+                                    <field name="analytic_distribution"/>
+                                    <field name="total_amount" string="Total"/>
+                                    <field name="state" string="Status" widget="badge"/>
+                                    <button name="action_open_iqama_expense"
+                                            type="object"
+                                            string="View"
+                                            class="oe_highlight"/>
+                                    <button name="action_remove_iqama_expense"
+                                            type="object"
+                                            icon="fa-trash"
+                                            string="Delete"
+                                            invisible="state == 'done'"/>
+                                </list>
+                            </field>
+                            <button name="action_open_add_fees_wizard"
+                                    type="object"
+                                    string="Add Fees"
+                                    class="oe_highlight"
+                                    invisible="state == 'active'"/>
+                        </page>
+                        <page string="Security Review" name="security_review_tab" invisible="state in ('new', 'under_review')">
+                            <group string="Security Questions">
+                                <group>
+                                    <field name="security_question_identity_verified" widget="radio" readonly="state != 'under_processing'"/>
+                                    <field name="security_question_employee_clear" widget="radio" readonly="state != 'under_processing'"/>
+                                    <field name="security_question_no_restrictions" widget="radio" readonly="state != 'under_processing'"/>
+                                </group>
+                                <group>
+                                    <field name="security_review_notes" placeholder="Add any security review notes here..." readonly="state != 'under_processing'"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="History" name="history_tab">
+                            <field name="history_ids" nolabel="1" readonly="1">
+                                <list create="0" delete="0" edit="0">
+                                    <field name="changed_on"/>
+                                    <field name="changed_by_id"/>
+                                    <field name="field_name"/>
+                                    <field name="from_value"/>
+                                    <field name="to_value"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Approvals" name="approvals_tab">
+                            <field name="approval_line_ids" readonly="1">
+                                <list>
+                                    <field name="approver_id" widget="many2one_avatar_user"/>
+                                    <field name="status"/>
+                                    <field name="decision_date"/>
+                                    <field name="comment"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Request Timeline" name="request_timeline_tab" invisible="state in ('new', 'under_review') or furthest_processing_stage != 'completed'">
+                            <field name="timeline_ids">
+                                <list editable="bottom">
+                                    <field name="title"/>
+                                    <field name="date"/>
+                                    <field name="details"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_iqama_my" model="ir.actions.act_window">
+        <field name="name">My Residency/Visa Requests</field>
+        <field name="res_model">hr.iqama</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hr_iqama_search"/>
+        <field name="domain">[('employee_id.user_id', '=', uid)]</field>
+    </record>
+
+    <record id="action_hr_iqama_all" model="ir.actions.act_window">
+        <field name="name">All Residency/Visa Requests</field>
+        <field name="res_model">hr.iqama</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hr_iqama_search"/>
+        <field name="domain">[]</field>
+    </record>
+
+    <record id="action_hr_iqama_draft" model="ir.actions.act_window">
+        <field name="name">New Residency/Visa Requests</field>
+        <field name="res_model">hr.iqama</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hr_iqama_search"/>
+        <field name="domain">[('state', '=', 'new')]</field>
+    </record>
+
+    <record id="action_hr_iqama_waiting_approval" model="ir.actions.act_window">
+        <field name="name">Under Review Residency/Visa Requests</field>
+        <field name="res_model">hr.iqama</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hr_iqama_search"/>
+        <field name="domain">[('state', '=', 'under_review')]</field>
+    </record>
+
+    <record id="action_hr_iqama_approved" model="ir.actions.act_window">
+        <field name="name">Under Processing Residency/Visa Requests</field>
+        <field name="res_model">hr.iqama</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hr_iqama_search"/>
+        <field name="domain">[('state', '=', 'under_processing')]</field>
+    </record>
+
+    <record id="action_hr_iqama_active" model="ir.actions.act_window">
+        <field name="name">Active Residency/Visa Requests</field>
+        <field name="res_model">hr.iqama</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hr_iqama_search"/>
+        <field name="domain">[('state', '=', 'active')]</field>
+    </record>
+
+    <record id="action_hr_iqama_expiring_soon" model="ir.actions.act_window">
+        <field name="name">Expiring Soon Residency/Visa Requests</field>
+        <field name="res_model">hr.iqama</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hr_iqama_search"/>
+        <field name="domain">[('is_expiring_soon', '=', True)]</field>
+    </record>
+</odoo>

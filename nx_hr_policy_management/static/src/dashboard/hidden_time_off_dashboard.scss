@@ -1,0 +1,71 @@
+// First leave-type card (e.g. Paid Time Off): inset from the sticky bar edge and a bit more top air
+.o_timeoff_dashboard > .o_timeoff_card.text-primary:first-child {
+    padding-left: 1.25rem;
+    padding-top: 1rem;
+}
+
+.o_hidden_timeoff_toggle {
+    min-width: 70px;
+    padding: 0.75rem 0.5rem;
+    cursor: pointer;
+    border-left: 1px solid var(--border-color, #d8dadd);
+    background: linear-gradient(180deg, #f8f6f3 0%, #f1ece6 100%);
+}
+
+.o_hidden_timeoff_toggle_label {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #6b556b;
+}
+
+.o_hidden_timeoff_rail {
+    min-width: 340px;
+    max-width: 420px;
+    border-left: 1px solid var(--border-color, #d8dadd);
+    background: #faf8f5;
+}
+
+.o_hidden_timeoff_rail_scroller {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 16px;
+    scroll-snap-type: x proximity;
+}
+
+.o_hidden_timeoff_card {
+    min-width: 180px;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    border: 1px solid #ddd5cc;
+    border-radius: 16px;
+    background: white;
+    padding: 16px 18px;
+    box-shadow: 0 10px 30px rgba(70, 52, 70, 0.08);
+}
+
+.o_hidden_timeoff_card_type {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #3e3c4a;
+    margin-bottom: 10px;
+}
+
+.o_hidden_timeoff_card_total {
+    font-size: 2rem;
+    line-height: 1;
+    font-weight: 800;
+    color: #7a5477;
+}
+
+.o_hidden_timeoff_card_unit {
+    margin-top: 8px;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #8b8792;
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_leave_allocation_view_form_inherit_service_rule" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.form.inherit.service.rule</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_form_manager"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='holiday_status_id']" position="after">
+                <field name="based_on_years_of_service" readonly="1"/>
+                <field name="leave_allowance_rule_id" readonly="1" invisible="not based_on_years_of_service"/>
+                <field name="service_anniversary_date" readonly="1" invisible="not based_on_years_of_service"/>
+                <field name="service_year_number" readonly="1" invisible="not based_on_years_of_service"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_leave_allocation_view_tree_inherit_service_rule" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.list.inherit.service.rule</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_tree"/>
+        <field name="arch" type="xml">
+            <field name="holiday_status_id" position="after">
+                <field name="based_on_years_of_service" optional="hide"/>
+                <field name="leave_allowance_rule_id" optional="hide"/>
+                <field name="service_anniversary_date" optional="hide"/>
+            </field>
+        </field>
+    </record>
+</odoo>

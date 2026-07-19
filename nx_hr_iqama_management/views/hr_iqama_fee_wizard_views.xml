@@ -1,0 +1,52 @@
+<odoo>
+    <record id="view_hr_iqama_fee_add_wizard_form" model="ir.ui.view">
+        <field name="name">hr.iqama.fee.add.wizard.form</field>
+        <field name="model">hr.iqama.fee.add.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Fees">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="iqama_id"/>
+                            <field name="employee_id"/>
+                        </group>
+                        <group>
+                            <field name="company_id"/>
+                            <field name="claim_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Expense Lines">
+                            <field name="line_ids" nolabel="1" context="{'default_claim_date': claim_date}">
+                                <list editable="bottom" string="Expense Lines">
+                                    <field name="expense_type_id" required="1"/>
+                                    <field name="name" readonly="1"/>
+                                    <field name="claim_date"/>
+                                    <field name="amount" widget="monetary" required="1"/>
+                                    <field name="currency_id" options="{'no_create': True}" required="1"/>
+                                </list>
+                                <form string="Expense Line">
+                                    <group>
+                                        <group>
+                                            <field name="expense_type_id" required="1"/>
+                                            <field name="name" readonly="1"/>
+                                        </group>
+                                        <group>
+                                            <field name="claim_date"/>
+                                            <field name="amount" widget="monetary" required="1"/>
+                                            <field name="currency_id" options="{'no_create': True}" required="1"/>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_add_fees" string="Add Fees" type="object" class="btn btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

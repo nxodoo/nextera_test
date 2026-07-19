@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Draft timesheets count toward payroll by default (set True to require validation). -->
+    <record id="ir_config_parameter_only_validated_timesheets" model="ir.config_parameter">
+        <field name="key">nx_payroll_timesheet_work_entry.only_validated_timesheets</field>
+        <field name="value">False</field>
+    </record>
+
+</odoo>

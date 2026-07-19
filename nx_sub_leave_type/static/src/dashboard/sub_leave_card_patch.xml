@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-inherit="hr_holidays.TimeOffCard" t-inherit-mode="extension">
+        <!--
+            Append sub leave info at the bottom of the card when the parent
+            leave type has a sub leave type configured for this employee.
+        -->
+        <xpath expr="//div[hasclass('o_timeoff_card')]" position="inside">
+            <div t-if="props.data and props.data.sub_leave_type_name"
+                 class="o_sub_leave_info mt-2 pt-2 border-top w-100 text-center">
+                <span class="o_sub_leave_label fw-semibold small">
+                    <t t-esc="props.data.sub_leave_type_name"/>
+                </span>
+                <br/>
+                <span class="o_sub_leave_balance small">
+                    <t t-esc="props.data.sub_leave_remaining"/> /
+                    <t t-esc="props.data.sub_leave_limit"/> days
+                </span>
+            </div>
+        </xpath>
+    </t>
+
+</templates>

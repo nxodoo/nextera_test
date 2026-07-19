@@ -1,0 +1,130 @@
+<odoo>
+    <record id="view_hr_iqama_family_member_form_dialog" model="ir.ui.view">
+        <field name="name">view.hr.iqama.family.member.form.dialog</field>
+        <field name="model">hr.iqama.family.member</field>
+        <field name="arch" type="xml">
+            <form string="Add Family Member">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="passport_number"/>
+                            <field name="passport_name"/>
+                            <field name="arabic_name"/>
+                        </group>
+                        <group>
+                            <field name="nationality_id"/>
+                            <field name="religion"/>
+                            <field name="date_of_birth"/>
+                            <field name="passport_profession"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_iqama_family_member_create_wizard_form" model="ir.ui.view">
+        <field name="name">view.hr.iqama.family.member.create.wizard.form</field>
+        <field name="model">hr.iqama.family.member.create.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Family Members">
+                <sheet>
+                    <field name="iqama_id" invisible="1"/>
+                    <notebook>
+                        <page string="Family Member Details">
+                            <group>
+                                <group>
+                                    <field name="passport_number" required="1"/>
+                                    <field name="passport_name" string="Passport Name (EN)" required="1"/>
+                                    <field name="arabic_name" string="Passport Name (AR)" required="1"/>
+                                    <field name="passport_profession" string="Profession" required="1"/>
+                                </group>
+                                <group>
+                                    <field name="name" string="Relation" required="1"/>
+                                    <field name="nationality_id" required="1"/>
+                                    <field name="date_of_birth" required="1"/>
+                                    <field name="religion" required="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Required Documents">
+                            <field name="line_ids" nolabel="1">
+                                <list editable="bottom" create="1" delete="0">
+                                    <field name="required_document_id" readonly="1"/>
+                                    <field name="document_name"/>
+                                    <field name="description"/>
+                                    <field name="mandatory" readonly="1"/>
+                                    <field name="expiry_date"/>
+                                    <field name="attachment_filename"/>
+                                    <field name="attachment" filename="attachment_filename" widget="iqama_drag_drop_binary"/>
+                                    <field name="upload_date"/>
+                                    <field name="status" readonly="1"/>
+                                    <field name="is_manual_line" column_invisible="1"/>
+                                    <button name="action_remove_manual_line"
+                                            type="object"
+                                            icon="fa-trash"
+                                            string="Delete"
+                                            invisible="not is_manual_line"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_save_and_close"
+                            string="Save &amp; Close"
+                            type="object"
+                            class="btn-primary"/>
+                    <button name="action_save_and_new"
+                            string="Save &amp; New"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_iqama_family_document_wizard_form" model="ir.ui.view">
+        <field name="name">view.hr.iqama.family.document.wizard.form</field>
+        <field name="model">hr.iqama.family.document.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Family Required Documents">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="family_member_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="passport_number" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Required Documents">
+                        <field name="line_ids" nolabel="1">
+                            <list editable="bottom" create="1" delete="0">
+                                <field name="required_document_id" readonly="1"/>
+                                <field name="description"/>
+                                <field name="mandatory" readonly="1"/>
+                                <field name="expiry_date"/>
+                                <field name="attachment_filename"/>
+                                <field name="attachment" filename="attachment_filename" widget="iqama_drag_drop_binary"/>
+                                <field name="upload_date"/>
+                                <field name="is_manual_line" column_invisible="1"/>
+                                <button name="action_remove_manual_line"
+                                        type="object"
+                                        icon="fa-trash"
+                                        string="Delete"
+                                        invisible="not is_manual_line"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_save_documents" string="Save Documents" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

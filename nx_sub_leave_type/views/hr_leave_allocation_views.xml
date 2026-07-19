@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── Base Form View ─────────────────────────────────────────────────── -->
+    <record id="view_hr_leave_allocation_form_sub_leave" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.form.sub.leave</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_form"/>
+        <field name="arch" type="xml">
+
+            <!--
+                Add the 3 config fields as plain fields inside the left group,
+                directly after holiday_status_id (Time Off Type).
+                No wrapping <group> — nesting groups inside Odoo's inner column
+                groups breaks the parent layout. These render as label|value rows
+                right below "Time Off Type" and above "Based on Years of Service".
+            -->
+            <xpath expr="//field[@name='holiday_status_id']" position="after">
+                <field name="sub_leave_type_id"
+                       options="{'no_create': True, 'no_open': True}"/>
+                <field name="sub_leave_days_limit"
+                       invisible="not sub_leave_type_id"/>
+                <field name="max_days_per_request"
+                       invisible="not sub_leave_type_id"
+                       help="Set to 0 for no per-request limit."/>
+            </xpath>
+
+            <!-- Sub Leave Usage group after notes -->
+            <xpath expr="//field[@name='notes']" position="after">
+                <group string="Sub Leave Usage" name="sub_leave_usage_group"
+                       invisible="not sub_leave_type_id">
+                    <field name="sub_leave_used_days" readonly="1"/>
+                    <field name="sub_leave_remaining_days" readonly="1"/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ── List View: Optional sub leave columns ──────────────────────────── -->
+    <record id="view_hr_leave_allocation_list_sub_leave" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.list.sub.leave</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_tree"/>
+        <field name="arch" type="xml">
+            <field name="holiday_status_id" position="after">
+                <field name="sub_leave_type_id" optional="hide"/>
+                <field name="sub_leave_days_limit" optional="hide"/>
+                <field name="sub_leave_remaining_days" optional="hide"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

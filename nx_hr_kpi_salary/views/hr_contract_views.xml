@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_contract_form_inherit_kpi" model="ir.ui.view">
+        <field name="name">hr.contract.form.inherit.kpi</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='top_info_right']/field[@name='department_id' and @groups='!hr_contract.group_hr_contract_manager']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//group[@name='top_info_right']/field[@name='department_id' and @groups='hr_contract.group_hr_contract_manager']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='information']/group[@name='salary_info']/group[@name='yearly_benefits']" position="inside">
+                <field name="kpi_type"/>
+                <field name="kpi_value"/>
+                <field name="kpi_frequency"/>
+                <field name="quarterly_kpi_months" invisible="kpi_frequency != 'quarterly'" required="kpi_frequency == 'quarterly'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

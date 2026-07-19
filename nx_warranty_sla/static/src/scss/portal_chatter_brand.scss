@@ -1,0 +1,83 @@
+#wrapwrap.nx-warranty-portal-mode {
+    --nx-brand-900: #063a3d;
+    --nx-brand-700: #0c6d71;
+    --nx-brand-600: #0f8f94;
+    --nx-brand-500: #19aeb3;
+    --nx-brand-100: #e7f7f8;
+}
+
+#wrapwrap.nx-warranty-portal-mode .o_portal_chatter .o_portal_chatter_composer_btn,
+#wrapwrap.nx-warranty-portal-mode .o_portal_chatter .o_portal_chatter_composer_btn.btn.btn-primary,
+#wrapwrap.nx-warranty-portal-mode .o-portal-Chatter .o-mail-Composer-send.btn.btn-primary,
+#wrapwrap.nx-warranty-portal-mode .o-portal-Chatter .o-mail-Composer-send.btn.btn-primary.btn-sm {
+    --bs-btn-color: #ffffff;
+    --bs-btn-bg: var(--nx-brand-700);
+    --bs-btn-border-color: var(--nx-brand-700);
+    --bs-btn-hover-color: #ffffff;
+    --bs-btn-hover-bg: #0a5e61;
+    --bs-btn-hover-border-color: #0a5e61;
+    --bs-btn-focus-shadow-rgb: 12, 109, 113;
+    --bs-btn-active-color: #ffffff;
+    --bs-btn-active-bg: #0a5e61;
+    --bs-btn-active-border-color: #0a5e61;
+    --bs-btn-disabled-color: #ffffff;
+    --bs-btn-disabled-bg: #7aaeb1;
+    --bs-btn-disabled-border-color: #7aaeb1;
+    border-color: var(--nx-brand-700) !important;
+    background-color: var(--nx-brand-700) !important;
+    background-image: linear-gradient(135deg, var(--nx-brand-900) 0%, var(--nx-brand-700) 52%, var(--nx-brand-500) 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 16px 30px rgba(12, 109, 113, 0.20);
+}
+
+#wrapwrap.nx-warranty-portal-mode .o_portal_chatter .o_portal_chatter_composer_btn:hover,
+#wrapwrap.nx-warranty-portal-mode .o_portal_chatter .o_portal_chatter_composer_btn:focus,
+#wrapwrap.nx-warranty-portal-mode .o_portal_chatter .o_portal_chatter_composer_btn:active,
+#wrapwrap.nx-warranty-portal-mode .o-portal-Chatter .o-mail-Composer-send.btn.btn-primary:hover,
+#wrapwrap.nx-warranty-portal-mode .o-portal-Chatter .o-mail-Composer-send.btn.btn-primary:focus,
+#wrapwrap.nx-warranty-portal-mode .o-portal-Chatter .o-mail-Composer-send.btn.btn-primary:active {
+    border-color: #0a5e61 !important;
+    background-color: #0a5e61 !important;
+    background-image: linear-gradient(135deg, #053133 0%, #0a5e61 52%, #149ca1 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 20px 34px rgba(12, 109, 113, 0.24);
+}
+
+#wrapwrap.nx-warranty-portal-mode .o-portal-Chatter .o-mail-Composer-attachFiles,
+#wrapwrap.nx-warranty-portal-mode .o-portal-Chatter .o-mail-Composer .fa-smile-o {
+    color: var(--nx-brand-700) !important;
+}
+
+#wrapwrap.nx-warranty-portal-mode .o-portal-Chatter .o-mail-Composer-attachFiles,
+#wrapwrap.nx-warranty-portal-mode .o-portal-Chatter .o-mail-Composer .btn.rounded-circle {
+    background: rgba(12, 109, 113, 0.08);
+    border-radius: 999px !important;
+    opacity: 1 !important;
+}
+
+#wrapwrap.nx-warranty-portal-mode .o-portal-Chatter .o-mail-Composer-attachFiles:hover,
+#wrapwrap.nx-warranty-portal-mode .o-portal-Chatter .o-mail-Composer .btn.rounded-circle:hover {
+    background: rgba(12, 109, 113, 0.14);
+}
+
+#wrapwrap.nx-warranty-portal-mode .o-portal-Chatter .o-mail-Message-body:not(.o-note) {
+    border: 1px solid #dcebed;
+    border-radius: 18px !important;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fcfc 100%);
+    box-shadow: 0 8px 18px rgba(8, 61, 63, 0.05);
+}
+
+#wrapwrap.nx-warranty-portal-mode .o-portal-Chatter .o-mail-Message.o-selfAuthored .o-mail-Message-body:not(.o-note) {
+    border-color: #c9e8ea;
+    background: linear-gradient(180deg, #eff9fa 0%, #e6f6f7 100%);
+}
+
+#wrapwrap.nx-warranty-portal-mode .o-portal-Chatter .o-mail-DateSection .o-discuss-separator {
+    border-top-color: #dcebed;
+    opacity: 1;
+}
+
+#wrapwrap.nx-warranty-portal-mode .o-portal-Chatter .o-mail-DateSection span {
+    color: #6a8088 !important;
+    font-weight: 700;
+}

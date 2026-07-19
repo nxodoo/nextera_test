@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_payslip_form_inherit_kpi" model="ir.ui.view">
+        <field name="name">hr.payslip.form.inherit.kpi</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='alert alert-warning' and @name='payslip_alert']" position="after">
+                <div class="alert alert-warning" role="alert" invisible="not kpi_warning_message">
+                    <field name="kpi_warning_message"/>
+                </div>
+            </xpath>
+            <xpath expr="//page[@name='salary_computation']" position="after">
+                <page string="KPI" name="kpi_information">
+                    <group col="4">
+                        <field name="kpi_bonus_amount" readonly="1"/>
+                        <field name="kpi_evaluation_line_id" readonly="1"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//page[@name='salary_computation']//field[@name='line_ids']/list/field[@name='salary_rule_id']" position="after">
+                <field name="accounting_description" optional="show"/>
+            </xpath>
+            <xpath expr="//page[@name='salary_computation']//field[@name='line_ids']/form/group/field[@name='salary_rule_id']" position="before">
+                <field name="accounting_description"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

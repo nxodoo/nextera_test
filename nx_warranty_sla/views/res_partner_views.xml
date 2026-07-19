@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_warranty_sla" model="ir.ui.view">
+        <field name="name">res.partner.form.warranty.sla</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_title mb24']/div[hasclass('o_row')]" position="before">
+                <label for="parent_id"
+                       string="Company Name"
+                       class="o_form_label"
+                       invisible="is_company"/>
+            </xpath>
+            <xpath expr="//field[@name='phone']" position="attributes">
+                <attribute name="required">not id</attribute>
+            </xpath>
+            <xpath expr="//field[@name='street']" position="attributes">
+                <attribute name="required">not id</attribute>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="object" name="action_view_linked_users" class="oe_stat_button" icon="fa-users">
+                    <field name="linked_user_count" string="Users" widget="statinfo"/>
+                </button>
+                <button type="object" name="action_view_warranty_contracts" class="oe_stat_button" icon="fa-shield">
+                    <field name="warranty_contract_count" string="Warranties" widget="statinfo"/>
+                </button>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="E-Learning Courses">
+                    <group>
+                        <group>
+                            <field name="nx_allowed_slide_channel_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="nx_allowed_slide_channel_ids" options="{'no_create_edit': True}">
+                        <list>
+                            <field name="name"/>
+                            <field name="website_published"/>
+                            <field name="visibility"/>
+                            <field name="total_slides"/>
+                        </list>
+                    </field>
+                </page>
+                <page string="Warranties" groups="nx_warranty_sla.group_warranty_access">
+                    <group>
+                        <group>
+                            <field name="warranty_contract_count" readonly="1"/>
+                            <field name="warranty_active_count" readonly="1"/>
+                            <field name="warranty_expired_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="warranty_contract_ids" readonly="1">
+                        <list>
+                            <field name="name"/>
+                            <field name="product_id"/>
+                            <field name="warranty_template_id"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="remaining_minutes"/>
+                            <field name="state"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

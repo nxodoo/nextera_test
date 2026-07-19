@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_warranty_template_user,warranty.template user,model_warranty_template,base.group_user,1,1,1,1
+access_warranty_contract_user,warranty.contract user,model_warranty_contract,base.group_user,1,1,1,1
+access_warranty_template_portal,warranty.template portal,model_warranty_template,base.group_portal,1,0,0,0
+access_warranty_contract_portal,warranty.contract portal,model_warranty_contract,base.group_portal,1,0,0,0
+access_warranty_contract_state_override_wizard_user,warranty.contract.state.override.wizard user,model_warranty_contract_state_override_wizard,base.group_user,1,1,1,1
+access_helpdesk_ticket_close_feedback_wizard_user,helpdesk.ticket.close.feedback.wizard user,model_helpdesk_ticket_close_feedback_wizard,base.group_user,1,1,1,1
+access_nx_helpdesk_ticket_type_user,nx.helpdesk.ticket.type user,model_nx_helpdesk_ticket_type,helpdesk.group_helpdesk_user,1,0,0,0
+access_nx_helpdesk_ticket_type_manager,nx.helpdesk.ticket.type manager,model_nx_helpdesk_ticket_type,helpdesk.group_helpdesk_manager,1,1,1,1

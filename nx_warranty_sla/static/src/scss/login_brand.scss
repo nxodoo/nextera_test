@@ -1,0 +1,551 @@
+.nx-enterprise-login-page,
+.nx-enterprise-login-page #wrap,
+.nx-enterprise-login-page #wrapwrap,
+.nx-enterprise-login-page main {
+    min-height: 100vh;
+}
+
+.nx-enterprise-login-page #wrapwrap {
+    background:
+        radial-gradient(circle at top right, rgba(93, 215, 219, 0.16), transparent 28%),
+        linear-gradient(135deg, #0d4950 0%, #0d6268 40%, #0f7b80 100%);
+}
+
+.nx-enterprise-login-page #wrapwrap > header,
+.nx-enterprise-login-page header#top,
+.nx-enterprise-login-page .o_header_standard,
+.nx-enterprise-login-page .o_main_navbar,
+.nx-enterprise-login-page nav.navbar,
+.nx-enterprise-login-page footer,
+.nx-enterprise-login-page #bottom {
+    display: none !important;
+}
+
+.nx-enterprise-login {
+    min-height: 100vh;
+}
+
+.nx-enterprise-login__shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(420px, 0.92fr);
+    height: 100vh;
+    min-height: 100vh;
+}
+
+.nx-enterprise-login__showcase {
+    position: relative;
+    overflow: hidden;
+    padding: 2rem 2.5rem;
+    color: #f5fcfd;
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        radial-gradient(circle at 65% 20%, rgba(93, 215, 219, 0.34), transparent 22%),
+        linear-gradient(135deg, #0d4a50 0%, #0f6770 52%, #169ca3 100%);
+    background-size: 40px 40px, 40px 40px, auto, auto;
+}
+
+.nx-enterprise-login__showcase::before,
+.nx-enterprise-login__showcase::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    pointer-events: none;
+}
+
+.nx-enterprise-login__showcase::before {
+    width: 36rem;
+    height: 36rem;
+    left: -8rem;
+    bottom: -12rem;
+}
+
+.nx-enterprise-login__showcase::after {
+    width: 24rem;
+    height: 24rem;
+    right: -7rem;
+    bottom: 3rem;
+}
+
+.nx-enterprise-login__showcase-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 46rem;
+}
+
+.nx-enterprise-login__brand-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.nx-enterprise-login__brand-mark {
+    width: 12rem;
+    max-width: 100%;
+    filter: brightness(0) invert(1);
+}
+
+.nx-enterprise-login__portal-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0.4rem 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+}
+
+.nx-enterprise-login__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.9rem;
+    color: #a9edf0;
+    font-size: 0.86rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+}
+
+.nx-enterprise-login__eyebrow-dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background: #49dbe0;
+    box-shadow: 0 0 0 0.35rem rgba(73, 219, 224, 0.12);
+    animation: nxEyebrowDotPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes nxEyebrowDotPulse {
+    0%, 100% {
+        transform: scale(0.55);
+        box-shadow: 0 0 0 0 rgba(73, 219, 224, 0.35);
+    }
+    50% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0.5rem rgba(73, 219, 224, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nx-enterprise-login__eyebrow-dot,
+    .nx-enterprise-login__partner-track {
+        animation: none;
+    }
+}
+
+.nx-enterprise-login__hero {
+    max-width: 14ch;
+    margin-bottom: 0.85rem;
+    color: #ffffff;
+    font-size: clamp(2rem, 3.4vw, 3.1rem);
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 1;
+}
+
+.nx-enterprise-login__hero span {
+    color: #63edf0;
+}
+
+.nx-enterprise-login__lead {
+    max-width: 46rem;
+    margin-bottom: 1rem;
+    color: rgba(244, 252, 253, 0.88);
+    font-size: 0.94rem;
+    line-height: 1.55;
+}
+
+.nx-enterprise-login__tagline {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.4rem;
+    padding: 0.55rem 1.15rem;
+    margin-bottom: 1.1rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    background: rgba(10, 43, 48, 0.22);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.92rem;
+}
+
+.nx-enterprise-login__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.nx-enterprise-login__stat-card,
+.nx-enterprise-login__partner-card {
+    padding: 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.15rem;
+    background: rgba(12, 67, 74, 0.28);
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.nx-enterprise-login__stat-card:hover,
+.nx-enterprise-login__partner-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(99, 237, 240, 0.45);
+    background: rgba(12, 67, 74, 0.4);
+}
+
+.nx-enterprise-login__stat-card strong {
+    display: block;
+    color: #ffffff;
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.nx-enterprise-login__stat-card span {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.nx-enterprise-login__partners-title {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 0.65rem;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.nx-enterprise-login__partners-title span {
+    color: #7ce7ea;
+}
+
+.nx-enterprise-login__partner-carousel {
+    overflow: hidden;
+    padding: 0.2rem 0;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+}
+
+.nx-enterprise-login__partner-track {
+    display: flex;
+    width: max-content;
+    gap: 0.5rem;
+    animation: nxPartnerCarousel 42s linear infinite;
+}
+
+.nx-enterprise-login__partner-carousel > .nx-enterprise-login__partner-card {
+    display: none;
+}
+
+.nx-enterprise-login__partner-carousel:hover .nx-enterprise-login__partner-track {
+    animation-play-state: paused;
+}
+
+@keyframes nxPartnerCarousel {
+    to {
+        transform: translateX(calc(-50% - 0.25rem));
+    }
+}
+
+.nx-enterprise-login__partner-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 5.25rem;
+    height: 3.75rem;
+    padding: 0.4rem 0.55rem;
+    border-radius: 0.75rem;
+    background: #ffffff;
+    box-shadow: 0 4px 10px rgba(6, 34, 38, 0.18);
+}
+
+.nx-enterprise-login__partner-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.nx-enterprise-login__panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    max-height: 100vh;
+    overflow-y: auto;
+    padding: 1.25rem 2rem;
+    background:
+        radial-gradient(circle at top center, rgba(38, 181, 187, 0.12), transparent 28%),
+        linear-gradient(180deg, #f7fbfb 0%, #ffffff 42%, #f7fbfb 100%);
+}
+
+.nx-enterprise-login__panel-card {
+    width: #{"min(100%, 34rem)"};
+    margin: auto 0;
+    padding: 0.5rem 0;
+}
+
+.nx-enterprise-login__panel-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+}
+
+.nx-enterprise-login__panel-logo--nextera {
+    width: 11rem;
+    max-width: 60%;
+}
+
+.nx-enterprise-login__panel .oe_website_login_container {
+    width: 100%;
+}
+
+.nx-enterprise-login__form,
+.nx-enterprise-login__panel .o_user_switch,
+.nx-enterprise-login__panel .o_database_list {
+    padding: 0;
+    border: 0;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.nx-enterprise-login__welcome {
+    margin-bottom: 0.4rem;
+    color: #18a6aa;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.34em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.nx-enterprise-login__title {
+    margin-bottom: 0.5rem;
+    color: #0f2d38;
+    font-size: clamp(1.7rem, 2.4vw, 2.3rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    text-align: center;
+}
+
+.nx-enterprise-login__subtitle {
+    margin-bottom: 1.25rem;
+    color: #607784;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+.nx-enterprise-login__form .form-label {
+    margin-bottom: 0.4rem;
+    color: #173743;
+    font-weight: 700;
+}
+
+.nx-enterprise-login__form .mb-3 {
+    margin-bottom: 0.85rem !important;
+}
+
+.nx-enterprise-login__form .form-control,
+.nx-enterprise-login__form .input-group > .btn {
+    min-height: 3.1rem;
+    border-radius: 1rem !important;
+}
+
+.nx-enterprise-login__form .form-control {
+    border: 1px solid #d9e7ea;
+    background: #f8fbfb;
+    box-shadow: none;
+    color: #173743;
+    font-size: 1rem;
+}
+
+.nx-enterprise-login__form .form-control::placeholder {
+    color: #9aaeb8;
+}
+
+.nx-enterprise-login__form .form-control:focus {
+    border-color: #25afb3;
+    background: #ffffff;
+    box-shadow: 0 0 0 0.25rem rgba(37, 175, 179, 0.14);
+}
+
+.nx-enterprise-login__utility-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0.4rem 0 1rem;
+}
+
+.nx-enterprise-login__remember {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #526974;
+    font-weight: 600;
+}
+
+.nx-enterprise-login__remember .form-check-input {
+    margin: 0;
+    border-color: #cfe0e5;
+}
+
+.nx-enterprise-login__remember .form-check-input:checked {
+    background-color: #11787c;
+    border-color: #11787c;
+}
+
+.nx-enterprise-login__link,
+.nx-enterprise-login__form .btn-link {
+    color: #11787c !important;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.nx-enterprise-login__link:hover,
+.nx-enterprise-login__form .btn-link:hover {
+    color: #0d6467 !important;
+}
+
+.nx-enterprise-login__actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.86fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-top: 0 !important;
+}
+
+.btn-nx-login-primary,
+.btn-nx-login-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.1rem;
+    border-radius: 1rem !important;
+    font-size: 1.02rem;
+    font-weight: 800;
+    text-decoration: none !important;
+    box-shadow: none !important;
+}
+
+.btn-nx-login-primary {
+    border: 1px solid #0e7478 !important;
+    background: linear-gradient(135deg, #0d6970 0%, #0f8f95 100%) !important;
+    color: #ffffff !important;
+}
+
+.btn-nx-login-primary:hover,
+.btn-nx-login-primary:focus,
+.btn-nx-login-primary:active {
+    border-color: #0b5a5d !important;
+    background: linear-gradient(135deg, #0b5a5d 0%, #0d8085 100%) !important;
+    color: #ffffff !important;
+}
+
+.btn-nx-login-secondary {
+    border: 1px solid #d8e5e8 !important;
+    background: #ffffff !important;
+    color: #11787c !important;
+}
+
+.btn-nx-login-secondary:hover,
+.btn-nx-login-secondary:focus,
+.btn-nx-login-secondary:active {
+    border-color: #bcd4d9 !important;
+    background: #f6fbfb !important;
+    color: #0d6467 !important;
+}
+
+.nx-enterprise-login__support {
+    padding: 0.7rem 1rem;
+    border: 1px solid #dce8eb;
+    border-radius: 1rem;
+    background: #f3f8f8;
+    color: #607784;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    text-align: center;
+}
+
+.nx-enterprise-login__support a {
+    color: #11787c;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.nx-enterprise-login__support a:hover {
+    color: #0d6467;
+}
+
+.nx-enterprise-login__form .alert {
+    border-radius: 1rem;
+}
+
+@media (max-width: 1199.98px) {
+    .nx-enterprise-login__shell {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .nx-enterprise-login__showcase,
+    .nx-enterprise-login__panel {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .nx-enterprise-login__showcase {
+        padding-bottom: 2rem;
+    }
+
+    .nx-enterprise-login__partner-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 767.98px) {
+    .nx-enterprise-login__showcase,
+    .nx-enterprise-login__panel {
+        padding: 1.5rem;
+    }
+
+    .nx-enterprise-login__brand-row,
+    .nx-enterprise-login__utility-row,
+    .nx-enterprise-login__actions,
+    .nx-enterprise-login__stats,
+    .nx-enterprise-login__partner-grid {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+    }
+
+    .nx-enterprise-login__brand-row,
+    .nx-enterprise-login__utility-row {
+        align-items: flex-start;
+    }
+
+    .nx-enterprise-login__actions {
+        display: grid;
+    }
+
+    .nx-enterprise-login__hero {
+        max-width: none;
+    }
+
+    .nx-enterprise-login__panel-card {
+        width: 100%;
+    }
+}

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_expense_view_form_inherit_salary_deduction" model="ir.ui.view">
+        <field name="name">hr.expense.view.form.inherit.salary.deduction</field>
+        <field name="model">hr.expense</field>
+        <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/sheet" position="inside">
+                <widget name="web_ribbon"
+                        title="Deducted from Salary"
+                        bg_color="text-bg-warning"
+                        invisible="not is_deducted_from_salary"/>
+            </xpath>
+            <xpath expr="/form/sheet" position="before">
+                <div class="alert alert-info" role="alert" invisible="not salary_deduction_pending">
+                    This expense will be deducted from salary in the next eligible payslip.
+                </div>
+                <div class="alert alert-warning" role="alert" invisible="not is_deducted_from_salary">
+                    This expense was already linked to a payroll deduction.
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='date']" position="after">
+                <field name="payslip_deduction_id"
+                       readonly="1"
+                       invisible="not payslip_deduction_id"
+                       options="{'no_create': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_expense_view_search_inherit_salary_deduction" model="ir.ui.view">
+        <field name="name">hr.expense.view.search.inherit.salary.deduction</field>
+        <field name="model">hr.expense</field>
+        <field name="inherit_id" ref="hr_expense.hr_expense_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='approved']" position="after">
+                <filter string="Deducted from Salary"
+                        name="deducted_from_salary"
+                        domain="[('payslip_deduction_id', '!=', False)]"/>
+                <filter string="Not Yet Deducted"
+                        name="not_yet_deducted"
+                        domain="[('state', '=', 'approved'), ('payslip_deduction_id', '=', False)]"/>
+            </xpath>
+            <xpath expr="//search/group" position="inside">
+                <filter string="Deduction Payslip"
+                        name="group_by_payslip_deduction_id"
+                        context="{'group_by': 'payslip_deduction_id'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,33 @@
+.nx_hr_private_info_layout {
+    width: 100%;
+}
+
+.nx_hr_private_info_row {
+    display: grid;
+    gap: 32px;
+    margin-top: 16px;
+    align-items: start;
+}
+
+.nx_hr_private_info_row_top {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.nx_hr_private_info_row_bottom {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.nx_hr_private_info_layout .o_inner_group {
+    margin: 0;
+}
+
+.nx_hr_private_info_layout .o_inner_group > tbody > tr > td {
+    vertical-align: top;
+}
+
+@media (max-width: 1200px) {
+    .nx_hr_private_info_row_top,
+    .nx_hr_private_info_row_bottom {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

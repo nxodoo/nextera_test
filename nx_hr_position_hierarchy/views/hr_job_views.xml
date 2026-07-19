@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_job_form_position_hierarchy" model="ir.ui.view">
+        <field name="name">hr.job.form.position.hierarchy</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_open" string="Open" type="object" class="btn-primary" invisible="recruitment_state not in ('draft', 'expired')"/>
+                <button name="action_activate" string="Activate" type="object" class="btn-primary" invisible="recruitment_state != 'open'"/>
+                <button name="action_close" string="Close" type="object" invisible="recruitment_state not in ('open', 'active', 'expired')"/>
+                <button name="action_cancel" string="Cancel" type="object" invisible="recruitment_state in ('closed', 'cancelled')"/>
+                <field name="recruitment_state" widget="statusbar" statusbar_visible="draft,open,active,expired,closed,cancelled"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" icon="fa-sitemap" name="action_open_position_org_chart" type="object">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value"><field name="child_all_count"/></span>
+                        <span class="o_stat_text">Org Chart</span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//page[@name='recruitment_page']/group" position="inside">
+                <group string="Position Structure" name="position_structure">
+                    <field name="parent_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                    <field name="is_assistant_position"/>
+                    <field name="child_ids" readonly="1">
+                        <list>
+                            <field name="name"/>
+                            <field name="department_id"/>
+                            <field name="is_assistant_position"/>
+                            <field name="position_level_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="position_status"/>
+                        </list>
+                    </field>
+                    <field name="position_level_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                    <field name="headcount"/>
+                    <field name="position_status" readonly="1"/>
+                    <field name="assigned_employee_count" readonly="1"/>
+                    <field name="vacancy_count" readonly="1"/>
+                </group>
+                <group string="Recruitment Deadline" name="recruitment_deadline">
+                    <field name="application_deadline"/>
+                    <field name="days_to_deadline" readonly="1"/>
+                    <field name="time_to_fill" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_job_tree_position_hierarchy" model="ir.ui.view">
+        <field name="name">hr.job.list.position.hierarchy</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="parent_id" optional="show"/>
+                <field name="is_assistant_position" optional="show"/>
+                <field name="department_id" optional="show"/>
+                <field name="position_level_id" optional="show"/>
+                <field name="headcount" optional="show"/>
+                <field name="position_status" optional="show"/>
+                <field name="application_deadline" optional="show"/>
+                <field name="recruitment_state" optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_hr_job_search_position_hierarchy" model="ir.ui.view">
+        <field name="name">hr.job.search.position.hierarchy</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_job_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='department_id']" position="after">
+                <field name="parent_id"/>
+                <field name="is_assistant_position"/>
+                <field name="position_level_id"/>
+                <field name="position_status"/>
+                <field name="recruitment_state"/>
+            </xpath>
+            <xpath expr="//filter[@name='archived']" position="before">
+                <filter string="Open Positions" name="open_positions" domain="[('recruitment_state', '=', 'open')]"/>
+                <filter string="Active Positions" name="active_positions" domain="[('recruitment_state', '=', 'active')]"/>
+                <filter string="Positions Near Deadline" name="near_deadline" domain="[('application_deadline', '&gt;=', context_today().strftime('%Y-%m-%d')), ('days_to_deadline', '&lt;=', 7)]"/>
+                <filter string="Expired Positions" name="expired_positions" domain="[('recruitment_state', '=', 'expired')]"/>
+            </xpath>
+            <xpath expr="//group" position="inside">
+                <filter string="Position Level" name="group_position_level_id" context="{'group_by': 'position_level_id'}"/>
+                <filter string="Position Status" name="group_position_status" context="{'group_by': 'position_status'}"/>
+                <filter string="Recruitment Status" name="group_recruitment_state" context="{'group_by': 'recruitment_state'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_job_hierarchy_position" model="ir.ui.view">
+        <field name="name">hr.job.view.hierarchy.position</field>
+        <field name="model">hr.job</field>
+        <field name="arch" type="xml">
+            <hierarchy child_field="child_ids" icon="fa-sitemap" draggable="1">
+                <field name="name"/>
+                <field name="department_id"/>
+                <field name="position_level_id"/>
+                <field name="position_status"/>
+                <field name="headcount"/>
+                <field name="is_assistant_position"/>
+                <templates>
+                    <t t-name="hierarchy-box">
+                        <div class="d-flex flex-column text-center gap-1">
+                            <field class="fw-bold" name="name"/>
+                            <field name="department_id"/>
+                            <field name="is_assistant_position"/>
+                            <field name="position_level_id"/>
+                            <field name="position_status"/>
+                        </div>
+                    </t>
+                </templates>
+            </hierarchy>
+        </field>
+    </record>
+
+    <record id="action_hr_job_position_structure" model="ir.actions.act_window">
+        <field name="name">Job Positions</field>
+        <field name="res_model">hr.job</field>
+        <field name="view_mode">hierarchy,list,kanban,form</field>
+        <field name="search_view_id" ref="hr.view_job_filter"/>
+    </record>
+
+    <menuitem id="menu_hr_job_position_structure"
+              name="Job Positions"
+              parent="hr.menu_human_resources_configuration"
+              action="action_hr_job_position_structure"
+              groups="hr.group_hr_user"
+              sequence="5"/>
+</odoo>

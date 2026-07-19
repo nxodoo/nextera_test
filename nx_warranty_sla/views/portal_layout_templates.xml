@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="portal_warranty_hide_top_header" inherit_id="website.layout" priority="53">
+            <xpath expr="//div[@id='wrapwrap']" position="before">
+                <t t-set="nx_warranty_path"
+                   t-value="(request and request.httprequest and request.httprequest.path) or ''"/>
+                <t t-set="nx_warranty_mode"
+                   t-value="request and request.website and request.website.portal_mode == 'warranty'"/>
+                <t t-set="nx_warranty_login_path"
+                   t-value="nx_warranty_mode and nx_warranty_path and nx_warranty_path.startswith('/web/login')"/>
+                <t t-set="nx_warranty_portal_path"
+                   t-value="nx_warranty_mode and nx_warranty_path and (nx_warranty_path.startswith('/my') or '/helpdesk' in nx_warranty_path or '/knowledge' in nx_warranty_path or '/contactus' in nx_warranty_path or '/slides' in nx_warranty_path)"/>
+                <t t-set="nx_warranty_header_path"
+                   t-value="nx_warranty_login_path or nx_warranty_portal_path"/>
+            </xpath>
+            <xpath expr="//div[@id='wrapwrap']/header" position="attributes">
+                <attribute name="t-if">not nx_warranty_portal_path</attribute>
+            </xpath>
+        </template>
+
+        <template id="portal_warranty_scope_wrapwrap" inherit_id="portal.frontend_layout" priority="54">
+            <xpath expr="//div[@id='wrapwrap']" position="attributes">
+                <attribute name="t-attf-class" add="#{request and request.website and request.website.portal_mode == 'warranty' and 'nx-warranty-portal-mode' or ''}" separator=" "/>
+            </xpath>
+        </template>
+
+        <template id="portal_order_visibility_context" inherit_id="portal.portal_layout" priority="56">
+            <xpath expr="//t[@t-call='portal.frontend_layout']" position="inside">
+                <t t-set="nx_is_warranty_portal"
+                   t-value="request and request.website and request.website.portal_mode == 'warranty'"/>
+                <t t-set="nx_show_orders"
+                   t-value="nx_is_warranty_portal or (request and request.env and request.env.user and (request.env.user.has_group('base.group_user') or (request.env.user._fields.get('portal_ticket_role') and request.env.user.portal_ticket_role == 'admin')))"/>
+            </xpath>
+        </template>
+
+        <template id="portal_layout_hide_breadcrumbs" inherit_id="portal.portal_layout" priority="55">
+            <xpath expr="//t[@t-call='portal.frontend_layout']" position="inside">
+                <t t-if="nx_is_warranty_portal" t-set="no_breadcrumbs" t-value="True"/>
+            </xpath>
+        </template>
+
+        <template id="portal_side_warranty_summary" inherit_id="portal.side_content" priority="70">
+            <xpath expr="//div[hasclass('o_portal_my_details')]" position="attributes">
+                <attribute name="t-if">not (request and request.website and request.website.portal_mode == 'warranty')</attribute>
+            </xpath>
+            <xpath expr="//div[hasclass('o_portal_my_details')]" position="before">
+                <t t-if="request and request.website and request.website.portal_mode == 'warranty'">
+                    <style>
+                        .o_portal .o_portal_my_details,
+                        .o_portal_wrap .o_portal_my_details {
+                            border: 1px solid #e6edf0;
+                            border-radius: 14px;
+                            padding: 14px 16px;
+                            background: #fbfdfd;
+                        }
+                        .o_portal .o_portal_my_details .fa,
+                        .o_portal_wrap .o_portal_my_details .fa {
+                            color: #0c8085;
+                        }
+                        .o_portal .o_portal_my_details a,
+                        .o_portal_wrap .o_portal_my_details a {
+                            color: #0c8085 !important;
+                            font-weight: 600;
+                        }
+                        .o_portal .o_portal_contact_img,
+                        .o_portal_wrap .o_portal_contact_img {
+                            border: 3px solid #d9eff0;
+                        }
+                        .nx-warranty-portal-mode .o_portal_my_details {
+                            display: none !important;
+                        }
+                        .nx-last-warranty {
+                            border: 1px solid #e3ecef;
+                            border-radius: 12px;
+                            background: #f8fcfc;
+                            padding: 12px 14px;
+                            margin-top: 14px;
+                        }
+                        .nx-last-warranty .nx-title {
+                            color: #0c6d71;
+                            font-weight: 700;
+                            font-size: 0.95rem;
+                        }
+                        .nx-last-warranty .nx-meta {
+                            color: #304e5f;
+                            font-size: 0.92rem;
+                        }
+                        .nx-last-warranty .progress {
+                            height: 8px;
+                            background: #e8eff2;
+                        }
+                        .nx-last-warranty .progress .progress-bar {
+                            background: linear-gradient(90deg, #0a8f94 0%, #22b0b6 100%);
+                        }
+                    </style>
+                </t>
+            </xpath>
+            <xpath expr="//div[hasclass('o_portal_my_details')]" position="after">
+                <t t-if="request and request.website and request.website.portal_mode == 'warranty'">
+                    <t t-set="nx_is_arabic" t-value="nx_is_arabic"/>
+                    <div class="nx-last-warranty mt-3">
+                        <div class="nx-title mb-1">
+                            <t t-esc="'ملخص الضمان' if nx_is_arabic else 'Warranty Summary'"/>
+                        </div>
+                        <t t-if="latest_warranty">
+                            <div class="nx-meta">
+                                <strong><t t-esc="'الاسم:' if nx_is_arabic else 'Name:'"/></strong>
+                                <t t-esc="latest_warranty.name"/>
+                            </div>
+                            <div class="nx-meta">
+                                <strong><t t-esc="'النوع:' if nx_is_arabic else 'Type:'"/></strong>
+                                <t t-esc="latest_warranty.warranty_template_id.name or '-'"/>
+                            </div>
+                            <div class="nx-meta">
+                                <strong><t t-esc="'تاريخ الانتهاء:' if nx_is_arabic else 'End date:'"/></strong>
+                                <t t-if="latest_warranty.end_date"><span t-field="latest_warranty.end_date"/></t>
+                                <t t-else="">-</t>
+                            </div>
+                            <t t-if="latest_warranty_is_tickets_based">
+                                <div class="nx-meta mt-1">
+                                    <strong><t t-esc="'التذاكر المتبقية:' if nx_is_arabic else 'Remaining tickets:'"/></strong>
+                                    <t t-esc="latest_warranty_remaining_tickets"/>
+                                    /
+                                    <t t-esc="latest_warranty.total_tickets or 0"/>
+                                </div>
+                                <div class="progress mt-2">
+                                    <div class="progress-bar" role="progressbar" t-att-style="'width: ' + str(round(latest_warranty_progress or 0.0, 2)) + '%;'"/>
+                                </div>
+                                <div class="nx-meta mt-1">
+                                    <strong><t t-esc="'الاستخدام:' if nx_is_arabic else 'Usage:'"/></strong>
+                                    <t t-esc="str(round(latest_warranty_progress or 0.0, 1)) + '%'"/>
+                                </div>
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <div class="nx-meta">
+                                <t t-esc="'لا توجد بيانات ضمان متاحة حاليًا.' if nx_is_arabic else 'No warranty data is currently available.'"/>
+                            </div>
+                        </t>
+                        <a href="/my/warranties" class="btn btn-light btn-sm w-100 mt-3">
+                            <i class="fa fa-shield me-1"/>
+                            <t t-esc="'فتح الضمانات' if nx_is_arabic else 'Open Warranties'"/>
+                        </a>
+                    </div>
+                </t>
+            </xpath>
+        </template>
+
+        <!-- Hard override: remove "Your contact" block in warranty mode -->
+        <template id="portal_side_hide_contact_block_warranty" inherit_id="portal.side_content" priority="999">
+            <xpath expr="//div[hasclass('o_portal_my_details')]" position="replace">
+                <t t-if="not (request and request.website and request.website.portal_mode == 'warranty')">
+                    <div class="o_portal_my_details">
+                        <div t-field="user_id.partner_id" t-options='{"widget": "contact", "fields": ["email", "phone", "address"]}'/>
+                    </div>
+                </t>
+            </xpath>
+            <xpath expr="//div[@name='portal_contact']" position="replace">
+                <t t-if="not (request and request.website and request.website.portal_mode == 'warranty')">
+                    <div name="portal_contact" class="o_my_contact mt-5" t-if="sales_user">
+                        <t t-call="portal.portal_contact"/>
+                    </div>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="portal_layout_sidebar_all_pages" inherit_id="portal.portal_layout" priority="65">
+            <xpath expr="//div[hasclass('d-none') and hasclass('d-lg-flex') and hasclass('justify-content-end') and hasclass('col-lg-4')]" position="replace">
+                <t t-if="request and request.website and request.website.portal_mode == 'warranty' and request.httprequest and request.httprequest.path and request.httprequest.path.startswith('/my')">
+                    <div class="d-none d-lg-flex justify-content-end col-lg-4">
+                        <style>
+                            .nx-portal-sidebar-shell {
+                                position: sticky;
+                                top: 1.25rem;
+                                width: 100%;
+                            }
+                            @media (min-width: 992px) {
+                                .o_portal_wrap .row.justify-content-between:has(#nx-portal-sidebar-toggle-home) > .o_portal_content {
+                                    flex: 0 0 calc(100% - 23rem);
+                                    max-width: calc(100% - 23rem);
+                                    transition: flex-basis 0.2s ease, max-width 0.2s ease;
+                                }
+                                .o_portal_wrap .row.justify-content-between:has(#nx-portal-sidebar-toggle-home) > .d-none.d-lg-flex.justify-content-end.col-lg-4 {
+                                    flex: 0 0 21rem;
+                                    max-width: 21rem;
+                                    transition: flex-basis 0.2s ease, max-width 0.2s ease;
+                                }
+                                .o_portal_wrap .row.justify-content-between:has(#nx-portal-sidebar-toggle-home:not(:checked)) > .o_portal_content {
+                                    flex: 0 0 calc(100% - 8rem);
+                                    max-width: calc(100% - 8rem);
+                                }
+                                .o_portal_wrap .row.justify-content-between:has(#nx-portal-sidebar-toggle-home:not(:checked)) > .d-none.d-lg-flex.justify-content-end.col-lg-4 {
+                                    flex: 0 0 6rem;
+                                    max-width: 6rem;
+                                }
+                            }
+                            .nx-portal-sidebar-toggle {
+                                position: absolute;
+                                opacity: 0;
+                                pointer-events: none;
+                            }
+                            .nx-portal-sidebar-panel {
+                                position: relative;
+                                width: 100%;
+                            }
+                            .nx-portal-sidebar-expanded,
+                            .nx-portal-sidebar-collapsed {
+                                transition: opacity 0.2s ease, transform 0.2s ease;
+                            }
+                            .nx-portal-sidebar-expanded {
+                                display: block;
+                                width: 100%;
+                            }
+                            .nx-portal-sidebar-expanded > * {
+                                width: 100%;
+                            }
+                            .nx-portal-sidebar-collapsed {
+                                display: none;
+                            }
+                            .nx-portal-sidebar-toggle-btn {
+                                position: absolute;
+                                top: -0.75rem;
+                                inset-inline-end: 0.5rem;
+                                z-index: 3;
+                                width: 2.5rem;
+                                height: 2.5rem;
+                                border: 1px solid #dfe9ee;
+                                border-radius: 12px;
+                                background: rgba(255, 255, 255, 0.96);
+                                color: #4c5f6b;
+                                box-shadow: 0 6px 18px rgba(16, 24, 40, 0.08);
+                                cursor: pointer;
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                            }
+                            .nx-portal-sidebar-toggle-btn .fa {
+                                transition: transform 0.2s ease;
+                            }
+                            .nx-portal-sidebar-toggle:not(:checked) ~ .nx-portal-sidebar-panel .nx-portal-sidebar-expanded {
+                                display: none;
+                            }
+                            .nx-portal-sidebar-toggle:not(:checked) ~ .nx-portal-sidebar-panel .nx-portal-sidebar-collapsed {
+                                display: flex;
+                            }
+                            .nx-portal-sidebar-toggle:not(:checked) ~ .nx-portal-sidebar-toggle-btn .fa {
+                                transform: rotate(180deg);
+                            }
+                            .nx-portal-sidebar-collapsed {
+                                width: 6rem;
+                                min-height: 32rem;
+                                border: 1px solid #e3ecef;
+                                border-radius: 20px;
+                                background: #ffffff;
+                                box-shadow: 0 10px 28px rgba(11, 30, 44, 0.06);
+                                align-items: center;
+                                justify-content: space-between;
+                                flex-direction: column;
+                                padding: 1rem 0.75rem;
+                                margin-inline-start: auto;
+                            }
+                            .nx-portal-sidebar-mini-top,
+                            .nx-portal-sidebar-mini-links,
+                            .nx-portal-sidebar-mini-bottom {
+                                display: flex;
+                                align-items: center;
+                                flex-direction: column;
+                                gap: 0.75rem;
+                            }
+                            .nx-portal-sidebar-mini-divider {
+                                width: 100%;
+                                height: 1px;
+                                background: #e8eef1;
+                            }
+                            .nx-portal-sidebar-mini-avatar {
+                                width: 3rem;
+                                height: 3rem;
+                                border-radius: 999px;
+                                border: 3px solid #d9eff0;
+                                object-fit: cover;
+                                background: #f8fcfc;
+                            }
+                            .nx-portal-sidebar-mini-link {
+                                width: 3rem;
+                                height: 3rem;
+                                border-radius: 14px;
+                                color: #6b7280;
+                                background: transparent;
+                                text-decoration: none;
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                transition: background 0.18s ease, color 0.18s ease;
+                            }
+                            .nx-portal-sidebar-mini-link:hover,
+                            .nx-portal-sidebar-mini-link:focus {
+                                background: #f4f7f8;
+                                color: #0c6d71;
+                            }
+                            .nx-portal-sidebar-mini-link .fa {
+                                font-size: 1.35rem;
+                            }
+                            .nx-portal-sidebar-mini-link.is-active {
+                                background: #f4f7f8;
+                                color: #0c6d71;
+                            }
+                        </style>
+                        <div class="nx-portal-sidebar-shell">
+                            <input type="checkbox" id="nx-portal-sidebar-toggle-home" class="nx-portal-sidebar-toggle" checked="checked"/>
+                            <label for="nx-portal-sidebar-toggle-home" class="nx-portal-sidebar-toggle-btn" aria-label="Toggle sidebar">
+                                <i class="fa fa-angle-double-left"/>
+                            </label>
+                            <div class="nx-portal-sidebar-panel">
+                                <div class="nx-portal-sidebar-expanded">
+                                    <t t-call="portal.side_content"/>
+                                </div>
+                                <div class="nx-portal-sidebar-collapsed">
+                                    <div class="nx-portal-sidebar-mini-top">
+                                        <img t-if="user_id.image_1920" t-att-src="image_data_uri(user_id.image_1920)" t-att-alt="user_id.name" class="nx-portal-sidebar-mini-avatar"/>
+                                        <div t-else="" class="nx-portal-sidebar-mini-avatar"/>
+                                        <a href="/my/home" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and request.httprequest.path == '/my/home' else ''}" title="Home" aria-label="Home">
+                                            <i class="fa fa-home"/>
+                                        </a>
+                                    </div>
+                                    <div class="nx-portal-sidebar-mini-links">
+                                        <div class="nx-portal-sidebar-mini-divider"/>
+                                        <a href="/my/tickets" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and ('/my/tickets' in request.httprequest.path or '/helpdesk/ticket' in request.httprequest.path) else ''}" title="Tickets" aria-label="Tickets">
+                                            <i class="fa fa-ticket"/>
+                                        </a>
+                                        <a t-if="nx_show_orders" href="/my/orders" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and '/my/orders' in request.httprequest.path else ''}" title="Orders" aria-label="Orders">
+                                            <i class="fa fa-shopping-bag"/>
+                                        </a>
+                                        <a href="/my/elearning" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and ('/my/elearning' in request.httprequest.path or '/slides' in request.httprequest.path) else ''}" title="E-Learning" aria-label="E-Learning">
+                                            <i class="fa fa-graduation-cap"/>
+                                        </a>
+                                        <a href="/my/knowledge" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and ('/my/knowledge' in request.httprequest.path or '/knowledge' in request.httprequest.path) else ''}" title="Knowledge" aria-label="Knowledge">
+                                            <i class="fa fa-book"/>
+                                        </a>
+                                        <a href="/my/warranties" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and '/my/warranties' in request.httprequest.path else ''}" title="Warranties" aria-label="Warranties">
+                                            <i class="fa fa-shield"/>
+                                        </a>
+                                        <a href="/contactus" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and '/contactus' in request.httprequest.path else ''}" title="Contact Us" aria-label="Contact Us">
+                                            <i class="fa fa-envelope"/>
+                                        </a>
+                                        <a href="/my/account" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and '/my/account' in request.httprequest.path else ''}" title="Edit Profile" aria-label="Edit Profile">
+                                            <i class="fa fa-pencil"/>
+                                        </a>
+                                        <div class="nx-portal-sidebar-mini-divider"/>
+                                    </div>
+                                    <div class="nx-portal-sidebar-mini-bottom">
+                                        <a href="/web/session/logout?redirect=/" class="nx-portal-sidebar-mini-link" title="Logout" aria-label="Logout">
+                                            <i class="fa fa-sign-out"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+                <t t-else="">
+                    <style>
+                        .nx-portal-sidebar-shell { position: sticky; top: 1.25rem; width: 100%; }
+                    </style>
+                    <div class="d-none d-lg-flex justify-content-end col-lg-4">
+                        <t t-call="portal.side_content"/>
+                    </div>
+                </t>
+            </xpath>
+            <xpath expr="//t[@t-else='']/t[@t-out='0']" position="replace">
+                <t t-if="request and request.website and request.website.portal_mode == 'warranty' and request.httprequest and request.httprequest.path and request.httprequest.path.startswith('/my')">
+                    <style>
+                        .nx-portal-sidebar-shell {
+                            position: sticky;
+                            top: 1.25rem;
+                            width: 100%;
+                        }
+                        @media (min-width: 992px) {
+                            .o_portal_wrap .row.justify-content-between:has(#nx-portal-sidebar-toggle-home) > .o_portal_content {
+                                flex: 0 0 calc(100% - 23rem);
+                                max-width: calc(100% - 23rem);
+                                transition: flex-basis 0.2s ease, max-width 0.2s ease;
+                            }
+                            .o_portal_wrap .row.justify-content-between:has(#nx-portal-sidebar-toggle-home) > .d-none.d-lg-flex.justify-content-end.col-lg-4 {
+                                flex: 0 0 21rem;
+                                max-width: 21rem;
+                                transition: flex-basis 0.2s ease, max-width 0.2s ease;
+                            }
+                            .o_portal_wrap .row.justify-content-between:has(#nx-portal-sidebar-toggle-home:not(:checked)) > .o_portal_content {
+                                flex: 0 0 calc(100% - 8rem);
+                                max-width: calc(100% - 8rem);
+                            }
+                            .o_portal_wrap .row.justify-content-between:has(#nx-portal-sidebar-toggle-home:not(:checked)) > .d-none.d-lg-flex.justify-content-end.col-lg-4 {
+                                flex: 0 0 6rem;
+                                max-width: 6rem;
+                            }
+                        }
+                        .nx-portal-sidebar-toggle {
+                            position: absolute;
+                            opacity: 0;
+                            pointer-events: none;
+                        }
+                        .nx-portal-sidebar-panel {
+                            position: relative;
+                        }
+                        .nx-portal-sidebar-expanded,
+                        .nx-portal-sidebar-collapsed {
+                            transition: opacity 0.2s ease, transform 0.2s ease;
+                        }
+                        .nx-portal-sidebar-expanded {
+                            display: block;
+                        }
+                        .nx-portal-sidebar-collapsed {
+                            display: none;
+                        }
+                        .nx-portal-sidebar-toggle-btn {
+                            position: absolute;
+                            top: -0.75rem;
+                            inset-inline-end: 0.5rem;
+                            z-index: 3;
+                            width: 2.5rem;
+                            height: 2.5rem;
+                            border: 1px solid #dfe9ee;
+                            border-radius: 12px;
+                            background: rgba(255, 255, 255, 0.96);
+                            color: #4c5f6b;
+                            box-shadow: 0 6px 18px rgba(16, 24, 40, 0.08);
+                            cursor: pointer;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                        .nx-portal-sidebar-toggle-btn .fa {
+                            transition: transform 0.2s ease;
+                        }
+                        .nx-portal-sidebar-toggle:not(:checked) ~ .nx-portal-sidebar-panel .nx-portal-sidebar-expanded {
+                            display: none;
+                        }
+                        .nx-portal-sidebar-toggle:not(:checked) ~ .nx-portal-sidebar-panel .nx-portal-sidebar-collapsed {
+                            display: flex;
+                        }
+                        .nx-portal-sidebar-toggle:not(:checked) ~ .nx-portal-sidebar-toggle-btn .fa {
+                            transform: rotate(180deg);
+                        }
+                        .nx-portal-sidebar-collapsed {
+                            width: 6rem;
+                            min-height: 32rem;
+                            border: 1px solid #e3ecef;
+                            border-radius: 20px;
+                            background: #ffffff;
+                            box-shadow: 0 10px 28px rgba(11, 30, 44, 0.06);
+                            align-items: center;
+                            justify-content: space-between;
+                            flex-direction: column;
+                            padding: 1rem 0.75rem;
+                            margin-inline-start: auto;
+                        }
+                        .nx-portal-sidebar-mini-top,
+                        .nx-portal-sidebar-mini-links,
+                        .nx-portal-sidebar-mini-bottom {
+                            display: flex;
+                            align-items: center;
+                            flex-direction: column;
+                            gap: 0.75rem;
+                        }
+                        .nx-portal-sidebar-mini-divider {
+                            width: 100%;
+                            height: 1px;
+                            background: #e8eef1;
+                        }
+                        .nx-portal-sidebar-mini-avatar {
+                            width: 3rem;
+                            height: 3rem;
+                            border-radius: 999px;
+                            border: 3px solid #d9eff0;
+                            object-fit: cover;
+                            background: #f8fcfc;
+                        }
+                        .nx-portal-sidebar-mini-link {
+                            width: 3rem;
+                            height: 3rem;
+                            border-radius: 14px;
+                            color: #6b7280;
+                            background: transparent;
+                            text-decoration: none;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            transition: background 0.18s ease, color 0.18s ease;
+                        }
+                        .nx-portal-sidebar-mini-link:hover,
+                        .nx-portal-sidebar-mini-link:focus {
+                            background: #f4f7f8;
+                            color: #0c6d71;
+                        }
+                        .nx-portal-sidebar-mini-link .fa {
+                            font-size: 1.35rem;
+                        }
+                        .nx-portal-sidebar-mini-link.is-active {
+                            background: #f4f7f8;
+                            color: #0c6d71;
+                        }
+                    </style>
+                    <div class="row justify-content-between">
+                        <div class="o_portal_content col-12 col-lg-8 mb-5">
+                            <t t-out="0"/>
+                        </div>
+                        <div class="d-none d-lg-flex justify-content-end col-lg-4">
+                            <div class="nx-portal-sidebar-shell">
+                                <input type="checkbox" id="nx-portal-sidebar-toggle-home" class="nx-portal-sidebar-toggle" checked="checked"/>
+                                <label for="nx-portal-sidebar-toggle-home" class="nx-portal-sidebar-toggle-btn" aria-label="Toggle sidebar">
+                                    <i class="fa fa-angle-double-left"/>
+                                </label>
+                                <div class="nx-portal-sidebar-panel">
+                                    <div class="nx-portal-sidebar-expanded">
+                                        <t t-call="portal.side_content"/>
+                                    </div>
+                                    <div class="nx-portal-sidebar-collapsed">
+                                        <div class="nx-portal-sidebar-mini-top">
+                                            <img t-if="user_id.image_1920" t-att-src="image_data_uri(user_id.image_1920)" t-att-alt="user_id.name" class="nx-portal-sidebar-mini-avatar"/>
+                                            <div t-else="" class="nx-portal-sidebar-mini-avatar"/>
+                                            <a href="/my/home" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and request.httprequest.path == '/my/home' else ''}" title="Home" aria-label="Home">
+                                                <i class="fa fa-home"/>
+                                            </a>
+                                        </div>
+                                        <div class="nx-portal-sidebar-mini-links">
+                                            <div class="nx-portal-sidebar-mini-divider"/>
+                                            <a href="/my/tickets" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and ('/my/tickets' in request.httprequest.path or '/helpdesk/ticket' in request.httprequest.path) else ''}" title="Tickets" aria-label="Tickets">
+                                                <i class="fa fa-ticket"/>
+                                            </a>
+                                            <a t-if="nx_show_orders" href="/my/orders" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and '/my/orders' in request.httprequest.path else ''}" title="Orders" aria-label="Orders">
+                                                <i class="fa fa-shopping-bag"/>
+                                            </a>
+                                            <a href="/my/elearning" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and ('/my/elearning' in request.httprequest.path or '/slides' in request.httprequest.path) else ''}" title="E-Learning" aria-label="E-Learning">
+                                                <i class="fa fa-graduation-cap"/>
+                                            </a>
+                                            <a href="/my/knowledge" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and ('/my/knowledge' in request.httprequest.path or '/knowledge' in request.httprequest.path) else ''}" title="Knowledge" aria-label="Knowledge">
+                                                <i class="fa fa-book"/>
+                                            </a>
+                                            <a href="/my/warranties" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and '/my/warranties' in request.httprequest.path else ''}" title="Warranties" aria-label="Warranties">
+                                                <i class="fa fa-shield"/>
+                                            </a>
+                                            <a href="/contactus" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and '/contactus' in request.httprequest.path else ''}" title="Contact Us" aria-label="Contact Us">
+                                                <i class="fa fa-envelope"/>
+                                            </a>
+                                            <a href="/my/account" t-attf-class="nx-portal-sidebar-mini-link #{'is-active' if request and '/my/account' in request.httprequest.path else ''}" title="Edit Profile" aria-label="Edit Profile">
+                                                <i class="fa fa-pencil"/>
+                                            </a>
+                                            <div class="nx-portal-sidebar-mini-divider"/>
+                                        </div>
+                                        <div class="nx-portal-sidebar-mini-bottom">
+                                            <a href="/web/session/logout?redirect=/" class="nx-portal-sidebar-mini-link" title="Logout" aria-label="Logout">
+                                                <i class="fa fa-sign-out"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="offcanvas offcanvas-start d-lg-none" id="accountOffCanvas">
+                            <t t-call="portal.side_content">
+                                <t t-set="isOffcanvas" t-value="true"/>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+                <t t-else="">
+                    <t t-out="0"/>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="portal_home_tabs_above_title" inherit_id="portal.portal_layout" priority="60">
+            <xpath expr="//div[hasclass('wrapper')]/h3[hasclass('my-3')]" position="before">
+                <t t-if="False">
+                    <div class="nx-home-tabs" id="nx-home-tabs">
+                        <a href="/my/tickets" class="nx-tab-btn">Tickets</a>
+                        <a href="/my/orders" class="nx-tab-btn">Orders</a>
+                        <a href="/my/elearning" class="nx-tab-btn">E-Learning</a>
+                        <a href="/my/knowledge" class="nx-tab-btn">Knowledge</a>
+                        <a href="/my/warranties" class="nx-tab-btn">Warranties</a>
+                    </div>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="portal_top_nav_tabs" inherit_id="website.template_header_default" priority="95">
+            <xpath expr="//t[@t-call='portal.user_dropdown']" position="attributes">
+                <attribute name="t-if">not nx_warranty_portal_path</attribute>
+            </xpath>
+            <xpath expr="//t[@t-call='portal.user_dropdown']/t[@t-set='_user_name']" position="replace">
+                <t t-set="_user_name" t-value="not nx_warranty_header_path"/>
+            </xpath>
+            <xpath expr="//t[@t-call='website.placeholder_header_search_box']" position="attributes">
+                <attribute name="t-if">not nx_warranty_header_path</attribute>
+            </xpath>
+            <xpath expr="//t[@t-call='website.placeholder_header_call_to_action']" position="attributes">
+                <attribute name="t-if">not nx_warranty_header_path</attribute>
+            </xpath>
+            <xpath expr="//t[@t-call='website.placeholder_header_text_element']" position="attributes">
+                <attribute name="t-if">not nx_warranty_header_path</attribute>
+            </xpath>
+            <xpath expr="//t[@t-call='website.placeholder_header_text_element']" position="after">
+                <t t-if="nx_warranty_portal_path">
+                    <li class="nav-item nx-phone-item">
+                        <span class="nav-link d-flex align-items-center">
+                            <i class="fa fa-phone me-2"/>
+                            +202 376 4470
+                        </span>
+                    </li>
+                </t>
+            </xpath>
+            <xpath expr="//t[@t-call='website.navbar_nav']/t[@t-foreach='website.menu_id.child_id']" position="replace">
+                <t t-if="nx_warranty_login_path"/>
+                <t t-elif="nx_warranty_portal_path">
+                    <li class="nav-item">
+                        <a t-attf-class="nav-link nx-portal-nav-link #{'active' if ('/my/tickets' in request.httprequest.path or '/helpdesk/ticket' in request.httprequest.path) else ''}" href="/my/tickets">Tickets</a>
+                    </li>
+                    <li t-if="(request and request.website and request.website.portal_mode == 'warranty') or (request and request.env and request.env.user and (request.env.user.has_group('base.group_user') or (request.env.user._fields.get('portal_ticket_role') and request.env.user.portal_ticket_role == 'admin')))" class="nav-item">
+                        <a t-attf-class="nav-link nx-portal-nav-link #{'active' if '/my/orders' in request.httprequest.path else ''}" href="/my/orders">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a t-attf-class="nav-link nx-portal-nav-link #{'active' if ('/my/elearning' in request.httprequest.path or '/slides' in request.httprequest.path) else ''}" href="/my/elearning">E-Learning</a>
+                    </li>
+                    <li class="nav-item">
+                        <a t-attf-class="nav-link nx-portal-nav-link #{'active' if ('/my/knowledge' in request.httprequest.path or '/knowledge' in request.httprequest.path) else ''}" href="/my/knowledge">Knowledge</a>
+                    </li>
+                    <li class="nav-item">
+                        <a t-attf-class="nav-link nx-portal-nav-link #{'active' if '/my/warranties' in request.httprequest.path else ''}" href="/my/warranties">Warranties</a>
+                    </li>
+                    <li class="nav-item">
+                        <a t-attf-class="nav-link nx-portal-nav-link #{'active' if '/contactus' in request.httprequest.path else ''}" href="/contactus">Contact us</a>
+                    </li>
+                </t>
+                <t t-else="">
+                    <t t-foreach="website.menu_id.child_id" t-as="submenu">
+                        <t t-call="website.submenu">
+                            <t t-set="item_class" t-valuef="nav-item"/>
+                            <t t-set="link_class" t-valuef="nav-link"/>
+                        </t>
+                    </t>
+                </t>
+            </xpath>
+            <xpath expr="//t[@t-call='website.navbar_nav']" position="after">
+                <t t-if="nx_warranty_header_path">
+                    <style>
+                        .o_main_nav a.navbar-brand,
+                        .o_main_nav .navbar-brand {
+                            display: inline-flex !important;
+                            visibility: visible !important;
+                        }
+                        .o_main_nav .nx-portal-nav-link {
+                            color: #0f5f63 !important;
+                            font-weight: 600;
+                            border-radius: 10px;
+                            padding: 8px 12px !important;
+                            transition: all 0.18s ease;
+                        }
+                        .o_main_nav .nx-portal-nav-link:hover {
+                            color: #ffffff !important;
+                            background: #12979d !important;
+                        }
+                        .o_main_nav .nx-portal-nav-link.active {
+                            color: #ffffff !important;
+                            background: #0c6d71 !important;
+                            font-weight: 800 !important;
+                        }
+                        .o_main_nav .nx-phone-item .nav-link {
+                            color: #0f5f63 !important;
+                            font-weight: 700;
+                            padding-left: 8px !important;
+                            padding-right: 8px !important;
+                        }
+                        .o_main_nav .js_language_selector .dropdown-toggle {
+                            min-height: 48px;
+                            border: 1px solid #cfe6e8 !important;
+                            border-radius: 14px;
+                            background: linear-gradient(180deg, #ffffff 0%, #f4fbfb 100%) !important;
+                            color: #0f5f63 !important;
+                            font-weight: 700;
+                            box-shadow: 0 10px 24px rgba(8, 61, 63, 0.08);
+                            transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+                        }
+                        .o_main_nav .js_language_selector .dropdown-toggle:hover,
+                        .o_main_nav .js_language_selector .dropdown-toggle:focus,
+                        .o_main_nav .js_language_selector.show .dropdown-toggle {
+                            border-color: #1aa3aa !important;
+                            color: #0c6d71 !important;
+                            box-shadow: 0 14px 28px rgba(8, 61, 63, 0.14);
+                            transform: translateY(-1px);
+                        }
+                        .o_main_nav .js_language_selector .dropdown-menu {
+                            border: 1px solid #d6eaec;
+                            border-radius: 16px;
+                            padding: 0.45rem;
+                            min-width: 14rem;
+                            background: rgba(255, 255, 255, 0.98);
+                            box-shadow: 0 18px 36px rgba(11, 30, 44, 0.12);
+                            backdrop-filter: blur(10px);
+                        }
+                        .o_main_nav .js_language_selector .dropdown-item {
+                            border-radius: 12px;
+                            color: #234553;
+                            font-weight: 600;
+                            padding: 0.8rem 1rem;
+                            transition: background-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+                        }
+                        .o_main_nav .js_language_selector .dropdown-item:hover,
+                        .o_main_nav .js_language_selector .dropdown-item:focus {
+                            background: #e7f7f8;
+                            color: #0c6d71;
+                            transform: translateX(2px);
+                        }
+                        .o_main_nav .js_language_selector .dropdown-item.active,
+                        .o_main_nav .js_language_selector .dropdown-item:active {
+                            background: linear-gradient(135deg, #0c6d71 0%, #17a3a8 100%);
+                            color: #ffffff;
+                        }
+                        .o_portal_wrap h3.my-3 {
+                            display: none !important;
+                        }
+                    </style>
+                </t>
+                <t t-if="nx_warranty_login_path">
+                    <style>
+                        .o_main_nav .navbar-nav > li,
+                        .o_main_nav .o_menu_systray,
+                        .o_main_nav .o_wsale_my_cart,
+                        .o_main_nav .o_portal_user_dropdown,
+                        .o_main_nav .divider,
+                        .o_main_nav .vr {
+                            display: none !important;
+                        }
+                        .o_main_nav ul.navbar-nav {
+                            gap: 0 !important;
+                        }
+                    </style>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="website_header_brand_logo_nextera_img" inherit_id="website.template_header_default" priority="96">
+            <xpath expr="//t[@t-call='website.placeholder_header_brand']" position="replace">
+                <t t-if="nx_warranty_header_path">
+                    <a data-name="Navbar Logo" href="/my/home" class="navbar-brand logo me-4">
+                        <img src="/nx_warranty_sla/static/src/img/img.png" alt="NextEra" class="img img-fluid" width="156" height="40"/>
+                    </a>
+                </t>
+                <t t-else="">
+                    <t t-call="website.placeholder_header_brand">
+                        <t t-set="_link_class" t-valuef="me-4"/>
+                    </t>
+                </t>
+            </xpath>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_template_form_warranty_sla" model="ir.ui.view">
+        <field name="name">product.template.form.warranty.sla</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']" position="after">
+                <page name="warranty_sla" string="Warranty / SLA">
+                    <group>
+                        <field name="has_warranty"/>
+                        <field name="warranty_certain_period" invisible="type != 'service' or not has_warranty"/>
+                        <field name="warranty_template_ids" invisible="not has_warranty" required="has_warranty">
+                            <list editable="bottom">
+                                <field name="name"/>
+                                <field name="duration_type"/>
+                                <field name="duration_months" optional="show"/>
+                                <field name="total_tickets" optional="show"/>
+                                <field name="service_hours_per_day" optional="show"/>
+                                <field name="service_days_per_week" optional="show"/>
+                                <field name="active" optional="show"/>
+                            </list>
+                            <form>
+                                <sheet>
+                                    <group>
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="duration_type"/>
+                                            <field name="active"/>
+                                        </group>
+                                        <group>
+                                            <field name="duration_months" invisible="1"/>
+                                            <field name="total_tickets" invisible="duration_type != 'tickets_based'"/>
+                                            <field name="service_hours_per_day"/>
+                                            <field name="service_days_per_week"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <field name="description"/>
+                                    </group>
+                                </sheet>
+                            </form>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

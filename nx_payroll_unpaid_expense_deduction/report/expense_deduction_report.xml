@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_salary_expense_deduction" model="ir.actions.report">
+        <field name="name">Salary Deduction for Expenses</field>
+        <field name="model">hr.payslip</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">nx_payroll_unpaid_expense_deduction.report_salary_expense_deduction</field>
+        <field name="report_file">nx_payroll_unpaid_expense_deduction.report_salary_expense_deduction</field>
+        <field name="binding_model_id" ref="hr_payroll.model_hr_payslip"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Expense Deduction - %s' % (object.number or object.name)</field>
+    </record>
+
+    <template id="report_salary_expense_deduction">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Salary Deduction for Expenses</h2>
+                        <p><strong>Employee:</strong> <span t-field="o.employee_id"/></p>
+                        <p><strong>Payslip Period:</strong> <span t-field="o.date_from"/> - <span t-field="o.date_to"/></p>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Category</th>
+                                    <th class="text-end">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.deducted_expense_ids" t-as="expense">
+                                    <td><span t-field="expense.date"/></td>
+                                    <td><span t-field="expense.name"/></td>
+                                    <td><span t-field="expense.product_id"/></td>
+                                    <td class="text-end">
+                                        <span t-out="o._convert_expense_amount_to_payslip_currency(expense)"
+                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="fw-bold">
+                                    <td colspan="3">Total Deducted</td>
+                                    <td class="text-end">
+                                        <span t-field="o.total_deducted_expenses"
+                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                </tr>
+                                <tr class="fw-bold">
+                                    <td colspan="3">Remaining Net Salary</td>
+                                    <td class="text-end">
+                                        <span t-field="o.net_wage"
+                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

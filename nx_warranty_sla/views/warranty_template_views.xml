@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_warranty_template_list" model="ir.ui.view">
+        <field name="name">warranty.template.list</field>
+        <field name="model">warranty.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="duration_type"/>
+                <field name="duration_months"/>
+                <field name="service_hours_per_day"/>
+                <field name="service_days_per_week"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_warranty_template_form" model="ir.ui.view">
+        <field name="name">warranty.template.form</field>
+        <field name="model">warranty.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="duration_type"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="duration_months" invisible="duration_type != 'months'" required="duration_type == 'months'"/>
+                            <field name="service_hours_per_day"/>
+                            <field name="service_days_per_week"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_warranty_template" model="ir.actions.act_window">
+        <field name="name">Warranty Templates</field>
+        <field name="res_model">warranty.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="groups_id" eval="[(6, 0, [ref('sales_team.group_sale_salesman')])]"/>
+    </record>
+    <menuitem
+        id="menu_warranty_template"
+        name="Warranty Templates"
+        parent="sale.prod_config_main"
+        action="action_warranty_template"
+        sequence="99"
+        groups="sales_team.group_sale_salesman"/>
+</odoo>

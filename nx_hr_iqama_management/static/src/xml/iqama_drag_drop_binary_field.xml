@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="nx_hr_iqama_management.DragDropBinaryField">
+        <div t-att-class="dropzoneClassName"
+             t-on-dragenter="onDragEnter"
+             t-on-dragover="onDragOver"
+             t-on-dragleave="onDragLeave"
+             t-on-drop="onDrop">
+            <t t-if="!props.readonly">
+                <t t-if="hasFile">
+                    <div class="o_iqama_drag_drop_binary_field__content">
+                        <div class="o_iqama_drag_drop_binary_field__filename text-truncate" t-att-title="fileName">
+                            <t t-esc="fileName"/>
+                        </div>
+                        <div class="o_iqama_drag_drop_binary_field__actions">
+                            <FileUploader
+                                acceptedFileExtensions="props.acceptedFileExtensions"
+                                onUploaded.bind="update"
+                            >
+                                <t name="download" t-if="props.record.resId and !props.record.dirty">
+                                    <button
+                                        class="btn btn-link btn-sm lh-1 fa fa-download o_download_file_button"
+                                        data-tooltip="Download"
+                                        aria-label="Download"
+                                        t-on-click="onFileDownload"
+                                        type="button"
+                                    />
+                                </t>
+                                <t t-set-slot="toggler">
+                                    <button
+                                        class="btn btn-link btn-sm lh-1 fa fa-pencil o_select_file_button"
+                                        data-tooltip="Replace"
+                                        aria-label="Replace"
+                                        type="button"
+                                    />
+                                </t>
+                                <button
+                                    class="btn btn-link btn-sm lh-1 fa fa-trash o_clear_file_button"
+                                    data-tooltip="Clear"
+                                    aria-label="Clear"
+                                    t-on-click="() => this.update({})"
+                                    type="button"
+                                />
+                            </FileUploader>
+                        </div>
+                    </div>
+                    <div class="o_iqama_drag_drop_binary_field__hint text-muted">
+                        Drag &amp; drop to replace
+                    </div>
+                </t>
+                <t t-else="">
+                    <label class="o_iqama_drag_drop_binary_field__empty">
+                        <FileUploader
+                            acceptedFileExtensions="props.acceptedFileExtensions"
+                            onUploaded.bind="update"
+                        >
+                            <t t-set-slot="toggler">
+                                <span class="o_iqama_drag_drop_binary_field__upload_text">
+                                    <i class="fa fa-upload me-1"/>
+                                    Drag &amp; drop or upload
+                                </span>
+                            </t>
+                        </FileUploader>
+                    </label>
+                </t>
+            </t>
+            <t t-elif="props.record.resId and props.record.data[props.name]">
+                <a class="o_form_uri" href="#" t-on-click.prevent="onFileDownload">
+                    <span class="fa fa-download me-2"/>
+                    <t t-if="fileName" t-esc="fileName"/>
+                </a>
+            </t>
+        </div>
+    </t>
+</templates>

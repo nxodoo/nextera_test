@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_expense_form_inherit_expense_lines" model="ir.ui.view">
+        <field name="name">hr.expense.form.inherit.expense.lines</field>
+        <field name="model">hr.expense</field>
+        <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']/.." position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='price_unit']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//label[@for='quantity']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//div[./field[@name='quantity']]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//label[@for='total_amount_currency']" position="attributes">
+                <attribute name="string">Total</attribute>
+            </xpath>
+            <xpath expr="//div[@class='fst-italic' and .//field[@name='product_description']]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='price_unit' and @widget='monetary']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//label[@for='total_amount_currency']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//div[./field[@name='total_amount_currency'] and ./field[@name='currency_id']]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//label[@name='total_amount_product_cost_label']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//label[@name='total_amount_multicurrency_label']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//div[./field[@name='total_amount'] and ./field[@name='label_currency_rate']]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//label[@for='tax_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//div[./field[@name='tax_ids'] and ./field[@name='tax_amount_currency']]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group[./field[@name='date']]" position="inside">
+                <field name="total_amount_currency"
+                       string="Total"
+                       widget="monetary"
+                       readonly="1"
+                       options="{'currency_field': 'currency_id'}"/>
+                <field name="tax_ids"
+                       string="Included taxes"
+                       force_save="1"
+                       widget="many2many_tags"
+                       readonly="not is_editable"
+                       options="{'no_create': True}"/>
+                <field name="analytic_distribution"
+                       string="Analytic Distribution"
+                       widget="analytic_distribution"
+                       groups="analytic.group_analytic_accounting"
+                       options="{'product_field': 'product_id', 'account_field': 'account_id', 'business_domain': 'expense'}"
+                       readonly="not is_editable"/>
+            </xpath>
+            <xpath expr="//group[./field[@name='date']]/field[@name='account_id']/following-sibling::field[@name='analytic_distribution'][1]" position="replace"/>
+            <xpath expr="//div[field[@name='description']]" position="before">
+                <notebook>
+                    <page name="expense_detail_lines" string="Expense Lines">
+                        <field name="has_expense_lines" invisible="1"/>
+                        <field name="expense_line_ids"
+                               nolabel="1"
+                               readonly="not is_editable"
+                               context="{'default_currency_id': currency_id}">
+                            <list editable="bottom" string="Expense Lines">
+                                <field name="sequence" widget="handle"/>
+                                <field name="expense_line_type_id" string="Expense Line Type" required="1"/>
+                                <field name="name" required="1"/>
+                                <field name="unit_amount" string="Unit Price" widget="monetary" required="1"/>
+                                <field name="total_amount" widget="monetary" readonly="1"/>
+                                <field name="currency_id" options="{'no_create': True}" required="1"/>
+                                <field name="attachment_ids" string="Attachments" widget="many2many_binary"/>
+                            </list>
+                            <form string="Expense Line">
+                                <group>
+                                    <group>
+                                        <field name="expense_line_type_id" required="1"/>
+                                        <field name="name" required="1"/>
+                                        <field name="unit_amount" widget="monetary" required="1"/>
+                                        <field name="total_amount" widget="monetary" readonly="1"/>
+                                        <field name="currency_id" options="{'no_create': True}" required="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="attachment_ids" widget="many2many_binary"/>
+                                    </group>
+                                </group>
+                            </form>
+                        </field>
+                        <group class="oe_subtotal_footer" colspan="2" name="expense_total">
+                            <field name="total_amount_currency"
+                                   string="Total In Currency"
+                                   widget="monetary"
+                                   readonly="1"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="currency_id" readonly="1" groups="base.group_multi_currency"/>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_expense_search_inherit_expense_lines" model="ir.ui.view">
+        <field name="name">hr.expense.search.inherit.expense.lines</field>
+        <field name="model">hr.expense</field>
+        <field name="inherit_id" ref="hr_expense.hr_expense_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/group" position="inside">
+                <filter string="Has Expense Lines" name="has_expense_lines" domain="[('expense_line_ids', '!=', False)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_expense_sheet_form_inherit_expense_lines" model="ir.ui.view">
+        <field name="name">hr.expense.sheet.form.inherit.expense.lines</field>
+        <field name="model">hr.expense.sheet</field>
+        <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='expenses']" position="after">
+                <page name="expense_detail_lines" string="Expense Lines">
+                    <field name="expense_detail_line_ids" readonly="1">
+                        <list string="Expense Detail Lines">
+                            <field name="expense_id"/>
+                            <field name="date"/>
+                            <field name="employee_id" optional="show"/>
+                            <field name="expense_line_type_id"/>
+                            <field name="name"/>
+                            <field name="unit_amount" widget="monetary"/>
+                            <field name="total_amount" widget="monetary"/>
+                            <field name="currency_id" optional="show"/>
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </list>
+                        <form string="Expense Line">
+                            <group>
+                                <group>
+                                    <field name="expense_id" readonly="1"/>
+                                    <field name="date" readonly="1"/>
+                                    <field name="employee_id" readonly="1"/>
+                                    <field name="expense_line_type_id" readonly="1"/>
+                                    <field name="name" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="unit_amount" widget="monetary" readonly="1"/>
+                                    <field name="total_amount" widget="monetary" readonly="1"/>
+                                    <field name="currency_id" readonly="1"/>
+                                    <field name="attachment_ids" widget="many2many_binary" readonly="1"/>
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

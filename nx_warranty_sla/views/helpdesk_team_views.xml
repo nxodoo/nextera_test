@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_team_view_form_contactus_default" model="ir.ui.view">
+        <field name="name">helpdesk.team.form.contactus.default</field>
+        <field name="model">helpdesk.team</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_team_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='website_form_channel']" position="inside">
+                <setting
+                    help="Use this team for tickets created from the public Contact Us website page."
+                >
+                    <field name="is_default_contactus_team"/>
+                    <div class="text-muted o_row ps-1 mt16" invisible="not is_default_contactus_team">
+                        <i class="fa fa-lightbulb-o"/>
+                        <span class="ms-2">The website Contact Us page will create helpdesk tickets in this team by default.</span>
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

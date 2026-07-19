@@ -1,0 +1,38 @@
+{
+    "name": "HR KPI Variable Salary",
+    "version": "18.0.1.0.0",
+    "summary": "Manage KPI-based variable salary and payroll integration",
+    "author": "Ahmed Tarek",
+    "license": "LGPL-3",
+    "category": "Human Resources/Payroll",
+    "depends": [
+        "hr",
+        "hr_contract",
+        "hr_payroll",
+        "hr_payroll_account",
+    ],
+    "data": [
+        "security/security.xml",
+        "security/ir.model.access.csv",
+        "data/ir_sequence_data.xml",
+        "data/hr_payroll_rule_overrides.xml",
+        "data/hr_salary_rule_data.xml",
+        "data/ir_cron_data.xml",
+        "views/hr_contract_views.xml",
+        "views/hr_employee_views.xml",
+        "views/hr_kpi_evaluation_views.xml",
+        "views/hr_payslip_views.xml",
+        "views/res_config_settings_views.xml",
+        "report/report_light_payslip_templates.xml",
+        "wizard/hr_payslip_kpi_missing_wizard_views.xml",
+    ],
+    "assets": {
+        "web.assets_backend": [
+            "nx_hr_kpi_salary/static/src/js/payslip_view_fallbacks.js",
+        ],
+    },
+    "installable": True,
+    "application": False,
+    "auto_install": False,
+    "post_init_hook": "post_init_hook",
+}

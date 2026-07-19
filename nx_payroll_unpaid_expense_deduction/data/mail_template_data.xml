@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_template_expense_deducted" model="mail.template">
+            <field name="name">Expense Deduction Notice</field>
+            <field name="model_id" ref="hr_payroll.model_hr_payslip"/>
+            <field name="subject">Expense Deduction Notice - Payslip {{ object.number or object.name }}</field>
+            <field name="email_from">{{ (user.email_formatted or user.company_id.email_formatted or '') }}</field>
+            <field name="partner_to">{{ object.employee_id.work_contact_id.id }}</field>
+            <field name="body_html" type="html">
+                <div>
+                    <p>Dear <t t-out="object.employee_id.name"/>,</p>
+                    <p>
+                        The following approved expenses were deducted from your salary for the period
+                        <strong><t t-out="object.date_from"/></strong> to <strong><t t-out="object.date_to"/></strong>.
+                    </p>
+                    <ul>
+                        <t t-foreach="object.deducted_expense_ids" t-as="expense">
+                            <li>
+                                <t t-out="expense.name"/>:
+                                <t t-out="format_amount(object.env, object._convert_expense_amount_to_payslip_currency(expense), object.currency_id)"/>
+                            </li>
+                        </t>
+                    </ul>
+                    <p>
+                        <strong>Total Deducted:</strong>
+                        <t t-out="format_amount(object.env, object.total_deducted_expenses, object.currency_id)"/>
+                    </p>
+                    <p>Please review your payslip for more details.</p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

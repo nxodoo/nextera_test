@@ -1,0 +1,26 @@
+{
+    "name": "Payroll Unpaid Expense Deduction",
+    "version": "18.0.1.0.0",
+    "summary": "Deduct approved unpaid expenses from employee payslips",
+    "author": "OpenAI",
+    "license": "LGPL-3",
+    "depends": [
+        "hr_payroll",
+        "hr_expense",
+    ],
+    "data": [
+        "security/ir.model.access.csv",
+        "security/security.xml",
+        "data/hr_salary_rule_data.xml",
+        "data/mail_template_data.xml",
+        "views/res_config_settings_views.xml",
+        "views/hr_expense_views.xml",
+        "views/hr_payslip_views.xml",
+        "report/hr_payslip_report.xml",
+        "report/expense_deduction_report.xml",
+    ],
+    "installable": True,
+    "application": False,
+    "auto_install": False,
+    "post_init_hook": "post_init_hook",
+}

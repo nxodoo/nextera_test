@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_expense_line_type_form_inherit_payroll_allowance" model="ir.ui.view">
+        <field name="name">hr.expense.line.type.form.inherit.payroll.allowance</field>
+        <field name="model">hr.expense.line.type</field>
+        <field name="inherit_id" ref="nx_hr_expense_line.view_hr_expense_line_type_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[field[@name='note']]" position="after">
+                <group string="Payroll" name="payroll_expense_allowance">
+                    <field name="payroll_post_to_payroll"/>
+                    <field name="payroll_salary_rule_id"
+                           invisible="not payroll_post_to_payroll"
+                           options="{'no_create': True}"/>
+                    <field name="payroll_payslip_input_type_id"
+                           invisible="not payroll_post_to_payroll"
+                           options="{'no_create': True}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_expense_line_type_tree_inherit_payroll_allowance" model="ir.ui.view">
+        <field name="name">hr.expense.line.type.tree.inherit.payroll.allowance</field>
+        <field name="model">hr.expense.line.type</field>
+        <field name="inherit_id" ref="nx_hr_expense_line.view_hr_expense_line_type_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='active']" position="before">
+                <field name="payroll_post_to_payroll" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

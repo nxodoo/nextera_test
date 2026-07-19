@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_cron_generate_kpi_evaluations" model="ir.cron">
+        <field name="name">Generate KPI Evaluations</field>
+        <field name="model_id" ref="model_hr_kpi_evaluation"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_generate_draft_kpi_evaluations()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

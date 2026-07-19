@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_nx_internal_project_mass_allocation_wizard_manager,nx.internal.project.mass.allocation.wizard manager,model_nx_internal_project_mass_allocation_wizard,nx_payroll_timesheet_work_entry.group_manage_internal_project_entries,1,1,1,1
+access_nx_internal_project_mass_allocation_wizard_system,nx.internal.project.mass.allocation.wizard system,model_nx_internal_project_mass_allocation_wizard,base.group_system,1,1,1,1

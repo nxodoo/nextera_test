@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_payslip_inherit_expense_deductions" inherit_id="hr_payroll.report_payslip">
+        <xpath expr="//div[@id='to_pay']" position="before">
+            <div t-if="o.deducted_expense_ids" class="mt-4">
+                <h4>Deducted Expenses</h4>
+                <table class="table table-sm table-borderless">
+                    <thead class="o_black_border">
+                        <tr>
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th class="text-end">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="o.deducted_expense_ids" t-as="expense">
+                            <td>
+                                <span t-field="expense.name"/>
+                            </td>
+                            <td>
+                                <span t-field="expense.date"/>
+                            </td>
+                            <td class="text-end">
+                                <span t-out="o._convert_expense_amount_to_payslip_currency(expense)"
+                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                            </td>
+                        </tr>
+                        <tr class="fw-bold o_border_top">
+                            <td colspan="2">Total Deducted Expenses</td>
+                            <td class="text-end">
+                                <span t-field="o.total_deducted_expenses"
+                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_light_payslip_inherit_kpi_description" inherit_id="hr_payroll.report_light_payslip">
+        <xpath expr="//td[@id='payslip_line_name']/span" position="replace">
+            <span t-if="line.accounting_description" t-field="line.accounting_description"/>
+            <span t-else="" t-field="line.name"/>
+        </xpath>
+    </template>
+</odoo>

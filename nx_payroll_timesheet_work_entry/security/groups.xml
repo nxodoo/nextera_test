@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!--
+            Bypass Timesheet Date Restriction
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            Users in this group can create/edit timesheets for any date
+            without being restricted to today/yesterday.
+            Implied by HR Manager and base.group_system.
+        -->
+        <record id="group_bypass_timesheet_date_restriction" model="res.groups">
+            <field name="name">Bypass Timesheet Date Restriction</field>
+            <field name="category_id" ref="base.module_category_human_resources_payroll"/>
+            <field name="comment">
+                Members may create or edit timesheets for any past or future date,
+                bypassing the today/yesterday date restriction applied to regular employees.
+            </field>
+        </record>
+
+        <record id="group_manage_internal_project_entries" model="res.groups">
+            <field name="name">Manage Internal Project Entries</field>
+            <field name="category_id" ref="base.module_category_human_resources_payroll"/>
+            <field name="comment">
+                Members may create, edit, delete, and mass allocate timesheets
+                on restricted internal projects.
+            </field>
+        </record>
+
+        <!-- HR Manager implicitly gets the bypass -->
+        <record id="hr.group_hr_manager" model="res.groups">
+            <field name="implied_ids" eval="[
+                (4, ref('nx_payroll_timesheet_work_entry.group_bypass_timesheet_date_restriction')),
+                (4, ref('nx_payroll_timesheet_work_entry.group_manage_internal_project_entries'))
+            ]"/>
+        </record>
+
+        <!-- System Administrator implicitly gets the bypass -->
+        <record id="base.group_system" model="res.groups">
+            <field name="implied_ids" eval="[
+                (4, ref('nx_payroll_timesheet_work_entry.group_bypass_timesheet_date_restriction')),
+                (4, ref('nx_payroll_timesheet_work_entry.group_manage_internal_project_entries'))
+            ]"/>
+        </record>
+
+    </data>
+</odoo>

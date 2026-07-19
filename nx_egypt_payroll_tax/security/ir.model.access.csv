@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_nx_egypt_payroll_tax_user,nx.egypt.payroll.tax.user,model_nx_egypt_payroll_tax,hr_payroll.group_hr_payroll_user,1,0,0,0
+access_nx_egypt_payroll_tax_manager,nx.egypt.payroll.tax.manager,model_nx_egypt_payroll_tax,hr_payroll.group_hr_payroll_manager,1,1,1,1
+access_nx_egypt_payroll_tax_bracket_user,nx.egypt.payroll.tax.bracket.user,model_nx_egypt_payroll_tax_bracket,hr_payroll.group_hr_payroll_user,1,0,0,0
+access_nx_egypt_payroll_tax_bracket_manager,nx.egypt.payroll.tax.bracket.manager,model_nx_egypt_payroll_tax_bracket,hr_payroll.group_hr_payroll_manager,1,1,1,1

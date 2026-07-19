@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="portal_my_home_warranty_entry" inherit_id="portal.portal_my_home" priority="30">
+            <xpath expr="//div[contains(@class, 'o_portal_doc_spinner')]" position="attributes">
+                <attribute name="class" add="d-none" separator=" "/>
+            </xpath>
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+                <t t-if="request.website.portal_mode == 'warranty'">
+
+                    <t t-call="portal.portal_docs_entry">
+                        <t t-set="title">Warranties</t>
+                        <t t-set="url">/my/warranties</t>
+                        <t t-set="count" t-value="warranty_count"/>
+                    </t>
+
+                </t>
+            </xpath>
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+                <t t-if="not (request and request.env and request.env.user and (request.env.user.has_group('base.group_user') or (request.env.user._fields.get('portal_ticket_role') and request.env.user.portal_ticket_role == 'admin')))">
+                    <style>
+                        .o_portal .o_portal_docs .o_portal_index_card > a[href*="/my/orders"],
+                        .o_portal_wrap .o_portal_docs .o_portal_index_card > a[href*="/my/orders"] {
+                            display: none !important;
+                        }
+                    </style>
+                </t>
+                <style>
+                    .o_portal .o_portal_content h3,
+                    .o_portal_wrap .o_portal_content h3 {
+                        font-weight: 700;
+                        letter-spacing: -0.02em;
+                    }
+                    .o_portal .o_portal_docs .o_portal_index_card > a,
+                    .o_portal_wrap .o_portal_docs .o_portal_index_card > a {
+                        position: relative;
+                        border: 1px solid #dfe9ee;
+                        border-radius: 16px;
+                        background: #ffffff !important;
+                        transition: all 0.2s ease;
+                        box-shadow: 0 6px 16px rgba(11, 30, 44, 0.05);
+                        padding: 18px 16px !important;
+                    }
+                    .o_portal .o_portal_docs .o_portal_index_card > a:hover,
+                    .o_portal_wrap .o_portal_docs .o_portal_index_card > a:hover {
+                        transform: translateY(-2px);
+                        border-color: #8ecfd3;
+                        box-shadow: 0 12px 24px rgba(11, 80, 84, 0.13);
+                    }
+                    .o_portal .o_portal_docs .o_portal_index_card > a::before,
+                    .o_portal_wrap .o_portal_docs .o_portal_index_card > a::before {
+                        content: "";
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        height: 4px;
+                        border-top-left-radius: 16px;
+                        border-top-right-radius: 16px;
+                        background: linear-gradient(90deg, #0a8f94 0%, #1eb0b5 100%);
+                        opacity: 0.9;
+                    }
+                    .o_portal .o_portal_docs .o_portal_index_card .fs-5,
+                    .o_portal_wrap .o_portal_docs .o_portal_index_card .fs-5 {
+                        color: #103543;
+                        font-weight: 700 !important;
+                        font-size: 1.2rem !important;
+                    }
+                    .o_portal .o_portal_docs .o_portal_index_card .opacity-75,
+                    .o_portal_wrap .o_portal_docs .o_portal_index_card .opacity-75 {
+                        opacity: 1 !important;
+                        color: #5f7280;
+                        margin-top: 0.2rem;
+                    }
+                    .o_portal .o_portal_docs .o_portal_index_card .o_portal_icon,
+                    .o_portal_wrap .o_portal_docs .o_portal_index_card .o_portal_icon {
+                        display: flex !important;
+                        align-items: center;
+                        justify-content: center;
+                        width: 52px;
+                        height: 52px;
+                        border-radius: 12px;
+                        background: #ebf7f8;
+                        flex: 0 0 auto;
+                    }
+                    .o_portal .o_portal_docs .o_portal_index_card .o_portal_icon img,
+                    .o_portal_wrap .o_portal_docs .o_portal_index_card .o_portal_icon img {
+                        width: 34px;
+                        height: 34px;
+                        object-fit: contain;
+                    }
+                    .o_portal .o_portal_docs .o_portal_index_card .alert-link,
+                    .o_portal_wrap .o_portal_docs .o_portal_index_card .alert-link {
+                        color: inherit !important;
+                    }
+<!--                    .o_portal .o_portal_docs .o_portal_index_card > a[href*="/my/invoices"],-->
+<!--                    .o_portal_wrap .o_portal_docs .o_portal_index_card > a[href*="/my/invoices"],-->
+<!--                    .o_portal .o_portal_docs .o_portal_index_card > a[href*="/my/security"],-->
+<!--                    .o_portal_wrap .o_portal_docs .o_portal_index_card > a[href*="/my/security"] {-->
+<!--                        display: none !important;-->
+<!--                    }-->
+<!--                    .o_portal .o_portal_docs .o_portal_index_card > a[href*="/my/warranties"],-->
+<!--                    .o_portal_wrap .o_portal_docs .o_portal_index_card > a[href*="/my/warranties"],-->
+<!--                    .o_portal .o_portal_docs .o_portal_index_card > a[href*="/my/orders"],-->
+<!--                    .o_portal_wrap .o_portal_docs .o_portal_index_card > a[href*="/my/orders"],-->
+<!--                    .o_portal .o_portal_docs .o_portal_index_card > a[href*="/my/tickets"],-->
+<!--                    .o_portal_wrap .o_portal_docs .o_portal_index_card > a[href*="/my/tickets"],-->
+<!--                    .o_portal .o_portal_docs .o_portal_index_card > a[href*="/my/knowledge"],-->
+<!--                    .o_portal_wrap .o_portal_docs .o_portal_index_card > a[href*="/my/knowledge"],-->
+<!--                    .o_portal .o_portal_docs .o_portal_index_card > a[href*="/my/projects"],-->
+<!--                    .o_portal_wrap .o_portal_docs .o_portal_index_card > a[href*="/my/projects"],-->
+<!--                    .o_portal .o_portal_docs .o_portal_index_card > a[href*="/my/tasks"],-->
+<!--                    .o_portal_wrap .o_portal_docs .o_portal_index_card > a[href*="/my/tasks"],-->
+<!--                    .o_portal .o_portal_docs .o_portal_index_card > a[href*="/my/timesheets"],-->
+<!--                    .o_portal_wrap .o_portal_docs .o_portal_index_card > a[href*="/my/timesheets"],-->
+<!--                    .o_portal .o_portal_docs .o_portal_index_card > a[href*="/my/documents"],-->
+<!--                    .o_portal_wrap .o_portal_docs .o_portal_index_card > a[href*="/my/documents"],-->
+<!--                    .o_portal .o_portal_docs .o_portal_index_card > a[href*="/knowledge"],-->
+<!--                    .o_portal_wrap .o_portal_docs .o_portal_index_card > a[href*="/knowledge"],-->
+<!--                    .o_portal .o_portal_docs .o_portal_index_card > a[href*="/helpdesk"],-->
+<!--                    .o_portal_wrap .o_portal_docs .o_portal_index_card > a[href*="/helpdesk"] {-->
+<!--                        display: none !important;-->
+<!--                    }-->
+                    .nx-home-tabs {
+                        display: inline-flex;
+                        background: #edf5f6;
+                        border-radius: 999px;
+                        padding: 4px;
+                        gap: 4px;
+                        margin: 10px 0 14px;
+                    }
+                    .nx-home-tabs .nx-tab-btn {
+                        border: 0;
+                        background: transparent;
+                        color: #365464;
+                        border-radius: 999px;
+                        padding: 8px 16px;
+                        font-weight: 700;
+                        font-size: 0.95rem;
+                        text-decoration: none !important;
+                        transition: color 0.18s ease, background-color 0.18s ease;
+                    }
+                    .nx-home-tabs .nx-tab-btn:hover,
+                    .nx-home-tabs .nx-tab-btn:focus {
+                        color: #0c6d71;
+                        background: #dff1f2;
+                        text-decoration: none !important;
+                    }
+                    .nx-home-tabs .nx-tab-btn.active {
+                        background: #ffffff;
+                        color: #0c6d71;
+                        box-shadow: 0 2px 8px rgba(16, 24, 40, 0.08);
+                    }
+                    .o_portal .o_portal_docs .o_portal_doc_spinner,
+                    .o_portal_wrap .o_portal_docs .o_portal_doc_spinner {
+                        color: #0c8085 !important;
+                    }
+                    .o_portal .o_portal_my_details,
+                    .o_portal_wrap .o_portal_my_details {
+                        border: 1px solid #e6edf0;
+                        border-radius: 14px;
+                        padding: 14px 16px;
+                        background: #fbfdfd;
+                    }
+                    .o_portal .o_portal_my_details .fa,
+                    .o_portal_wrap .o_portal_my_details .fa {
+                        color: #0c8085;
+                    }
+                    .o_portal .o_portal_my_details a,
+                    .o_portal .o_portal_contact_img,
+                    .o_portal_wrap .o_portal_contact_img {
+                        border: 3px solid #d9eff0;
+                    }
+                    .o_portal .o_portal_content .btn.btn-link,
+                    .o_portal_wrap .o_portal_content .btn.btn-link {
+                        color: #0c8085;
+                        font-weight: 600;
+                        text-decoration: none;
+                    }
+                    .nx-warranty-home {
+                        position: relative;
+                        overflow: hidden;
+                        border-radius: 28px;
+                        background:
+                            radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 24%),
+                            linear-gradient(135deg, #06373a 0%, #0c5b5f 38%, #118489 68%, #28c0c7 100%);
+                        color: #fff;
+                        box-shadow: 0 20px 48px rgba(8, 61, 63, 0.22);
+                    }
+                    .nx-warranty-home::before {
+                        content: "";
+                        position: absolute;
+                        inset: 0;
+                        background:
+                            linear-gradient(120deg, rgba(255, 255, 255, 0.06), transparent 38%, rgba(255, 255, 255, 0.1) 58%, transparent 78%);
+                        pointer-events: none;
+                    }
+                    .nx-warranty-home::after {
+                        content: "";
+                        position: absolute;
+                        width: 20rem;
+                        height: 20rem;
+                        right: -6rem;
+                        bottom: -8rem;
+                        border-radius: 50%;
+                        background: radial-gradient(circle, rgba(255, 255, 255, 0.16), transparent 68%);
+                        pointer-events: none;
+                    }
+                    .nx-warranty-home > .row {
+                        position: relative;
+                        z-index: 1;
+                    }
+                    .nx-warranty-home .nx-pill {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 0.45rem;
+                        border-radius: 999px;
+                        background: rgba(255, 255, 255, 0.14);
+                        border: 1px solid rgba(255, 255, 255, 0.12);
+                        padding: 0.7rem 1.1rem;
+                        font-size: 0.92rem;
+                        font-weight: 700;
+                        letter-spacing: 0.01em;
+                        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+                    }
+                    .nx-warranty-home .nx-count {
+                        font-size: clamp(2.6rem, 3vw, 3.6rem);
+                        font-weight: 800;
+                        line-height: 1;
+                        letter-spacing: -0.04em;
+                    }
+                    .nx-warranty-home .btn-nx {
+                        position: relative;
+                        overflow: hidden;
+                        border-radius: 16px;
+                        font-weight: 700;
+                        padding: 0.9rem 1.4rem;
+                        min-width: 13rem;
+                        box-shadow: 0 14px 30px rgba(4, 26, 28, 0.2);
+                        transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+                    }
+                    .nx-warranty-home .btn-nx:hover,
+                    .nx-warranty-home .btn-nx:focus {
+                        transform: translateY(-2px);
+                        box-shadow: 0 18px 34px rgba(4, 26, 28, 0.26);
+                    }
+                    .nx-magnetic-btn {
+                        position: relative;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 0.35rem;
+                        border-radius: 20px;
+                        background: radial-gradient(circle at center, rgba(255,255,255,0.16), rgba(255,255,255,0) 68%);
+                    }
+                    .nx-magnetic-btn::before {
+                        content: "";
+                        position: absolute;
+                        inset: 0.4rem;
+                        border-radius: 18px;
+                        background: radial-gradient(circle at center, rgba(101, 245, 247, 0.32), transparent 70%);
+                        opacity: 0;
+                        transition: opacity 0.22s ease, transform 0.22s ease;
+                        transform: scale(0.9);
+                        pointer-events: none;
+                    }
+                    .nx-magnetic-btn.is-magnetic-hover::before {
+                        opacity: 1;
+                        transform: scale(1.08);
+                    }
+                    .nx-magnetic-btn-inner {
+                        position: relative;
+                        z-index: 1;
+                        will-change: transform;
+                        transition: transform 0.12s ease-out;
+                    }
+                    @media (min-width: 1200px) {
+                        .o_portal_wrap .nx-warranty-home {
+                            width: 100%;
+                            max-width: 100%;
+                            margin-right: 0;
+                        }
+                    }
+                    .nx-last-warranty {
+                        border: 1px solid #e3ecef;
+                        border-radius: 12px;
+                        background: #f8fcfc;
+                        padding: 12px 14px;
+                        margin-top: 12px;
+                    }
+                    .nx-last-warranty .nx-title {
+                        color: #0c6d71;
+                        font-weight: 700;
+                        font-size: 0.95rem;
+                    }
+                    .nx-last-warranty .nx-meta {
+                        color: #304e5f;
+                        font-size: 0.92rem;
+                    }
+                    .nx-last-warranty .progress {
+                        height: 8px;
+                        background: #e8eff2;
+                    }
+                    .nx-last-warranty .progress .progress-bar {
+                        background: linear-gradient(90deg, #0a8f94 0%, #22b0b6 100%);
+                    }
+                    .nx-side-ticket-summary {
+                        border-radius: 14px;
+                        background: linear-gradient(135deg, #0a4e51 0%, #0f7b80 58%, #25b4ba 100%);
+                        color: #ffffff;
+                        box-shadow: 0 8px 18px rgba(7, 58, 61, 0.18);
+                    }
+                    .nx-side-ticket-summary .nx-count {
+                        font-size: 1.8rem;
+                        font-weight: 800;
+                        line-height: 1;
+                    }
+                    .nx-side-ticket-summary .nx-mini {
+                        font-size: 0.9rem;
+                        opacity: 0.95;
+                    }
+                    .nx-side-ticket-summary a.btn {
+                        border-radius: 10px;
+                        font-weight: 700;
+                    }
+                    .nx-home-copy {
+                        max-width: 45rem;
+                    }
+                    .nx-home-copy h3 {
+                        font-size: clamp(2.2rem, 3vw, 4rem);
+                        line-height: 0.96;
+                        margin-bottom: 1rem !important;
+                    }
+                    .nx-typewriter {
+                        display: inline-flex;
+                        align-items: baseline;
+                        gap: 0.18em;
+                        min-height: 1.08em;
+                        color: #ffffff;
+                    }
+                    .nx-typewriter-text {
+                        display: inline-block;
+                    }
+                    .nx-typewriter-cursor {
+                        display: inline-block;
+                        width: 0.08em;
+                        min-width: 0.08em;
+                        height: 0.92em;
+                        border-radius: 999px;
+                        background: linear-gradient(180deg, #d6ffff 0%, #57edf0 100%);
+                        box-shadow: 0 0 16px rgba(133, 245, 248, 0.55);
+                        transform: translateY(0.06em);
+                        animation: nx-typewriter-caret 0.95s steps(1) infinite;
+                    }
+                    .nx-typewriter:not(.is-active) .nx-typewriter-cursor {
+                        opacity: 0.4;
+                    }
+                    .nx-home-copy p {
+                        max-width: 36rem;
+                        color: rgba(255, 255, 255, 0.9);
+                        font-size: 1.45rem;
+                        line-height: 1.45;
+                        font-family: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
+                        font-weight: 500;
+                        letter-spacing: 0.01em;
+                    }
+                    .nx-recent-tickets {
+                        list-style: none;
+                        padding: 0;
+                        margin: 0;
+                        display: grid;
+                        gap: 0.8rem;
+                    }
+                    .nx-recent-tickets li {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.75rem;
+                        font-size: 1.08rem;
+                        line-height: 1.45;
+                    }
+                    .nx-recent-tickets li::before {
+                        content: "";
+                        width: 0.5rem;
+                        height: 0.5rem;
+                        flex: 0 0 auto;
+                        border-radius: 50%;
+                        background: linear-gradient(135deg, #ffffff, rgba(255, 255, 255, 0.62));
+                        box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.08);
+                    }
+                    .nx-recent-tickets strong {
+                        font-size: 1.2rem;
+                        font-weight: 800;
+                        letter-spacing: -0.02em;
+                        color: #ffffff;
+                        font-family: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
+                    }
+                    .nx-recent-tickets span {
+                        color: rgba(221, 250, 251, 0.88);
+                        font-size: 0.98rem;
+                        font-weight: 700;
+                        letter-spacing: 0.01em;
+                        font-family: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
+                    }
+                    .nx-ticket-stat-panel {
+                        display: grid;
+                        gap: 1.25rem;
+                        justify-items: center;
+                        padding: 1.75rem 1.5rem;
+                        margin-inline-start: auto;
+                        border-radius: 24px;
+                        background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.08));
+                        border: 1px solid rgba(255, 255, 255, 0.12);
+                        backdrop-filter: blur(10px);
+                        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+                    }
+                    .nx-ticket-chart-wrap {
+                        display: inline-flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 1rem;
+                        justify-content: flex-end;
+                    }
+                    .nx-ticket-chart-shell {
+                        position: relative;
+                        padding: 0.4rem;
+                    }
+                    .nx-ticket-chart-shell::before {
+                        content: "";
+                        position: absolute;
+                        inset: -0.45rem;
+                        border-radius: 50%;
+                        background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 70%);
+                        animation: nx-ticket-chart-glow 2.8s ease-in-out infinite;
+                    }
+                    .nx-ticket-chart {
+                        width: 148px;
+                        height: 148px;
+                        border-radius: 50%;
+                        --nx-chart-duration: 1.35s;
+                        background: conic-gradient(
+                            #ffffff 0deg,
+                            #ffffff var(--nx-progress),
+                            rgba(255,255,255,0.18) var(--nx-progress),
+                            rgba(255,255,255,0.18) 360deg
+                        );
+                        box-shadow:
+                            inset 0 0 0 1px rgba(255,255,255,0.14),
+                            0 14px 36px rgba(4, 24, 26, 0.16);
+                        animation: nx-ticket-chart-reveal var(--nx-chart-duration) cubic-bezier(0.19, 1, 0.22, 1);
+                    }
+                    .nx-ticket-chart::before {
+                        content: "";
+                        position: absolute;
+                        inset: 23px;
+                        border-radius: 50%;
+                        background:
+                            radial-gradient(circle at 30% 30%, rgba(39, 207, 214, 0.18), transparent 40%),
+                            rgba(7, 54, 57, 0.94);
+                        box-shadow:
+                            inset 0 0 0 1px rgba(255,255,255,0.08),
+                            inset 0 12px 20px rgba(255,255,255,0.05);
+                    }
+                    .nx-ticket-chart::after {
+                        content: "";
+                        position: absolute;
+                        inset: 8px;
+                        border-radius: 50%;
+                        background: conic-gradient(from 180deg, transparent, rgba(255,255,255,0.34), transparent 30%);
+                        opacity: 0.6;
+                        filter: blur(2px);
+                        animation: nx-ticket-chart-shimmer 2.6s linear infinite;
+                    }
+                    .nx-ticket-chart-value {
+                        position: absolute;
+                        inset: 0;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        text-align: center;
+                        z-index: 1;
+                    }
+                    .nx-ticket-chart-value strong {
+                        display: block;
+                        font-size: 2rem;
+                        line-height: 1;
+                        font-weight: 800;
+                        letter-spacing: -0.04em;
+                    }
+                    .nx-ticket-chart-value span {
+                        display: block;
+                        margin-top: 0.3rem;
+                        font-size: 0.74rem;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        opacity: 0.9;
+                        letter-spacing: 0.12em;
+                        color: rgba(214, 255, 255, 0.86);
+                    }
+                    .nx-ticket-total-label {
+                        font-size: 1.9rem;
+                        font-weight: 800;
+                        line-height: 1;
+                        letter-spacing: -0.03em;
+                    }
+                    .nx-ticket-stat-kicker {
+                        text-transform: uppercase;
+                        letter-spacing: 0.16em;
+                        font-size: 0.76rem;
+                        font-weight: 700;
+                        color: rgba(255, 255, 255, 0.68);
+                    }
+                    @keyframes nx-ticket-chart-reveal {
+                        0% {
+                            transform: scale(0.82) rotate(-120deg);
+                            opacity: 0.15;
+                        }
+                        100% {
+                            transform: scale(1) rotate(0deg);
+                            opacity: 1;
+                        }
+                    }
+                    @keyframes nx-ticket-chart-shimmer {
+                        from {
+                            transform: rotate(0deg);
+                        }
+                        to {
+                            transform: rotate(360deg);
+                        }
+                    }
+                    @keyframes nx-ticket-chart-glow {
+                        0%, 100% {
+                            transform: scale(0.96);
+                            opacity: 0.45;
+                        }
+                        50% {
+                            transform: scale(1.04);
+                            opacity: 0.9;
+                        }
+                    }
+                    @keyframes nx-typewriter-caret {
+                        0%, 49% {
+                            opacity: 1;
+                        }
+                        50%, 100% {
+                            opacity: 0.18;
+                        }
+                    }
+                    @media (prefers-reduced-motion: reduce) {
+                        .nx-ticket-chart,
+                        .nx-ticket-chart::after,
+                        .nx-ticket-chart-shell::before,
+                        .nx-warranty-home .btn-nx,
+                        .nx-typewriter-cursor {
+                            animation: none !important;
+                            transition: none !important;
+                        }
+                    }
+                    @media (max-width: 991.98px) {
+                        .nx-home-copy h3 {
+                            font-size: 2.4rem;
+                        }
+                        .nx-home-copy p {
+                            font-size: 1.08rem;
+                        }
+                        .nx-ticket-stat-panel {
+                            margin-inline: 0;
+                            width: 100%;
+                        }
+                    }
+                </style>
+                <div class="col-12">
+                    <t t-if="request.website.portal_mode == 'warranty'">
+                        <section class="nx-warranty-home p-4 p-lg-5 mt-3 mb-3">
+                        <t t-set="nx_is_arabic" t-value="nx_is_arabic"/>
+                        <div class="row g-3 align-items-center">
+                            <div class="col-lg-7 nx-home-copy">
+                                <span class="nx-pill mb-2"><i class="fa fa-ticket me-2"/><t t-esc="'تذاكر الدعم' if nx_is_arabic else 'Support Tickets'"/></span>
+                                <h3 class="mb-2">
+                                    <span class="nx-typewriter"
+                                          t-att-data-phrases="'تابع تذاكر الدعم|تابع تحديثات المراحل مباشرة|افتح طلبات جديدة بسرعة' if nx_is_arabic else 'Track your support tickets|Follow live stage updates|Open new requests quickly'"
+                                          data-type-speed="54"
+                                          data-delete-speed="30"
+                                          data-hold-delay="1500"
+                                          data-start-delay="300">
+                                        <span class="nx-typewriter-text"><t t-esc="'تابع تذاكر الدعم' if nx_is_arabic else 'Track your support tickets'"/></span>
+                                        <span class="nx-typewriter-cursor" aria-hidden="true"/>
+                                    </span>
+                                </h3>
+                                <p class="mb-3"><t t-esc="'تابع آخر حالة للتذاكر وتحديثات المراحل وافتح طلبات جديدة بسرعة.' if nx_is_arabic else 'Check latest ticket status, stage updates, and open new requests quickly.'"/></p>
+                                <t t-if="recent_tickets">
+                                    <ul class="nx-recent-tickets">
+                                        <t t-foreach="recent_tickets" t-as="t">
+                                            <li>
+                                                <strong><t t-esc="'#%s' % t.id"/></strong>
+                                                <span class="ms-1">(<t t-esc="t.stage_id.name"/>)</span>
+                                            </li>
+                                        </t>
+                                    </ul>
+                                </t>
+                                <t t-else="">
+                                    <p class="mb-0">No tickets yet.</p>
+                                </t>
+                            </div>
+                            <div class="col-lg-5 text-lg-end">
+                                <div class="nx-ticket-stat-panel">
+                                    <div>
+                                        <div class="nx-ticket-stat-kicker"><t t-esc="'نظرة مباشرة' if nx_is_arabic else 'Live overview'"/></div>
+                                        <div class="nx-count mb-2"><t t-esc="ticket_count or 0"/></div>
+                                        <div class="nx-ticket-total-label"><t t-esc="'إجمالي التذاكر' if nx_is_arabic else 'Total tickets'"/></div>
+                                    </div>
+                                    <div class="nx-ticket-chart-wrap">
+                                        <div class="nx-ticket-chart-shell">
+                                        <div class="nx-ticket-chart" t-att-style="'--nx-progress: ' + str(round(ticket_in_progress_percent or 0.0, 2) * 3.6) + 'deg;'"/>
+                                        <div class="nx-ticket-chart-value">
+                                            <strong><t t-esc="ticket_in_progress_count or 0"/></strong>
+                                            <span><t t-esc="'قيد التنفيذ' if nx_is_arabic else 'In Progress'"/></span>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <span class="nx-magnetic-btn" data-magnetic-strength="0.32" data-magnetic-shift="16">
+                                        <a href="/my/tickets" class="btn btn-light btn-nx nx-magnetic-btn-inner">
+                                            <i class="fa fa-life-ring me-1"/>
+                                            <t t-esc="'فتح التذاكر' if nx_is_arabic else 'Open Tickets'"/>
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    </t>
+                </div>
+            </xpath>
+            <xpath expr="//div[hasclass('o_portal_my_home')]" position="after">
+                <t t-if="False and latest_warranty">
+                    <div class="nx-last-warranty">
+                        <div class="nx-title mb-1">Last Warranty</div>
+                        <div class="nx-meta"><strong>Name:</strong> <t t-esc="latest_warranty.name"/></div>
+                        <div class="nx-meta"><strong>Type:</strong> <t t-esc="latest_warranty.warranty_template_id.name or '-'"/></div>
+                        <div class="nx-meta">
+                            <strong>End date:</strong>
+                            <t t-if="latest_warranty.end_date"><span t-field="latest_warranty.end_date"/></t>
+                            <t t-else="">-</t>
+                        </div>
+                        <t t-if="latest_warranty_is_tickets_based">
+                            <div class="nx-meta mt-1">
+                                <strong>Remaining tickets:</strong>
+                                <t t-esc="latest_warranty_remaining_tickets"/>
+                                /
+                                <t t-esc="latest_warranty.total_tickets or 0"/>
+                            </div>
+                            <div class="progress mt-2">
+                                <div class="progress-bar" role="progressbar" t-att-style="'width: ' + str(round(latest_warranty_progress or 0.0, 2)) + '%;'"/>
+                            </div>
+                            <div class="nx-meta mt-1">
+                                <strong>Usage:</strong>
+                                <t t-esc="str(round(latest_warranty_progress or 0.0, 1)) + '%'"/>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </xpath>
+        </template>
+    </data>
+</odoo>

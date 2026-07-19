@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="mail_template_employee_birthday_greeting" model="mail.template">
+            <field name="name">Employee Birthday Greeting</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="subject">Happy Birthday {{ object.name }}!</field>
+            <field name="email_from">"{{ object.company_id.name }}" &lt;{{ (object.company_id.email or user.email) }}&gt;</field>
+            <field name="lang">{{ object.user_id.lang or object.company_id.partner_id.lang or user.lang }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0; padding: 0; font-family: Arial, sans-serif; color: #454748;">
+                    <p>Dear <t t-out="object.name or ''">Employee</t>,</p>
+                    <p>Wishing you a very happy birthday and a wonderful year ahead.</p>
+                    <p>Thank you for being a valued part of <t t-out="object.company_id.name or ''">Your Company</t>.</p>
+                    <p>Best regards,<br/>Human Resources</p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_hr_contract_form_inherit_timesheet_work_entry" model="ir.ui.view">
+        <field name="name">hr.contract.form.inherit.timesheet.work.entry</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='work_entry_source']" position="attributes">
+                <attribute name="invisible">0</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='work_entry_source']" position="after">
+                <field name="attendance_based_on_timesheet"/>
+                <div class="alert alert-info o_form_no_cog"
+                     role="alert"
+                     invisible="work_entry_source != 'timesheet'">
+                    <strong>Timesheet — payroll from logged hours only</strong>
+                    <ul class="mb-0 mt-1">
+                        <li>
+                            Salary = <strong>Timesheet hours</strong> in the payslip period
+                            × <strong>Employee Hourly Cost</strong> from the System tab.
+                        </li>
+                        <li>
+                            <strong>Salary Structure Type</strong> should be <strong>Worker</strong>
+                            and payslip structure <strong>Worker Pay</strong> (hourly).
+                        </li>
+                        <li>
+                            The contract wage fields are ignored for this source.
+                        </li>
+                        <li>
+                            Timesheet <strong>dates must be inside the payslip period</strong>.
+                        </li>
+                    </ul>
+                </div>
+                <field name="timesheet_hours_preview"
+                       invisible="work_entry_source != 'timesheet'"/>
+                <button name="action_generate_timesheet_work_entries"
+                        type="object"
+                        string="Generate Work Entries from Timesheets"
+                        class="btn-secondary"
+                        invisible="work_entry_source != 'timesheet'"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_hr_contract_form_payroll_timesheet_wage" model="ir.ui.view">
+        <field name="name">hr.contract.form.payroll.timesheet.wage</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_payroll.hr_contract_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//label[@for='hourly_wage']" position="attributes">
+                <attribute name="invisible">wage_type != 'hourly' or work_entry_source == 'timesheet'</attribute>
+            </xpath>
+            <xpath expr="//div[@name='hourly_wage']" position="attributes">
+                <attribute name="invisible">wage_type != 'hourly' or work_entry_source == 'timesheet'</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

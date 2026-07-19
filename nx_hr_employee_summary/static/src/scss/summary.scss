@@ -1,0 +1,225 @@
+.nx_summary_root {
+    --nx-radius: 12px;
+    font-size: 0.9rem;
+    color: #1e293b;
+
+    .nx_card {
+        border: 1px solid #e6e9ef;
+        border-radius: var(--nx-radius);
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        margin-bottom: 4px;
+    }
+
+    /* ---------- Card headers ---------- */
+    .nx_card_head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 20px;
+        font-weight: 700;
+        font-size: 1rem;
+        i { font-size: 1.05rem; }
+    }
+    .nx_head_green   { background: linear-gradient(135deg, #2f9e63 0%, #248a52 100%); color: #fff; }
+    .nx_head_greenlite { background: linear-gradient(135deg, #eafaf0 0%, #def4e8 100%); color: #15803d; }
+    .nx_head_purple  { background: linear-gradient(135deg, #f3effe 0%, #ece7fb 100%); color: #1e293b; i { color: #8b5cf6; } }
+    .nx_head_blue    { background: linear-gradient(135deg, #eef3fe 0%, #e6effb 100%); color: #1e293b; i { color: #2563eb; } }
+
+    .nx_card_inner { padding: 22px; }
+
+    /* ============ EXEC ============ */
+    .nx_card_exec { background: linear-gradient(180deg, #f3fbf6 0%, #ffffff 60%); }
+    .nx_exec_body {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        padding: 22px;
+    }
+    .nx_exec_tile {
+        border: 1px solid #e3e8ee;
+        border-radius: 10px;
+        padding: 18px 20px;
+        background: #fff;
+    }
+    .nx_tile_label { font-size: 0.85rem; color: #64748b; display: flex; align-items: center; gap: 6px; }
+    .nx_tile_value { font-size: 1.7rem; font-weight: 700; margin-top: 8px; }
+    .nx_days_value { color: #ea580c; }
+
+    .nx_rec_tile { border: none; color: #fff; }
+    .nx_rec_renew     { background: linear-gradient(135deg, #34a866 0%, #1f8a4c 100%); }
+    .nx_rec_review    { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+    .nx_rec_terminate { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); }
+    .nx_rec_tile .nx_tile_label { color: rgba(255,255,255,0.9); }
+    .nx_rec_value { font-size: 1.45rem; font-weight: 800; margin-top: 10px; display: flex; align-items: center; gap: 8px; }
+
+    /* ============ Career stat row ============ */
+    .nx_stat_row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+    .nx_stat_card { border-radius: 10px; padding: 16px; text-align: center; border: 1px solid transparent; }
+    .nx_stat_blue   { background: #eff5ff; border-color: #dbe7fe; }
+    .nx_stat_purple { background: #f7f0ff; border-color: #ecddff; }
+    .nx_stat_indigo { background: #eef0ff; border-color: #dfe3ff; }
+    .nx_stat_plain  { background: #f8fafc; border-color: #e8edf3; text-align: left; }
+    .nx_stat_title  { font-size: 0.82rem; font-weight: 600; color: #6366f1; }
+    .nx_stat_blue   .nx_stat_title { color: #2563eb; }
+    .nx_stat_purple .nx_stat_title { color: #8b5cf6; }
+    .nx_stat_num    { font-size: 1.8rem; font-weight: 800; margin-top: 6px; color: #1e293b; }
+    .nx_stat_title2 { font-size: 0.78rem; color: #94a3b8; }
+    .nx_stat_date   { font-size: 0.95rem; font-weight: 700; margin-top: 6px; }
+
+    .nx_section_sub { font-weight: 700; color: #334155; margin: 22px 0 16px; }
+
+    /* ============ Career timeline ============ */
+    .nx_timeline {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding-top: 8px;
+    }
+    .nx_timeline_line {
+        position: absolute;
+        top: 30px; left: 30px; right: 30px;
+        height: 3px;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6, #6366f1, #22c55e);
+        opacity: 0.4;
+        z-index: 0;
+    }
+    .nx_tl_node { position: relative; z-index: 1; flex: 1; text-align: center; }
+    .nx_tl_dot {
+        width: 46px; height: 46px; border-radius: 50%;
+        margin: 0 auto 12px;
+        display: flex; align-items: center; justify-content: center;
+        color: #fff; font-size: 1rem;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    }
+    .nx_tl_badge_txt { font-size: 0.6rem; font-weight: 800; }
+    .nx_tl_title { font-weight: 700; font-size: 0.92rem; }
+    .nx_tl_date  { font-size: 0.8rem; color: #64748b; margin-top: 2px; }
+    .nx_tl_move  { font-size: 0.8rem; font-weight: 600; margin-top: 2px; }
+    .nx_tl_salary {
+        display: inline-block; margin-top: 8px;
+        padding: 4px 12px; border-radius: 6px;
+        border: 1px solid; font-weight: 700; font-size: 0.85rem;
+        background: #fff;
+    }
+    .nx_tl_pct { margin-top: 6px; font-size: 0.8rem; font-weight: 700; }
+
+    .nx_pct_pos  { color: #16a34a; }
+    .nx_pct_neg  { color: #dc2626; }
+    .nx_pct_zero { color: #94a3b8; }
+
+    /* ============ Compensation ============ */
+    .nx_comp_current {
+        position: relative;
+        border: 1px solid #d9e6fb;
+        background: linear-gradient(135deg, #f1f7ff 0%, #eaf6ff 100%);
+        border-radius: 12px;
+        padding: 22px;
+    }
+    .nx_active_badge {
+        position: absolute; top: 18px; right: 18px;
+        background: #2563eb; color: #fff;
+        font-size: 0.72rem; font-weight: 700;
+        padding: 4px 10px; border-radius: 6px;
+    }
+    .nx_comp_current_title { font-weight: 700; font-size: 1.05rem; margin-bottom: 18px; }
+    .nx_comp_current_grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .nx_comp_lbl { color: #2563eb; font-size: 0.85rem; font-weight: 600; }
+    .nx_comp_big { font-size: 1.9rem; font-weight: 800; color: #1e3a8a; margin-top: 4px; }
+
+    .nx_comp_timeline_box {
+        margin-top: 20px;
+        border: 1px solid #e8edf3;
+        border-radius: 12px;
+        padding: 18px 20px;
+        background: #fafbfc;
+    }
+    .nx_bar_row { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+    .nx_bar_date { width: 70px; font-size: 0.82rem; color: #64748b; flex: none; }
+    .nx_bar_track { flex: 1; background: #e9edf2; border-radius: 8px; height: 34px; overflow: hidden; }
+    .nx_bar_fill {
+        height: 100%; border-radius: 8px;
+        display: flex; align-items: center; gap: 10px;
+        padding: 0 14px; color: #fff; min-width: fit-content;
+        white-space: nowrap;
+    }
+    .nx_bar_sal  { font-weight: 700; font-size: 0.85rem; }
+    .nx_bar_role { font-size: 0.8rem; opacity: 0.92; }
+    .nx_bar_pct  { font-size: 0.8rem; opacity: 0.92; }
+
+    .nx_comp_footer { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+    .nx_foot_card { border-radius: 10px; padding: 18px; text-align: center; border: 1px solid transparent; }
+    .nx_foot_green { background: #effaf2; border-color: #cdeed7; }
+    .nx_foot_blue  { background: #eef4ff; border-color: #d8e4fb; }
+    .nx_foot_cyan  { background: #ecfbfd; border-color: #cfeff4; }
+    .nx_foot_lbl { font-size: 0.85rem; color: #475569; }
+    .nx_foot_val { font-size: 1.6rem; font-weight: 800; margin-top: 6px; }
+    .nx_foot_green .nx_foot_val { color: #15803d; }
+    .nx_foot_blue  .nx_foot_val { color: #1e3a8a; }
+    .nx_foot_cyan  .nx_foot_val { color: #0e7490; }
+
+    /* ============ Attendance ============ */
+    .nx_att_overview {
+        position: relative;
+        display: flex; align-items: center; gap: 22px;
+        border: 1px solid #dbeafe;
+        background: linear-gradient(135deg, #f2f7ff 0%, #eef4ff 100%);
+        border-radius: 12px;
+        padding: 20px 22px;
+    }
+    .nx_att_ring {
+        width: 86px; height: 86px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        flex: none;
+    }
+    .nx_att_ring_inner {
+        width: 66px; height: 66px; border-radius: 50%;
+        background: #fff;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .nx_att_pct { font-size: 1.15rem; font-weight: 800; color: #2563eb; }
+    .nx_att_pct_lbl { font-size: 0.6rem; color: #2563eb; }
+    .nx_att_title { font-weight: 700; font-size: 1.05rem; }
+    .nx_att_stats { display: flex; gap: 26px; margin-top: 8px; color: #475569; font-size: 0.9rem; }
+    .nx_txt_blue { color: #2563eb; }
+    .nx_txt_orange { color: #ea580c; }
+    .nx_excellent_badge {
+        position: absolute; top: 18px; right: 18px;
+        background: #2563eb; color: #fff;
+        font-size: 0.72rem; font-weight: 700;
+        padding: 4px 10px; border-radius: 6px;
+    }
+
+    .nx_att_cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 18px; }
+    .nx_att_card { border-radius: 10px; padding: 16px; text-align: center; border: 1px solid #e8edf3; }
+    .nx_att_card_lbl { font-size: 0.85rem; font-weight: 700; }
+    .nx_att_card_num { font-size: 1.9rem; font-weight: 800; margin: 4px 0; color: #1e293b; }
+    .nx_att_card_sub { font-size: 0.75rem; color: #94a3b8; }
+    .nx_att_amber  { background: #fffbeb; border-color: #fde6c2; .nx_att_card_lbl { color: #b45309; } }
+    .nx_att_blue   { background: #eff5ff; border-color: #d8e6fe; .nx_att_card_lbl { color: #1d4ed8; } }
+    .nx_att_gray   { background: #f8fafc; .nx_att_card_lbl { color: #475569; } }
+    .nx_att_orange { background: #fff7ed; border-color: #fde0c2; .nx_att_card_lbl { color: #c2410c; } }
+    .nx_att_green  { background: #f0fdf4; border-color: #c9eed5; .nx_att_card_lbl { color: #15803d; } }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 992px) {
+        .nx_exec_body,
+        .nx_stat_row,
+        .nx_comp_footer,
+        .nx_att_cards,
+        .nx_comp_current_grid { grid-template-columns: 1fr 1fr; }
+        .nx_timeline { flex-wrap: wrap; }
+        .nx_tl_node { flex: 0 0 45%; margin-bottom: 18px; }
+        .nx_timeline_line { display: none; }
+    }
+    @media (max-width: 576px) {
+        .nx_exec_body,
+        .nx_stat_row,
+        .nx_comp_footer,
+        .nx_att_cards,
+        .nx_comp_current_grid { grid-template-columns: 1fr; }
+        .nx_tl_node { flex: 0 0 100%; }
+    }
+}

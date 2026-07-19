@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add the Summary tab as the first page of the employee notebook -->
+    <record id="view_employee_form_inherit_summary" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.summary</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="priority">8</field>
+        <field name="arch" type="xml">
+
+            <xpath expr="//notebook/page[1]" position="before">
+                <page string="Summary" name="nx_summary">
+
+                    <!-- Hidden payload field consumed by the OWL widgets -->
+                    <field name="nx_summary_data_json" invisible="1"/>
+
+                    <!-- ===== 1. Executive Recommendation (always visible) ===== -->
+                    <widget name="nx_summary" part="exec"/>
+
+                    <!-- ===== 2. Career Journey (collapsible) ===== -->
+                    <widget name="section_toggle" data-default-open="false"/>
+                    <div class="closed-section" style="display:none;">
+                        <div class="nx_section_meta"
+                             data-title="Career Journey &amp; Compensation Progression"
+                             data-icon="fa-line-chart"
+                             data-color="#8B5CF6"
+                             style="display:none;"/>
+                        <widget name="nx_summary" part="career"/>
+                    </div>
+
+                    <!-- ===== 3. Compensation Growth (collapsible) ===== -->
+                    <widget name="section_toggle" data-default-open="false"/>
+                    <div class="closed-section" style="display:none;">
+                        <div class="nx_section_meta"
+                             data-title="Compensation Growth History"
+                             data-icon="fa-usd"
+                             data-color="#2563EB"
+                             style="display:none;"/>
+                        <widget name="nx_summary" part="compensation"/>
+                    </div>
+
+                    <!-- ===== 4. Attendance & Discipline (collapsible) ===== -->
+                    <widget name="section_toggle" data-default-open="false"/>
+                    <div class="closed-section" style="display:none;">
+                        <div class="nx_section_meta"
+                             data-title="Attendance &amp; Operational Record"
+                             data-icon="fa-clock-o"
+                             data-color="#22C55E"
+                             style="display:none;"/>
+                        <widget name="nx_summary" part="attendance"/>
+                    </div>
+
+                    <!-- ===== HR-maintained operational inputs ===== -->
+                    <widget name="section_toggle" data-default-open="false"/>
+                    <div class="closed-section" style="display:none;">
+                        <div class="nx_section_meta"
+                             data-title="Summary Data Entry (HR)"
+                             data-icon="fa-pencil-square-o"
+                             data-color="#64748B"
+                             style="display:none;"/>
+                        <group>
+                            <group string="Period &amp; Attendance">
+                                <field name="nx_currency_id" groups="base.group_no_one"/>
+                                <field name="nx_period_start_date"/>
+                                <field name="nx_period_end_date"
+                                       placeholder="Leave empty to use today"/>
+                                <field name="nx_period_label" readonly="1"/>
+                                <field name="nx_total_working_days" readonly="1"/>
+                                <field name="nx_present_days"/>
+                                <field name="nx_absent_days" readonly="1"/>
+                            </group>
+                            <group string="Leave &amp; Discipline">
+                                <field name="nx_sick_leave_days" readonly="1"/>
+                                <field name="nx_annual_leave_days" readonly="1"/>
+                                <field name="nx_unpaid_leave_days" readonly="1"/>
+                                <field name="nx_other_leave_days" readonly="1"/>
+                                <field name="nx_late_arrivals" readonly="1"/>
+                                <field name="nx_warnings_count"/>
+                            </group>
+                        </group>
+                    </div>
+
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

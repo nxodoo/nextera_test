@@ -1,0 +1,475 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* nx_warranty_sla
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-24 00:00+0000\n"
+"PO-Revision-Date: 2026-03-24 00:00+0000\n"
+"Last-Translator: Codex\n"
+"Language-Team: Arabic\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_top_nav_tabs
+msgid "Tickets"
+msgstr "التذاكر"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_top_nav_tabs
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_login_account_custom
+msgid "Orders"
+msgstr "الطلبات"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_top_nav_tabs
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_login_account_custom
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_elearning
+msgid "E-Learning"
+msgstr "التعلم الإلكتروني"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_top_nav_tabs
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_login_account_custom
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_knowledge
+msgid "Knowledge"
+msgstr "المعرفة"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_top_nav_tabs
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_login_account_custom
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_home_warranty_entry
+msgid "Warranties"
+msgstr "الضمانات"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_top_nav_tabs
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_login_account_custom
+msgid "Contact us"
+msgstr "اتصل بنا"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_side_warranty_summary
+msgid "Last Warranty"
+msgstr "آخر ضمان"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_side_warranty_summary
+msgid "Name:"
+msgstr "الاسم:"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_side_warranty_summary
+msgid "Type:"
+msgstr "النوع:"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_side_warranty_summary
+msgid "End date:"
+msgstr "تاريخ الانتهاء:"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_side_warranty_summary
+msgid "Remaining tickets:"
+msgstr "التذاكر المتبقية:"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_side_warranty_summary
+msgid "Usage:"
+msgstr "الاستخدام:"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_side_warranty_summary
+msgid "Open Warranties"
+msgstr "فتح الضمانات"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_elearning
+msgid "E-Learning Hub"
+msgstr "مركز التعلم الإلكتروني"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_elearning
+msgid "Access relevant courses and continue your learning journey."
+msgstr "يمكنك الوصول إلى الدورات المناسبة ومواصلة رحلتك التعليمية."
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_elearning
+msgid "Enrolled courses"
+msgstr "الدورات المسجل بها"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_elearning
+msgid "E-Learning module is not installed."
+msgstr "وحدة التعلم الإلكتروني غير مثبتة."
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_elearning
+msgid "My Courses"
+msgstr "دوراتي"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_elearning
+msgid "You are not enrolled in any course yet."
+msgstr "أنت غير مسجل في أي دورة حتى الآن."
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_elearning
+msgid "lessons"
+msgstr "دروس"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_elearning
+msgid "Open Course"
+msgstr "فتح الدورة"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_elearning
+msgid "Recommended Courses"
+msgstr "الدورات الموصى بها"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_elearning
+msgid "No additional recommended courses right now."
+msgstr "لا توجد دورات موصى بها إضافية حالياً."
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_elearning
+msgid "View Course"
+msgstr "عرض الدورة"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_knowledge
+msgid "Knowledge Hub"
+msgstr "مركز المعرفة"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_knowledge
+msgid "Browse articles, guides, and answers from your support knowledge base."
+msgstr "تصفح المقالات والأدلة والإجابات من قاعدة معرفة الدعم الخاصة بك."
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_knowledge
+msgid "Open Knowledge"
+msgstr "فتح المعرفة"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_knowledge
+msgid "Connected Team"
+msgstr "الفريق المرتبط"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_knowledge
+msgid " is linked to your portal knowledge."
+msgstr " مرتبط بمعرفة البوابة الخاصة بك."
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_knowledge
+msgid "No website-published helpdesk team with Knowledge is configured yet."
+msgstr "لم يتم إعداد أي فريق مكتب مساعدة منشور على الموقع ومربوط بالمعرفة حتى الآن."
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "Warranty Overview"
+msgstr "نظرة عامة على الضمان"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "Track service hours, ticket quotas, and contract status."
+msgstr "تابع ساعات الخدمة وحصص التذاكر وحالة العقود."
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "Total contracts"
+msgstr "إجمالي العقود"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "No warranties found."
+msgstr "لم يتم العثور على ضمانات."
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "Helpdesk Teams"
+msgstr "فرق خدمة العملاء"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "Start Date"
+msgstr "تاريخ البدء"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "End Date"
+msgstr "تاريخ الانتهاء"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "Sale Order"
+msgstr "أمر البيع"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "Total Allocated Hours"
+msgstr "إجمالي الساعات المخصصة"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "Used Hours"
+msgstr "الساعات المستخدمة"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "Remaining Hours"
+msgstr "الساعات المتبقية"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "Total Tickets"
+msgstr "إجمالي التذاكر"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "Used Tickets"
+msgstr "التذاكر المستخدمة"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "Remaining Tickets"
+msgstr "التذاكر المتبقية"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "Progress"
+msgstr "التقدم"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "Related Tickets ("
+msgstr "التذاكر المرتبطة ("
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_warranties
+msgid "No related tickets."
+msgstr "لا توجد تذاكر مرتبطة."
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_home_warranty_entry
+msgid "Track your support tickets in one place"
+msgstr "تابع تذاكر الدعم الخاصة بك في مكان واحد"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_home_warranty_entry
+msgid "Check latest ticket status, stage updates, and open new requests quickly."
+msgstr "تابع آخر حالة للتذاكر وتحديثات المراحل وافتح طلبات جديدة بسرعة."
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_home_warranty_entry
+msgid "Support Tickets"
+msgstr "تذاكر الدعم"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_home_warranty_entry
+msgid "Open Tickets"
+msgstr "فتح التذاكر"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_home_warranty_entry
+msgid "Total tickets"
+msgstr "إجمالي التذاكر"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_restyle
+msgid "Tickets Overview"
+msgstr "نظرة عامة على التذاكر"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_restyle
+msgid "Track all support requests and follow their stage changes."
+msgstr "تابع جميع طلبات الدعم وتغييرات مراحلها."
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_restyle
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_ticket_new
+msgid "Create Ticket"
+msgstr "إنشاء تذكرة"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_restyle
+msgid "Total tickets"
+msgstr "إجمالي التذاكر"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_columns_restyle
+msgid "Ticket"
+msgstr "التذكرة"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_columns_restyle
+msgid "Reported on"
+msgstr "تاريخ الإبلاغ"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_columns_restyle
+msgid "Solved on"
+msgstr "تاريخ الحل"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_columns_restyle
+msgid "Severity"
+msgstr "درجة الخطورة"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_columns_restyle
+msgid "Time Spent (h)"
+msgstr "الوقت المستغرق (س)"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_columns_restyle
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_portal_total_time_detail
+msgid "Stage"
+msgstr "المرحلة"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_columns_restyle
+msgid "Unassigned"
+msgstr "غير مُسند"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_columns_restyle
+msgid "In Progress"
+msgstr "قيد التنفيذ"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_columns_restyle
+msgid "Blocked"
+msgstr "محظور"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_columns_restyle
+msgid "Ready"
+msgstr "جاهز"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_columns_restyle
+msgid "No Customer"
+msgstr "بدون عميل"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_columns_restyle
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_portal_total_time_detail
+msgid "High"
+msgstr "عالٍ"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_columns_restyle
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_portal_total_time_detail
+msgid "Medium"
+msgstr "متوسط"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_list_columns_restyle
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_portal_total_time_detail
+msgid "Low"
+msgstr "منخفض"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_portal_total_time_detail
+msgid "Ticket Number:"
+msgstr "رقم التذكرة:"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_portal_total_time_detail
+msgid "Current stage of this ticket"
+msgstr "المرحلة الحالية لهذه التذكرة"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_portal_total_time_detail
+msgid "Description"
+msgstr "الوصف"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_portal_total_time_detail
+msgid "Solved On"
+msgstr "تاريخ الحل"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_portal_total_time_detail
+msgid "Priority"
+msgstr "الأولوية"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_portal_total_time_detail
+msgid "Severity"
+msgstr "درجة الخطورة"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_portal_total_time_detail
+msgid "Expected Closing Date"
+msgstr "تاريخ الإغلاق المتوقع"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_portal_total_time_detail
+msgid "Total Time Spent (Hours)"
+msgstr "إجمالي الوقت المستغرق (بالساعات)"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.helpdesk_ticket_detail_restyle
+msgid "Communication History"
+msgstr "سجل المراسلات"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_login_account_custom
+msgid "Edit Profile"
+msgstr "تعديل الملف الشخصي"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_login_account_custom
+msgid "Useful Links"
+msgstr "روابط مفيدة"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_login_account_custom
+msgid "About NextEra"
+msgstr "عن NextEra"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_login_account_custom
+msgid "Connect with us"
+msgstr "تواصل معنا"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_orders_restyle
+msgid "Orders Overview"
+msgstr "نظرة عامة على الطلبات"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_orders_restyle
+msgid "Review order references, dates, and totals in one clean view."
+msgstr "راجع مراجع الطلبات وتواريخها والإجماليات في عرض واحد واضح."
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_orders_restyle
+msgid "Total orders"
+msgstr "إجمالي الطلبات"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_orders_restyle
+msgid "Sales Order #"
+msgstr "رقم أمر البيع"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_orders_restyle
+msgid "Order Date"
+msgstr "تاريخ الطلب"
+
+#. module: nx_warranty_sla
+#: model_terms:ir.ui.view,arch_db:nx_warranty_sla.portal_my_orders_restyle
+msgid "Total"
+msgstr "الإجمالي"

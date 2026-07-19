@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <function model="ir.rule" name="write">
+            <value model="ir.rule" search="[('id', '=', ref('hr_payroll.ir_rule_hr_payslip_input_type_multi_company'))]"/>
+            <value eval="{'domain_force': &quot;[(1, '=', 1)]&quot;}"/>
+        </function>
+    </data>
+</odoo>

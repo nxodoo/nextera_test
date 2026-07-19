@@ -1,0 +1,36 @@
+{
+    "name": "HR Policy Management",
+    "version": "18.0.1.0.1",
+    "summary": "Generic HR policy rules and automation",
+    "author": "Ahmed Tarek",
+    "license": "LGPL-3",
+    "category": "Human Resources",
+    "depends": [
+        "hr",
+        "hr_contract",
+        "hr_holidays",
+        "mail",
+    ],
+    "data": [
+        "security/ir.model.access.csv",
+        "data/ir_cron_data.xml",
+        "views/hr_holiday_greeting_template_views.xml",
+        "views/hr_leave_allowance_rule_views.xml",
+        "views/hr_employee_views.xml",
+        "views/hr_leave_views.xml",
+        "views/hr_leave_allocation_views.xml",
+        "views/hr_leave_type_views.xml",
+        "views/resource_calendar_leaves_views.xml",
+        "views/res_config_settings_views.xml",
+    ],
+    "assets": {
+        "web.assets_backend": [
+            "nx_hr_policy_management/static/src/dashboard/hidden_time_off_dashboard_patch.js",
+            "nx_hr_policy_management/static/src/dashboard/hidden_time_off_dashboard_patch.xml",
+            "nx_hr_policy_management/static/src/dashboard/hidden_time_off_dashboard.scss",
+        ],
+    },
+    "installable": True,
+    "application": False,
+    "auto_install": False,
+}
