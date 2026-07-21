@@ -29,6 +29,8 @@ class HrEmployee(models.Model):
             if 'job_id' in vals:
                 job = jobs_by_id.get(vals.get('job_id'))
                 vals['department_id'] = job.department_id.id if job else False
+            elif 'department_id' in vals and not self.env.context.get('nx_sync_department_from_job'):
+                vals['department_id'] = False
         return super().create(vals_list)
 
     def write(self, vals):
@@ -36,6 +38,9 @@ class HrEmployee(models.Model):
         if 'job_id' in vals:
             job = self.env['hr.job'].browse(vals['job_id']) if vals['job_id'] else False
             vals = dict(vals, department_id=job.department_id.id if job else False)
+        elif 'department_id' in vals and not self.env.context.get('nx_sync_department_from_job'):
+            vals = dict(vals)
+            vals.pop('department_id')
         return super().write(vals)
 
     def action_open_position_org_chart(self):

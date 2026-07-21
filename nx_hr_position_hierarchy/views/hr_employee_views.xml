@@ -4,7 +4,7 @@
         <field name="name">hr.employee.form.no.job.create</field>
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form"/>
-        <field name="priority">50</field>
+        <field name="priority">99</field>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='job_id']" position="attributes">
                 <attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>

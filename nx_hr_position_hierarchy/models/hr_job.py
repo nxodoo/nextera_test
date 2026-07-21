@@ -291,7 +291,7 @@ class HrJob(models.Model):
     def _sync_assigned_employee_departments(self):
         """Align employees' departments with their assigned job positions."""
         for job in self:
-            job.assigned_employee_ids.write({
+            job.assigned_employee_ids.with_context(nx_sync_department_from_job=True).write({
                 'department_id': job.department_id.id or False,
             })
 
