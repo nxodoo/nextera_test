@@ -49,7 +49,12 @@
                 <div t-elif="!state.nodes.length" class="o_nx_position_empty">No positions match the selected filters.</div>
                 <div t-else="" class="o_nx_position_tree_roots">
                     <t t-foreach="state.nodes" t-as="node" t-key="node.id">
-                        <PositionOrgChartNode node="node" openJob.bind="openJob" openEmployee.bind="openEmployee"/>
+                        <PositionOrgChartNode node="node"
+                                              collapsedNodes="state.collapsedNodes"
+                                              isCollapsed.bind="isCollapsed"
+                                              toggleNode.bind="toggleNode"
+                                              openJob.bind="openJob"
+                                              openEmployee.bind="openEmployee"/>
                     </t>
                 </div>
             </div>
@@ -58,7 +63,7 @@
 
     <t t-name="nx_hr_position_hierarchy.PositionOrgChartNode">
         <div class="o_nx_position_node_wrap">
-            <div t-attf-class="o_nx_position_node_body #{props.node.children.length ? 'o_nx_has_children' : ''} #{props.node.assistant_children.length ? 'o_nx_has_assistant' : ''}">
+            <div t-attf-class="o_nx_position_node_body #{props.node.children.length ? 'o_nx_has_children' : ''} #{props.node.assistant_children.length ? 'o_nx_has_assistant' : ''} #{props.isCollapsed(props.node.id) ? 'o_nx_children_collapsed' : ''}">
                 <div class="o_nx_position_parent_slot">
                     <div role="button"
                          tabindex="0"
@@ -91,8 +96,16 @@
                         </div>
                         <div class="o_nx_position_headcount">
                             <span>Headcount <t t-esc="props.node.assigned_count"/>/<t t-esc="props.node.headcount"/></span>
-                            <span t-if="props.node.vacancy_count">Vacancies <t t-esc="props.node.vacancy_count"/></span>
+                            <span t-if="props.node.status === 'vacant' &amp;&amp; props.node.target_count">Target <t t-esc="props.node.target_count"/></span>
                         </div>
+                        <button t-if="props.node.children.length"
+                                type="button"
+                                t-attf-class="o_nx_position_toggle #{props.isCollapsed(props.node.id) ? 'o_nx_position_toggle_collapsed' : ''}"
+                                t-on-click.stop="() => props.toggleNode(props.node.id)"
+                                t-att-aria-expanded="!props.isCollapsed(props.node.id)">
+                            <i t-attf-class="fa #{props.isCollapsed(props.node.id) ? 'fa-caret-right' : 'fa-caret-down'}"/>
+                            <span><t t-esc="props.node.children.length"/> Positions</span>
+                        </button>
                     </div>
                     <div t-if="props.node.assistant_children.length" class="o_nx_position_assistants">
                         <t t-foreach="props.node.assistant_children" t-as="assistant" t-key="assistant.id">
@@ -128,7 +141,7 @@
                                     </div>
                                     <div class="o_nx_position_headcount">
                                         <span>Headcount <t t-esc="assistant.assigned_count"/>/<t t-esc="assistant.headcount"/></span>
-                                        <span t-if="assistant.vacancy_count">Vacancies <t t-esc="assistant.vacancy_count"/></span>
+                                        <span t-if="assistant.status === 'vacant' &amp;&amp; assistant.target_count">Target <t t-esc="assistant.target_count"/></span>
                                     </div>
                                 </div>
                             </div>
@@ -136,10 +149,15 @@
                     </div>
                 </div>
             </div>
-            <div t-if="props.node.children.length" class="o_nx_position_children">
+            <div t-if="props.node.children.length &amp;&amp; !props.isCollapsed(props.node.id)" class="o_nx_position_children">
                 <t t-foreach="props.node.children" t-as="child" t-key="child.id">
                     <div class="o_nx_position_child_branch">
-                        <PositionOrgChartNode node="child" openJob.bind="props.openJob" openEmployee.bind="props.openEmployee"/>
+                        <PositionOrgChartNode node="child"
+                                              collapsedNodes="props.collapsedNodes"
+                                              isCollapsed.bind="props.isCollapsed"
+                                              toggleNode.bind="props.toggleNode"
+                                              openJob.bind="props.openJob"
+                                              openEmployee.bind="props.openEmployee"/>
                     </div>
                 </t>
             </div>

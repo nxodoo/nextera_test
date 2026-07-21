@@ -44,32 +44,29 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
 
-            <!-- ── Insert our Details tab as the FIRST page in the notebook ── -->
-            <xpath expr="//notebook/page[1]" position="before">
-                <page name="employee_details_tab" string="Details">
-
-                    <group>
-                        <group string="Work Contact">
-                            <field name="work_email" widget="email"/>
-                            <field name="work_phone" widget="phone"/>
-                            <field name="mobile_phone" widget="phone"/>
-                            <field name="category_ids"
-                                   widget="many2many_tags"
-                                   options="{'color_field': 'color', 'no_create_edit': True}"
-                                   string="Tags"/>
-                            <field name="company_id" groups="base.group_multi_company"/>
-                            <field name="currency_id" invisible="1"/>
-                            <field name="employee_type"/>
-                        </group>
-                        <group string="Organization">
-                            <field name="department_id"/>
-                            <field name="job_id"/>
-                            <field name="parent_id" string="Manager"/>
-                            <field name="coach_id"/>
-                        </group>
+            <!-- ── Move formerly duplicated Details fields into Work Information ── -->
+            <xpath expr="//page[@name='public']//div[@id='o_work_employee_main']/group[1]" position="before">
+                <group name="nx_work_details" string="Work Details">
+                    <group string="Work Contact">
+                        <field name="work_email" widget="email"/>
+                        <field name="work_phone" widget="phone"/>
+                        <field name="mobile_phone" widget="phone"/>
+                        <field name="category_ids"
+                               widget="many2many_tags"
+                               options="{'color_field': 'color', 'no_create_edit': True}"
+                               string="Tags"
+                               groups="hr.group_hr_user"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="employee_type"/>
                     </group>
-
-                </page>
+                    <group string="Organization">
+                        <field name="department_id"/>
+                        <field name="job_id"/>
+                        <field name="parent_id" string="Manager" widget="many2one_avatar_user"/>
+                        <field name="coach_id" widget="many2one_avatar_user"/>
+                    </group>
+                </group>
             </xpath>
 
             <!-- ── Private Information: custom grid layout ── -->

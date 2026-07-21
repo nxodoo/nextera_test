@@ -54,8 +54,8 @@
 
     <menuitem id="menu_hr_position_level"
               name="Position Levels"
-              parent="hr.menu_human_resources_configuration"
+              parent="menu_position_org_chart_root"
               action="action_hr_position_level"
               groups="hr.group_hr_user"
-              sequence="6"/>
+              sequence="3"/>
 </odoo>

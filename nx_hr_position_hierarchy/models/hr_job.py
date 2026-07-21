@@ -282,9 +282,18 @@ class HrJob(models.Model):
             if level.is_assistant:
                 vals = dict(vals, is_assistant_position=True)
         result = super().write(vals)
+        if 'department_id' in vals:
+            self._sync_assigned_employee_departments()
         if 'application_deadline' in vals or 'recruitment_state' in vals:
             self._expire_jobs_after_deadline()
         return result
+
+    def _sync_assigned_employee_departments(self):
+        """Align employees' departments with their assigned job positions."""
+        for job in self:
+            job.assigned_employee_ids.write({
+                'department_id': job.department_id.id or False,
+            })
 
     @api.onchange('is_assistant_position')
     def _onchange_is_assistant_position(self):
@@ -307,6 +316,22 @@ class HrJob(models.Model):
             'name': _('Org Chart'),
             'params': {'root_job_id': self.id},
         }
+
+    def action_open_assigned_employees(self):
+        """Open employees currently assigned to this job position.
+
+        Returns:
+            dict: Window action filtered by the current job position.
+        """
+        self.ensure_one()
+        action = self.env['ir.actions.actions']._for_xml_id('hr.open_view_employee_list')
+        action['name'] = _('Employees')
+        action['domain'] = [('job_id', '=', self.id)]
+        action['context'] = {
+            'default_job_id': self.id,
+            'default_department_id': self.department_id.id,
+        }
+        return action
 
     def action_open(self):
         self.write({'recruitment_state': 'open'})

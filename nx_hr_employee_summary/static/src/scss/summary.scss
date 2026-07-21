@@ -53,6 +53,12 @@
     .nx_rec_terminate { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); }
     .nx_rec_tile .nx_tile_label { color: rgba(255,255,255,0.9); }
     .nx_rec_value { font-size: 1.45rem; font-weight: 800; margin-top: 10px; display: flex; align-items: center; gap: 8px; }
+    .nx_days_sub {
+        margin-top: 4px;
+        color: #64748b;
+        font-size: 0.82rem;
+        font-weight: 600;
+    }
 
     /* ============ Career stat row ============ */
     .nx_stat_row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
@@ -192,7 +198,7 @@
         padding: 4px 10px; border-radius: 6px;
     }
 
-    .nx_att_cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 18px; }
+    .nx_att_cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-top: 18px; }
     .nx_att_card { border-radius: 10px; padding: 16px; text-align: center; border: 1px solid #e8edf3; }
     .nx_att_card_lbl { font-size: 0.85rem; font-weight: 700; }
     .nx_att_card_num { font-size: 1.9rem; font-weight: 800; margin: 4px 0; color: #1e293b; }
@@ -202,6 +208,7 @@
     .nx_att_gray   { background: #f8fafc; .nx_att_card_lbl { color: #475569; } }
     .nx_att_orange { background: #fff7ed; border-color: #fde0c2; .nx_att_card_lbl { color: #c2410c; } }
     .nx_att_green  { background: #f0fdf4; border-color: #c9eed5; .nx_att_card_lbl { color: #15803d; } }
+    .nx_att_purple { background: #f7f0ff; border-color: #eadcff; .nx_att_card_lbl { color: #7c3aed; } }
 
     /* ---------- Responsive ---------- */
     @media (max-width: 992px) {
@@ -221,5 +228,86 @@
         .nx_att_cards,
         .nx_comp_current_grid { grid-template-columns: 1fr; }
         .nx_tl_node { flex: 0 0 100%; }
+    }
+}
+
+.o_form_view .nx_summary_section_grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 16px;
+    margin-top: 12px;
+
+    .nx_summary_section_item {
+        min-width: 0;
+
+        .o_section_toggle {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .closed-section {
+            margin-top: 12px;
+        }
+    }
+
+    .nx_summary_section_item:has(.closed-section:not([style*="display: none"]):not([style*="display:none"])) {
+        grid-column: 1 / -1;
+    }
+}
+
+.nx_employee_header_recommendation {
+    align-self: flex-start;
+    margin: 8px 18px 0 auto;
+    max-width: 260px;
+}
+
+.nx_summary_header_root {
+    width: auto;
+}
+
+.nx_header_rec {
+    min-width: 230px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.14);
+}
+
+.nx_header_rec_label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    opacity: 0.92;
+}
+
+.nx_header_rec_value {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 5px;
+    font-size: 1.05rem;
+    font-weight: 800;
+}
+
+.nx_header_rec.nx_rec_renew,
+.nx_rec_renew {
+    background: linear-gradient(135deg, #34a866 0%, #1f8a4c 100%);
+}
+
+.nx_header_rec.nx_rec_review,
+.nx_rec_review {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.nx_header_rec.nx_rec_terminate,
+.nx_rec_terminate {
+    background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+}
+
+@media (max-width: 768px) {
+    .o_form_view .nx_summary_section_grid {
+        grid-template-columns: 1fr;
     }
 }

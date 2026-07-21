@@ -4,7 +4,7 @@
     'summary': 'Track employee job history, education, and work experience',
     'category': 'Human Resources',
     'author': 'Ahmed Tarek',
-    'depends': ['hr'],
+    'depends': ['hr', 'hr_skills'],
     'data': [
         'security/ir.model.access.csv',
         'views/hr_employee_views.xml',

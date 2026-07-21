@@ -2,29 +2,25 @@
 <templates xml:space="preserve">
 
     <t t-name="nx_hr_employee_summary.EmployeeSummary">
-        <div class="nx_summary_root w-100">
+        <div t-attf-class="nx_summary_root #{part === 'header' ? 'nx_summary_header_root' : 'w-100'}">
 
             <!-- ============================================================ -->
             <!-- 1. EXECUTIVE RECOMMENDATION  (always visible)               -->
             <!-- ============================================================ -->
+            <t t-if="part === 'header'">
+                <div t-if="data.exec &amp;&amp; data.exec.show_recommendation" t-attf-class="nx_header_rec {{ recommendationClass }}">
+                    <div class="nx_header_rec_label"><i class="fa fa-bullseye"/> Recommendation</div>
+                    <div class="nx_header_rec_value"><i class="fa fa-check-circle"/> <t t-esc="data.exec.recommendation"/></div>
+                </div>
+            </t>
+
             <t t-if="part === 'exec'">
                 <div class="nx_card nx_card_exec">
-                    <div class="nx_card_head nx_head_green">
-                        <i class="fa fa-check-circle"/>
-                        <span>Executive Recommendation</span>
-                    </div>
                     <div class="nx_exec_body">
                         <div class="nx_exec_tile">
                             <div class="nx_tile_label"><i class="fa fa-calendar"/> Contract End Date</div>
                             <div class="nx_tile_value"><t t-esc="data.exec.end_date"/></div>
-                        </div>
-                        <div class="nx_exec_tile">
-                            <div class="nx_tile_label"><i class="fa fa-clock-o"/> Days Remaining</div>
-                            <div class="nx_tile_value nx_days_value"><t t-esc="data.exec.days_remaining"/></div>
-                        </div>
-                        <div t-attf-class="nx_exec_tile nx_rec_tile {{ recommendationClass }}">
-                            <div class="nx_tile_label"><i class="fa fa-bullseye"/> System Recommendation</div>
-                            <div class="nx_rec_value"><i class="fa fa-check-circle"/> <t t-esc="data.exec.recommendation"/></div>
+                            <div class="nx_days_sub"><i class="fa fa-clock-o"/> <t t-esc="data.exec.days_remaining"/> days remaining</div>
                         </div>
                     </div>
                 </div>
@@ -163,31 +159,20 @@
                                     <span>Total Working Days: <b><t t-esc="data.attendance.total"/></b></span>
                                     <span>Present Days: <b class="nx_txt_blue"><t t-esc="data.attendance.present"/></b></span>
                                     <span>Absent Days: <b class="nx_txt_orange"><t t-esc="data.attendance.absent"/></b></span>
+                                    <span>Late Arrivals: <b class="nx_txt_orange"><t t-esc="data.attendance.late"/></b></span>
                                 </div>
                             </div>
                             <span class="nx_excellent_badge" t-attf-style="background:{{ data.attendance.rating_color }};"><t t-esc="data.attendance.rating"/></span>
                         </div>
 
                         <div class="nx_att_cards">
-                            <div class="nx_att_card nx_att_amber">
-                                <div class="nx_att_card_lbl">Sick Leave</div>
-                                <div class="nx_att_card_num"><t t-esc="data.attendance.sick"/></div>
-                                <div class="nx_att_card_sub">days (YTD)</div>
-                            </div>
-                            <div class="nx_att_card nx_att_blue">
-                                <div class="nx_att_card_lbl">Annual Leave</div>
-                                <div class="nx_att_card_num"><t t-esc="data.attendance.annual"/></div>
-                                <div class="nx_att_card_sub">days (used)</div>
-                            </div>
-                            <div class="nx_att_card nx_att_gray">
-                                <div class="nx_att_card_lbl">Unpaid Leave</div>
-                                <div class="nx_att_card_num"><t t-esc="data.attendance.unpaid"/></div>
+                            <div t-foreach="data.attendance.leave_cards || []"
+                                 t-as="leave"
+                                 t-key="leave.name"
+                                 t-attf-class="nx_att_card {{ leave.style }}">
+                                <div class="nx_att_card_lbl"><t t-esc="leave.name"/></div>
+                                <div class="nx_att_card_num"><t t-esc="leave.days"/></div>
                                 <div class="nx_att_card_sub">days</div>
-                            </div>
-                            <div class="nx_att_card nx_att_orange">
-                                <div class="nx_att_card_lbl">Late Arrivals</div>
-                                <div class="nx_att_card_num"><t t-esc="data.attendance.late"/></div>
-                                <div class="nx_att_card_sub">instances</div>
                             </div>
                             <div class="nx_att_card nx_att_green">
                                 <div class="nx_att_card_lbl">Disciplinary</div>

@@ -405,7 +405,17 @@ class HrEmployee(models.Model):
     def _nx_compute_leave_counts(self, start_date, end_date):
         """Bucket approved Time Off days by leave type name."""
         self.ensure_one()
+        totals = self._nx_compute_leave_type_totals(start_date, end_date)
         counts = dict.fromkeys(('sick', 'annual', 'unpaid', 'other'), 0.0)
+        for leave_name, days in totals.items():
+            bucket = self._nx_get_leave_bucket_name(leave_name)
+            counts[bucket] += days
+        return {key: int(round(value)) for key, value in counts.items()}
+
+    def _nx_compute_leave_type_totals(self, start_date, end_date):
+        """Return approved Time Off totals by actual leave type name."""
+        self.ensure_one()
+        counts = {}
         if 'hr.leave' not in self.env.registry:
             return counts
         leaves = self.env['hr.leave'].sudo().search([
@@ -416,9 +426,11 @@ class HrEmployee(models.Model):
         ])
         for leave in leaves:
             days = self._nx_get_leave_overlap_days(leave, start_date, end_date)
-            bucket = self._nx_get_leave_bucket(leave.holiday_status_id)
-            counts[bucket] += days
-        return {key: int(round(value)) for key, value in counts.items()}
+            if not days:
+                continue
+            leave_name = leave.holiday_status_id.name or 'Time Off'
+            counts[leave_name] = counts.get(leave_name, 0.0) + days
+        return counts
 
     def _nx_get_leave_overlap_days(self, leave, start_date, end_date):
         """Return leave days within the summary period using request dates."""
@@ -431,7 +443,12 @@ class HrEmployee(models.Model):
     @staticmethod
     def _nx_get_leave_bucket(leave_type):
         """Classify leave type into the dashboard buckets from its name."""
-        name = (leave_type.name or '').lower()
+        return HrEmployee._nx_get_leave_bucket_name(leave_type.name)
+
+    @staticmethod
+    def _nx_get_leave_bucket_name(leave_name):
+        """Classify leave type names into legacy summary buckets."""
+        name = (leave_name or '').lower()
         if 'sick' in name or 'medical' in name:
             return 'sick'
         if 'annual' in name or 'vacation' in name or 'paid time off' in name:
@@ -560,12 +577,28 @@ class HrEmployee(models.Model):
                     'width': round(move.salary / max_salary * 100.0, 1) if max_salary else 0.0,
                 })
 
+            start_date, end_date = emp._nx_get_attendance_period()
+            leave_totals = (
+                emp._nx_compute_leave_type_totals(start_date, end_date)
+                if start_date and end_date else {}
+            )
+            leave_cards = [
+                {
+                    'name': leave_name,
+                    'days': int(round(days)),
+                    'style': emp._nx_leave_card_style(leave_name),
+                }
+                for leave_name, days in leave_totals.items()
+                if days
+            ]
+
             data = {
                 'currency': symbol,
                 'exec': {
                     'end_date': format_date(emp.env, emp.nx_contract_end_date)
                     if emp.nx_contract_end_date else 'Not set',
                     'days_remaining': emp.nx_days_remaining,
+                    'show_recommendation': bool(emp.nx_contract_end_date and 0 <= emp.nx_days_remaining <= 60),
                     'recommendation': dict(
                         self._fields['nx_system_recommendation'].selection
                     ).get(emp.nx_system_recommendation, ''),
@@ -603,6 +636,7 @@ class HrEmployee(models.Model):
                     'annual': emp.nx_annual_leave_days,
                     'unpaid': emp.nx_unpaid_leave_days,
                     'other': emp.nx_other_leave_days,
+                    'leave_cards': leave_cards,
                     'late': emp.nx_late_arrivals,
                     'warnings': emp.nx_warnings_count,
                 }),
@@ -622,6 +656,16 @@ class HrEmployee(models.Model):
         if pct >= 75:
             return {'rating': 'FAIR', 'rating_color': '#D97706', 'ring_color': '#D97706'}
         return {'rating': 'POOR', 'rating_color': '#DC2626', 'ring_color': '#DC2626'}
+
+    @staticmethod
+    def _nx_leave_card_style(leave_name):
+        bucket = HrEmployee._nx_get_leave_bucket_name(leave_name)
+        return {
+            'sick': 'nx_att_amber',
+            'annual': 'nx_att_blue',
+            'unpaid': 'nx_att_gray',
+            'other': 'nx_att_purple',
+        }.get(bucket, 'nx_att_purple')
 
     @staticmethod
     def _nx_money(amount, symbol):

@@ -53,6 +53,10 @@
         background: var(--nx-connector-color);
     }
 
+    .o_nx_children_collapsed:not(.o_nx_has_assistant)::before {
+        display: none;
+    }
+
     .o_nx_position_card {
         position: relative;
         z-index: 5;
@@ -167,6 +171,38 @@
         margin-top: 12px;
         color: #64748b;
         font-size: 12px;
+    }
+
+    .o_nx_position_toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: calc(100% + 28px);
+        min-height: 32px;
+        margin: 12px -14px -14px;
+        padding: 7px 10px;
+        border: 0;
+        border-top: 1px solid #d8dde6;
+        border-radius: 0 0 6px 6px;
+        background: #6f4665;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .o_nx_position_toggle:hover {
+        background: #5f3a57;
+    }
+
+    .o_nx_position_toggle_collapsed {
+        background: #805373;
+    }
+
+    .o_nx_position_toggle .fa {
+        width: 10px;
+        text-align: center;
     }
 
     .o_nx_has_assistant .o_nx_position_parent_slot::before {

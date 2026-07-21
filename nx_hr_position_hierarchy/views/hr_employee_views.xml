@@ -4,10 +4,20 @@
         <field name="name">hr.employee.form.no.job.create</field>
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="priority">50</field>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='job_id']" position="attributes">
                 <attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>
                 <attribute name="context">{'nx_forbid_job_creation': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="attributes">
+                <attribute name="readonly">1</attribute>
+                <attribute name="force_save">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='%(hr_org_chart.action_hr_employee_org_chart)d']" position="attributes">
+                <attribute name="name">action_open_position_org_chart</attribute>
+                <attribute name="type">object</attribute>
+                <attribute name="context">{}</attribute>
             </xpath>
         </field>
     </record>

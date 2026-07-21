@@ -3,73 +3,54 @@
     <record id="view_hr_employee_career_dev" model="ir.ui.view">
         <field name="name">view.hr.employee.career.dev</field>
         <field name="model">hr.employee</field>
-        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="inherit_id" ref="hr_skills.hr_employee_view_form"/>
         <field name="priority">17</field>
         <field name="arch" type="xml">
 
+            <xpath expr="//page[@name='skills_resume']/div[hasclass('row')]" position="after">
+                <!-- ── Job History ──────────────────────────────────────── -->
+                <widget name="section_toggle" data-default-open="true"/>
+                <div class="closed-section" style="display: none;">
+                    <div class="nx_section_meta"
+                         data-title="Job History"
+                         data-icon="fa-briefcase"
+                         data-color="#3B82F6"
+                         style="display: none;"/>
+                    <field name="job_history_ids" nolabel="1">
+                        <list editable="bottom">
+                            <field name="job_title" string="Job Title"/>
+                            <field name="date_from" string="From Date" width="120px"/>
+                            <field name="date_to" string="To Date" width="120px"/>
+                            <field name="currency_id" width="90px"/>
+                            <field name="salary" width="130px"/>
+                        </list>
+                    </field>
+                </div>
+
+                <!-- ── Education ────────────────────────────────────────── -->
+                <widget name="section_toggle" data-default-open="true"/>
+                <div class="closed-section" style="display: none;">
+                    <div class="nx_section_meta"
+                         data-title="Education"
+                         data-icon="fa-graduation-cap"
+                         data-color="#8B5CF6"
+                         style="display: none;"/>
+                    <field name="education_ids" nolabel="1">
+                        <list editable="bottom">
+                            <field name="certificate" string="Certificate Level" width="140px"/>
+                            <field name="university" string="University / College"/>
+                            <field name="department" width="130px"/>
+                            <field name="study_field" string="Field of Study" width="130px"/>
+                            <field name="school" width="120px"/>
+                            <field name="graduation_year" string="Graduation Year" width="110px"/>
+                            <field name="grade" string="Final Grade" width="100px"/>
+                        </list>
+                    </field>
+                </div>
+            </xpath>
+
             <xpath expr="//page[@name='personal_information']" position="after">
-                <page string="Career&amp;Development" name="career_development">
-
-                    <!-- ── Job History ──────────────────────────────────────── -->
-                    <widget name="section_toggle" data-default-open="true"/>
-                    <div class="closed-section" style="display: none;">
-                        <div class="nx_section_meta"
-                             data-title="Job History"
-                             data-icon="fa-briefcase"
-                             data-color="#3B82F6"
-                             style="display: none;"/>
-                        <field name="job_history_ids" nolabel="1">
-                            <list editable="bottom">
-                                <field name="job_title"   string="Job Title"/>
-                                <field name="date_from"   string="From Date"   width="120px"/>
-                                <field name="date_to"     string="To Date"     width="120px"/>
-                                <field name="currency_id"                       width="90px"/>
-                                <field name="salary"                            width="130px"/>
-                            </list>
-                        </field>
-                    </div>
-
-                    <!-- ── Education ────────────────────────────────────────── -->
-                    <widget name="section_toggle" data-default-open="true"/>
-                    <div class="closed-section" style="display: none;">
-                        <div class="nx_section_meta"
-                             data-title="Education"
-                             data-icon="fa-graduation-cap"
-                             data-color="#8B5CF6"
-                             style="display: none;"/>
-                        <field name="education_ids" nolabel="1">
-                            <list editable="bottom">
-                                <field name="certificate"      string="Certificate Level"   width="140px"/>
-                                <field name="university"       string="University / College"/>
-                                <field name="department"                                    width="130px"/>
-                                <field name="study_field"      string="Field of Study"      width="130px"/>
-                                <field name="school"                                        width="120px"/>
-                                <field name="graduation_year"  string="Graduation Year"     width="110px"/>
-                                <field name="grade"            string="Final Grade"         width="100px"/>
-                            </list>
-                        </field>
-                    </div>
-
-                    <!-- ── Work Experience ──────────────────────────────────── -->
-                    <widget name="section_toggle" data-default-open="true"/>
-                    <div class="closed-section" style="display: none;">
-                        <div class="nx_section_meta"
-                             data-title="Work Experience"
-                             data-icon="fa-building-o"
-                             data-color="#F59E0B"
-                             style="display: none;"/>
-                        <field name="previous_job_ids" nolabel="1">
-                            <list editable="bottom">
-                                <field name="company_name"   string="Company Name"/>
-                                <field name="job_title"      string="Job Title"/>
-                                <field name="start_date"     string="Start Date"     width="120px"/>
-                                <field name="end_date"       string="End Date"       width="120px"/>
-                                <field name="leaving_reason" string="Leaving Reason" width="160px"/>
-                            </list>
-                        </field>
-                    </div>
-
-                </page>
+                <page string="Career&amp;Development" name="career_development" invisible="1"/>
             </xpath>
 
         </field>

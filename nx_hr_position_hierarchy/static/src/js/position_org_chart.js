@@ -9,6 +9,9 @@ class PositionOrgChartNode extends Component {
     static template = "nx_hr_position_hierarchy.PositionOrgChartNode";
     static props = {
         node: Object,
+        collapsedNodes: Object,
+        isCollapsed: Function,
+        toggleNode: Function,
         openJob: Function,
         openEmployee: Function,
     };
@@ -30,6 +33,7 @@ export class PositionOrgChart extends Component {
             departmentId: "",
             level: "",
             showVacant: true,
+            collapsedNodes: {},
             loading: true,
         });
         this.pageTitle = this.props.action.params?.title || this.props.action.name || "Org Chart";
@@ -57,6 +61,7 @@ export class PositionOrgChart extends Component {
         });
         this.state.nodes = chart.nodes;
         this.state.summary = chart.summary;
+        this.state.collapsedNodes = {};
         this.state.loading = false;
     }
 
@@ -73,6 +78,17 @@ export class PositionOrgChart extends Component {
     async onShowVacantChange(ev) {
         this.state.showVacant = ev.target.checked;
         await this.loadChart();
+    }
+
+    isCollapsed(nodeId) {
+        return Boolean(this.state.collapsedNodes[nodeId]);
+    }
+
+    toggleNode(nodeId) {
+        this.state.collapsedNodes = {
+            ...this.state.collapsedNodes,
+            [nodeId]: !this.state.collapsedNodes[nodeId],
+        };
     }
 
     openJob(jobId) {

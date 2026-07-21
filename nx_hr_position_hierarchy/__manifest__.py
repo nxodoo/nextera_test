@@ -27,11 +27,11 @@
         'data/position_level_data.xml',
         'data/position_level_sync_data.xml',
         'data/ir_cron_data.xml',
+        'views/org_chart_views.xml',
         'views/hr_position_level_views.xml',
         'views/hr_job_views.xml',
         'views/hr_employee_views.xml',
         'views/hr_applicant_views.xml',
-        'views/org_chart_views.xml',
     ],
     'assets': {
         'web.assets_backend': [

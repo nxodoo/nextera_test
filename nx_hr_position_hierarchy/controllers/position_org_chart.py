@@ -55,6 +55,7 @@ class PositionOrgChartController(http.Controller):
             'status': status,
             'headcount': job.headcount,
             'assigned_count': assigned_count,
+            'target_count': job.no_of_recruitment,
             'vacancy_count': max(job.headcount - assigned_count, 0),
             'employees': employees,
             'assistant_children': assistant_children,

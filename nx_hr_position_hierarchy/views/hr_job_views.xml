@@ -13,6 +13,12 @@
                 <field name="recruitment_state" widget="statusbar" statusbar_visible="draft,open,active,expired,closed,cancelled"/>
             </xpath>
             <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" icon="fa-users" name="action_open_assigned_employees" type="object">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value"><field name="assigned_employee_count"/></span>
+                        <span class="o_stat_text">Employees</span>
+                    </div>
+                </button>
                 <button class="oe_stat_button" icon="fa-sitemap" name="action_open_position_org_chart" type="object">
                     <div class="o_field_widget o_stat_info">
                         <span class="o_stat_value"><field name="child_all_count"/></span>

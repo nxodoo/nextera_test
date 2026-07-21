@@ -6,7 +6,21 @@
         <field name="target">current</field>
     </record>
 
+    <menuitem id="menu_position_org_chart_root"
+              name="Org Chart"
+              parent="hr.menu_hr_root"
+              groups="hr.group_hr_user"
+              sequence="15"/>
+
     <record id="hr_org_chart.menu_hr_employee_org_chart" model="ir.ui.menu">
+        <field name="name">Org Chart</field>
+        <field name="parent_id" ref="menu_position_org_chart_root"/>
         <field name="action" ref="action_position_org_chart"/>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="hr.menu_hr_department_kanban" model="ir.ui.menu">
+        <field name="parent_id" ref="menu_position_org_chart_root"/>
+        <field name="sequence">2</field>
     </record>
 </odoo>
