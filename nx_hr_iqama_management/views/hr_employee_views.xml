@@ -61,7 +61,7 @@
                         <field name="employee_type"/>
                     </group>
                     <group string="Organization">
-                        <field name="department_id"/>
+                        <field name="department_id" readonly="1" force_save="1"/>
                         <field name="job_id"/>
                         <field name="parent_id" string="Manager" widget="many2one_avatar_user"/>
                         <field name="coach_id" widget="many2one_avatar_user"/>
