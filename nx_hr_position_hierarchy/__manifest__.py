@@ -20,6 +20,7 @@
         'hr',
         'hr_org_chart',
         'hr_recruitment',
+        'nx_nextera_base',
         'web_hierarchy',
     ],
     'data': [

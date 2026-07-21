@@ -4,6 +4,7 @@
         <field name="name">hr.job.form.position.hierarchy</field>
         <field name="model">hr.job</field>
         <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="priority">99</field>
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
                 <button name="action_open" string="Open" type="object" class="btn-primary" invisible="recruitment_state not in ('draft', 'expired')"/>
@@ -26,30 +27,100 @@
                     </div>
                 </button>
             </xpath>
-            <xpath expr="//page[@name='recruitment_page']/group" position="inside">
-                <group string="Position Structure" name="position_structure">
-                    <field name="parent_id" options="{'no_create': True, 'no_create_edit': True}"/>
-                    <field name="is_assistant_position"/>
-                    <field name="child_ids" readonly="1">
-                        <list>
-                            <field name="name"/>
-                            <field name="department_id"/>
-                            <field name="is_assistant_position"/>
-                            <field name="position_level_id" options="{'no_create': True, 'no_create_edit': True}"/>
-                            <field name="position_status"/>
-                        </list>
-                    </field>
-                    <field name="position_level_id" options="{'no_create': True, 'no_create_edit': True}"/>
-                    <field name="headcount"/>
-                    <field name="position_status" readonly="1"/>
-                    <field name="assigned_employee_count" readonly="1"/>
-                    <field name="vacancy_count" readonly="1"/>
-                </group>
-                <group string="Recruitment Deadline" name="recruitment_deadline">
-                    <field name="application_deadline"/>
-                    <field name="days_to_deadline" readonly="1"/>
-                    <field name="time_to_fill" readonly="1"/>
-                </group>
+            <xpath expr="//page[@name='recruitment_page']/group" position="replace">
+                <div name="nx_recruitment_layout" class="nx_job_recruitment_layout">
+                    <widget name="section_toggle" data-default-open="true"/>
+                    <div class="closed-section" style="display:none;">
+                        <div class="nx_section_meta"
+                             data-title="Job and Recruitment Details"
+                             data-icon="fa-briefcase"
+                             data-color="#2563EB"
+                             style="display:none;"/>
+                        <div name="nx_recruitment_top_row" class="row g-4">
+                            <div class="col-12 col-xl-4">
+                            <group string="Job Details" name="recruitment">
+                                <field name="company_id" options="{'no_create': True}" invisible="1" groups="base.group_multi_company"/>
+                                <field name="department_id"/>
+                                <label for="address_id"/>
+                                <div class="o_row">
+                                    <span invisible="address_id" class="oe_read_only">Remote</span>
+                                    <field name="address_id" context="{'show_address': 1}" placeholder="Remote"/>
+                                </div>
+                                <field name="industry_id"/>
+                                <label for="alias_name" string="Email Alias"/>
+                                <div name="alias_def">
+                                    <field name="alias_id" class="oe_read_only" string="Email Alias" required="0"/>
+                                    <div class="oe_edit_only" name="edit_alias">
+                                        <field name="alias_name" class="oe_inline" placeholder="e.g. jobs"/>@
+                                        <field name="alias_domain_id" class="oe_inline" placeholder="e.g. domain.com"
+                                               options="{'no_create': True, 'no_open': True}"/>
+                                    </div>
+                                </div>
+                                <field name="contract_type_id"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="date_from"
+                                       widget="daterange"
+                                       string="Mission Dates"
+                                       options="{'end_date_field': 'date_to'}"/>
+                                <field name="date_to" invisible="1"/>
+                            </group>
+                            </div>
+                            <div class="col-12 col-xl-4">
+                            <group string="Hiring Details" name="recruitment2">
+                                <label for="no_of_recruitment"/>
+                                <div class="o_row" name="recruitment_target">
+                                    <field name="no_of_recruitment" class="o_hr_narrow_field"/>
+                                    <span>new Employees</span>
+                                </div>
+                                <field name="user_id" widget="many2one_avatar_user"/>
+                                <field name="interviewer_ids" widget="many2many_tags_avatar" options="{'no_create': True, 'no_create_edit': True}"/>
+                            </group>
+                            </div>
+                            <div class="col-12 col-xl-4">
+                            <group string="Recruitment Deadline" name="recruitment_deadline">
+                                <field name="application_deadline"/>
+                                <field name="days_to_deadline" readonly="1"/>
+                                <field name="time_to_fill" readonly="1"/>
+                            </group>
+                            </div>
+                        </div>
+                    </div>
+                    <widget name="section_toggle" data-default-open="true"/>
+                    <div class="closed-section" style="display:none;">
+                        <div class="nx_section_meta"
+                             data-title="Position Details"
+                             data-icon="fa-sitemap"
+                             data-color="#8B5CF6"
+                             style="display:none;"/>
+                        <div name="nx_position_bottom_row" class="row g-4 mt-3">
+                            <div class="col-12 col-xl-8">
+                            <group string="Position Structure" name="position_structure">
+                                <field name="parent_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="is_assistant_position"/>
+                                <separator string="Direct Sub Positions"/>
+                                <field name="child_ids" nolabel="1" colspan="2" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="department_id"/>
+                                        <field name="is_assistant_position"/>
+                                        <field name="position_level_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                                        <field name="position_status"/>
+                                    </list>
+                                </field>
+                            </group>
+                            </div>
+                            <div class="col-12 col-xl-4">
+                            <group string="Position" name="position_details">
+                                <field name="position_level_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="headcount"/>
+                                <field name="position_status" readonly="1"/>
+                                <field name="assigned_employee_count" readonly="1"/>
+                                <field name="vacancy_count" readonly="1"/>
+                            </group>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </xpath>
         </field>
     </record>

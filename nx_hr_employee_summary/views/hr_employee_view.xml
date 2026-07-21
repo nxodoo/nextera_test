@@ -10,7 +10,7 @@
         <field name="arch" type="xml">
 
             <xpath expr="//field[@name='job_title']" position="attributes">
-                <attribute name="style">font-size: 1.35rem;</attribute>
+                <attribute name="style">font-size: 1.05rem;</attribute>
             </xpath>
             <xpath expr="//div[hasclass('o_employee_avatar')]" position="before">
                 <div class="nx_employee_header_recommendation">
