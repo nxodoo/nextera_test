@@ -1,19 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- ============ Test Calculation Wizard ============ -->
+    <record id="view_nx_egypt_payroll_tax_test_form" model="ir.ui.view">
+        <field name="name">nx.egypt.payroll.tax.test.form</field>
+        <field name="model">nx.egypt.payroll.tax.test</field>
+        <field name="arch" type="xml">
+            <form string="Test Calculation">
+                <group>
+                    <group string="Inputs">
+                        <field name="monthly_gross"/>
+                        <field name="annual_equivalent" readonly="1"/>
+                        <field name="personal_exemption" readonly="1"/>
+                        <field name="other_deductions"/>
+                        <field name="additional_taxable"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <group string="Results">
+                        <field name="annual_gross" readonly="1"/>
+                        <field name="exemption_applied" readonly="1"/>
+                        <field name="other_deductions_annual" readonly="1"/>
+                        <field name="additional_amount" readonly="1"/>
+                        <field name="annual_taxable" readonly="1"/>
+                        <field name="matched_category_id" readonly="1"/>
+                        <field name="total_annual_tax" readonly="1"/>
+                        <field name="monthly_tax" readonly="1"
+                               class="oe_inline" style="font-weight:bold;"/>
+                        <field name="net_salary" readonly="1"/>
+                    </group>
+                </group>
+                <div class="alert alert-info" role="alert">
+                    For <b>testing only</b>. Enter a monthly gross salary to see the
+                    matching net-income category and the resulting tax. On a Payslip,
+                    the <b>Income Tax (EGY_TAX)</b> rule computes each employee's tax
+                    automatically.
+                </div>
+                <footer>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_nx_egypt_payroll_tax_test" model="ir.actions.act_window">
+        <field name="name">Test Calculation</field>
+        <field name="res_model">nx.egypt.payroll.tax.test</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
     <!-- ===================== List ===================== -->
     <record id="view_nx_egypt_payroll_tax_list" model="ir.ui.view">
         <field name="name">nx.egypt.payroll.tax.list</field>
         <field name="model">nx.egypt.payroll.tax</field>
         <field name="arch" type="xml">
-            <list string="Egypt Payroll Tax Versions" decoration-success="state == 'active'"
+            <list string="Egypt Payroll Tax Categories" js_class="egypt_tax_list"
+                  decoration-success="state == 'active'"
                   decoration-muted="state == 'inactive'">
                 <field name="name"/>
-                <field name="effective_date"/>
-                <field name="end_date"/>
+                <field name="net_income_from"/>
+                <field name="net_income_to"/>
                 <field name="total_exemption_limit"/>
+                <field name="effective_date"/>
                 <field name="created_by_id"/>
-                <field name="created_on"/>
                 <field name="state" widget="badge"
                        decoration-success="state == 'active'"
                        decoration-info="state == 'draft'"
@@ -46,82 +95,41 @@
                 <sheet>
                     <div class="oe_title">
                         <label for="name"/>
-                        <h1><field name="name" placeholder="Version name"/></h1>
+                        <h1><field name="name" placeholder="Category name"/></h1>
                     </div>
                     <group>
-                        <group>
-                            <field name="created_by_id"/>
-                            <field name="created_on"/>
-                            <field name="effective_date"/>
+                        <group string="Net-Income Range">
+                            <field name="net_income_from"/>
+                            <field name="net_income_to"/>
+                            <field name="currency_id" invisible="1"/>
                         </group>
                         <group>
-                            <field name="end_date"/>
                             <field name="total_exemption_limit"/>
-                            <field name="currency_id" invisible="1"/>
+                            <field name="effective_date"/>
+                            <field name="end_date"/>
+                            <field name="created_by_id"/>
+                            <field name="created_on"/>
                         </group>
                     </group>
                     <notebook>
                         <!-- ============ Tax Brackets ============ -->
                         <page string="Tax Brackets" name="brackets">
-                            <div class="d-flex justify-content-between mb-2">
-                                <h3>Egyptian Tax Brackets Matrix (Annual)</h3>
-                                <button name="action_load_default_brackets" type="object"
-                                        string="Load Default Brackets" class="btn-link"
-                                        confirm="This will replace the current brackets with the default Egyptian matrix. Continue?"/>
-                            </div>
+                            <h3>Tax Brackets (Annual)</h3>
                             <field name="bracket_ids">
                                 <list editable="bottom">
                                     <field name="sequence" widget="handle"/>
                                     <field name="rate"/>
                                     <field name="amount_from"/>
                                     <field name="amount_to"/>
-                                    <field name="col_600k"/>
-                                    <field name="col_700k"/>
-                                    <field name="col_800k"/>
-                                    <field name="col_900k"/>
-                                    <field name="col_1200k"/>
-                                    <field name="col_above"/>
-                                    <field name="is_active" widget="boolean_toggle"/>
                                     <field name="notes"/>
                                 </list>
                             </field>
                             <p class="text-muted">
-                                Only <b>Active</b> rows are used in the tax calculation.
-                                The <b>From</b>/<b>To</b> numeric bounds drive the progressive
-                                computation; the category columns are informational ranges
-                                entered manually.
+                                This category applies to employees whose annual net income is
+                                within the <b>Net-Income Range</b> above. The <b>From</b>/<b>To</b>
+                                bounds drive the progressive <b>Rate</b> computation over this
+                                category's brackets.
                             </p>
-                        </page>
-
-                        <!-- ============ Test Calculation ============ -->
-                        <page string="Test Calculation" name="test_calc">
-                            <group>
-                                <group string="Inputs">
-                                    <field name="test_monthly_gross"/>
-                                    <field name="test_annual_equivalent" readonly="1"/>
-                                    <field name="test_personal_exemption" readonly="1"/>
-                                    <field name="test_other_deductions"/>
-                                    <field name="test_additional_taxable"/>
-                                    <button name="action_run_simulation" type="object"
-                                            string="Run Simulation" class="oe_highlight"/>
-                                </group>
-                                <group string="Results">
-                                    <field name="res_annual_gross" readonly="1"/>
-                                    <field name="res_exemption_applied" readonly="1"/>
-                                    <field name="res_other_deductions_annual" readonly="1"/>
-                                    <field name="res_additional_taxable" readonly="1"/>
-                                    <field name="res_annual_taxable" readonly="1"/>
-                                    <field name="res_total_annual_tax" readonly="1"/>
-                                    <field name="res_monthly_tax" readonly="1"
-                                           class="oe_inline" style="font-weight:bold;"/>
-                                    <field name="res_net_salary" readonly="1"/>
-                                </group>
-                            </group>
-                            <div class="alert alert-info" role="alert">
-                                This tab is for <b>testing only</b>. On a Payslip, the
-                                <b>Income Tax (EGY_TAX)</b> rule computes each employee's tax
-                                automatically from their own gross salary using the active version.
-                            </div>
                         </page>
                     </notebook>
                 </sheet>

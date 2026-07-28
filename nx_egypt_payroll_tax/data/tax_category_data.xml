@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Predefined Egyptian net-income categories (editable; add more later). -->
+    <data noupdate="1">
+
+        <!-- ===== Net Income ≤ 600K ===== -->
+        <record id="cat_600k" model="nx.egypt.payroll.tax">
+            <field name="name">Net Income ≤ 600K</field>
+            <field name="net_income_from">0</field>
+            <field name="net_income_to">600000</field>
+            <field name="state">active</field>
+        </record>
+        <record id="cat_600k_l1" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_600k"/><field name="sequence">10</field>
+            <field name="rate">0.0</field><field name="amount_from">1</field><field name="amount_to">40000</field>
+            <field name="notes">Zero-rate band</field>
+        </record>
+        <record id="cat_600k_l2" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_600k"/><field name="sequence">20</field>
+            <field name="rate">10.0</field><field name="amount_from">40001</field><field name="amount_to">55000</field>
+            <field name="notes">Lower tax band</field>
+        </record>
+        <record id="cat_600k_l3" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_600k"/><field name="sequence">30</field>
+            <field name="rate">15.0</field><field name="amount_from">55001</field><field name="amount_to">70000</field>
+            <field name="notes">Lower-middle tax band</field>
+        </record>
+        <record id="cat_600k_l4" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_600k"/><field name="sequence">40</field>
+            <field name="rate">20.0</field><field name="amount_from">70001</field><field name="amount_to">200000</field>
+            <field name="notes">Middle tax band</field>
+        </record>
+        <record id="cat_600k_l5" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_600k"/><field name="sequence">50</field>
+            <field name="rate">22.5</field><field name="amount_from">200001</field><field name="amount_to">400000</field>
+            <field name="notes">Upper-middle tax band</field>
+        </record>
+        <record id="cat_600k_l6" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_600k"/><field name="sequence">60</field>
+            <field name="rate">25.0</field><field name="amount_from">400001</field><field name="amount_to">600000</field>
+            <field name="notes">High tax band</field>
+        </record>
+
+        <!-- ===== 600K < Net ≤ 700K ===== -->
+        <record id="cat_700k" model="nx.egypt.payroll.tax">
+            <field name="name">600K &lt; Net ≤ 700K</field>
+            <field name="net_income_from">600001</field>
+            <field name="net_income_to">700000</field>
+            <field name="state">active</field>
+        </record>
+        <record id="cat_700k_l1" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_700k"/><field name="sequence">10</field>
+            <field name="rate">10.0</field><field name="amount_from">1</field><field name="amount_to">55000</field>
+            <field name="notes">Lower tax band</field>
+        </record>
+        <record id="cat_700k_l2" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_700k"/><field name="sequence">20</field>
+            <field name="rate">15.0</field><field name="amount_from">55001</field><field name="amount_to">70000</field>
+            <field name="notes">Lower-middle tax band</field>
+        </record>
+        <record id="cat_700k_l3" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_700k"/><field name="sequence">30</field>
+            <field name="rate">20.0</field><field name="amount_from">70001</field><field name="amount_to">200000</field>
+            <field name="notes">Middle tax band</field>
+        </record>
+        <record id="cat_700k_l4" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_700k"/><field name="sequence">40</field>
+            <field name="rate">22.5</field><field name="amount_from">200001</field><field name="amount_to">400000</field>
+            <field name="notes">Upper-middle tax band</field>
+        </record>
+        <record id="cat_700k_l5" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_700k"/><field name="sequence">50</field>
+            <field name="rate">25.0</field><field name="amount_from">400001</field><field name="amount_to">700000</field>
+            <field name="notes">High tax band</field>
+        </record>
+
+        <!-- ===== 700K < Net ≤ 800K ===== -->
+        <record id="cat_800k" model="nx.egypt.payroll.tax">
+            <field name="name">700K &lt; Net ≤ 800K</field>
+            <field name="net_income_from">700001</field>
+            <field name="net_income_to">800000</field>
+            <field name="state">active</field>
+        </record>
+        <record id="cat_800k_l1" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_800k"/><field name="sequence">10</field>
+            <field name="rate">15.0</field><field name="amount_from">1</field><field name="amount_to">70000</field>
+            <field name="notes">Lower-middle tax band</field>
+        </record>
+        <record id="cat_800k_l2" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_800k"/><field name="sequence">20</field>
+            <field name="rate">20.0</field><field name="amount_from">70001</field><field name="amount_to">200000</field>
+            <field name="notes">Middle tax band</field>
+        </record>
+        <record id="cat_800k_l3" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_800k"/><field name="sequence">30</field>
+            <field name="rate">22.5</field><field name="amount_from">200001</field><field name="amount_to">400000</field>
+            <field name="notes">Upper-middle tax band</field>
+        </record>
+        <record id="cat_800k_l4" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_800k"/><field name="sequence">40</field>
+            <field name="rate">25.0</field><field name="amount_from">400001</field><field name="amount_to">800000</field>
+            <field name="notes">High tax band</field>
+        </record>
+
+        <!-- ===== 800K < Net ≤ 900K ===== -->
+        <record id="cat_900k" model="nx.egypt.payroll.tax">
+            <field name="name">800K &lt; Net ≤ 900K</field>
+            <field name="net_income_from">800001</field>
+            <field name="net_income_to">900000</field>
+            <field name="state">active</field>
+        </record>
+        <record id="cat_900k_l1" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_900k"/><field name="sequence">10</field>
+            <field name="rate">20.0</field><field name="amount_from">1</field><field name="amount_to">200000</field>
+            <field name="notes">Middle tax band</field>
+        </record>
+        <record id="cat_900k_l2" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_900k"/><field name="sequence">20</field>
+            <field name="rate">22.5</field><field name="amount_from">200001</field><field name="amount_to">400000</field>
+            <field name="notes">Upper-middle tax band</field>
+        </record>
+        <record id="cat_900k_l3" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_900k"/><field name="sequence">30</field>
+            <field name="rate">25.0</field><field name="amount_from">400001</field><field name="amount_to">900000</field>
+            <field name="notes">High tax band</field>
+        </record>
+
+        <!-- ===== 900K < Net ≤ 1.2M ===== -->
+        <record id="cat_1200k" model="nx.egypt.payroll.tax">
+            <field name="name">900K &lt; Net ≤ 1.2M</field>
+            <field name="net_income_from">900001</field>
+            <field name="net_income_to">1200000</field>
+            <field name="state">active</field>
+        </record>
+        <record id="cat_1200k_l1" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_1200k"/><field name="sequence">10</field>
+            <field name="rate">22.5</field><field name="amount_from">1</field><field name="amount_to">400000</field>
+            <field name="notes">Upper-middle tax band</field>
+        </record>
+        <record id="cat_1200k_l2" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_1200k"/><field name="sequence">20</field>
+            <field name="rate">25.0</field><field name="amount_from">400001</field><field name="amount_to">1200000</field>
+            <field name="notes">High tax band</field>
+        </record>
+
+        <!-- ===== Net > 1.2M ===== -->
+        <record id="cat_above" model="nx.egypt.payroll.tax">
+            <field name="name">Net &gt; 1.2M</field>
+            <field name="net_income_from">1200001</field>
+            <field name="net_income_to">0</field>
+            <field name="state">active</field>
+        </record>
+        <record id="cat_above_l1" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_above"/><field name="sequence">10</field>
+            <field name="rate">25.0</field><field name="amount_from">1</field><field name="amount_to">1200000</field>
+            <field name="notes">High tax band</field>
+        </record>
+        <record id="cat_above_l2" model="nx.egypt.payroll.tax.bracket">
+            <field name="config_id" ref="cat_above"/><field name="sequence">20</field>
+            <field name="rate">27.5</field><field name="amount_from">1200001</field><field name="amount_to">0</field>
+            <field name="notes">Top rate</field>
+        </record>
+
+    </data>
+</odoo>

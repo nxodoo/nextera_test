@@ -5,6 +5,31 @@
     }
 }
 
+.o_form_view .nx_career_section_grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 16px;
+    margin-top: 12px;
+
+    .nx_career_section_item {
+        min-width: 0;
+
+        .o_section_toggle {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .closed-section {
+            margin-top: 12px;
+        }
+    }
+
+    // An expanded section spans the full width.
+    .nx_career_section_item:has(.closed-section:not([style*="display: none"]):not([style*="display:none"])) {
+        grid-column: 1 / -1;
+    }
+}
+
 @keyframes nxSectionSlideDown {
     from {
         opacity: 0;

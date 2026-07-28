@@ -36,7 +36,8 @@ Used For
 """,
     'category': 'Human Resources',
     'author': 'Ahmed Tarek',
-    'depends': ['base', 'hr', 'mail', 'hr_expense', 'nx_hr_expense_line'],
+    'depends': ['base', 'hr', 'mail', 'hr_expense', 'nx_hr_expense_line',
+                'nx_hr_policy_management'],
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="nx_egypt_payroll_tax.ListButtons"
+       t-inherit="web.ListView.Buttons" t-inherit-mode="primary">
+        <xpath expr="//div[hasclass('o_list_buttons')]" position="inside">
+            <button type="button" class="btn btn-primary o_egypt_tax_test_btn"
+                    t-on-click="() => this.onTestCalculation()">
+                Test Calculation
+            </button>
+        </xpath>
+    </t>
+
+</templates>

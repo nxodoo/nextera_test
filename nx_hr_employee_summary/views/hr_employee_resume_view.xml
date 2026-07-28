@@ -6,35 +6,66 @@
         <field name="name">hr.employee.form.resume.career.moves</field>
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr_skills.hr_employee_view_form"/>
-        <field name="priority">40</field>
+        <!-- Low priority: applied before nx_hr_career_development (17) so the
+             grid container exists when that view injects its own items. -->
+        <field name="priority">10</field>
         <field name="arch" type="xml">
 
-            <xpath expr="//page[@name='skills_resume']/div[hasclass('row')]" position="after">
+            <!-- Turn the base Resume + Skills row into a collapsible section. -->
+            <xpath expr="//page[@name='skills_resume']/div[hasclass('row')]" position="attributes">
+                <attribute name="class" add="closed-section" separator=" "/>
+            </xpath>
+            <xpath expr="//page[@name='skills_resume']/div[hasclass('row')]" position="inside">
+                <div class="nx_section_meta"
+                     data-title="Resume &amp; Skills"
+                     data-icon="fa-file-text-o"
+                     data-color="#0EA5E9"
+                     style="display:none;"/>
+            </xpath>
 
-                <widget name="section_toggle" data-default-open="false"/>
-                <div class="closed-section" style="display:none;">
-                    <div class="nx_section_meta"
-                         data-title="Company Moves (Promotions &amp; Transfers)"
-                         data-icon="fa-exchange"
-                         data-color="#8B5CF6"
-                         style="display:none;"/>
-                    <field name="nx_career_move_ids" nolabel="1"
-                           context="{'default_employee_id': id}">
-                        <list editable="bottom">
-                            <field name="date"/>
-                            <field name="move_type"/>
-                            <field name="from_job_id"/>
-                            <field name="to_job_id"/>
-                            <field name="from_department_id"/>
-                            <field name="to_department_id"/>
-                            <field name="currency_id" column_invisible="1"/>
-                            <field name="salary"/>
-                            <field name="pct_increase" string="% vs Prev." readonly="1"/>
-                            <field name="note" optional="show"/>
-                        </list>
-                    </field>
+            <!-- Build the 2-column grid BEFORE the row. The first tile is left
+                 empty here and the Resume row is moved into it in a separate
+                 step below (a move nested inside the freshly-inserted node is
+                 unreliable). Company Moves is the second tile. -->
+            <xpath expr="//page[@name='skills_resume']/div[hasclass('row')]" position="before">
+                <div class="nx_summary_section_grid nx_resume_section_grid">
+
+                    <div class="nx_summary_section_item nx_resume_row_item">
+                        <widget name="section_toggle" data-default-open="true"/>
+                    </div>
+
+                    <div class="nx_summary_section_item">
+                        <widget name="section_toggle" data-default-open="false"/>
+                        <div class="closed-section" style="display:none;">
+                            <div class="nx_section_meta"
+                                 data-title="Company Moves (Promotions &amp; Transfers)"
+                                 data-icon="fa-exchange"
+                                 data-color="#8B5CF6"
+                                 style="display:none;"/>
+                            <field name="nx_career_move_ids" nolabel="1"
+                                   context="{'default_employee_id': id}">
+                                <list editable="bottom">
+                                    <field name="date"/>
+                                    <field name="move_type"/>
+                                    <field name="from_job_id"/>
+                                    <field name="to_job_id"/>
+                                    <field name="from_department_id"/>
+                                    <field name="to_department_id"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="salary"/>
+                                    <field name="pct_increase" string="% vs Prev." readonly="1"/>
+                                    <field name="note" optional="show"/>
+                                </list>
+                            </field>
+                        </div>
+                    </div>
+
                 </div>
+            </xpath>
 
+            <!-- Move the (now collapsible) Resume row into the first grid tile. -->
+            <xpath expr="//div[hasclass('nx_resume_row_item')]" position="inside">
+                <xpath expr="//page[@name='skills_resume']/div[hasclass('row')]" position="move"/>
             </xpath>
 
         </field>

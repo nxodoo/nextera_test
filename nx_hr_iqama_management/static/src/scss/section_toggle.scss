@@ -5,6 +5,56 @@
     }
 }
 
+// Work Information tab: Org Chart stays in its right column (unchanged).
+// The section tiles stack vertically down the left column so they fill the
+// available height beside the chart instead of sitting in one short row that
+// leaves a large empty gap underneath.
+.o_form_view .nx_wi_section_grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+
+    .nx_wi_section_item {
+        min-width: 0;
+
+        .o_section_toggle {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .closed-section {
+            margin-top: 10px;
+        }
+    }
+}
+
+// Private Information tab: three collapsible sections side by side.
+.o_form_view .nx_pi_section_grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px 16px;
+    margin-top: 4px;
+
+    .nx_pi_section_item {
+        min-width: 0;
+
+        .o_section_toggle {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .closed-section {
+            margin-top: 12px;
+        }
+    }
+
+    // An expanded section spans the full width so its fields stay readable.
+    .nx_pi_section_item:has(.closed-section:not([style*="display: none"]):not([style*="display:none"])) {
+        grid-column: 1 / -1;
+    }
+}
+
 @keyframes nxSectionSlideDown {
     from {
         opacity: 0;

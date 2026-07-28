@@ -4,11 +4,11 @@ from odoo import fields, models
 
 class NxEgyptPayrollTaxBracket(models.Model):
     _name = 'nx.egypt.payroll.tax.bracket'
-    _description = 'Egyptian Tax Brackets Matrix (Annual)'
+    _description = 'Egyptian Tax Bracket Line'
     _order = 'sequence, id'
 
     config_id = fields.Many2one(
-        'nx.egypt.payroll.tax', string='Tax Configuration',
+        'nx.egypt.payroll.tax', string='Category',
         required=True, ondelete='cascade',
     )
     sequence = fields.Integer(string='Sequence', default=10)
@@ -21,13 +21,4 @@ class NxEgyptPayrollTaxBracket(models.Model):
         help='Upper bound of the bracket. Leave 0 for an open-ended top bracket.',
     )
 
-    # Manually-entered range text per net-income category (matrix columns).
-    col_600k = fields.Char(string='Net Income ≤ 600K', default='-')
-    col_700k = fields.Char(string='600K < Net ≤ 700K', default='-')
-    col_800k = fields.Char(string='700K < Net ≤ 800K', default='-')
-    col_900k = fields.Char(string='800K < Net ≤ 900K', default='-')
-    col_1200k = fields.Char(string='900K < Net ≤ 1.2M', default='-')
-    col_above = fields.Char(string='Net > 1.2M', default='-')
-
-    is_active = fields.Boolean(string='Active', default=True)
     notes = fields.Char(string='Notes')

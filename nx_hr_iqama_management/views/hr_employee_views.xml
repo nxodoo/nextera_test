@@ -123,6 +123,127 @@
             <xpath expr="//page[@name='personal_information']//group[@name='emergency']" position="replace"/>
             <xpath expr="//page[@name='personal_information']//separator[@name='has_work_permit']/ancestor::group[1]" position="replace"/>
 
+            <!-- ── Group Work Information into 3 side-by-side collapsible sections ──
+                 Build a 3-column grid of collapsible tiles, then move the three
+                 existing groups (nx_work_details from this module,
+                 nx_location_schedule_row / nx_approvers_allowance_row from
+                 nx_hr_policy_management) into their tiles. -->
+            <xpath expr="//page[@name='public']//div[@id='o_work_employee_main']" position="inside">
+                <div class="nx_wi_section_grid">
+
+                    <div class="nx_wi_section_item">
+                        <widget name="section_toggle" data-default-open="false"/>
+                        <div class="closed-section nx_wi_slot_contact" style="display:none;">
+                            <div class="nx_section_meta"
+                                 data-title="Contact &amp; Organization"
+                                 data-icon="fa-address-card-o"
+                                 data-color="#0EA5E9"
+                                 style="display:none;"/>
+                        </div>
+                    </div>
+
+                    <div class="nx_wi_section_item">
+                        <widget name="section_toggle" data-default-open="false"/>
+                        <div class="closed-section nx_wi_slot_location" style="display:none;">
+                            <div class="nx_section_meta"
+                                 data-title="Location &amp; Schedule"
+                                 data-icon="fa-map-marker"
+                                 data-color="#22C55E"
+                                 style="display:none;"/>
+                        </div>
+                    </div>
+
+                    <div class="nx_wi_section_item">
+                        <widget name="section_toggle" data-default-open="false"/>
+                        <div class="closed-section nx_wi_slot_approvers" style="display:none;">
+                            <div class="nx_section_meta"
+                                 data-title="Approvers &amp; Leave Allowance"
+                                 data-icon="fa-check-circle-o"
+                                 data-color="#8B5CF6"
+                                 style="display:none;"/>
+                        </div>
+                    </div>
+
+                </div>
+            </xpath>
+
+            <xpath expr="//div[hasclass('nx_wi_slot_contact')]" position="inside">
+                <xpath expr="//group[@name='nx_work_details']" position="move"/>
+            </xpath>
+            <xpath expr="//div[hasclass('nx_wi_slot_location')]" position="inside">
+                <xpath expr="//group[@name='nx_location_schedule_row']" position="move"/>
+            </xpath>
+            <xpath expr="//div[hasclass('nx_wi_slot_approvers')]" position="inside">
+                <xpath expr="//group[@name='nx_approvers_allowance_row']" position="move"/>
+            </xpath>
+
+            <!-- ── Group Private Information into 3 side-by-side collapsible sections ──
+                 Build the grid, move the six existing groups into three tiles
+                 (two groups each), then drop the now-empty original wrappers. -->
+            <xpath expr="//page[@name='personal_information']" position="inside">
+                <div class="nx_pi_section_grid">
+
+                    <div class="nx_pi_section_item">
+                        <widget name="section_toggle" data-default-open="false"/>
+                        <div class="closed-section nx_pi_slot_contact" style="display:none;">
+                            <div class="nx_section_meta"
+                                 data-title="Contact &amp; Citizenship"
+                                 data-icon="fa-address-book-o"
+                                 data-color="#0EA5E9"
+                                 style="display:none;"/>
+                            <group name="nx_pi_pair_contact"/>
+                        </div>
+                    </div>
+
+                    <div class="nx_pi_section_item">
+                        <widget name="section_toggle" data-default-open="false"/>
+                        <div class="closed-section nx_pi_slot_docs" style="display:none;">
+                            <div class="nx_section_meta"
+                                 data-title="Passport &amp; Work Permit"
+                                 data-icon="fa-id-card-o"
+                                 data-color="#22C55E"
+                                 style="display:none;"/>
+                            <group name="nx_pi_pair_docs"/>
+                        </div>
+                    </div>
+
+                    <div class="nx_pi_section_item">
+                        <widget name="section_toggle" data-default-open="false"/>
+                        <div class="closed-section nx_pi_slot_family" style="display:none;">
+                            <div class="nx_section_meta"
+                                 data-title="Family &amp; Emergency"
+                                 data-icon="fa-users"
+                                 data-color="#8B5CF6"
+                                 style="display:none;"/>
+                            <group name="nx_pi_pair_family"/>
+                        </div>
+                    </div>
+
+                </div>
+            </xpath>
+
+            <!-- Tile 1: Private Contact + Citizenship (side by side) -->
+            <xpath expr="//group[@name='nx_pi_pair_contact']" position="inside">
+                <xpath expr="//page[@name='personal_information']//field[@name='private_street']/ancestor::group[1]" position="move"/>
+                <xpath expr="//page[@name='personal_information']//field[@name='identification_id']/ancestor::group[1]" position="move"/>
+            </xpath>
+
+            <!-- Tile 2: Passport Info + Work Permit (side by side) -->
+            <xpath expr="//group[@name='nx_pi_pair_docs']" position="inside">
+                <xpath expr="//page[@name='personal_information']//field[@name='passport_name_english']/ancestor::group[1]" position="move"/>
+                <xpath expr="//page[@name='personal_information']//field[@name='has_work_permit']/ancestor::group[1]" position="move"/>
+            </xpath>
+
+            <!-- Tile 3: Family Status + Emergency (side by side) -->
+            <xpath expr="//group[@name='nx_pi_pair_family']" position="inside">
+                <xpath expr="//page[@name='personal_information']//field[@name='spouse_complete_name']/ancestor::group[1]" position="move"/>
+                <xpath expr="//page[@name='personal_information']//field[@name='emergency_contact']/ancestor::group[1]" position="move"/>
+            </xpath>
+
+            <!-- Drop the now-empty original wrappers (outer group + custom layout div). -->
+            <xpath expr="//page[@name='personal_information']//div[hasclass('nx_hr_private_info_layout')]" position="replace"/>
+            <xpath expr="//page[@name='personal_information']/group[1]" position="replace"/>
+
         </field>
     </record>
 </odoo>

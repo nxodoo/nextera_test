@@ -23,11 +23,11 @@
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
             <field name="amount_python_compute">
-# Income Tax sourced from the active Egypt Payroll Tax version.
-# Tax is computed per employee from their own monthly gross salary.
-config = payslip.env['nx.egypt.payroll.tax']._get_active_version()
+# Income Tax sourced from the active Egypt Payroll Tax categories.
+# Tax is computed per employee from their own monthly gross salary; the
+# matching net-income category is selected automatically.
 monthly_gross = categories['GROSS'] or (contract.wage if contract else 0.0)
-tax = config.compute_monthly_tax_for(monthly_gross) if config else 0.0
+tax = payslip.env['nx.egypt.payroll.tax'].compute_employee_monthly_tax(monthly_gross)
 result = -tax
 result_name = 'Income Tax'
             </field>

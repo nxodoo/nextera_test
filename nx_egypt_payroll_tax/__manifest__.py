@@ -21,8 +21,15 @@
     'data': [
         'security/ir.model.access.csv',
         'data/salary_rule_data.xml',
+        'data/tax_category_data.xml',
         'views/egypt_payroll_tax_views.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'nx_egypt_payroll_tax/static/src/js/egypt_tax_list.js',
+            'nx_egypt_payroll_tax/static/src/xml/egypt_tax_list.xml',
+        ],
+    },
     'application': False,
     'installable': True,
     'license': 'LGPL-3',
