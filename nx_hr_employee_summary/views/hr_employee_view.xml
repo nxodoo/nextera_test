@@ -66,38 +66,6 @@
                                 <widget name="nx_summary" part="attendance"/>
                             </div>
                         </div>
-
-                        <!-- ===== HR-maintained operational inputs ===== -->
-                        <div class="nx_summary_section_item">
-                            <widget name="section_toggle" data-default-open="false"/>
-                            <div class="closed-section" style="display:none;">
-                                <div class="nx_section_meta"
-                                     data-title="Summary Data Entry (HR)"
-                                     data-icon="fa-pencil-square-o"
-                                     data-color="#64748B"
-                                     style="display:none;"/>
-                                <group>
-                                    <group string="Period &amp; Attendance">
-                                        <field name="nx_currency_id" groups="base.group_no_one"/>
-                                        <field name="nx_period_start_date"/>
-                                        <field name="nx_period_end_date"
-                                               placeholder="Leave empty to use today"/>
-                                        <field name="nx_period_label" readonly="1"/>
-                                        <field name="nx_total_working_days" readonly="1"/>
-                                        <field name="nx_present_days"/>
-                                        <field name="nx_absent_days" readonly="1"/>
-                                    </group>
-                                    <group string="Leave &amp; Discipline">
-                                        <field name="nx_sick_leave_days" readonly="1"/>
-                                        <field name="nx_annual_leave_days" readonly="1"/>
-                                        <field name="nx_unpaid_leave_days" readonly="1"/>
-                                        <field name="nx_other_leave_days" readonly="1"/>
-                                        <field name="nx_late_arrivals" readonly="1"/>
-                                        <field name="nx_warnings_count"/>
-                                    </group>
-                                </group>
-                            </div>
-                        </div>
                     </div>
 
                 </page>

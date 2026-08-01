@@ -91,11 +91,11 @@ class HrEmployee(models.Model):
     # ------------------------------------------------------------------
     nx_period_start_date = fields.Date(
         string='Attendance Period Start',
-        help='Start date used to compute working days, leaves and late arrivals.',
+        help='Legacy manual period start. The summary now derives its period automatically.',
     )
     nx_period_end_date = fields.Date(
         string='Attendance Period End',
-        help='Optional end date. Leave empty to compute up to today automatically.',
+        help='Legacy manual period end. The summary now derives its period automatically.',
     )
     nx_period_label = fields.Char(
         string='Attendance Period', compute='_compute_nx_period_label', store=False,
@@ -107,10 +107,8 @@ class HrEmployee(models.Model):
     nx_present_days = fields.Integer(
         string='Present Days',
         compute='_compute_nx_present_days',
-        inverse='_inverse_nx_present_days',
-        store=True,
-        readonly=False,
-        help='Computed from timesheet days when available, but can still be adjusted manually.',
+        store=False,
+        help='Computed from attendance check-ins, falling back to timesheet days when needed.',
     )
     nx_absent_days = fields.Integer(
         string='Absent Days', compute='_compute_nx_attendance',
@@ -258,7 +256,9 @@ class HrEmployee(models.Model):
                 (current - starting) / starting * 100.0 if starting else 0.0
             )
 
-    @api.depends('nx_period_start_date', 'nx_period_end_date', 'contract_id.date_start')
+    @api.depends(
+        'contract_id.date_start', 'contract_id.date_end', 'first_contract_date',
+    )
     def _compute_nx_period_label(self):
         for emp in self:
             start_date, end_date = emp._nx_get_attendance_period()
@@ -271,9 +271,9 @@ class HrEmployee(models.Model):
                 emp.nx_period_label = ''
 
     @api.depends(
-        'nx_period_start_date', 'nx_period_end_date',
-        'contract_id', 'contract_id.date_start', 'contract_id.work_entry_source',
-        'contract_id.resource_calendar_id', 'resource_calendar_id',
+        'contract_id', 'contract_id.date_start', 'contract_id.date_end',
+        'contract_id.work_entry_source', 'contract_id.resource_calendar_id',
+        'resource_calendar_id', 'first_contract_date',
     )
     def _compute_nx_operational_record(self):
         for emp in self:
@@ -300,8 +300,8 @@ class HrEmployee(models.Model):
             )
 
     @api.depends(
-        'nx_period_start_date', 'nx_period_end_date',
-        'contract_id', 'contract_id.date_start', 'contract_id.work_entry_source',
+        'contract_id', 'contract_id.date_start', 'contract_id.date_end',
+        'contract_id.work_entry_source', 'first_contract_date',
     )
     def _compute_nx_present_days(self):
         for emp in self:
@@ -310,31 +310,48 @@ class HrEmployee(models.Model):
                 emp.nx_present_days = 0
                 continue
             contract = emp._nx_get_summary_contract()
-            emp.nx_present_days = emp._nx_count_timesheet_present_days(
-                contract, start_date, end_date,
+            present_dates = emp._nx_get_attendance_present_dates(
+                start_date, end_date,
             )
+            present_dates.update(
+                emp._nx_get_timesheet_present_dates(contract, start_date, end_date)
+            )
+            emp.nx_present_days = len(present_dates)
 
-    def _inverse_nx_present_days(self):
-        """Allow HR to adjust present days after the timesheet-based default."""
-        return True
-
-    @api.depends('nx_total_working_days', 'nx_present_days')
+    @api.depends(
+        'nx_total_working_days', 'nx_present_days',
+        'nx_sick_leave_days', 'nx_annual_leave_days',
+        'nx_unpaid_leave_days', 'nx_other_leave_days',
+    )
     def _compute_nx_attendance(self):
         for emp in self:
             total = emp.nx_total_working_days or 0
             present = emp.nx_present_days or 0
-            emp.nx_absent_days = max(total - present, 0)
-            emp.nx_attendance_pct = round(present / total * 100.0, 1) if total else 0.0
+            approved_leave_days = (
+                (emp.nx_sick_leave_days or 0)
+                + (emp.nx_annual_leave_days or 0)
+                + (emp.nx_unpaid_leave_days or 0)
+                + (emp.nx_other_leave_days or 0)
+            )
+            emp.nx_absent_days = max(total - present - approved_leave_days, 0)
+            attended_or_excused = min(present + approved_leave_days, total)
+            emp.nx_attendance_pct = (
+                round(attended_or_excused / total * 100.0, 1) if total else 0.0
+            )
 
     def _nx_get_attendance_period(self):
-        """Return the summary period, defaulting to contract start through today."""
+        """Return the automatic year-to-date attendance summary period."""
         self.ensure_one()
         today = fields.Date.context_today(self)
-        start_date = self.nx_period_start_date
-        if not start_date:
-            contract = self.contract_id if 'contract_id' in self._fields else False
-            start_date = contract.date_start if contract and contract.date_start else today.replace(day=1)
-        end_date = self.nx_period_end_date or today
+        contract = self._nx_get_summary_contract()
+        period_start = today.replace(month=1, day=1)
+        employee_start = contract.date_start if contract and contract.date_start else False
+        if not employee_start and 'first_contract_date' in self._fields:
+            employee_start = self.first_contract_date
+        start_date = max(period_start, employee_start) if employee_start else period_start
+        end_date = today
+        if contract and contract.date_end and contract.date_end < today:
+            end_date = contract.date_end
         if start_date > end_date:
             return False, False
         return start_date, end_date
@@ -359,11 +376,32 @@ class HrEmployee(models.Model):
         self.ensure_one()
         return self._nx_count_calendar_working_days(start_date, end_date)
 
+    def _nx_get_attendance_present_dates(self, start_date, end_date):
+        """Return dates with at least one attendance check-in."""
+        self.ensure_one()
+        if 'hr.attendance' not in self.env.registry:
+            return set()
+        attendances = self.env['hr.attendance'].sudo().search([
+            ('employee_id', '=', self.id),
+            ('check_in', '>=', datetime.combine(start_date, dtime.min)),
+            ('check_in', '<=', datetime.combine(end_date, dtime.max)),
+        ])
+        return {
+            fields.Datetime.context_timestamp(self, attendance.check_in).date()
+            for attendance in attendances
+            if attendance.check_in
+        }
+
     def _nx_count_timesheet_present_days(self, contract, start_date, end_date):
         """Count each date with positive logged timesheet hours as one day."""
         self.ensure_one()
+        return len(self._nx_get_timesheet_present_dates(contract, start_date, end_date))
+
+    def _nx_get_timesheet_present_dates(self, contract, start_date, end_date):
+        """Return dates with positive logged timesheet hours."""
+        self.ensure_one()
         if not contract or 'account.analytic.line' not in self.env.registry:
-            return 0
+            return set()
         if hasattr(contract, '_search_timesheet_lines'):
             timesheets = contract._search_timesheet_lines(start_date, end_date)
         else:
@@ -373,12 +411,11 @@ class HrEmployee(models.Model):
                 ('date', '<=', end_date),
                 ('unit_amount', '>', 0),
             ])
-        worked_dates = {
+        return {
             fields.Date.to_date(line.date)
             for line in timesheets
             if line.unit_amount and line.unit_amount > 0
         }
-        return len(worked_dates)
 
     def _nx_count_calendar_working_days(self, start_date, end_date):
         """Count dates whose weekday exists in the employee working schedule."""

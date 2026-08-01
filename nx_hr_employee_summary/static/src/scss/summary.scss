@@ -233,9 +233,8 @@
 
 .o_form_view .nx_summary_section_grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px 16px;
-    margin-top: 12px;
+    gap: 16px 20px;
+    margin-top: 14px;
 
     .nx_summary_section_item {
         min-width: 0;
@@ -253,6 +252,19 @@
     .nx_summary_section_item:has(.closed-section:not([style*="display: none"]):not([style*="display:none"])) {
         grid-column: 1 / -1;
     }
+}
+
+.o_form_view .nx_summary_section_grid:not(.nx_resume_section_grid) {
+    align-items: start;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.o_form_view .nx_resume_section_grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.o_form_view .nx_summary_section_grid:not(.nx_resume_section_grid) .o_section_toggle {
+    min-height: 64px;
 }
 
 .nx_employee_header_recommendation {
@@ -309,5 +321,11 @@
 @media (max-width: 768px) {
     .o_form_view .nx_summary_section_grid {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+    .o_form_view .nx_summary_section_grid:not(.nx_resume_section_grid) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
