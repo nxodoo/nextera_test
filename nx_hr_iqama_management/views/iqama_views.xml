@@ -131,7 +131,7 @@
                                      data-icon="fa-id-card"
                                      data-color="#374151"
                                      style="display: none;"/>
-                                <group string="Start Request" invisible="state != 'new' or (employee_id and iqama_type_id)">
+                                <group string="Start Request" invisible="id">
                                     <group>
                                         <field name="request_country_id"/>
                                         <field name="iqama_type_id"/>
@@ -154,17 +154,17 @@
                                         <group>
                                             <field name="employee_name" readonly="1"/>
                                             <field name="passport_number" readonly="1"/>
-                                            <field name="passport_name_english" readonly="1"/>
-                                            <field name="passport_name_arabic" readonly="1"/>
-                                            <field name="department_id" readonly="1"/>
-                                            <field name="company_id" readonly="1"/>
+                                            <field name="passport_name_english" readonly="id"/>
+                                            <field name="passport_name_arabic" readonly="id"/>
+                                            <field name="department_id" readonly="id"/>
+                                            <field name="company_id" readonly="id"/>
                                         </group>
                                         <group>
-                                            <field name="job_title" readonly="1"/>
-                                            <field name="nationality_id" readonly="1"/>
-                                            <field name="religion" readonly="1"/>
-                                            <field name="date_of_birth" readonly="1"/>
-                                            <field name="passport_profession" readonly="1"/>
+                                            <field name="job_title" readonly="id"/>
+                                            <field name="nationality_id" readonly="id"/>
+                                            <field name="religion" readonly="id"/>
+                                            <field name="date_of_birth" readonly="id"/>
+                                            <field name="passport_profession" readonly="id"/>
                                         </group>
                                     </group>
                                 </group>
