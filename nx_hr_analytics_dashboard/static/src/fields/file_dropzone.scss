@@ -1,0 +1,25 @@
+.o_nx_dropzone {
+    display: inline-flex; align-items: center; gap: 6px;
+    min-width: 160px; max-width: 260px; padding: 6px 10px;
+    border: 1px dashed #C5CDD8; border-radius: 8px;
+    color: #6B7A8D; font-size: 13px; cursor: pointer;
+    transition: border-color .15s ease, background .15s ease, color .15s ease;
+
+    &:hover { border-color: #1A5C3A; color: #1A5C3A; background: #F0FDF4; }
+    &.o_dragging { border-color: #1A5C3A; background: #E8F5EE; color: #1A5C3A; }
+    &.o_has_file {
+        border-style: solid; border-color: #B7E4C7; color: #166534; background: #F0FDF4;
+    }
+    &.o_readonly { cursor: default; opacity: .7; }
+    &.o_readonly:hover { border-color: #C5CDD8; background: transparent; color: #6B7A8D; }
+
+    .o_nx_dropzone_input { display: none; }
+    .o_nx_dropzone_name {
+        max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .o_nx_dropzone_hint { white-space: nowrap; }
+    .o_nx_dropzone_clear {
+        border: 0; background: transparent; color: #DC2626; cursor: pointer;
+        padding: 0 2px; margin-left: auto; line-height: 1;
+    }
+}

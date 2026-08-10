@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="nx_hr_analytics_dashboard.FileDropzone">
+        <div class="o_nx_dropzone"
+             t-att-class="{'o_dragging': state.dragging, 'o_has_file': hasValue, 'o_readonly': props.readonly}"
+             t-on-dragover="onDragOver" t-on-dragleave="onDragLeave"
+             t-on-drop="onDrop" t-on-click="openPicker">
+            <input type="file" class="o_nx_dropzone_input" t-ref="fileInput"
+                   t-att-accept="props.acceptedFileExtensions" t-on-change="onInputChange"/>
+            <t t-if="hasValue">
+                <i class="fa fa-file-text-o"/>
+                <span class="o_nx_dropzone_name" t-esc="fileName"/>
+                <button t-if="!props.readonly" class="o_nx_dropzone_clear"
+                        t-on-click="clearFile" title="Remove">
+                    <i class="fa fa-times"/>
+                </button>
+            </t>
+            <t t-else="">
+                <i class="fa fa-cloud-upload"/>
+                <span class="o_nx_dropzone_hint">Drag &amp; drop or click</span>
+            </t>
+        </div>
+    </t>
+</templates>

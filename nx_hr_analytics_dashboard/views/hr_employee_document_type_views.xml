@@ -71,4 +71,32 @@
               parent="hr.menu_human_resources_configuration"
               action="action_hr_employee_document_type"
               sequence="90"/>
+
+    <!-- One-click backfill: generate the required-document checklist for all
+         existing employees (new employees are handled automatically). -->
+    <record id="action_generate_all_employee_documents" model="ir.actions.server">
+        <field name="name">Generate Employee Documents</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="state">code</field>
+        <field name="code">
+records = env['hr.employee'].with_context(active_test=False).search([])
+records._sync_required_documents()
+action = {
+    'type': 'ir.actions.client',
+    'tag': 'display_notification',
+    'params': {
+        'title': 'Employee Documents',
+        'message': '%s employees processed.' % len(records),
+        'type': 'success',
+        'sticky': False,
+    },
+}
+        </field>
+    </record>
+
+    <menuitem id="menu_generate_all_employee_documents"
+              name="Generate Employee Documents"
+              parent="hr.menu_human_resources_configuration"
+              action="action_generate_all_employee_documents"
+              sequence="91"/>
 </odoo>

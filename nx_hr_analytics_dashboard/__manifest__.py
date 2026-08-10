@@ -25,11 +25,15 @@ HR Analytics Dashboard
     ],
     "assets": {
         "web.assets_backend": [
+            "nx_hr_analytics_dashboard/static/src/fields/file_dropzone.scss",
+            "nx_hr_analytics_dashboard/static/src/fields/file_dropzone.js",
+            "nx_hr_analytics_dashboard/static/src/fields/file_dropzone.xml",
             "nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.scss",
             "nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml",
             "nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js",
         ],
     },
+    "post_init_hook": "post_init_hook",
     "installable": True,
     "application": False,
 }
