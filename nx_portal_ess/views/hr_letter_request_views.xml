@@ -69,8 +69,8 @@
 
     <!-- Dedicated parent menu for ESS-submitted employee requests -->
     <menuitem id="menu_ess_employee_requests"
-              name="Employee Requests"
-              parent="hr.menu_hr_root"
+              name="Requests"
+              parent="hr.menu_hr_employee_payroll"
               groups="hr.group_hr_user"
               sequence="55"/>
 

@@ -2,7 +2,7 @@
     <menuitem
         id="menu_hr_iqama_root"
         name="Residencies"
-        parent="hr.menu_hr_root"
+        parent="hr.menu_hr_employee_payroll"
         action="action_hr_iqama_all"
         sequence="35"
         groups="hr.group_hr_user,base.group_system"/>
