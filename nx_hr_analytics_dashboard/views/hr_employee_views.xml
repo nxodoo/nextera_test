@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_form_documents" model="ir.ui.view">
+        <field name="name">hr.employee.form.documents</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="priority">30</field>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Documents" name="employee_documents">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="text-muted">
+                            Compliance:
+                            <field name="document_compliance_rate" widget="progressbar"
+                                   class="d-inline-block"/>
+                            <field name="document_complete_count" class="ms-2"/> complete /
+                            <field name="document_missing_count"/> missing /
+                            <field name="document_expired_count"/> expired
+                        </div>
+                        <button name="action_sync_required_documents" type="object"
+                                string="Generate Required Documents"
+                                class="btn btn-secondary" icon="fa-refresh"/>
+                    </div>
+                    <field name="document_ids" nolabel="1"
+                           context="{'list_view_ref': 'nx_hr_analytics_dashboard.view_hr_employee_document_list',
+                                     'form_view_ref': 'nx_hr_analytics_dashboard.view_hr_employee_document_form',
+                                     'default_employee_id': id}"/>
+                    <field name="document_status" invisible="1"/>
+                    <field name="document_required_count" invisible="1"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

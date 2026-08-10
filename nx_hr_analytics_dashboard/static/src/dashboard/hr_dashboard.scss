@@ -1,0 +1,328 @@
+.o_nx_hr_dash {
+    // ── Design tokens (from Figma reference) ──────────────────────────────
+    --nx-green: #1A5C3A;
+    --nx-green-soft: #E8F5EE;
+    --nx-page-bg: #F4F6F8;
+    --nx-card-bg: #FFFFFF;
+    --nx-border: #E5E8EC;
+    --nx-text: #1F2937;
+    --nx-muted: #6B7A8D;
+    --nx-radius: 16px;
+    --nx-shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 4px 16px rgba(16, 24, 40, .05);
+    --nx-shadow-hover: 0 8px 28px rgba(16, 24, 40, .10);
+
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 20px 24px 40px;
+    background: var(--nx-page-bg);
+    color: var(--nx-text);
+    font-family: Inter, "IBM Plex Sans Arabic", system-ui, sans-serif;
+
+    h1 { font-size: 22px; font-weight: 700; margin: 0; }
+    h3 { font-size: 15px; font-weight: 600; margin: 0 0 14px; }
+    p  { color: var(--nx-muted); margin: 4px 0 0; font-size: 13px; }
+
+    // ── Top bar ───────────────────────────────────────────────────────────
+    .o_nx_hr_dash_topbar {
+        display: flex; align-items: center; justify-content: space-between;
+        flex-wrap: wrap; gap: 10px; margin-bottom: 16px;
+    }
+    .o_nx_hr_dash_breadcrumb {
+        display: flex; align-items: center; gap: 8px;
+        color: var(--nx-muted); font-size: 13px;
+        .o_active { color: var(--nx-green); font-weight: 600; }
+        i { font-size: 11px; opacity: .6; }
+    }
+    .o_nx_hr_dash_toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .o_nx_hr_filter {
+        display: flex; align-items: center; gap: 6px;
+        background: var(--nx-card-bg); border: 1px solid var(--nx-border);
+        border-radius: 10px; padding: 6px 10px; font-size: 13px;
+        label { color: var(--nx-muted); }
+        select {
+            border: 0; background: transparent; font-weight: 600;
+            color: var(--nx-text); outline: none; cursor: pointer; max-width: 160px;
+        }
+    }
+
+    // ── Buttons ───────────────────────────────────────────────────────────
+    .o_nx_hr_btn {
+        display: inline-flex; align-items: center; border: 1px solid transparent;
+        border-radius: 10px; padding: 7px 14px; font-size: 13px; font-weight: 600;
+        cursor: pointer; transition: all .15s ease; white-space: nowrap;
+    }
+    .o_nx_hr_btn_light {
+        background: var(--nx-card-bg); border-color: var(--nx-border); color: var(--nx-text);
+        &:hover { background: #F9FAFB; box-shadow: var(--nx-shadow); }
+    }
+    .o_nx_hr_btn_primary {
+        background: var(--nx-green); color: #fff;
+        &:hover { filter: brightness(1.08); box-shadow: var(--nx-shadow-hover); }
+    }
+
+    // ── Header + tabs ─────────────────────────────────────────────────────
+    .o_nx_hr_dash_header {
+        display: flex; align-items: flex-start; justify-content: space-between;
+        gap: 16px; flex-wrap: wrap; margin-bottom: 18px;
+    }
+    .o_nx_hr_tabs {
+        display: inline-flex; background: var(--nx-card-bg);
+        border: 1px solid var(--nx-border); border-radius: 12px; padding: 4px;
+        button {
+            border: 0; background: transparent; color: var(--nx-muted);
+            font-weight: 600; font-size: 13px; padding: 8px 16px;
+            border-radius: 9px; cursor: pointer; transition: all .18s ease;
+            &:hover { color: var(--nx-green); }
+            &.o_active { background: var(--nx-green-soft); color: var(--nx-green); }
+        }
+    }
+
+    // ── Loading ───────────────────────────────────────────────────────────
+    .o_nx_hr_loading {
+        position: absolute; inset: 0; display: flex; align-items: center;
+        justify-content: center; background: rgba(244, 246, 248, .6); z-index: 5;
+        i { font-size: 34px; color: var(--nx-green); }
+    }
+
+    // ── KPI cards ─────────────────────────────────────────────────────────
+    .o_nx_hr_kpis {
+        display: grid; grid-template-columns: repeat(6, 1fr);
+        gap: 16px; margin-bottom: 16px;
+    }
+    .o_nx_hr_kpi {
+        position: relative; background: var(--nx-card-bg);
+        border: 1px solid var(--nx-border); border-radius: var(--nx-radius);
+        box-shadow: var(--nx-shadow); padding: 16px 18px 18px;
+        display: flex; justify-content: space-between; align-items: flex-start;
+        overflow: hidden; transition: transform .18s ease, box-shadow .18s ease;
+        animation: nxHrRise .5s ease both;
+        &::after {
+            content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px;
+            background: var(--accent, var(--nx-green));
+        }
+        &:hover { transform: translateY(-3px); box-shadow: var(--nx-shadow-hover); }
+        &.o_clickable { cursor: pointer; }
+        &.o_clickable:hover .o_nx_hr_kpi_go { opacity: 1; transform: translateX(0); }
+    }
+    .o_nx_hr_kpi_go {
+        position: absolute; right: 14px; bottom: 12px; color: var(--accent, var(--nx-green));
+        font-size: 13px; opacity: 0; transform: translateX(-4px);
+        transition: opacity .18s ease, transform .18s ease;
+    }
+    .o_nx_hr_kpi_body { display: flex; flex-direction: column; gap: 4px; }
+    .o_nx_hr_kpi_label { color: var(--nx-muted); font-size: 12.5px; font-weight: 500; }
+    .o_nx_hr_kpi_value { font-size: 30px; font-weight: 700; line-height: 1.1; }
+    .o_nx_hr_kpi_delta {
+        font-size: 12px; font-weight: 600; margin-top: 2px;
+        &.o_up { color: #16A34A; } &.o_down { color: #DC2626; } &.o_muted { color: var(--nx-muted); font-weight: 500; }
+    }
+    .o_nx_hr_kpi_icon {
+        width: 38px; height: 38px; border-radius: 11px; display: flex;
+        align-items: center; justify-content: center; font-size: 16px;
+        color: var(--accent, var(--nx-green));
+        background: color-mix(in srgb, var(--accent, #1A5C3A) 12%, white);
+    }
+    @for $i from 1 through 6 {
+        .o_nx_hr_kpi:nth-child(#{$i}) { animation-delay: #{$i * 0.05}s; }
+    }
+
+    // ── Card grid (flex so hidden cards free their space) ─────────────────
+    .o_nx_hr_row {
+        display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; align-items: stretch;
+    }
+    .o_nx_hr_card {
+        background: var(--nx-card-bg); border: 1px solid var(--nx-border);
+        border-radius: var(--nx-radius); box-shadow: var(--nx-shadow); padding: 20px;
+        animation: nxHrFade .5s ease both;
+    }
+    .o_nx_hr_row > .o_nx_hr_card { flex: 1 1 300px; min-width: 0; }
+    .o_nx_hr_row > .o_span2 { flex: 2 1 460px; }
+    .o_nx_hr_chartbox { height: 300px; min-height: 300px; position: relative; }
+
+    // ── Branch bar list ───────────────────────────────────────────────────
+    .o_nx_hr_barlist { display: flex; flex-direction: column; gap: 8px; }
+    .o_nx_hr_barlist_item {
+        display: grid; grid-template-columns: 12px 1fr 90px auto;
+        align-items: center; gap: 10px; font-size: 13px;
+        padding: 6px 8px; border-radius: 8px;
+        &.o_clickable_row { cursor: pointer; transition: background .12s ease; }
+        &.o_clickable_row:hover { background: var(--nx-green-soft); }
+        .o_dot { width: 10px; height: 10px; border-radius: 50%; }
+        .o_name { color: var(--nx-text); font-weight: 500; }
+        .o_bar { height: 8px; background: #EEF1F4; border-radius: 6px; overflow: hidden; }
+        .o_fill { display: block; height: 100%; border-radius: 6px; transition: width .6s ease; }
+        .o_val { font-weight: 700; text-align: right; }
+    }
+
+    // ── Mini table (top paid positions) ──────────────────────────────────
+    .o_nx_hr_minitable {
+        width: 100%; border-collapse: collapse; font-size: 13px;
+        th {
+            text-align: left; color: var(--nx-muted); font-weight: 600;
+            padding: 8px 6px; border-bottom: 1px solid var(--nx-border);
+        }
+        td { padding: 10px 6px; border-bottom: 1px solid #F1F3F5; }
+        th.o_num, td.o_num { text-align: right; white-space: nowrap; }
+        .o_ok { color: #16A34A; font-weight: 600; }
+        .o_empty { text-align: center; color: var(--nx-muted); padding: 24px; }
+        tr.o_clickable_row { cursor: pointer; transition: background .12s ease; }
+        tbody tr.o_clickable_row:hover { background: var(--nx-green-soft); }
+    }
+
+    // ── Donuts + legends ──────────────────────────────────────────────────
+    .o_nx_hr_donutwrap { display: flex; align-items: center; gap: 16px; }
+    .o_nx_hr_donut { width: 150px; height: 150px; position: relative; flex: 0 0 auto; }
+    .o_nx_hr_legend {
+        display: flex; flex-direction: column; gap: 10px; font-size: 13px; flex: 1;
+        div { display: flex; align-items: center; gap: 8px; }
+        b { margin-left: auto; font-weight: 700; }
+        .o_dot { width: 10px; height: 10px; border-radius: 50%; }
+    }
+
+    // ── Payroll tax card ──────────────────────────────────────────────────
+    .o_nx_hr_paytax_row {
+        display: flex; justify-content: space-between; font-size: 13px;
+        padding: 8px 0; border-bottom: 1px dashed var(--nx-border);
+        span { color: var(--nx-muted); }
+    }
+    .o_nx_hr_badge {
+        display: inline-block; background: var(--nx-green-soft); color: var(--nx-green);
+        font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+        margin-bottom: 10px;
+        &.o_danger { background: #FEE2E2; color: #DC2626; }
+    }
+
+    // ── Alerts ────────────────────────────────────────────────────────────
+    .o_nx_hr_alerts_head { display: flex; align-items: center; justify-content: space-between; }
+    .o_nx_hr_alert {
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        padding: 14px 16px; border-radius: 12px; margin-top: 12px;
+        border: 1px solid var(--nx-border); border-left: 4px solid var(--nx-muted);
+        background: #FBFCFD; transition: transform .15s ease;
+        &:hover { transform: translateX(2px); }
+        &.o_danger { border-left-color: #EF4444; }
+        &.o_warning { border-left-color: #F59E0B; }
+        &.o_info { border-left-color: #3B82F6; }
+        .o_nx_hr_alert_txt { display: flex; flex-direction: column; }
+        b { font-size: 14px; } small { color: var(--nx-muted); }
+    }
+
+    // ── Payroll Tax tab ─────────────────────────────────────────────────
+    h2 { font-size: 18px; font-weight: 700; margin: 0; }
+    .o_nx_hr_badge.o_warn { background: #FEF3C7; color: #B45309; }
+    .o_nx_hr_badge.o_muted-badge { background: #EEF1F4; color: var(--nx-muted); }
+
+    .o_nx_hr_decl {
+        display: flex; justify-content: space-between; align-items: flex-start;
+        gap: 16px; flex-wrap: wrap; margin-bottom: 16px;
+    }
+    .o_nx_hr_decl_title { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+    .o_nx_hr_decl_meta { color: var(--nx-muted); font-size: 13px; }
+    .o_nx_hr_decl_actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .o_nx_hr_btn_soft { background: var(--nx-green-soft); color: var(--nx-green); }
+    .o_nx_hr_btn_soft:hover { filter: brightness(.98); }
+
+    .o_nx_hr_paytiles {
+        display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 16px;
+    }
+    .o_nx_hr_tile {
+        background: var(--nx-card-bg); border: 1px solid var(--nx-border);
+        border-radius: var(--nx-radius); box-shadow: var(--nx-shadow); padding: 16px 18px;
+        display: flex; flex-direction: column; gap: 4px; animation: nxHrRise .4s ease both;
+        span { color: var(--nx-muted); font-size: 12.5px; }
+        b { font-size: 22px; font-weight: 700; }
+        small { color: var(--nx-muted); font-size: 11px; }
+        &.o_accent { background: var(--nx-green-soft); border-color: transparent; }
+        &.o_accent b { color: var(--nx-green); }
+    }
+
+    .o_nx_hr_signoff {
+        display: flex; gap: 32px; flex-wrap: wrap; padding: 14px 20px; margin-bottom: 16px;
+        font-size: 13px; color: var(--nx-muted);
+        b { color: var(--nx-text); }
+    }
+
+    .o_nx_hr_tabletools {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .o_nx_hr_search {
+        flex: 1; min-width: 220px; max-width: 360px;
+        border: 1px solid var(--nx-border); border-radius: 10px; padding: 8px 12px;
+        font-size: 13px; outline: none;
+        &:focus { border-color: var(--nx-green); box-shadow: 0 0 0 3px var(--nx-green-soft); }
+    }
+    .o_nx_hr_count { color: var(--nx-muted); font-size: 13px; margin-left: auto; }
+    .o_nx_hr_select {
+        border: 1px solid var(--nx-border); border-radius: 10px; padding: 8px 12px;
+        font-size: 13px; font-weight: 600; color: var(--nx-text); background: #fff;
+        outline: none; cursor: pointer;
+    }
+    .o_nx_hr_link {
+        border: 0; background: transparent; color: var(--nx-green); font-weight: 600;
+        font-size: 13px; cursor: pointer; padding: 2px 6px; border-radius: 6px;
+        &:hover { background: var(--nx-green-soft); }
+    }
+    .o_v_ok { color: #16A34A; }
+    .o_v_warn { color: #D97706; }
+    .o_v_danger { color: #DC2626; }
+
+    .o_nx_hr_tablewrap { overflow-x: auto; }
+    .o_nx_hr_table {
+        width: 100%; border-collapse: collapse; font-size: 13px; white-space: nowrap;
+        th {
+            text-align: left; color: var(--nx-muted); font-weight: 600;
+            padding: 10px 12px; border-bottom: 1px solid var(--nx-border);
+        }
+        td { padding: 12px; border-bottom: 1px solid #F1F3F5; }
+        th.o_num, td.o_num { text-align: right; }
+        .o_code { color: var(--nx-green); font-weight: 700; }
+        .o_danger { color: #DC2626; }
+        .o_ok { color: #16A34A; font-weight: 600; }
+        .o_note { color: var(--nx-muted); }
+        tbody tr { transition: background .12s ease; }
+        tbody tr:hover { background: #F9FAFB; }
+        tr.o_row_error { background: #FEF2F2; }
+        tr.o_row_error:hover { background: #FEE9E9; }
+        tr.o_row_warning { background: #FFFBEB; }
+        tr.o_row_warning:hover { background: #FEF3C7; }
+        tfoot td { border-top: 2px solid var(--nx-border); font-weight: 700; }
+        .o_empty { text-align: center; color: var(--nx-muted); padding: 30px; }
+    }
+    .o_nx_hr_status {
+        display: inline-block; padding: 3px 10px; border-radius: 20px;
+        font-size: 11px; font-weight: 700;
+        &.o_reviewed { background: #DBEAFE; color: #1D4ED8; }
+        &.o_approved { background: #DCFCE7; color: #15803D; }
+        &.o_waiting  { background: #FEF3C7; color: #B45309; }
+        &.o_warning  { background: #FEF3C7; color: #B45309; }
+        &.o_draft    { background: #EEF1F4; color: #6B7A8D; }
+        &.o_error    { background: #FEE2E2; color: #DC2626; }
+        &.o_cancelled{ background: #EEF1F4; color: #9AA6B2; }
+    }
+
+    // ── Placeholder ───────────────────────────────────────────────────────
+    .o_nx_hr_placeholder {
+        text-align: center; padding: 60px 20px;
+        i { font-size: 42px; color: var(--nx-green); opacity: .5; }
+        h3 { margin-top: 14px; } p { margin-bottom: 18px; text-transform: capitalize; }
+    }
+
+    // ── Responsive ────────────────────────────────────────────────────────
+    @media (max-width: 1200px) {
+        .o_nx_hr_kpis { grid-template-columns: repeat(3, 1fr); }
+        .o_nx_hr_paytiles { grid-template-columns: repeat(3, 1fr); }
+        .o_nx_hr_row > .o_nx_hr_card,
+        .o_nx_hr_row > .o_span2 { flex: 1 1 100%; }
+    }
+    @media (max-width: 700px) {
+        .o_nx_hr_kpis { grid-template-columns: repeat(2, 1fr); }
+        .o_nx_hr_paytiles { grid-template-columns: repeat(2, 1fr); }
+    }
+}
+
+@keyframes nxHrRise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes nxHrFade { from { opacity: 0; } to { opacity: 1; } }

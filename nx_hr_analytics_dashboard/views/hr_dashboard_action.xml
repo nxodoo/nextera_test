@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Client action rendering the OWL HR Analytics Dashboard. -->
+    <record id="action_nx_hr_dashboard" model="ir.actions.client">
+        <field name="name">HR Analytics Dashboard</field>
+        <field name="tag">nx_hr_analytics_dashboard.dashboard</field>
+    </record>
+
+    <!-- Add the dashboard as the FIRST menu of the Employees app.
+         The Employees app root menu keeps its default behaviour, so all the
+         standard HR menus stay visible; a negative sequence simply places
+         "Dashboard" ahead of the other tabs, and (as the first child of a
+         root menu with no action of its own) it opens automatically when the
+         Employees app is clicked. -->
+    <menuitem id="menu_nx_hr_dashboard"
+              name="Dashboard"
+              parent="hr.menu_hr_root"
+              action="action_nx_hr_dashboard"
+              sequence="-10"/>
+</odoo>
