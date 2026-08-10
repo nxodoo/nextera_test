@@ -78,10 +78,35 @@
         </field>
     </record>
 
+    <!-- Compliance list: includes the Employee (used by the standalone
+         Document Compliance action, not the embedded employee-form tab). -->
+    <record id="view_hr_employee_document_compliance_list" model="ir.ui.view">
+        <field name="name">hr.employee.document.compliance.list</field>
+        <field name="model">hr.employee.document</field>
+        <field name="arch" type="xml">
+            <list string="Document Compliance" editable="bottom" create="0">
+                <field name="employee_id" readonly="1"/>
+                <field name="department_id" readonly="1" optional="show"/>
+                <field name="document_type_id" readonly="1"/>
+                <field name="expiry_required" column_invisible="1"/>
+                <field name="mandatory" optional="hide"/>
+                <field name="reference" optional="hide"/>
+                <field name="document_file" filename="document_filename" widget="nx_file_dropzone"/>
+                <field name="document_filename" column_invisible="1"/>
+                <field name="expiry_date" invisible="not expiry_required" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'complete'"
+                       decoration-warning="state == 'expiring'"
+                       decoration-danger="state in ('missing','expired')"/>
+            </list>
+        </field>
+    </record>
+
     <record id="action_hr_employee_document" model="ir.actions.act_window">
         <field name="name">Document Compliance</field>
         <field name="res_model">hr.employee.document</field>
         <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_hr_employee_document_compliance_list"/>
         <field name="search_view_id" ref="view_hr_employee_document_search"/>
         <field name="context">{'search_default_mandatory': 1, 'search_default_group_status': 1}</field>
     </record>
