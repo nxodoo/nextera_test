@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, onMounted, onWillUnmount, useState, useRef } from "@odoo/owl";
+import { Component, onWillStart, onWillUnmount, useEffect, useState, useRef } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { loadBundle } from "@web/core/assets";
@@ -54,7 +54,19 @@ export class HrAnalyticsDashboard extends Component {
             await loadBundle("web.chartjs_lib");
             await this.loadData();
         });
-        onMounted(() => requestAnimationFrame(() => this.renderCharts()));
+        // Render charts AFTER the DOM is patched (canvas refs exist) whenever
+        // the active tab or any tab's dataset changes.
+        useEffect(
+            () => {
+                this.renderCharts();
+            },
+            () => [
+                this.state.activeTab,
+                this.state.data,
+                this.state.documents,
+                this.state.insurance,
+            ],
+        );
         onWillUnmount(() => this.destroyCharts());
     }
 
@@ -83,7 +95,6 @@ export class HrAnalyticsDashboard extends Component {
         this.state.documents = await this.orm.call(
             "nx.hr.dashboard.service", "get_documents_data", [this.state.filters]);
         this.state.documentsLoading = false;
-        requestAnimationFrame(() => this.renderCharts());
     }
 
     async loadInsurance() {
@@ -91,20 +102,18 @@ export class HrAnalyticsDashboard extends Component {
         this.state.insurance = await this.orm.call(
             "nx.hr.dashboard.service", "get_insurance_data", [this.state.filters]);
         this.state.insuranceLoading = false;
-        requestAnimationFrame(() => this.renderCharts());
     }
 
     async applyFilters() {
         await this.loadData();
-        if (this.state.activeTab === "dashboard") {
-            requestAnimationFrame(() => this.renderCharts());
-        } else if (this.state.activeTab === "payroll") {
+        if (this.state.activeTab === "payroll") {
             await this.loadPayroll();
         } else if (this.state.activeTab === "documents") {
             await this.loadDocuments();
         } else if (this.state.activeTab === "insurance") {
             await this.loadInsurance();
         }
+        // Charts re-render via useEffect when the datasets above change.
     }
 
     onFilterChange(field, ev) {
@@ -128,9 +137,8 @@ export class HrAnalyticsDashboard extends Component {
 
     setTab(tab) {
         this.state.activeTab = tab;
-        if (tab === "dashboard") {
-            requestAnimationFrame(() => this.renderCharts());
-        } else if (tab === "payroll" && !this.state.payroll) {
+        // Dashboard charts re-render via useEffect (activeTab is a dependency).
+        if (tab === "payroll" && !this.state.payroll) {
             this.loadPayroll();
         } else if (tab === "documents" && !this.state.documents) {
             this.loadDocuments();
