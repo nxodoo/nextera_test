@@ -6,13 +6,6 @@
 
         <!-- ── Top bar ─────────────────────────────────────────────── -->
         <div class="o_nx_hr_dash_topbar">
-            <div class="o_nx_hr_dash_breadcrumb">
-                <span>Employees</span>
-                <i class="fa fa-angle-right"/>
-                <span>Reporting</span>
-                <i class="fa fa-angle-right"/>
-                <span class="o_active">HR Analytics Dashboard</span>
-            </div>
             <div class="o_nx_hr_dash_toolbar">
                 <div class="o_nx_hr_filter">
                     <label>Branch:</label>
@@ -48,9 +41,6 @@
                 </div>
                 <button class="o_nx_hr_btn o_nx_hr_btn_light" t-on-click="clearFilters">
                     <i class="fa fa-times me-1"/>Clear
-                </button>
-                <button class="o_nx_hr_btn o_nx_hr_btn_light" t-on-click="exportDashboard">
-                    <i class="fa fa-download me-1"/>Export
                 </button>
             </div>
         </div>

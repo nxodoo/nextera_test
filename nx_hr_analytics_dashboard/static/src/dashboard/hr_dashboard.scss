@@ -27,7 +27,7 @@
 
     // ── Top bar ───────────────────────────────────────────────────────────
     .o_nx_hr_dash_topbar {
-        display: flex; align-items: center; justify-content: space-between;
+        display: flex; align-items: center; justify-content: flex-end;
         flex-wrap: wrap; gap: 10px; margin-bottom: 16px;
     }
     .o_nx_hr_dash_breadcrumb {

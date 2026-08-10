@@ -353,7 +353,12 @@ export class HrAnalyticsDashboard extends Component {
                     }
                 },
                 scales: {
-                    y: { beginAtZero: true, grid: { color: gridColor }, border: { display: false } },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1, precision: 0 },
+                        grid: { color: gridColor },
+                        border: { display: false },
+                    },
                     x: { grid: { display: false }, border: { display: false } },
                 },
             },
@@ -413,7 +418,11 @@ export class HrAnalyticsDashboard extends Component {
             options: {
                 ...baseOpts,
                 scales: {
-                    y: { grid: { color: gridColor }, border: { display: false } },
+                    y: {
+                        ticks: { precision: 0 },
+                        grid: { color: gridColor },
+                        border: { display: false },
+                    },
                     x: { grid: { display: false }, border: { display: false } },
                 },
             },
@@ -481,7 +490,12 @@ export class HrAnalyticsDashboard extends Component {
                 ...this._baseOpts,
                 indexAxis: "y",
                 scales: {
-                    x: { beginAtZero: true, grid: { color: this._gridColor }, border: { display: false } },
+                    x: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1, precision: 0 },
+                        grid: { color: this._gridColor },
+                        border: { display: false },
+                    },
                     y: { grid: { display: false }, border: { display: false } },
                 },
             },
@@ -523,7 +537,12 @@ export class HrAnalyticsDashboard extends Component {
                 ...this._baseOpts,
                 indexAxis: "y",
                 scales: {
-                    x: { beginAtZero: true, grid: { color: this._gridColor }, border: { display: false } },
+                    x: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1, precision: 0 },
+                        grid: { color: this._gridColor },
+                        border: { display: false },
+                    },
                     y: { grid: { display: false }, border: { display: false } },
                 },
             },
