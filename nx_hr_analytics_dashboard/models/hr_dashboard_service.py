@@ -216,6 +216,9 @@ class NxHrDashboardService(models.AbstractModel):
         base_domain = self._employee_domain(filters)
         today = fields.Date.context_today(self)
         labels, values = [], []
+        # Month bounds and raw counts travel with the series so the chart can
+        # drill through to exactly the departures behind a given point.
+        starts, ends, counts = [], [], []
         for i in range(11, -1, -1):
             first = today.replace(day=1) - relativedelta(months=i)
             last = first + relativedelta(months=1) - relativedelta(days=1)
@@ -233,7 +236,16 @@ class NxHrDashboardService(models.AbstractModel):
             rate = round((departures / headcount) * 100.0, 2)
             labels.append(first.strftime("%b %y"))
             values.append(rate)
-        return {"labels": labels, "values": values}
+            starts.append(fields.Date.to_string(first))
+            ends.append(fields.Date.to_string(last))
+            counts.append(departures)
+        return {
+            "labels": labels,
+            "values": values,
+            "starts": starts,
+            "ends": ends,
+            "departures": counts,
+        }
 
     # ── Payroll tax summary ──────────────────────────────────────────────
     def _payroll_tax_summary(self, filters):
@@ -393,6 +405,7 @@ class NxHrDashboardService(models.AbstractModel):
             else:
                 status, note = self._payslip_status(slip), ""
             rows.append({
+                "id": emp.id,
                 "code": self._emp_code(emp),
                 "name": emp.name,
                 "national_id": emp.identification_id or "---",
@@ -435,6 +448,7 @@ class NxHrDashboardService(models.AbstractModel):
             else:
                 status, note = "draft", "Projected from contract"
             rows.append({
+                "id": emp.id,
                 "code": self._emp_code(emp),
                 "name": emp.name,
                 "national_id": emp.identification_id or "---",
@@ -555,6 +569,7 @@ class NxHrDashboardService(models.AbstractModel):
                 "department": emp.department_id.name or "",
                 "job": emp.job_id.name or "",
                 "contract_start": start or "---",
+                "has_contract": bool(contract),
                 "basic_wage": round(basic, 2),
                 "reference_amount": round(amount, 2),
                 "status": "insured" if is_insured else "not_insured",

@@ -31,4 +31,23 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Drill-through target for the Employee Turnover chart: shows who left,
+         when, and why. `departure_*` fields are hr.group_hr_user-only, so a
+         user without that group simply sees the remaining columns. -->
+    <record id="view_hr_employee_departure_list" model="ir.ui.view">
+        <field name="name">hr.employee.departure.list</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <list string="Departures" create="0" default_order="departure_date desc">
+                <field name="name"/>
+                <field name="department_id"/>
+                <field name="job_id" optional="show"/>
+                <field name="departure_date"/>
+                <field name="departure_reason_id"/>
+                <field name="work_email" optional="hide"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
 </odoo>

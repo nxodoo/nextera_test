@@ -32,7 +32,9 @@
 <t t-name="nx_hr_analytics_dashboard.StatTiles">
     <div class="o_nx_stats">
         <t t-foreach="tiles" t-as="s" t-key="s.key">
-            <div class="o_nx_stat" t-attf-style="--accent:{{s.accent}}">
+            <div class="o_nx_stat o_clickable" t-attf-style="--accent:{{s.accent}}"
+                 t-att-title="'Open ' + s.label"
+                 t-on-click="() => this.openStat(scope, s.key)">
                 <div class="o_nx_stat_top">
                     <span class="o_nx_stat_label" t-esc="s.label"/>
                     <span class="o_nx_stat_icon"><i t-attf-class="fa {{s.icon}}"/></span>
@@ -347,6 +349,7 @@
                 <!-- Summary stats -->
                 <t t-call="nx_hr_analytics_dashboard.StatTiles">
                     <t t-set="tiles" t-value="payStats"/>
+                    <t t-set="scope" t-value="'payroll'"/>
                 </t>
 
                 <!-- Where the payroll actually goes + tax concentration -->
@@ -497,6 +500,7 @@
             <t t-if="state.documents">
                 <t t-call="nx_hr_analytics_dashboard.StatTiles">
                     <t t-set="tiles" t-value="docStats"/>
+                    <t t-set="scope" t-value="'documents'"/>
                 </t>
 
                 <div class="o_nx_section"><h4>Compliance Shape</h4></div>
@@ -631,6 +635,7 @@
             <t t-if="state.insurance">
                 <t t-call="nx_hr_analytics_dashboard.StatTiles">
                     <t t-set="tiles" t-value="insStats"/>
+                    <t t-set="scope" t-value="'insurance'"/>
                 </t>
 
                 <!-- The gap that needs closing, and how wages map to the

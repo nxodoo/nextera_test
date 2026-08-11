@@ -530,7 +530,7 @@ export class HrAnalyticsDashboard extends Component {
     }
 
     /** Shared area-line config with a gradient fill. */
-    _areaConfig(ref, trend, { color, yOpts = {} } = {}) {
+    _areaConfig(ref, trend, { color, yOpts = {}, onPointClick, tooltipSuffix = "" } = {}) {
         const t = this._tokens(ref);
         const hue = color || t.series;
         return {
@@ -560,6 +560,25 @@ export class HrAnalyticsDashboard extends Component {
                 ...baseOptions(t),
                 // Crosshair-style hover: nearest x, no need to hit the point.
                 interaction: { mode: "index", intersect: false },
+                onClick: onPointClick
+                    ? (evt, els, chart) => {
+                        // Use the index under the cursor, so the whole column
+                        // is clickable rather than just the 5px marker.
+                        const pts = chart.getElementsAtEventForMode(
+                            evt, "index", { intersect: false }, true);
+                        if (pts.length) {
+                            onPointClick(pts[0].index);
+                        }
+                    }
+                    : undefined,
+                onHover: onPointClick
+                    ? (evt) => {
+                        const target = evt?.native?.target;
+                        if (target) {
+                            target.style.cursor = "pointer";
+                        }
+                    }
+                    : undefined,
                 scales: {
                     y: valueAxis(t, yOpts),
                     x: categoryAxis(t),
@@ -567,7 +586,7 @@ export class HrAnalyticsDashboard extends Component {
                 plugins: {
                     legend: { display: false },
                     tooltip: tooltipStyle(t, {
-                        callbacks: { label: (c) => ` ${this.fmt(c.raw)}` },
+                        callbacks: { label: (c) => ` ${this.fmt(c.raw)}${tooltipSuffix}` },
                     }),
                 },
             },
@@ -664,6 +683,8 @@ export class HrAnalyticsDashboard extends Component {
                 this._areaConfig(this.turnoverChart, turn, {
                     color: t.warning,
                     yOpts: { ticks: { callback: (v) => `${v}%` } },
+                    tooltipSuffix: "%  ·  click to see who left",
+                    onPointClick: (i) => this.openTurnoverMonth(i),
                 }));
         }
     }
@@ -910,6 +931,146 @@ export class HrAnalyticsDashboard extends Component {
             { key: "nocontract", label: "No Contract", value: this.fmt(k.no_contract),
               icon: "fa-file-text-o", accent: "#eda100" },
         ];
+    }
+
+    // ── Drill-through helpers ─────────────────────────────────────────────
+    /** Open an employee list restricted to an explicit set of ids. */
+    _openEmployeeIds(name, ids, { includeArchived = false } = {}) {
+        if (!ids || !ids.length) {
+            return this.notification.add(`No employees behind “${name}”.`, { type: "info" });
+        }
+        return this.action.doAction({
+            type: "ir.actions.act_window",
+            name,
+            res_model: "hr.employee",
+            domain: [["id", "in", ids]],
+            context: includeArchived ? { active_test: false } : {},
+            views: [[false, "list"], [false, "kanban"], [false, "form"]],
+        });
+    }
+
+    _openDocuments(name, state) {
+        const domain = [["mandatory", "=", true]];
+        if (state) {
+            domain.push(["state", "=", state]);
+        }
+        const f = this.state.filters;
+        if (f.department_id) {
+            domain.push(["employee_id.department_id", "=", f.department_id]);
+        }
+        if (f.company_id) {
+            domain.push(["company_id", "=", f.company_id]);
+        }
+        return this.action.doAction({
+            type: "ir.actions.act_window",
+            name,
+            res_model: "hr.employee.document",
+            domain,
+            views: [[false, "list"], [false, "form"]],
+        });
+    }
+
+    /**
+     * Departures inside one month of the turnover series, grouped by reason —
+     * this is the "who resigned / retired / was let go" view.
+     */
+    openTurnoverMonth(index) {
+        const trend = this.state.data?.turnover_trend;
+        if (!trend?.starts?.length) {
+            return undefined;
+        }
+        const start = trend.starts[index];
+        const end = trend.ends[index];
+        const label = trend.labels[index];
+        if ((trend.departures?.[index] || 0) === 0) {
+            return this.notification.add(`No departures recorded in ${label}.`, { type: "info" });
+        }
+        const domain = [["departure_date", ">=", start], ["departure_date", "<=", end]];
+        const f = this.state.filters;
+        if (f.department_id) {
+            domain.push(["department_id", "=", f.department_id]);
+        }
+        if (f.company_id) {
+            domain.push(["company_id", "=", f.company_id]);
+        }
+        return this.action.doAction({
+            type: "ir.actions.act_window",
+            name: `Departures — ${label}`,
+            res_model: "hr.employee",
+            domain,
+            // Departed employees are archived, so they only appear with
+            // active_test disabled. Grouping by reason answers the "why".
+            context: {
+                active_test: false,
+                group_by: ["departure_reason_id"],
+                list_view_ref: "nx_hr_analytics_dashboard.view_hr_employee_departure_list",
+            },
+            views: [[false, "list"], [false, "form"]],
+        });
+    }
+
+    /** Dispatch a stat-tile click to the right drill-through. */
+    openStat(scope, key) {
+        const empIds = (rows, pred) => (rows || []).filter(pred).map((r) => r.id).filter(Boolean);
+
+        if (scope === "insurance") {
+            const rows = this.state.insurance?.rows || [];
+            switch (key) {
+                case "total":
+                    return this._openEmployeeIds("Employees", empIds(rows, () => true));
+                case "insured":
+                case "coverage":
+                case "ref":
+                    return this._openEmployeeIds("Insured Employees",
+                        empIds(rows, (r) => r.status === "insured"));
+                case "not":
+                    return this._openEmployeeIds("Not Insured",
+                        empIds(rows, (r) => r.status !== "insured"));
+                case "nocontract":
+                    return this._openEmployeeIds("No Contract",
+                        empIds(rows, (r) => !r.has_contract));
+                default:
+                    return undefined;
+            }
+        }
+
+        if (scope === "documents") {
+            const rows = this.state.documents?.rows || [];
+            switch (key) {
+                case "total":
+                    return this._openEmployeeIds("Employees", empIds(rows, () => true));
+                case "complete":
+                    return this._openEmployeeIds("Complete Files",
+                        empIds(rows, (r) => r.status === "complete"));
+                case "incomplete":
+                    return this._openEmployeeIds("Incomplete Files",
+                        empIds(rows, (r) => r.status !== "complete"));
+                case "missing":
+                    return this._openDocuments("Missing Documents", "missing");
+                case "expired":
+                    return this._openDocuments("Expired Documents", "expired");
+                case "soon":
+                    return this._openDocuments("Expiring Soon", "expiring");
+                default:
+                    return undefined;
+            }
+        }
+
+        if (scope === "payroll") {
+            const rows = this.state.payroll?.rows || [];
+            const ids = empIds(rows, () => true);
+            const names = {
+                emp: "Employees in this payroll run",
+                gross: "Employees — Total Wages",
+                exempt: "Employees — Exemptions",
+                base: "Employees — Taxable Base",
+                tax: "Employees — Tax Due",
+                net: "Employees — Net Payout",
+            };
+            return this._openEmployeeIds(names[key] || "Employees", ids);
+        }
+
+        return undefined;
     }
 
     /** Colour class for a percentage cell's mini-bar. */
