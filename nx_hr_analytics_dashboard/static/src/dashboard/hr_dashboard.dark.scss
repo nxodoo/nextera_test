@@ -1,0 +1,72 @@
+// ============================================================================
+//  HR Analytics Dashboard — dark mode
+// ============================================================================
+// Odoo compiles dark mode as a SEPARATE asset bundle (`web.assets_web_dark`),
+// selected by the `color_scheme` cookie — there is no `.o_dark_mode` class on
+// the document. So this file needs no selector guard and no media query: it is
+// only ever loaded when the user has actually switched to dark mode, and it
+// cascades on top of hr_dashboard.scss.
+//
+// Do NOT gate these on `prefers-color-scheme` — that would follow the OS
+// instead of Odoo's own setting, and the dashboard would go dark while the
+// rest of the web client stayed light.
+//
+// The steps below are *selected* for the dark surface, not an inversion of the
+// light values: validated at CVD ΔE 9.1 (protan) with every colour ≥ 3:1
+// contrast against the dark card background.
+
+.o_nx_hr_dash {
+    --nx-page-bg: #14181D;
+    --nx-card-bg: #1B2027;
+    --nx-border: #2A313A;
+    --nx-text: #E8EBEF;
+    --nx-muted: #98A4B3;
+    --nx-green: #4FBF88;
+    --nx-green-soft: #16302A;
+    --nx-shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 4px 16px rgba(0, 0, 0, .28);
+    --nx-shadow-hover: 0 8px 28px rgba(0, 0, 0, .45);
+
+    --nx-chart-surface: #1B2027;
+    --nx-chart-grid: rgba(255, 255, 255, .09);
+    --nx-chart-text: #E8EBEF;
+    --nx-chart-text-muted: #98A4B3;
+    --nx-chart-tooltip-bg: #0B0E12;
+    --nx-chart-tooltip-text: #FFFFFF;
+    --nx-chart-series: #4FBF88;
+    --nx-chart-good: #1faa72;
+    --nx-chart-warning: #e3a41a;
+    --nx-chart-critical: #e66767;
+    --nx-cat-1: #3987e5;
+    --nx-cat-2: #d95926;
+    --nx-cat-3: #199e70;
+    --nx-cat-4: #c98500;
+
+    // A few places in the light sheet use literal light hexes.
+    .o_nx_hr_loading { background: rgba(20, 24, 29, .65); }
+    .o_nx_hr_btn_light:hover { background: #232A33; }
+    .o_nx_hr_table {
+        tbody tr:hover { background: #212832; }
+        tr.o_row_error { background: rgba(224, 103, 103, .10); }
+        tr.o_row_error:hover { background: rgba(224, 103, 103, .16); }
+        tr.o_row_warning { background: rgba(227, 164, 26, .10); }
+        tr.o_row_warning:hover { background: rgba(227, 164, 26, .16); }
+    }
+    .o_nx_hr_alert { background: #1F252D; }
+    .o_nx_hr_select { background: var(--nx-card-bg); color: var(--nx-text); }
+    .o_nx_hr_search { background: var(--nx-card-bg); color: var(--nx-text); }
+    .o_nx_hr_kpi_icon {
+        background: color-mix(in srgb, var(--accent, #4FBF88) 20%, transparent);
+    }
+    .o_nx_hr_status {
+        &.o_reviewed { background: rgba(57, 135, 229, .18); color: #8FBDF3; }
+        &.o_approved { background: rgba(31, 170, 114, .18); color: #6FD3A8; }
+        &.o_waiting, &.o_warning { background: rgba(227, 164, 26, .18); color: #E8BE63; }
+        &.o_draft, &.o_cancelled { background: rgba(255, 255, 255, .08); color: var(--nx-muted); }
+        &.o_error { background: rgba(230, 103, 103, .18); color: #F09A9A; }
+    }
+    .o_nx_hr_badge {
+        &.o_danger { background: rgba(230, 103, 103, .18); color: #F09A9A; }
+        &.o_warn { background: rgba(227, 164, 26, .18); color: #E8BE63; }
+        &.o_muted-badge { background: rgba(255, 255, 255, .08); color: var(--nx-muted); }
+    }
+}

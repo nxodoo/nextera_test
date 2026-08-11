@@ -15,6 +15,8 @@ import {
     shortLabel,
     tooltipStyle,
     valueAxis,
+    waterfallConnectors,
+    waterfallLabels,
     withAlpha,
 } from "./chart_theme";
 
@@ -63,6 +65,7 @@ export class HrAnalyticsDashboard extends Component {
         this.insStatusChart = useRef("insStatusChart");
         this.insTrendChart = useRef("insTrendChart");
         // New per-tab charts
+        this.payWaterfallChart = useRef("payWaterfallChart");
         this.payTaxDeptChart = useRef("payTaxDeptChart");
         this.payGrossDeptChart = useRef("payGrossDeptChart");
         this.docDistChart = useRef("docDistChart");
@@ -84,6 +87,9 @@ export class HrAnalyticsDashboard extends Component {
                 this.state.data,
                 this.state.documents,
                 this.state.insurance,
+                // Payroll loads asynchronously after the tab switch; without it
+                // here its charts stay blank until some other dependency moves.
+                this.state.payroll,
                 // Re-create charts when a card flips back from table view.
                 JSON.stringify(this.state.tableView),
             ],
@@ -529,6 +535,71 @@ export class HrAnalyticsDashboard extends Component {
         };
     }
 
+    /**
+     * Waterfall: floating bars ([from, to]) with connectors, showing gross
+     * being reduced step by step to net.
+     */
+    _waterfallConfig(ref, wf) {
+        const t = this._tokens(ref);
+        const steps = wf.steps;
+        // Anchors (gross / net) vs. reductions — one colour per role, so the
+        // three deductions never compete with each other for attention.
+        const colorFor = (s) => {
+            if (s.kind === "down") {
+                return t.cat2;
+            }
+            return s.key === "net" ? t.series : t.cat1;
+        };
+        return {
+            type: "bar",
+            data: {
+                labels: steps.map((s) => s.label),
+                datasets: [{
+                    data: steps.map((s) => [s.from, s.to]),
+                    backgroundColor: steps.map((s) => withAlpha(colorFor(s), 0.9)),
+                    hoverBackgroundColor: steps.map(colorFor),
+                    borderRadius: 4,
+                    borderSkipped: false,
+                    maxBarThickness: 76,
+                }],
+            },
+            options: {
+                ...baseOptions(t),
+                animation: entryAnimation({ stagger: 70 }),
+                layout: { padding: { top: 26 } },
+                scales: {
+                    y: {
+                        ...valueAxis(t, { ticks: { display: false } }),
+                        grid: { display: false },
+                        beginAtZero: true,
+                    },
+                    x: categoryAxis(t, { ticks: { color: t.text, font: { size: 12 } } }),
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: tooltipStyle(t, {
+                        callbacks: {
+                            title: (c) => steps[c[0].dataIndex].label,
+                            label: (c) => {
+                                const s = steps[c.dataIndex];
+                                const sign = s.kind === "down" ? "−" : "";
+                                return ` ${sign}${this.fmt(Math.round(s.value))}  ·  ${s.pct}% of gross`;
+                            },
+                        },
+                    }),
+                    nxWaterfallConnectors: { steps, color: t.grid },
+                    nxWaterfallLabels: {
+                        steps,
+                        color: t.text,
+                        downColor: t.cat2,
+                        format: (v) => this.fmt(Math.round(v)),
+                    },
+                },
+            },
+            plugins: [waterfallConnectors, waterfallLabels],
+        };
+    }
+
     /** Shared area-line config with a gradient fill. */
     _areaConfig(ref, trend, { color, yOpts = {}, onPointClick, tooltipSuffix = "" } = {}) {
         const t = this._tokens(ref);
@@ -614,6 +685,13 @@ export class HrAnalyticsDashboard extends Component {
             return;
         }
         const t = this._tokens(this.payTaxDeptChart);
+
+        const wf = this.payWaterfall;
+        if (wf) {
+            this._make(this.payWaterfallChart, "payWaterfall",
+                this._waterfallConfig(this.payWaterfallChart, wf));
+        }
+
         const byTax = this.payTaxByDept;
         if (byTax.length && !this.isTableView("payTaxDept")) {
             this._make(this.payTaxDeptChart, "payTaxDept",
@@ -783,25 +861,43 @@ export class HrAnalyticsDashboard extends Component {
 
     // ── Payroll Tax ───────────────────────────────────────────────────────
     /**
-     * Where the gross wage actually goes. Net + tax + insurance + other
-     * deductions reconstitute gross, so this is a true part-to-whole.
+     * Gross stepped down to net, one deduction at a time — a waterfall reads
+     * the subtraction sequence, which a part-to-whole bar cannot show.
+     * Zero-valued deductions are skipped so the chart never shows empty steps.
      */
-    get payComposition() {
+    get payWaterfall() {
         const t = this.state.payroll?.totals;
         if (!t || !t.gross) {
             return null;
         }
-        const segs = [
-            { key: "net", label: "Net Salary", value: t.net || 0, cls: "o_cat1" },
-            { key: "tax", label: "Tax Due", value: t.tax_due || 0, cls: "o_cat2" },
-            { key: "ins", label: "Insurance", value: t.insurance || 0, cls: "o_cat3" },
-            { key: "ded", label: "Deductions", value: t.deductions || 0, cls: "o_cat4" },
-        ].filter((s) => s.value > 0);
-        const sum = segs.reduce((s, x) => s + x.value, 0) || 1;
-        return {
-            gross: t.gross,
-            segments: segs.map((s) => ({ ...s, pct: this._pctOf(s.value, sum) })),
-        };
+        const steps = [];
+        let running = t.gross;
+        steps.push({
+            key: "gross", label: "Gross Wage", kind: "total",
+            from: 0, to: t.gross, value: t.gross, pct: 100,
+        });
+        for (const [field, label] of [
+            ["tax_due", "Tax Due"],
+            ["insurance", "Insurance"],
+            ["deductions", "Deductions"],
+        ]) {
+            const amount = t[field] || 0;
+            if (amount <= 0) {
+                continue;
+            }
+            steps.push({
+                key: field, label, kind: "down",
+                from: running - amount, to: running,
+                value: amount, pct: this._pctOf(amount, t.gross),
+            });
+            running -= amount;
+        }
+        steps.push({
+            key: "net", label: "Net Salary", kind: "total",
+            from: 0, to: running, value: running,
+            pct: this._pctOf(running, t.gross),
+        });
+        return { gross: t.gross, net: running, steps };
     }
     get payTaxByDept() {
         return this._groupSum(this.state.payroll?.rows, "department", "tax_due");

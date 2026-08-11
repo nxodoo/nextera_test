@@ -33,6 +33,13 @@ HR Analytics Dashboard
             "nx_hr_analytics_dashboard/static/src/dashboard/chart_theme.js",
             "nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js",
         ],
+        # Dark mode (Odoo Enterprise): served as its own bundle, selected by the
+        # `color_scheme` cookie the user-menu toggle sets. Registering here is
+        # the only way a custom module participates — there is no dark CSS
+        # class on the document to hook onto.
+        "web.assets_web_dark": [
+            "nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.dark.scss",
+        ],
     },
     "post_init_hook": "post_init_hook",
     "installable": True,

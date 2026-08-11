@@ -26,8 +26,8 @@
     --nx-chart-good: #12855a;
     --nx-chart-warning: #eda100;
     --nx-chart-critical: #d03b3b;
-    // Categorical slots — for composition (pay breakdown), where the segments
-    // are identities, not states. Validated on the adjacent pairlist:
+    // Categorical slots — identities, not states (waterfall anchors vs.
+    // deduction steps). Validated on the adjacent pairlist:
     // worst CVD ΔE 9.1 light / 8.4 dark. Never reuse the status colours here.
     --nx-cat-1: #2a78d6;
     --nx-cat-2: #eb6834;
@@ -171,6 +171,8 @@
     // Bar cards size themselves to their row count, so the category labels and
     // the axis band always fit instead of forcing a nested scrollbar.
     .o_nx_hr_chartbox_auto { min-height: 0; }
+    // The waterfall needs headroom for the value label above the tallest bar.
+    .o_nx_hr_chartbox_wf { height: 300px; min-height: 300px; }
 
     // ── Card head (title + affordances) ───────────────────────────────────
     .o_nx_hr_cardhead {
@@ -292,40 +294,6 @@
             animation: nxHrGrow .8s cubic-bezier(.22,.9,.3,1) both;
         }
     }
-
-    // ══════════════════════════════════════════════════════════════════════
-    //  Composition bar — one stacked bar answering "where did the money go".
-    //  Built in DOM rather than canvas: real text for a11y, crisp at any DPI,
-    //  and a 2px surface gap between segments instead of drawn borders.
-    // ══════════════════════════════════════════════════════════════════════
-    .o_nx_compo_track {
-        display: flex; gap: 2px; height: 34px; border-radius: 9px;
-        overflow: hidden; margin-bottom: 14px; background: transparent;
-    }
-    .o_nx_compo_seg {
-        position: relative; min-width: 2px;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 11.5px; font-weight: 700; color: #fff; white-space: nowrap;
-        transition: filter .15s ease;
-        animation: nxHrGrowX .75s cubic-bezier(.22,.9,.3,1) both;
-        &:first-child { border-radius: 9px 0 0 9px; }
-        &:last-child  { border-radius: 0 9px 9px 0; }
-        &:hover { filter: brightness(1.1); }
-        // Only label a segment when the text genuinely fits inside it.
-        .o_seg_txt { padding: 0 8px; overflow: hidden; text-overflow: ellipsis; }
-    }
-    .o_nx_compo_legend {
-        display: flex; flex-wrap: wrap; gap: 8px 20px;
-        > div {
-            display: flex; align-items: center; gap: 8px; font-size: 12.5px;
-            .o_dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
-            .o_k { color: var(--nx-muted); }
-            .o_v { font-weight: 700; font-variant-numeric: tabular-nums; }
-            .o_p { color: var(--nx-muted); font-size: 11.5px; }
-        }
-    }
-    .o_cat1 { background: var(--nx-cat-1); } .o_cat2 { background: var(--nx-cat-2); }
-    .o_cat3 { background: var(--nx-cat-3); } .o_cat4 { background: var(--nx-cat-4); }
 
     // ── Inline mini-bar for percentage cells in tables ────────────────────
     .o_nx_hr_minibar {
@@ -536,48 +504,13 @@
     @media (max-width: 700px) {
         .o_nx_hr_kpis { grid-template-columns: repeat(2, 1fr); }
         .o_nx_hr_paytiles, .o_nx_stats { grid-template-columns: repeat(2, 1fr); }
-        .o_nx_compo_legend { gap: 6px 14px; }
     }
 }
 
-// ── Dark mode ─────────────────────────────────────────────────────────────
-// Dark steps are *selected* for the dark surface (validated: CVD ΔE 9.1,
-// all ≥ 3:1 contrast), not an automatic inversion of the light values.
-// Declared for both Odoo's dark class and the OS preference.
-@mixin nx-hr-dark-tokens {
-    --nx-page-bg: #14181D;
-    --nx-card-bg: #1B2027;
-    --nx-border: #2A313A;
-    --nx-text: #E8EBEF;
-    --nx-muted: #98A4B3;
-    --nx-green: #4FBF88;
-    --nx-green-soft: #16302A;
-    --nx-shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 4px 16px rgba(0, 0, 0, .28);
-    --nx-shadow-hover: 0 8px 28px rgba(0, 0, 0, .45);
-
-    --nx-chart-surface: #1B2027;
-    --nx-chart-grid: rgba(255, 255, 255, .09);
-    --nx-chart-text: #E8EBEF;
-    --nx-chart-text-muted: #98A4B3;
-    --nx-chart-tooltip-bg: #0B0E12;
-    --nx-chart-tooltip-text: #FFFFFF;
-    --nx-chart-series: #4FBF88;
-    --nx-chart-good: #1faa72;
-    --nx-chart-warning: #e3a41a;
-    --nx-chart-critical: #e66767;
-    // Dark categorical steps — selected for the dark surface, all ≥ 3:1.
-    --nx-cat-1: #3987e5;
-    --nx-cat-2: #d95926;
-    --nx-cat-3: #199e70;
-    --nx-cat-4: #c98500;
-}
-
-.o_dark_mode .o_nx_hr_dash,
-.o_web_client.o_dark_mode .o_nx_hr_dash { @include nx-hr-dark-tokens; }
-
-@media (prefers-color-scheme: dark) {
-    :root:not(.o_light_mode) .o_nx_hr_dash { @include nx-hr-dark-tokens; }
-}
+// Dark mode lives in hr_dashboard.dark.scss — Odoo serves it as a separate
+// asset bundle (web.assets_web_dark), so it needs no selector or media query
+// here. Gating on prefers-color-scheme would follow the OS instead of Odoo's
+// own toggle and leave the dashboard dark inside a light web client.
 
 @keyframes nxHrRise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes nxHrFade { from { opacity: 0; } to { opacity: 1; } }
@@ -590,7 +523,7 @@
     .o_nx_hr_dash {
         .o_nx_hr_kpi, .o_nx_hr_card, .o_nx_hr_tile, .o_nx_stat,
         .o_nx_hr_donut_hero, .o_nx_hr_datatable,
-        .o_nx_meter span, .o_nx_compo_seg { animation: none !important; }
+        .o_nx_meter span { animation: none !important; }
         .o_nx_hr_kpi:hover, .o_nx_hr_alert:hover,
         .o_nx_hr_iconbtn:hover, .o_nx_stat:hover { transform: none; }
         * { transition-duration: .01ms !important; }

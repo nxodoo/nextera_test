@@ -32,6 +32,12 @@ export function readTokens(el) {
         good: v("--nx-chart-good", "#12855a"),
         warning: v("--nx-chart-warning", "#eda100"),
         critical: v("--nx-chart-critical", "#d03b3b"),
+        // Categorical slots (identity, not state) — validated on the adjacent
+        // pairlist: worst CVD ΔE 9.1 light / 8.4 dark.
+        cat1: v("--nx-cat-1", "#2a78d6"),
+        cat2: v("--nx-cat-2", "#eb6834"),
+        cat3: v("--nx-cat-3", "#1baf7a"),
+        cat4: v("--nx-cat-4", "#eda100"),
     };
 }
 
@@ -176,6 +182,75 @@ export const barValueLabels = {
                 }
             });
         }
+        ctx.restore();
+    },
+};
+
+/**
+ * Waterfall step connectors — thin solid hairlines linking the settled total
+ * of one bar to the start of the next, so the chart reads as a running
+ * subtraction rather than five unrelated bars. Solid, never dashed.
+ */
+export const waterfallConnectors = {
+    id: "nxWaterfallConnectors",
+    beforeDatasetsDraw(chart, _args, opts) {
+        const meta = chart.getDatasetMeta(0);
+        const steps = opts?.steps || [];
+        const scale = chart.scales.y;
+        if (!meta?.data?.length || !scale) {
+            return;
+        }
+        const { ctx } = chart;
+        ctx.save();
+        ctx.strokeStyle = opts?.color || "rgba(0,0,0,.22)";
+        ctx.lineWidth = 1;
+        for (let i = 0; i < meta.data.length - 1; i++) {
+            const step = steps[i];
+            if (!step) {
+                continue;
+            }
+            // Where the running total sits once this step has been applied.
+            const settled = step.kind === "total" ? step.to : step.from;
+            const y = Math.round(scale.getPixelForValue(settled)) + 0.5;
+            const a = meta.data[i];
+            const b = meta.data[i + 1];
+            ctx.beginPath();
+            ctx.moveTo(a.x + a.width / 2, y);
+            ctx.lineTo(b.x - b.width / 2, y);
+            ctx.stroke();
+        }
+        ctx.restore();
+    },
+};
+
+/**
+ * Labels each waterfall bar above its top edge — signed for the deductions
+ * so the direction of each step is readable without the tooltip.
+ */
+export const waterfallLabels = {
+    id: "nxWaterfallLabels",
+    afterDatasetsDraw(chart, _args, opts) {
+        const meta = chart.getDatasetMeta(0);
+        const steps = opts?.steps || [];
+        const fmt = opts?.format || ((v) => v);
+        const { ctx } = chart;
+        ctx.save();
+        ctx.font = "700 11.5px Inter, system-ui, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "bottom";
+        meta.data.forEach((bar, i) => {
+            const step = steps[i];
+            if (!step) {
+                return;
+            }
+            ctx.fillStyle = step.kind === "down"
+                ? (opts?.downColor || "#b4531f")
+                : (opts?.color || "#1F2937");
+            const text = step.kind === "down"
+                ? `−${fmt(Math.abs(step.value))}`
+                : fmt(step.value);
+            ctx.fillText(text, bar.x, Math.min(bar.y, bar.base) - 7);
+        });
         ctx.restore();
     },
 };

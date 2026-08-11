@@ -55,29 +55,6 @@
     </div>
 </t>
 
-<!-- One stacked bar answering a part-to-whole question, with a value legend. -->
-<t t-name="nx_hr_analytics_dashboard.CompositionBar">
-    <div class="o_nx_compo_track">
-        <t t-foreach="compo.segments" t-as="s" t-key="s.key">
-            <div t-attf-class="o_nx_compo_seg {{s.cls}}"
-                 t-attf-style="flex: {{s.value}} 1 0"
-                 t-attf-title="{{s.label}}: {{s.pct}}%">
-                <span class="o_seg_txt" t-if="s.pct >= 9"><t t-esc="s.pct"/>%</span>
-            </div>
-        </t>
-    </div>
-    <div class="o_nx_compo_legend">
-        <t t-foreach="compo.segments" t-as="s" t-key="s.key">
-            <div>
-                <span t-attf-class="o_dot {{s.cls}}"/>
-                <span class="o_k" t-esc="s.label"/>
-                <span class="o_v" t-esc="fmt(s.value)"/>
-                <span class="o_p"><t t-esc="s.pct"/>%</span>
-            </div>
-        </t>
-    </div>
-</t>
-
 <t t-name="nx_hr_analytics_dashboard.HrAnalyticsDashboard">
     <div class="o_nx_hr_dash" t-ref="root">
 
@@ -355,16 +332,16 @@
                 <!-- Where the payroll actually goes + tax concentration -->
                 <div class="o_nx_section"><h4>Payroll Breakdown</h4></div>
                 <div class="o_nx_hr_row">
-                    <div class="o_nx_hr_card o_span2" t-if="payComposition">
+                    <div class="o_nx_hr_card o_span2" t-if="payWaterfall">
                         <div class="o_nx_hr_cardhead">
-                            <h3>Where the Gross Wage Goes</h3>
+                            <h3>Gross Wage → Net Salary</h3>
                             <span class="o_nx_hr_chiplegend">
-                                Gross <b class="ms-1" t-esc="fmt(payComposition.gross)"/>
+                                <t t-esc="payWaterfall.steps.length - 2"/> deduction step(s)
                             </span>
                         </div>
-                        <t t-call="nx_hr_analytics_dashboard.CompositionBar">
-                            <t t-set="compo" t-value="payComposition"/>
-                        </t>
+                        <div class="o_nx_hr_chartbox o_nx_hr_chartbox_wf">
+                            <canvas t-ref="payWaterfallChart"/>
+                        </div>
                     </div>
                     <div class="o_nx_hr_card">
                         <h3>Filing Status</h3>
