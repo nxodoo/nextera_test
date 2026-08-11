@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_custody_create_wizard" model="ir.ui.view">
+        <field name="name">custody.create.wizard.form</field>
+        <field name="model">custody.create.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Custody Request" class="o_custody_create_wizard">
+                <group>
+                    <field name="employee_id" placeholder="Select employee..."/>
+                    <field name="custody_type" widget="radio" options="{'horizontal': true}"/>
+                    <field name="is_temporary"/>
+                    <field name="date"/>
+                </group>
+                <footer>
+                    <button name="action_create_request"
+                            string="Create"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_custody_create_wizard" model="ir.actions.act_window">
+        <field name="name">Create Custody Request</field>
+        <field name="res_model">custody.create.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

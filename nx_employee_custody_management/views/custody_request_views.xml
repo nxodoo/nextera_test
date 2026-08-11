@@ -1,0 +1,219 @@
+<odoo>
+    <record id="view_custody_request_form" model="ir.ui.view">
+        <field name="name">custody.request.form</field>
+        <field name="model">custody.request</field>
+        <field name="arch" type="xml">
+            <form string="Custody Request">
+                <header>
+                    <!--                    <button name="action_submit_to_approve" type="object"-->
+                    <!--                            class="btn-primary"-->
+                    <!--                            string="Submit to Approve"-->
+                    <!--                            invisible="state not in ['draft','refill']"/>-->
+
+                    <button name="action_refill"
+                            type="object"
+                            string="Refill Custody"
+                            class="btn-primary"
+                            groups="nx_employee_custody_management.group_request_custody"
+                            invisible="custody_type == 'product' or state not in ['refill','entry_created','entry_cancelled','refused']"/>
+
+                    <button name="action_return_custody"
+                            string="Return Custody"
+                            type="object"
+                            class="btn-primary"
+                            groups="nx_employee_custody_management.group_request_custody"
+                            invisible="state not in ['refill','entry_created','entry_cancelled','refused'] or (custody_type == 'money' and balance == 0)"/>
+
+                    <!--                    <button name="action_approve" type="object"-->
+                    <!--                            class="btn-primary"-->
+                    <!--                            string="Approve"-->
+                    <!--                            invisible="state not in ['to_approve']"/>-->
+
+                    <!--                    <button name="action_refuse" type="object"-->
+                    <!--                            class="btn-primary"-->
+                    <!--                            string="Refuse"-->
+                    <!--                            invisible="state not in ['to_approve']"/>-->
+
+                    <button name="action_create_entry" type="object"
+                            class="btn-primary"
+                            string="Create Entry"
+                            groups="nx_employee_custody_management.group_request_custody"
+                            invisible="custody_type == 'product' or state not in ['draft','refill']"/>
+
+                    <button name="action_create_entry" type="object"
+                            class="btn-primary"
+                            string="Confirm Custody"
+                            groups="nx_employee_custody_management.group_request_custody"
+                            invisible="custody_type == 'money' or state not in ['draft','refill']"/>
+
+                    <button name="action_reverse_entry"
+                            type="object"
+                            string="Reverse Entry"
+                            groups="nx_employee_custody_management.group_request_custody"
+                            class="btn-danger"
+                            invisible="1"/>
+
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,entry_created,entry_cancelled"/>
+                </header>
+                <sheet>
+                    <!-- Smart Button for Journal Entry -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_entry"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-list">
+                            <field string="Journal Entry" name="entry_ids" widget="statinfo"/>
+                        </button>
+                        <button name="action_open_journal_items"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-book">
+                            <field string="Journal Items" name="move_line_ids" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <div class="o_custody_type_badge">
+                            <span class="badge o_custody_badge_money"
+                                  invisible="custody_type != 'money'">💵 Money Custody</span>
+                            <span class="badge o_custody_badge_product"
+                                  invisible="custody_type != 'product'">📦 Product Custody</span>
+                        </div>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="custody_type" widget="radio" options="{'horizontal': true}"
+                                   readonly="state != 'draft'"/>
+                            <field name="active"/>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="is_temporary" readonly="state not in ['draft']"/>
+                            <field name="employee_id" readonly="state != 'draft'"/>
+                            <field name="balance" invisible="custody_type == 'product'"/>
+                            <field name="amount" readonly="state not in ['draft','refill']"
+                                   invisible="custody_type == 'product'"
+                                   required="custody_type == 'money'"/>
+                            <!--<field name="amount_manager" readonly="state != 'to_approve'"
+                                   invisible="state == 'draft'"/>-->
+                        </group>
+                        <group>
+                            <field name="total_taken" invisible="custody_type == 'product'"/>
+                            <field name="total_payment" invisible="custody_type == 'product'"/>
+                            <field name="product_total_value" invisible="custody_type == 'money'"/>
+                            <field name="entry_id" readonly="1"/>
+                            <field name="custody_account_id" readonly="1"
+                                   invisible="custody_type == 'product'"/>
+                            <field name="payment_journal_id"
+                                   domain="[('id', 'not in', journal_ids),('type', 'in', ('cash', 'bank'))]"
+                                   readonly="state not in ['draft','refill']"
+                                   required="custody_type == 'money'"
+                                   invisible="custody_type == 'product'"/>
+                            <!--<field name="approve_by" readonly="1" invisible="state != 'approved'"/>
+                            <field name="approve_date" readonly="1" invisible="state != 'approved'"/>
+                            <field name="refused_by" readonly="1" invisible="state != 'refused'"/>
+                            <field name="refused_date" readonly="1" invisible="state != 'refused'"/>-->
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Custody Product Lines" name="custody_product_lines"
+                              invisible="custody_type != 'product'">
+                            <field name="company_currency_id" invisible="1"/>
+                            <field name="product_line_ids"
+                                   readonly="state not in ['draft','refill']">
+                                <list editable="bottom" class="o_custody_product_lines">
+                                    <field name="company_currency_id" column_invisible="1"/>
+                                    <field name="product_id"/>
+                                    <field name="lot_id"/>
+                                    <field name="available_qty" readonly="1"/>
+                                    <field name="quantity"/>
+                                    <field name="uom_id" readonly="1"/>
+                                    <field name="expiry_date"/>
+                                    <field name="is_expired" column_invisible="1"/>
+                                    <field name="remaining_period" readonly="1"
+                                           decoration-success="not is_expired"
+                                           decoration-danger="is_expired"/>
+                                    <field name="unit_cost"/>
+                                    <field name="total_value" readonly="1"/>
+                                    <field name="state" readonly="1" widget="badge"
+                                           decoration-info="state == 'draft'"
+                                           decoration-success="state == 'confirmed'"
+                                           decoration-muted="state == 'returned'"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="product_line_count"/>
+                                <field name="product_total_qty"/>
+                                <field name="product_total_value"/>
+                            </group>
+                        </page>
+                        <page string="Custody Transactions" name="custody_transactions"
+                              invisible="custody_type != 'money'">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="fa fa-filter" title="Filter by date"/>
+                                <field name="txn_date_from" nolabel="1" placeholder="From"/>
+                                <field name="txn_date_to" nolabel="1" placeholder="To"/>
+                                <button name="action_txn_filter_this_month" type="object"
+                                        class="btn btn-sm btn-secondary" string="This Month"/>
+                                <button name="action_txn_filter_this_year" type="object"
+                                        class="btn btn-sm btn-secondary" string="This Year"/>
+                                <button name="action_txn_filter_clear" type="object"
+                                        class="btn btn-sm btn-link" string="Clear"/>
+                            </div>
+                            <field name="company_currency_id" invisible="1"/>
+                            <field name="move_line_ids" nolabel="1" readonly="1">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="payment_id" column_invisible="1"/>
+                                    <field name="date"/>
+                                    <field name="move_name" string="Journal Entry"/>
+                                    <field name="nx_payment_journal_id" string="Payment Journal"/>
+                                    <field name="name" string="Label"/>
+                                    <field name="partner_id" optional="show"/>
+                                    <field name="debit" sum="Total Debit"/>
+                                    <field name="credit" sum="Total Credit"/>
+                                    <button name="action_open_custody_payment"
+                                            type="object"
+                                            string="View Payment"
+                                            class="btn-link"
+                                            icon="fa-external-link"
+                                            invisible="not payment_id"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="total_debit"/>
+                                <field name="total_credit"/>
+                            </group>
+                        </page>
+                        <page string="Note">
+                            <group>
+                                <field name="note" readonly="state not in ['draft','refill']"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <Chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_custody_request_tree" model="ir.ui.view">
+        <field name="name">custody.request.tree</field>
+        <field name="model">custody.request</field>
+        <field name="arch" type="xml">
+            <list js_class="custody_request_list">
+                <field name="name"/>
+                <field name="name_rec"/>
+                <field name="custody_type" widget="badge"
+                       decoration-info="custody_type == 'money'"
+                       decoration-warning="custody_type == 'product'"/>
+                <field name="employee_id"/>
+                <field name="total_taken" optional="show"/>
+                <field name="total_payment" optional="show"/>
+                <field name="balance" optional="show"/>
+                <field name="product_total_value" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+</odoo>

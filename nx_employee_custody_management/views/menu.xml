@@ -1,0 +1,14 @@
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_custody_root"
+              name="Custody Management"
+              web_icon="nx_employee_custody_management,static/description/icon.png"
+              sequence="10"/>
+
+    <!-- Submenu for Custody Requests -->
+    <menuitem id="menu_custody_request"
+              name="Custody Requests"
+              parent="menu_custody_root"
+              action="action_custody_request"
+              sequence="1"/>
+</odoo>

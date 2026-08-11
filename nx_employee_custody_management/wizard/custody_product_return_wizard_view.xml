@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_custody_product_return_wizard" model="ir.ui.view">
+        <field name="name">custody.product.return.wizard.form</field>
+        <field name="model">custody.product.return.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Return Product Custody">
+                <field name="custody_id" invisible="1"/>
+                <field name="company_currency_id" invisible="1"/>
+                <div class="alert alert-info" role="alert">
+                    Products still valid (not expired) will be charged back to the
+                    employee as a <strong>money deduction</strong>. Expired products
+                    are returned with no financial impact.
+                </div>
+                <group>
+                    <field name="date"/>
+                </group>
+                <field name="line_ids">
+                    <list editable="bottom" create="0" delete="0">
+                        <field name="product_line_id" column_invisible="1"/>
+                        <field name="company_currency_id" column_invisible="1"/>
+                        <field name="to_return" widget="boolean_toggle"/>
+                        <field name="product_id" readonly="1"/>
+                        <field name="lot_id" readonly="1"/>
+                        <field name="expiry_date" readonly="1"/>
+                        <field name="is_expired" column_invisible="1"/>
+                        <field name="remaining_period" readonly="1"
+                               decoration-success="not is_expired"
+                               decoration-danger="is_expired"/>
+                        <field name="unit_cost" readonly="1"/>
+                        <field name="return_qty"/>
+                        <field name="line_deduction"
+                               readonly="not to_return or is_expired"
+                               decoration-danger="line_deduction &gt; 0"/>
+                    </list>
+                </field>
+                <group class="oe_subtotal_footer">
+                    <field name="deduction_total"/>
+                </group>
+                <footer>
+                    <button name="action_confirm_return"
+                            string="Confirm Return"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

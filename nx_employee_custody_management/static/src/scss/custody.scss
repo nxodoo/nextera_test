@@ -1,0 +1,46 @@
+// ============================================================
+//  Employee Custody Management – colour accents
+// ============================================================
+
+// Custody type badges on the form title
+.o_custody_type_badge {
+    margin-top: 4px;
+
+    .badge {
+        font-size: 12px;
+        padding: 5px 10px;
+        border-radius: 12px;
+        font-weight: 600;
+    }
+
+    .o_custody_badge_money {
+        background-color: #E6F4EA;
+        color: #1E7E34;
+        border: 1px solid #A3D9B1;
+    }
+
+    .o_custody_badge_product {
+        background-color: #F3EAFB;
+        color: #6B2FA0;
+        border: 1px solid #D3B6EC;
+    }
+}
+
+// Product custody lines – soft purple header, matching the mockup
+.o_custody_product_lines {
+    thead th {
+        background-color: #F7F2FC !important;
+        color: #4A235A;
+    }
+
+    .o_data_row:hover {
+        background-color: #FBF7FE;
+    }
+}
+
+// Create-wizard radio buttons rendered as selectable cards
+.o_custody_create_wizard {
+    .o_radio_item {
+        margin-right: 1rem;
+    }
+}

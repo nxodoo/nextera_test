@@ -1,0 +1,57 @@
+<odoo>
+    <!-- =========================================================
+         Inherited View: Res Config Settings
+         Purpose: Add Custody Management Settings in General Settings
+         ========================================================= -->
+    <record id="res_config_settings_view_form_inherit_custody" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.custody</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- =====================================================
+                 Add Custody Management block inside General Settings
+                 ===================================================== -->
+            <xpath expr="//form" position="inside">
+                <app string="Custody"
+                     name="nx_employee_custody_management"
+                     data-string="Custody"
+                     groups="account.group_account_manager">
+
+                    <block title="Custody Management Settings"
+                           id="custody_management_setting_container">
+
+                        <!-- =======================
+                             Custody Journal
+                             ======================= -->
+                        <setting string="Permanent Custody Journal"
+                                 help="Select the default journal for permanent employee custody requests.">
+                            <field name="custody_journal_permanent_id"/>
+                        </setting>
+
+                        <setting string="Temporary Custody Journal"
+                                 help="Select the default journal for temporary employee custody requests.">
+                            <field name="custody_journal_temporary_id"/>
+                        </setting>
+
+                        <setting string="Product Custody Journal"
+                                 help="Journal used to post product custody deduction entries.">
+                            <field name="custody_product_journal_id"/>
+                        </setting>
+
+                        <setting string="Product Custody Account"
+                                 help="Asset account holding the value of products under employee custody.">
+                            <field name="custody_product_account_id"/>
+                        </setting>
+
+                        <setting string="Custody Deduction Account"
+                                 help="Account charged when a still-valid product custody is returned (deduction).">
+                            <field name="custody_deduction_account_id"/>
+                        </setting>
+
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>
