@@ -4,12 +4,19 @@ import { Component, onWillStart, onWillUnmount, useEffect, useState, useRef } fr
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { loadBundle } from "@web/core/assets";
-
-const GREENS = ["#1A5C3A", "#2D6A4F", "#40916C", "#52B788", "#74C69D", "#95D5B2", "#B7E4C7", "#D8F3DC"];
-const C_SUCCESS = "#22C55E";
-const C_WARN = "#F59E0B";
-const C_DANGER = "#EF4444";
-const C_INFO = "#3B82F6";
+import {
+    areaGradient,
+    barValueLabels,
+    baseOptions,
+    categoryAxis,
+    entryAnimation,
+    prefersReducedMotion,
+    readTokens,
+    shortLabel,
+    tooltipStyle,
+    valueAxis,
+    withAlpha,
+} from "./chart_theme";
 
 export class HrAnalyticsDashboard extends Component {
     static template = "nx_hr_analytics_dashboard.HrAnalyticsDashboard";
@@ -37,7 +44,13 @@ export class HrAnalyticsDashboard extends Component {
             insuranceLoading: false,
             insSearch: "",
             insFilter: "all",
+            // Per-chart "show the numbers instead" toggles (table-view twin).
+            tableView: {},
         });
+
+        // Root ref — the design tokens are declared on it, so it is the
+        // reliable place to resolve them from even when a canvas is hidden.
+        this.rootEl = useRef("root");
 
         // Canvas refs
         this.deptChart = useRef("deptChart");
@@ -49,6 +62,12 @@ export class HrAnalyticsDashboard extends Component {
         this.missingTypeChart = useRef("missingTypeChart");
         this.insStatusChart = useRef("insStatusChart");
         this.insTrendChart = useRef("insTrendChart");
+        // New per-tab charts
+        this.payTaxDeptChart = useRef("payTaxDeptChart");
+        this.payGrossDeptChart = useRef("payGrossDeptChart");
+        this.docDistChart = useRef("docDistChart");
+        this.docMissingDeptChart = useRef("docMissingDeptChart");
+        this.insUninsuredChart = useRef("insUninsuredChart");
 
         onWillStart(async () => {
             await loadBundle("web.chartjs_lib");
@@ -65,6 +84,8 @@ export class HrAnalyticsDashboard extends Component {
                 this.state.data,
                 this.state.documents,
                 this.state.insurance,
+                // Re-create charts when a card flips back from table view.
+                JSON.stringify(this.state.tableView),
             ],
         );
         onWillUnmount(() => this.destroyCharts());
@@ -297,15 +318,259 @@ export class HrAnalyticsDashboard extends Component {
         this._charts[key] = new window.Chart(ref.el, config);
     }
 
-    get _gridColor() {
-        return "rgba(0,0,0,0.06)";
+    /** Resolved colour tokens, read from CSS so light/dark live in one place. */
+    _tokens(ref) {
+        return readTokens(ref?.el || this.rootEl?.el || document.documentElement);
     }
-    get _baseOpts() {
+
+    // ── Table-view twin ───────────────────────────────────────────────────
+    toggleTableView(key) {
+        this.state.tableView[key] = !this.state.tableView[key];
+    }
+    isTableView(key) {
+        return !!this.state.tableView[key];
+    }
+
+    /** Rows for a chart's table twin, as [{label, value, pct}]. */
+    tableRows(items) {
+        const rows = items || [];
+        const total = rows.reduce((s, r) => s + (r.value || 0), 0);
+        return rows.map((r) => ({
+            label: r.label,
+            value: r.value || 0,
+            pct: total ? Math.round(((r.value || 0) / total) * 100) : 0,
+        }));
+    }
+
+    /**
+     * Horizontal bars need vertical room per row, otherwise the labels get
+     * squeezed. Grow the container with the number of bars instead of forcing
+     * a fixed height that crops the axis band.
+     */
+    barBoxHeight(count, { row = 38, min = 132, pad = 28 } = {}) {
+        return Math.max(min, (count || 0) * row + pad);
+    }
+
+    // ── Donut hero numbers (the value the donut is really about) ───────────
+    _pct(part, total) {
+        return total ? Math.round((part / total) * 100) : 0;
+    }
+    get insuranceHero() {
+        const s = this.state.data?.social_insurance;
+        if (!s) {
+            return null;
+        }
+        const total = (s.insured || 0) + (s.not_insured || 0);
+        return { value: this._pct(s.insured, total), caption: "insured" };
+    }
+    get complianceHero() {
+        const c = this.state.data?.document_compliance;
+        if (!c) {
+            return null;
+        }
+        const total = (c.complete || 0) + (c.incomplete || 0) + (c.expired || 0);
+        return { value: this._pct(c.complete, total), caption: "complete" };
+    }
+    get docComplianceHero() {
+        const c = this.state.documents?.compliance;
+        if (!c) {
+            return null;
+        }
+        const total = (c.complete || 0) + (c.incomplete || 0) + (c.expired || 0);
+        return { value: this._pct(c.complete, total), caption: "complete" };
+    }
+    get insStatusHero() {
+        const s = this.state.insurance?.status;
+        if (!s) {
+            return null;
+        }
+        const total = (s.insured || 0) + (s.not_insured || 0);
+        return { value: this._pct(s.insured, total), caption: "insured" };
+    }
+
+    /**
+     * Shared doughnut config. Zero-value segments are dropped so the ring
+     * never reads as a single solid colour, and a 2px surface gap separates
+     * the remaining segments instead of a drawn border.
+     */
+    _donutConfig(ref, entries) {
+        const t = this._tokens(ref);
+        const live = (entries || []).filter((e) => (e.value || 0) > 0);
         return {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            animation: { duration: 700, easing: "easeOutQuart" },
+            type: "doughnut",
+            data: {
+                labels: live.map((e) => e.label),
+                datasets: [{
+                    data: live.map((e) => e.value),
+                    backgroundColor: live.map((e) => e.color),
+                    // 2px surface-coloured gap between segments (spacer rule).
+                    borderColor: t.surface,
+                    borderWidth: 2,
+                    hoverBorderColor: t.surface,
+                    hoverOffset: 6,
+                    borderRadius: 4,
+                }],
+            },
+            options: {
+                ...baseOptions(t),
+                cutout: "72%",
+                animation: prefersReducedMotion()
+                    ? { duration: 0 }
+                    : { animateRotate: true, animateScale: true, duration: 850, easing: "easeOutQuart" },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: tooltipStyle(t, {
+                        callbacks: {
+                            label: (c) => {
+                                const total = c.dataset.data.reduce((s, v) => s + v, 0);
+                                const pct = total ? Math.round((c.raw / total) * 100) : 0;
+                                return ` ${c.label}: ${this.fmt(c.raw)} (${pct}%)`;
+                            },
+                        },
+                    }),
+                },
+            },
+        };
+    }
+
+    /** Shared horizontal-bar config for a single-hue series. */
+    _hBarConfig(ref, items, { color, onClick, stagger = 45 } = {}) {
+        const t = this._tokens(ref);
+        const hue = color || t.series;
+        return {
+            type: "bar",
+            data: {
+                labels: items.map((r) => shortLabel(r.label)),
+                datasets: [{
+                    data: items.map((r) => r.value),
+                    // One series → one colour. Length already encodes magnitude.
+                    backgroundColor: withAlpha(hue, 0.88),
+                    hoverBackgroundColor: hue,
+                    borderRadius: 4,
+                    borderSkipped: false,
+                    maxBarThickness: 22,
+                }],
+            },
+            options: {
+                ...baseOptions(t),
+                indexAxis: "y",
+                animation: entryAnimation({ stagger }),
+                layout: { padding: { right: 44 } },
+                onClick,
+                onHover: (evt, els) => {
+                    const target = evt?.native?.target;
+                    if (onClick && target) {
+                        target.style.cursor = els.length ? "pointer" : "default";
+                    }
+                },
+                scales: {
+                    x: {
+                        ...valueAxis(t, { ticks: { display: false } }),
+                        grid: { display: false },
+                    },
+                    y: categoryAxis(t, {
+                        ticks: { color: t.text, font: { size: 12 }, padding: 6 },
+                    }),
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: tooltipStyle(t, {
+                        callbacks: {
+                            // Tooltip shows the FULL name; the axis shows the leaf.
+                            title: (c) => items[c[0].dataIndex]?.label ?? "",
+                            label: (c) => ` ${this.fmt(c.raw)}`,
+                        },
+                    }),
+                    nxBarValueLabels: { horizontal: true, color: t.text, format: (v) => this.fmt(v) },
+                },
+            },
+            plugins: [barValueLabels],
+        };
+    }
+
+    /**
+     * Vertical bars — used for ordered bands (e.g. completeness 0→100%),
+     * where left-to-right progression is part of the meaning. Short labels
+     * only, so nothing needs rotating.
+     */
+    _vBarConfig(ref, items, { color, stagger = 55 } = {}) {
+        const t = this._tokens(ref);
+        const hue = color || t.series;
+        return {
+            type: "bar",
+            data: {
+                labels: items.map((r) => r.label),
+                datasets: [{
+                    data: items.map((r) => r.value),
+                    backgroundColor: withAlpha(hue, 0.88),
+                    hoverBackgroundColor: hue,
+                    borderRadius: 4,
+                    borderSkipped: false,
+                    maxBarThickness: 54,
+                }],
+            },
+            options: {
+                ...baseOptions(t),
+                animation: entryAnimation({ stagger }),
+                layout: { padding: { top: 22 } },
+                scales: {
+                    y: { ...valueAxis(t, { ticks: { display: false } }), grid: { display: false } },
+                    x: categoryAxis(t, { ticks: { color: t.text, font: { size: 12 } } }),
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: tooltipStyle(t, {
+                        callbacks: { label: (c) => ` ${this.fmt(c.raw)} employees` },
+                    }),
+                    nxBarValueLabels: { horizontal: false, color: t.text, format: (v) => this.fmt(v) },
+                },
+            },
+            plugins: [barValueLabels],
+        };
+    }
+
+    /** Shared area-line config with a gradient fill. */
+    _areaConfig(ref, trend, { color, yOpts = {} } = {}) {
+        const t = this._tokens(ref);
+        const hue = color || t.series;
+        return {
+            type: "line",
+            data: {
+                labels: trend.labels,
+                datasets: [{
+                    data: trend.values,
+                    borderColor: hue,
+                    backgroundColor: (c) => areaGradient(c.chart.ctx, c.chart.chartArea, hue),
+                    fill: true,
+                    // Monotone keeps the curve inside the data range — a plain
+                    // tension spline can dip below zero on a rate that cannot
+                    // be negative, inventing values that aren't in the data.
+                    cubicInterpolationMode: "monotone",
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 5,
+                    pointBackgroundColor: hue,
+                    pointBorderColor: t.surface,
+                    pointBorderWidth: 2,
+                    // Generous hit target — no pinpoint hovering.
+                    pointHitRadius: 24,
+                }],
+            },
+            options: {
+                ...baseOptions(t),
+                // Crosshair-style hover: nearest x, no need to hit the point.
+                interaction: { mode: "index", intersect: false },
+                scales: {
+                    y: valueAxis(t, yOpts),
+                    x: categoryAxis(t),
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: tooltipStyle(t, {
+                        callbacks: { label: (c) => ` ${this.fmt(c.raw)}` },
+                    }),
+                },
+            },
         };
     }
 
@@ -320,6 +585,25 @@ export class HrAnalyticsDashboard extends Component {
             this._renderDocumentCharts();
         } else if (tab === "insurance") {
             this._renderInsuranceCharts();
+        } else if (tab === "payroll") {
+            this._renderPayrollCharts();
+        }
+    }
+
+    _renderPayrollCharts() {
+        if (!this.state.payroll) {
+            return;
+        }
+        const t = this._tokens(this.payTaxDeptChart);
+        const byTax = this.payTaxByDept;
+        if (byTax.length && !this.isTableView("payTaxDept")) {
+            this._make(this.payTaxDeptChart, "payTaxDept",
+                this._hBarConfig(this.payTaxDeptChart, byTax, { color: t.critical }));
+        }
+        const byGross = this.payGrossByDept;
+        if (byGross.length && !this.isTableView("payGrossDept")) {
+            this._make(this.payGrossDeptChart, "payGrossDept",
+                this._hBarConfig(this.payGrossDeptChart, byGross, { color: t.series }));
         }
     }
 
@@ -328,131 +612,60 @@ export class HrAnalyticsDashboard extends Component {
         if (!data) {
             return;
         }
-        const gridColor = this._gridColor;
-        const baseOpts = this._baseOpts;
+        const t = this._tokens(this.deptChart);
 
-        // Headcount by Department — vertical bar
+        // Headcount by Department — horizontal bars. Vertical bars forced the
+        // long department paths into colliding 45° labels; one row per
+        // department gives each name a horizontal line of its own.
         const dept = data.headcount_by_department || [];
-        this._make(this.deptChart, "dept", {
-            type: "bar",
-            data: {
-                labels: dept.map((d) => d.label),
-                datasets: [{
-                    data: dept.map((d) => d.value),
-                    backgroundColor: dept.map((_, i) => GREENS[i % GREENS.length]),
-                    borderRadius: 6,
-                    maxBarThickness: 46,
-                }],
-            },
-            options: {
-                ...baseOpts,
+        if (!this.isTableView("dept")) {
+            this._make(this.deptChart, "dept", this._hBarConfig(this.deptChart, dept, {
                 onClick: (evt, els) => {
                     if (els.length) {
                         const d = dept[els[0].index];
                         this.openEmployeesFiltered("department_id", d && d.id, d && d.label);
                     }
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: { stepSize: 1, precision: 0 },
-                        grid: { color: gridColor },
-                        border: { display: false },
-                    },
-                    x: { grid: { display: false }, border: { display: false } },
-                },
-            },
-        });
+            }));
+        }
 
         // Social Insurance — doughnut
         const ins = data.social_insurance;
-        if (ins) {
-            this._make(this.insuranceChart, "insurance", {
-                type: "doughnut",
-                data: {
-                    labels: ["Insured", "Not Insured"],
-                    datasets: [{
-                        data: [ins.insured, ins.not_insured],
-                        backgroundColor: [C_SUCCESS, C_DANGER],
-                        borderWidth: 0,
-                    }],
-                },
-                options: { ...baseOpts, cutout: "68%" },
-            });
+        if (ins && !this.isTableView("insurance")) {
+            this._make(this.insuranceChart, "insurance",
+                this._donutConfig(this.insuranceChart, [
+                    { label: "Insured", value: ins.insured, color: t.good },
+                    { label: "Not Insured", value: ins.not_insured, color: t.critical },
+                ]));
         }
 
         // Document Compliance — doughnut
         const comp = data.document_compliance;
-        if (comp) {
-            this._make(this.complianceChart, "compliance", {
-                type: "doughnut",
-                data: {
-                    labels: ["Complete", "Incomplete", "Expired"],
-                    datasets: [{
-                        data: [comp.complete, comp.incomplete, comp.expired],
-                        backgroundColor: [C_SUCCESS, C_WARN, C_DANGER],
-                        borderWidth: 0,
-                    }],
-                },
-                options: { ...baseOpts, cutout: "68%" },
-            });
+        if (comp && !this.isTableView("compliance")) {
+            this._make(this.complianceChart, "compliance",
+                this._donutConfig(this.complianceChart, [
+                    { label: "Complete", value: comp.complete, color: t.good },
+                    { label: "Incomplete", value: comp.incomplete, color: t.warning },
+                    { label: "Expired", value: comp.expired, color: t.critical },
+                ]));
         }
 
-        // Headcount Trend — line
+        // Headcount Trend — gradient area line
         const trend = data.headcount_trend || { labels: [], values: [] };
-        this._make(this.trendChart, "trend", {
-            type: "line",
-            data: {
-                labels: trend.labels,
-                datasets: [{
-                    data: trend.values,
-                    borderColor: "#1A5C3A",
-                    backgroundColor: "rgba(26,92,58,0.10)",
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 2,
-                    pointHoverRadius: 5,
-                    borderWidth: 2,
-                }],
-            },
-            options: {
-                ...baseOpts,
-                scales: {
-                    y: {
-                        ticks: { precision: 0 },
-                        grid: { color: gridColor },
-                        border: { display: false },
-                    },
-                    x: { grid: { display: false }, border: { display: false } },
-                },
-            },
-        });
+        if (!this.isTableView("trend")) {
+            this._make(this.trendChart, "trend",
+                this._areaConfig(this.trendChart, trend, { color: t.series }));
+        }
 
-        // Turnover — line
+        // Turnover — gradient area line
         const turn = data.turnover_trend || { labels: [], values: [] };
-        this._make(this.turnoverChart, "turnover", {
-            type: "line",
-            data: {
-                labels: turn.labels,
-                datasets: [{
-                    data: turn.values,
-                    borderColor: C_WARN,
-                    backgroundColor: "rgba(245,158,11,0.10)",
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 2,
-                    pointHoverRadius: 5,
-                    borderWidth: 2,
-                }],
-            },
-            options: {
-                ...baseOpts,
-                scales: {
-                    y: { beginAtZero: true, grid: { color: gridColor }, border: { display: false } },
-                    x: { grid: { display: false }, border: { display: false } },
-                },
-            },
-        });
+        if (!this.isTableView("turnover")) {
+            this._make(this.turnoverChart, "turnover",
+                this._areaConfig(this.turnoverChart, turn, {
+                    color: t.warning,
+                    yOpts: { ticks: { callback: (v) => `${v}%` } },
+                }));
+        }
     }
 
     _renderDocumentCharts() {
@@ -460,46 +673,33 @@ export class HrAnalyticsDashboard extends Component {
         if (!d) {
             return;
         }
+        const t = this._tokens(this.docComplianceChart);
         const comp = d.compliance || {};
-        this._make(this.docComplianceChart, "docCompliance", {
-            type: "doughnut",
-            data: {
-                labels: ["Complete", "Incomplete", "Expired"],
-                datasets: [{
-                    data: [comp.complete, comp.incomplete, comp.expired],
-                    backgroundColor: [C_SUCCESS, C_WARN, C_DANGER],
-                    borderWidth: 0,
-                }],
-            },
-            options: { ...this._baseOpts, cutout: "68%" },
-        });
+        if (!this.isTableView("docCompliance")) {
+            this._make(this.docComplianceChart, "docCompliance",
+                this._donutConfig(this.docComplianceChart, [
+                    { label: "Complete", value: comp.complete, color: t.good },
+                    { label: "Incomplete", value: comp.incomplete, color: t.warning },
+                    { label: "Expired", value: comp.expired, color: t.critical },
+                ]));
+        }
 
         const byType = d.missing_by_type || [];
-        this._make(this.missingTypeChart, "missingType", {
-            type: "bar",
-            data: {
-                labels: byType.map((r) => r.label),
-                datasets: [{
-                    data: byType.map((r) => r.value),
-                    backgroundColor: C_WARN,
-                    borderRadius: 6,
-                    maxBarThickness: 22,
-                }],
-            },
-            options: {
-                ...this._baseOpts,
-                indexAxis: "y",
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        ticks: { stepSize: 1, precision: 0 },
-                        grid: { color: this._gridColor },
-                        border: { display: false },
-                    },
-                    y: { grid: { display: false }, border: { display: false } },
-                },
-            },
-        });
+        if (!this.isTableView("missingType")) {
+            this._make(this.missingTypeChart, "missingType",
+                this._hBarConfig(this.missingTypeChart, byType, { color: t.warning }));
+        }
+
+        // How the workforce is spread across completeness bands — turns one
+        // aggregate percentage into a shape you can actually act on.
+        this._make(this.docDistChart, "docDist",
+            this._vBarConfig(this.docDistChart, this.docDistribution, { color: t.series }));
+
+        const byDept = this.docMissingByDept;
+        if (byDept.length && !this.isTableView("docMissingDept")) {
+            this._make(this.docMissingDeptChart, "docMissingDept",
+                this._hBarConfig(this.docMissingDeptChart, byDept, { color: t.critical }));
+        }
     }
 
     _renderInsuranceCharts() {
@@ -507,46 +707,218 @@ export class HrAnalyticsDashboard extends Component {
         if (!d) {
             return;
         }
+        const t = this._tokens(this.insStatusChart);
         const s = d.status || {};
-        this._make(this.insStatusChart, "insStatus", {
-            type: "doughnut",
-            data: {
-                labels: ["Insured", "Not Insured"],
-                datasets: [{
-                    data: [s.insured, s.not_insured],
-                    backgroundColor: [C_SUCCESS, C_DANGER],
-                    borderWidth: 0,
-                }],
-            },
-            options: { ...this._baseOpts, cutout: "68%" },
-        });
+        if (!this.isTableView("insStatus")) {
+            this._make(this.insStatusChart, "insStatus",
+                this._donutConfig(this.insStatusChart, [
+                    { label: "Insured", value: s.insured, color: t.good },
+                    { label: "Not Insured", value: s.not_insured, color: t.critical },
+                ]));
+        }
 
         const byDept = d.by_department || [];
-        this._make(this.insTrendChart, "insByDept", {
-            type: "bar",
-            data: {
-                labels: byDept.map((r) => r.label),
-                datasets: [{
-                    data: byDept.map((r) => r.value),
-                    backgroundColor: byDept.map((_, i) => GREENS[i % GREENS.length]),
-                    borderRadius: 6,
-                    maxBarThickness: 22,
-                }],
-            },
-            options: {
-                ...this._baseOpts,
-                indexAxis: "y",
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        ticks: { stepSize: 1, precision: 0 },
-                        grid: { color: this._gridColor },
-                        border: { display: false },
-                    },
-                    y: { grid: { display: false }, border: { display: false } },
-                },
-            },
-        });
+        if (!this.isTableView("insByDept")) {
+            this._make(this.insTrendChart, "insByDept",
+                this._hBarConfig(this.insTrendChart, byDept, { color: t.series }));
+        }
+
+        // The actionable cut: who is still uncovered, and where.
+        const uninsured = this.insUninsuredByDept;
+        if (uninsured.length && !this.isTableView("insUninsured")) {
+            this._make(this.insUninsuredChart, "insUninsured",
+                this._hBarConfig(this.insUninsuredChart, uninsured, { color: t.critical }));
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    //  Derived views — everything below is computed from the rows the service
+    //  already returns, so no extra RPC and no backend change is needed.
+    // ══════════════════════════════════════════════════════════════════════
+
+    /** Group any row list by a key, summing a numeric field. Sorted desc. */
+    _groupSum(rows, keyField, valueField, { limit = 8 } = {}) {
+        const acc = new Map();
+        for (const r of rows || []) {
+            const key = r[keyField] || "Undefined";
+            acc.set(key, (acc.get(key) || 0) + (Number(r[valueField]) || 0));
+        }
+        const out = [...acc.entries()]
+            .map(([label, value]) => ({ label, value: Math.round(value) }))
+            .filter((r) => r.value > 0)
+            .sort((a, b) => b.value - a.value);
+        if (out.length <= limit) {
+            return out;
+        }
+        // Never silently truncate — the tail is folded into an explicit "Other".
+        const head = out.slice(0, limit - 1);
+        const rest = out.slice(limit - 1).reduce((s, r) => s + r.value, 0);
+        return [...head, { label: `Other (${out.length - limit + 1})`, value: rest }];
+    }
+
+    _pctOf(part, total) {
+        return total ? Math.round((part / total) * 1000) / 10 : 0;
+    }
+
+    // ── Payroll Tax ───────────────────────────────────────────────────────
+    /**
+     * Where the gross wage actually goes. Net + tax + insurance + other
+     * deductions reconstitute gross, so this is a true part-to-whole.
+     */
+    get payComposition() {
+        const t = this.state.payroll?.totals;
+        if (!t || !t.gross) {
+            return null;
+        }
+        const segs = [
+            { key: "net", label: "Net Salary", value: t.net || 0, cls: "o_cat1" },
+            { key: "tax", label: "Tax Due", value: t.tax_due || 0, cls: "o_cat2" },
+            { key: "ins", label: "Insurance", value: t.insurance || 0, cls: "o_cat3" },
+            { key: "ded", label: "Deductions", value: t.deductions || 0, cls: "o_cat4" },
+        ].filter((s) => s.value > 0);
+        const sum = segs.reduce((s, x) => s + x.value, 0) || 1;
+        return {
+            gross: t.gross,
+            segments: segs.map((s) => ({ ...s, pct: this._pctOf(s.value, sum) })),
+        };
+    }
+    get payTaxByDept() {
+        return this._groupSum(this.state.payroll?.rows, "department", "tax_due");
+    }
+    get payGrossByDept() {
+        return this._groupSum(this.state.payroll?.rows, "department", "gross");
+    }
+    get payStats() {
+        const p = this.state.payroll;
+        if (!p) {
+            return [];
+        }
+        const t = p.totals;
+        const cur = p.currency;
+        return [
+            { key: "emp", label: "Employees", value: this.fmt(t.employees),
+              icon: "fa-users", accent: "#1A5C3A" },
+            { key: "gross", label: "Total Wages", value: this.fmt(t.gross), unit: cur,
+              icon: "fa-money", accent: "#2a78d6" },
+            { key: "exempt", label: "Exemptions", value: this.fmt(t.exemptions), unit: cur,
+              icon: "fa-scissors", accent: "#1baf7a",
+              meter: this._pctOf(t.exemptions, t.gross), foot: "of gross wages" },
+            { key: "base", label: "Taxable Base", value: this.fmt(t.taxable_base), unit: cur,
+              icon: "fa-balance-scale", accent: "#eda100",
+              meter: this._pctOf(t.taxable_base, t.gross), foot: "of gross wages" },
+            { key: "tax", label: "Total Tax Due", value: this.fmt(t.tax_due), unit: cur,
+              icon: "fa-university", accent: "#d03b3b",
+              meter: this._pctOf(t.tax_due, t.gross), foot: "effective rate" },
+            { key: "net", label: "Net Payout", value: this.fmt(t.net), unit: cur,
+              icon: "fa-check-circle", accent: "#12855a",
+              meter: this._pctOf(t.net, t.gross), foot: "of gross wages" },
+        ];
+    }
+
+    // ── Documents ─────────────────────────────────────────────────────────
+    /** How many employees sit in each completeness band. */
+    get docDistribution() {
+        const rows = this.state.documents?.rows || [];
+        const bands = [
+            { label: "0–25%", min: 0, max: 25 },
+            { label: "26–50%", min: 26, max: 50 },
+            { label: "51–75%", min: 51, max: 75 },
+            { label: "76–99%", min: 76, max: 99 },
+            { label: "100%", min: 100, max: 100 },
+        ];
+        return bands.map((b) => ({
+            label: b.label,
+            value: rows.filter((r) => (r.pct || 0) >= b.min && (r.pct || 0) <= b.max).length,
+        }));
+    }
+    get docMissingByDept() {
+        return this._groupSum(this.state.documents?.rows, "department", "missing");
+    }
+    get docStats() {
+        const k = this.state.documents?.kpis;
+        if (!k) {
+            return [];
+        }
+        const total = k.total_employees || 0;
+        return [
+            { key: "total", label: "Total Employees", value: this.fmt(total),
+              icon: "fa-users", accent: "#1A5C3A" },
+            { key: "complete", label: "Complete Files", value: this.fmt(k.complete_files),
+              icon: "fa-check-circle", accent: "#12855a",
+              meter: this._pctOf(k.complete_files, total), foot: "of employees" },
+            { key: "incomplete", label: "Incomplete Files", value: this.fmt(k.incomplete_files),
+              icon: "fa-exclamation-circle", accent: "#eda100",
+              meter: this._pctOf(k.incomplete_files, total), foot: "of employees" },
+            { key: "missing", label: "Missing Documents", value: this.fmt(k.missing_documents),
+              icon: "fa-file-o", accent: "#eda100" },
+            { key: "expired", label: "Expired Documents", value: this.fmt(k.expired_documents),
+              icon: "fa-times-circle", accent: "#d03b3b" },
+            { key: "soon", label: "Expiring Soon", value: this.fmt(k.expiring_soon),
+              icon: "fa-clock-o", accent: "#eb6834" },
+        ];
+    }
+
+    // ── Insurance ─────────────────────────────────────────────────────────
+    /**
+     * Insured wage base vs. total basic wage, by department — shows how much
+     * of payroll the social-insurance reference actually covers.
+     */
+    get insWageCoverage() {
+        const rows = (this.state.insurance?.rows || []).filter((r) => r.status === "insured");
+        const byDept = new Map();
+        for (const r of rows) {
+            const k = r.department || "Undefined";
+            const cur = byDept.get(k) || { wage: 0, ref: 0 };
+            cur.wage += Number(r.basic_wage) || 0;
+            cur.ref += Number(r.reference_amount) || 0;
+            byDept.set(k, cur);
+        }
+        return [...byDept.entries()]
+            .map(([label, v]) => ({
+                label, wage: Math.round(v.wage), ref: Math.round(v.ref),
+                pct: this._pctOf(v.ref, v.wage),
+            }))
+            .filter((r) => r.wage > 0)
+            .sort((a, b) => b.wage - a.wage)
+            .slice(0, 8);
+    }
+    get insUninsuredByDept() {
+        const rows = (this.state.insurance?.rows || [])
+            .filter((r) => r.status !== "insured")
+            .map((r) => ({ department: r.department, n: 1 }));
+        return this._groupSum(rows, "department", "n");
+    }
+    get insStats() {
+        const k = this.state.insurance?.kpis;
+        if (!k) {
+            return [];
+        }
+        const total = k.total_employees || 0;
+        return [
+            { key: "total", label: "Total Employees", value: this.fmt(total),
+              icon: "fa-users", accent: "#1A5C3A" },
+            { key: "insured", label: "Insured", value: this.fmt(k.insured),
+              icon: "fa-shield", accent: "#12855a",
+              meter: this._pctOf(k.insured, total), foot: "of employees" },
+            { key: "not", label: "Not Insured", value: this.fmt(k.not_insured),
+              icon: "fa-exclamation-triangle", accent: "#d03b3b",
+              meter: this._pctOf(k.not_insured, total), foot: "of employees" },
+            { key: "coverage", label: "Coverage", value: `${k.coverage}`, unit: "%",
+              icon: "fa-pie-chart", accent: "#2a78d6", meter: Number(k.coverage) || 0 },
+            { key: "ref", label: "Total Reference", value: this.fmt(k.total_reference),
+              unit: this.state.insurance.currency, icon: "fa-money", accent: "#1baf7a" },
+            { key: "nocontract", label: "No Contract", value: this.fmt(k.no_contract),
+              icon: "fa-file-text-o", accent: "#eda100" },
+        ];
+    }
+
+    /** Colour class for a percentage cell's mini-bar. */
+    pctClass(pct) {
+        const p = Number(pct) || 0;
+        if (p >= 100) {
+            return "o_ok";
+        }
+        return p >= 50 ? "o_warn" : "o_bad";
     }
 
     // ── Alerts / actions ──────────────────────────────────────────────────

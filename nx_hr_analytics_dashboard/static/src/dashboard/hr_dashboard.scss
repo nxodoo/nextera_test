@@ -11,9 +11,36 @@
     --nx-shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 4px 16px rgba(16, 24, 40, .05);
     --nx-shadow-hover: 0 8px 28px rgba(16, 24, 40, .10);
 
+    // ── Chart tokens (read back by chart_theme.js) ─────────────────────────
+    // Status triplet validated with the data-viz palette validator:
+    // worst adjacent CVD ΔE 17.3 (protan) in light, 9.1 in dark. The former
+    // #22C55E/#F59E0B/#EF4444 set failed at ΔE 5.7 — green and amber were
+    // indistinguishable to red-green colourblind readers.
+    --nx-chart-surface: #FFFFFF;
+    --nx-chart-grid: rgba(16, 24, 40, .07);
+    --nx-chart-text: #1F2937;
+    --nx-chart-text-muted: #6B7A8D;
+    --nx-chart-tooltip-bg: #111827;
+    --nx-chart-tooltip-text: #FFFFFF;
+    --nx-chart-series: #1A5C3A;
+    --nx-chart-good: #12855a;
+    --nx-chart-warning: #eda100;
+    --nx-chart-critical: #d03b3b;
+    // Categorical slots — for composition (pay breakdown), where the segments
+    // are identities, not states. Validated on the adjacent pairlist:
+    // worst CVD ΔE 9.1 light / 8.4 dark. Never reuse the status colours here.
+    --nx-cat-1: #2a78d6;
+    --nx-cat-2: #eb6834;
+    --nx-cat-3: #1baf7a;
+    --nx-cat-4: #eda100;
+
     position: relative;
     height: 100%;
     width: 100%;
+    // Own the box model rather than inheriting whatever the host page sets —
+    // width:100% plus horizontal padding otherwise overflows the viewport.
+    box-sizing: border-box;
+    *, *::before, *::after { box-sizing: border-box; }
     overflow-y: auto;
     overflow-x: hidden;
     padding: 20px 24px 40px;
@@ -140,7 +167,190 @@
     }
     .o_nx_hr_row > .o_nx_hr_card { flex: 1 1 300px; min-width: 0; }
     .o_nx_hr_row > .o_span2 { flex: 2 1 460px; }
-    .o_nx_hr_chartbox { height: 300px; min-height: 300px; position: relative; }
+    .o_nx_hr_chartbox { height: 264px; min-height: 264px; position: relative; }
+    // Bar cards size themselves to their row count, so the category labels and
+    // the axis band always fit instead of forcing a nested scrollbar.
+    .o_nx_hr_chartbox_auto { min-height: 0; }
+
+    // ── Card head (title + affordances) ───────────────────────────────────
+    .o_nx_hr_cardhead {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 10px; margin-bottom: 14px;
+        h3 { margin: 0; }
+    }
+    .o_nx_hr_iconbtn {
+        flex: 0 0 auto; border: 1px solid var(--nx-border); background: var(--nx-card-bg);
+        color: var(--nx-muted); width: 30px; height: 30px; border-radius: 9px;
+        display: inline-flex; align-items: center; justify-content: center;
+        font-size: 12.5px; cursor: pointer;
+        transition: color .15s ease, border-color .15s ease, background .15s ease, transform .15s ease;
+        &:hover {
+            color: var(--nx-green); border-color: var(--nx-green);
+            background: var(--nx-green-soft); transform: translateY(-1px);
+        }
+        &:focus-visible { outline: 2px solid var(--nx-green); outline-offset: 2px; }
+    }
+
+    // Single-series charts name their series in a chip instead of a legend box.
+    .o_nx_hr_chiplegend {
+        display: inline-flex; align-items: center; gap: 7px;
+        font-size: 12px; font-weight: 600; color: var(--nx-muted);
+        .o_dot { width: 9px; height: 9px; border-radius: 50%; }
+    }
+
+    // Shared status dots — colour comes from the validated tokens, and every
+    // dot always sits beside its text label (never colour alone).
+    .o_dot {
+        &.o_good   { background: var(--nx-chart-good); }
+        &.o_warn   { background: var(--nx-chart-warning); }
+        &.o_crit   { background: var(--nx-chart-critical); }
+        &.o_series { background: var(--nx-chart-series); }
+    }
+
+    // ── Donut hero number ─────────────────────────────────────────────────
+    // Real HTML text (selectable, screen-readable) instead of canvas-painted
+    // text, filling what was an empty hole in the middle of the ring.
+    .o_nx_hr_donut_hero {
+        position: absolute; inset: 0; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 1px;
+        pointer-events: none; text-align: center;
+        animation: nxHrHero .5s .25s ease both;
+        b {
+            font-size: 27px; font-weight: 700; line-height: 1;
+            color: var(--nx-text); font-variant-numeric: proportional-nums;
+        }
+        small { font-size: 10.5px; color: var(--nx-muted); text-transform: uppercase; letter-spacing: .05em; }
+    }
+
+    // ── Chart table twin ──────────────────────────────────────────────────
+    .o_nx_hr_datatable {
+        max-height: 320px; overflow-y: auto;
+        animation: nxHrFade .3s ease both;
+        .o_muted_cell { color: var(--nx-muted); }
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    //  Stat tile — replaces the flat label+number tile on every tab.
+    //  Carries an accent rail, an optional micro-meter, and a caption, so a
+    //  number always arrives with the context that makes it readable.
+    // ══════════════════════════════════════════════════════════════════════
+    .o_nx_stats {
+        display: grid; grid-template-columns: repeat(6, 1fr);
+        gap: 14px; margin-bottom: 16px;
+    }
+    .o_nx_stat {
+        position: relative; overflow: hidden;
+        background: var(--nx-card-bg); border: 1px solid var(--nx-border);
+        border-radius: 14px; box-shadow: var(--nx-shadow);
+        padding: 14px 16px 15px 18px;
+        display: flex; flex-direction: column; gap: 7px;
+        animation: nxHrRise .45s ease both;
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+
+        // Accent rail — the tile's semantic colour, never carrying meaning alone.
+        &::before {
+            content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+            background: var(--accent, var(--nx-green));
+        }
+        &:hover { transform: translateY(-2px); box-shadow: var(--nx-shadow-hover); }
+        &.o_clickable { cursor: pointer; }
+        &.o_clickable:hover { border-color: var(--accent, var(--nx-green)); }
+    }
+    .o_nx_stat_top {
+        display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .o_nx_stat_label {
+        color: var(--nx-muted); font-size: 11px; font-weight: 600;
+        text-transform: uppercase; letter-spacing: .045em; line-height: 1.3;
+    }
+    .o_nx_stat_icon {
+        flex: 0 0 auto; width: 26px; height: 26px; border-radius: 8px;
+        display: flex; align-items: center; justify-content: center; font-size: 12px;
+        color: var(--accent, var(--nx-green));
+        background: color-mix(in srgb, var(--accent, #1A5C3A) 13%, transparent);
+    }
+    .o_nx_stat_value {
+        font-size: 25px; font-weight: 700; line-height: 1.05;
+        // Proportional figures on display-size numbers; tabular only in tables.
+        font-variant-numeric: proportional-nums;
+        .o_unit { font-size: 12px; font-weight: 600; color: var(--nx-muted); margin-left: 4px; }
+    }
+    .o_nx_stat_foot {
+        font-size: 11.5px; color: var(--nx-muted); font-weight: 500;
+        display: flex; align-items: center; gap: 5px;
+        &.o_up { color: #16A34A; } &.o_down { color: #DC2626; }
+    }
+
+    // ── Meter (a share, expressed as a bar + its number) ──────────────────
+    .o_nx_meter {
+        height: 5px; border-radius: 999px; overflow: hidden;
+        background: color-mix(in srgb, var(--nx-muted) 16%, transparent);
+        span {
+            display: block; height: 100%; border-radius: 999px;
+            background: var(--accent, var(--nx-green));
+            transform-origin: left center;
+            animation: nxHrGrow .8s cubic-bezier(.22,.9,.3,1) both;
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    //  Composition bar — one stacked bar answering "where did the money go".
+    //  Built in DOM rather than canvas: real text for a11y, crisp at any DPI,
+    //  and a 2px surface gap between segments instead of drawn borders.
+    // ══════════════════════════════════════════════════════════════════════
+    .o_nx_compo_track {
+        display: flex; gap: 2px; height: 34px; border-radius: 9px;
+        overflow: hidden; margin-bottom: 14px; background: transparent;
+    }
+    .o_nx_compo_seg {
+        position: relative; min-width: 2px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 11.5px; font-weight: 700; color: #fff; white-space: nowrap;
+        transition: filter .15s ease;
+        animation: nxHrGrowX .75s cubic-bezier(.22,.9,.3,1) both;
+        &:first-child { border-radius: 9px 0 0 9px; }
+        &:last-child  { border-radius: 0 9px 9px 0; }
+        &:hover { filter: brightness(1.1); }
+        // Only label a segment when the text genuinely fits inside it.
+        .o_seg_txt { padding: 0 8px; overflow: hidden; text-overflow: ellipsis; }
+    }
+    .o_nx_compo_legend {
+        display: flex; flex-wrap: wrap; gap: 8px 20px;
+        > div {
+            display: flex; align-items: center; gap: 8px; font-size: 12.5px;
+            .o_dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
+            .o_k { color: var(--nx-muted); }
+            .o_v { font-weight: 700; font-variant-numeric: tabular-nums; }
+            .o_p { color: var(--nx-muted); font-size: 11.5px; }
+        }
+    }
+    .o_cat1 { background: var(--nx-cat-1); } .o_cat2 { background: var(--nx-cat-2); }
+    .o_cat3 { background: var(--nx-cat-3); } .o_cat4 { background: var(--nx-cat-4); }
+
+    // ── Inline mini-bar for percentage cells in tables ────────────────────
+    .o_nx_hr_minibar {
+        // min-width keeps the track from collapsing inside a nowrap table cell.
+        display: inline-flex; align-items: center; gap: 8px; width: 100%; min-width: 118px;
+        .o_track {
+            flex: 1; min-width: 46px; height: 5px; border-radius: 999px;
+            background: color-mix(in srgb, var(--nx-muted) 16%, transparent); overflow: hidden;
+        }
+        .o_fill { display: block; height: 100%; border-radius: 999px; transition: width .5s ease; }
+        .o_pct { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; min-width: 34px; text-align: right; }
+        .o_fill.o_ok { background: var(--nx-chart-good); }
+        .o_fill.o_warn { background: var(--nx-chart-warning); }
+        .o_fill.o_bad { background: var(--nx-chart-critical); }
+    }
+
+    // ── Section heading between card groups ───────────────────────────────
+    .o_nx_section {
+        display: flex; align-items: center; gap: 10px; margin: 4px 2px 12px;
+        h4 {
+            margin: 0; font-size: 12px; font-weight: 700; color: var(--nx-muted);
+            text-transform: uppercase; letter-spacing: .06em;
+        }
+        &::after { content: ""; flex: 1; height: 1px; background: var(--nx-border); }
+    }
 
     // ── Branch bar list ───────────────────────────────────────────────────
     .o_nx_hr_barlist { display: flex; flex-direction: column; gap: 8px; }
@@ -270,15 +480,20 @@
     .o_v_warn { color: #D97706; }
     .o_v_danger { color: #DC2626; }
 
-    .o_nx_hr_tablewrap { overflow-x: auto; }
+    .o_nx_hr_tablewrap { overflow-x: auto; max-height: 620px; overflow-y: auto; border-radius: 10px; }
     .o_nx_hr_table {
         width: 100%; border-collapse: collapse; font-size: 13px; white-space: nowrap;
         th {
             text-align: left; color: var(--nx-muted); font-weight: 600;
             padding: 10px 12px; border-bottom: 1px solid var(--nx-border);
+            // Keep the header in view while scanning a long payroll run.
+            position: sticky; top: 0; z-index: 2;
+            background: var(--nx-card-bg);
+            font-size: 11.5px; text-transform: uppercase; letter-spacing: .035em;
         }
-        td { padding: 12px; border-bottom: 1px solid #F1F3F5; }
-        th.o_num, td.o_num { text-align: right; }
+        td { padding: 12px; border-bottom: 1px solid var(--nx-border); }
+        // Vertical alignment of digits matters in a table — here tabular is right.
+        th.o_num, td.o_num { text-align: right; font-variant-numeric: tabular-nums; }
         .o_code { color: var(--nx-green); font-weight: 700; }
         .o_danger { color: #DC2626; }
         .o_ok { color: #16A34A; font-weight: 600; }
@@ -314,15 +529,70 @@
     // ── Responsive ────────────────────────────────────────────────────────
     @media (max-width: 1200px) {
         .o_nx_hr_kpis { grid-template-columns: repeat(3, 1fr); }
-        .o_nx_hr_paytiles { grid-template-columns: repeat(3, 1fr); }
+        .o_nx_hr_paytiles, .o_nx_stats { grid-template-columns: repeat(3, 1fr); }
         .o_nx_hr_row > .o_nx_hr_card,
         .o_nx_hr_row > .o_span2 { flex: 1 1 100%; }
     }
     @media (max-width: 700px) {
         .o_nx_hr_kpis { grid-template-columns: repeat(2, 1fr); }
-        .o_nx_hr_paytiles { grid-template-columns: repeat(2, 1fr); }
+        .o_nx_hr_paytiles, .o_nx_stats { grid-template-columns: repeat(2, 1fr); }
+        .o_nx_compo_legend { gap: 6px 14px; }
     }
+}
+
+// ── Dark mode ─────────────────────────────────────────────────────────────
+// Dark steps are *selected* for the dark surface (validated: CVD ΔE 9.1,
+// all ≥ 3:1 contrast), not an automatic inversion of the light values.
+// Declared for both Odoo's dark class and the OS preference.
+@mixin nx-hr-dark-tokens {
+    --nx-page-bg: #14181D;
+    --nx-card-bg: #1B2027;
+    --nx-border: #2A313A;
+    --nx-text: #E8EBEF;
+    --nx-muted: #98A4B3;
+    --nx-green: #4FBF88;
+    --nx-green-soft: #16302A;
+    --nx-shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 4px 16px rgba(0, 0, 0, .28);
+    --nx-shadow-hover: 0 8px 28px rgba(0, 0, 0, .45);
+
+    --nx-chart-surface: #1B2027;
+    --nx-chart-grid: rgba(255, 255, 255, .09);
+    --nx-chart-text: #E8EBEF;
+    --nx-chart-text-muted: #98A4B3;
+    --nx-chart-tooltip-bg: #0B0E12;
+    --nx-chart-tooltip-text: #FFFFFF;
+    --nx-chart-series: #4FBF88;
+    --nx-chart-good: #1faa72;
+    --nx-chart-warning: #e3a41a;
+    --nx-chart-critical: #e66767;
+    // Dark categorical steps — selected for the dark surface, all ≥ 3:1.
+    --nx-cat-1: #3987e5;
+    --nx-cat-2: #d95926;
+    --nx-cat-3: #199e70;
+    --nx-cat-4: #c98500;
+}
+
+.o_dark_mode .o_nx_hr_dash,
+.o_web_client.o_dark_mode .o_nx_hr_dash { @include nx-hr-dark-tokens; }
+
+@media (prefers-color-scheme: dark) {
+    :root:not(.o_light_mode) .o_nx_hr_dash { @include nx-hr-dark-tokens; }
 }
 
 @keyframes nxHrRise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes nxHrFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes nxHrHero { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: none; } }
+@keyframes nxHrGrow  { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes nxHrGrowX { from { flex-basis: 0; opacity: .3; } to { opacity: 1; } }
+
+// Motion is an enhancement — drop it entirely when the OS asks us to.
+@media (prefers-reduced-motion: reduce) {
+    .o_nx_hr_dash {
+        .o_nx_hr_kpi, .o_nx_hr_card, .o_nx_hr_tile, .o_nx_stat,
+        .o_nx_hr_donut_hero, .o_nx_hr_datatable,
+        .o_nx_meter span, .o_nx_compo_seg { animation: none !important; }
+        .o_nx_hr_kpi:hover, .o_nx_hr_alert:hover,
+        .o_nx_hr_iconbtn:hover, .o_nx_stat:hover { transform: none; }
+        * { transition-duration: .01ms !important; }
+    }
+}

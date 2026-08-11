@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
-from odoo import fields, models
+from odoo import api, models
 
 
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
-    # Restrict the selectable job positions:
-    #   * job positions without a department are always available;
-    #   * job positions tied to a department are only available when that
-    #     department is the one selected on the employee.
-    # Setting the domain at the field level makes it apply in every view,
-    # regardless of which module renders the job_id field.
-    job_id = fields.Many2one(
-        domain="['|', ('department_id', '=', False),"
-               " ('department_id', '=', department_id)]",
-    )
+    # The Job Position now drives the Department instead of restricting the
+    # job list. All job positions stay selectable, and picking one fills in
+    # its department automatically.
+    @api.onchange('job_id')
+    def _onchange_job_id_set_department(self):
+        """Auto-fill the department from the selected job position."""
+        for employee in self:
+            if employee.job_id and employee.job_id.department_id:
+                employee.department_id = employee.job_id.department_id

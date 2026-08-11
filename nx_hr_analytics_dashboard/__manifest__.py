@@ -30,6 +30,7 @@ HR Analytics Dashboard
             "nx_hr_analytics_dashboard/static/src/fields/file_dropzone.xml",
             "nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.scss",
             "nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml",
+            "nx_hr_analytics_dashboard/static/src/dashboard/chart_theme.js",
             "nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js",
         ],
     },
