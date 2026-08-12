@@ -3,7 +3,7 @@ from odoo import models, fields, api, _
 
 
 class CustodyCreateWizard(models.TransientModel):
-    """Popup shown when creating a new custody request (money or product)."""
+    """Popup shown when creating a new custody request (money or asset)."""
 
     _name = "custody.create.wizard"
     _description = "Create Custody Request Wizard"
@@ -11,7 +11,7 @@ class CustodyCreateWizard(models.TransientModel):
     employee_id = fields.Many2one('hr.employee', string="Employee", required=True)
     custody_type = fields.Selection([
         ('money', 'Money Custody'),
-        ('product', 'Product Custody'),
+        ('asset', 'Asset Custody'),
     ], string="Custody Type", default='money', required=True)
     date = fields.Date(string="Request Date", default=fields.Date.context_today, required=True)
     is_temporary = fields.Boolean(string="Temporary Custody")

@@ -18,32 +18,44 @@ class CustodyRequest(models.Model):
     active = fields.Boolean(string="Active",default=True)
     custody_type = fields.Selection([
         ('money', 'Money Custody'),
-        ('product', 'Product Custody'),
+        ('asset', 'Asset Custody'),
     ], string="Custody Type", default='money', required=True, tracking=True)
     name = fields.Char(string="Sequence", required=True, copy=False, readonly=True, default="New")
     name_rec = fields.Char(string="Custody Name", compute="_computed_name")
     date = fields.Date(string="Request Date", default=fields.Date.context_today)
     employee_id = fields.Many2one('hr.employee', string="Custody Holder", required=True)
+    company_id = fields.Many2one(
+        'res.company',
+        string="Company",
+        required=True,
+        default=lambda self: self.env.company,
+    )
     amount = fields.Float(string="Amount")
 
-    # -- Product custody --
-    product_line_ids = fields.One2many(
-        'custody.product.line',
+    # -- Asset custody --
+    asset_line_ids = fields.One2many(
+        'custody.asset.line',
         'custody_id',
-        string="Custody Product Lines",
+        string="Custody Asset Lines",
         copy=False,
     )
-    product_line_count = fields.Integer(
-        string="Product Lines",
-        compute="_compute_product_totals",
+    asset_line_count = fields.Integer(
+        string="Assets",
+        compute="_compute_asset_totals",
     )
-    product_total_qty = fields.Float(
-        string="Total Quantity",
-        compute="_compute_product_totals",
+    asset_total_original_value = fields.Monetary(
+        string="Total Original Value",
+        compute="_compute_asset_totals",
+        currency_field='company_currency_id',
     )
-    product_total_value = fields.Monetary(
-        string="Total Product Value",
-        compute="_compute_product_totals",
+    asset_total_book_value = fields.Monetary(
+        string="Total Book Value",
+        compute="_compute_asset_totals",
+        currency_field='company_currency_id',
+    )
+    asset_total_depreciation = fields.Monetary(
+        string="Depreciated During Custody",
+        compute="_compute_asset_totals",
         currency_field='company_currency_id',
     )
     entry_id = fields.Many2one('account.move', string="Accounting Entry", copy=False)
@@ -114,7 +126,8 @@ class CustodyRequest(models.Model):
     company_currency_id = fields.Many2one(
         'res.currency',
         string="Company Currency",
-        default=lambda self: self.env.company.currency_id,
+        related='company_id.currency_id',
+        store=True,
     )
 
     state = fields.Selection([
@@ -175,13 +188,13 @@ class CustodyRequest(models.Model):
             rec.amount = 0.0
 
     def action_return_custody(self):
-        """Open wizard to return custody amount (money) or products."""
+        """Open wizard to return custody amount (money) or assets."""
         self.ensure_one()
-        if self.custody_type == 'product':
+        if self.custody_type == 'asset':
             return {
-                'name': _('Return Product Custody'),
+                'name': _('Return Asset Custody'),
                 'type': 'ir.actions.act_window',
-                'res_model': 'custody.product.return.wizard',
+                'res_model': 'custody.asset.return.wizard',
                 'view_mode': 'form',
                 'target': 'new',
                 'context': {'default_custody_id': self.id},
@@ -205,12 +218,9 @@ class CustodyRequest(models.Model):
             if rec.state not in ['draft','refill']:
                 raise UserError("Only Draft or Refill requests can create accounting entries.")
 
-            # --- Product custody: confirm the goods, no cash movement ---
-            if rec.custody_type == 'product':
-                if not rec.product_line_ids:
-                    raise UserError(_("Add at least one product line before confirming."))
-                rec.product_line_ids.write({'state': 'confirmed'})
-                rec.state = 'entry_created'
+            # --- Asset custody: transfer the asset value to the custody account ---
+            if rec.custody_type == 'asset':
+                rec._confirm_asset_custody()
                 continue
 
             param = self.env['ir.config_parameter'].sudo()
@@ -254,6 +264,109 @@ class CustodyRequest(models.Model):
             move.action_post()
             rec.entry_id = move
             rec.state = 'entry_created'
+
+    #-------------------------------------------
+    # Asset Custody
+    #-------------------------------------------
+    @api.model
+    def _get_asset_custody_settings(self):
+        """Read (and validate) the asset custody accounting configuration."""
+        param = self.env['ir.config_parameter'].sudo()
+        journal_id = param.get_param('nx_employee_custody_management.custody_asset_journal_id')
+        custody_account_id = param.get_param('nx_employee_custody_management.custody_asset_account_id')
+        deduction_account_id = param.get_param('nx_employee_custody_management.custody_deduction_account_id')
+        recovery_account_id = param.get_param('nx_employee_custody_management.custody_asset_recovery_account_id')
+
+        if not (journal_id and custody_account_id):
+            raise UserError(_(
+                "Please configure the Asset Custody Journal and the Assets Under "
+                "Custody Account in Settings > Custody."))
+
+        return {
+            'journal_id': int(journal_id),
+            'custody_account_id': int(custody_account_id),
+            'deduction_account_id': int(deduction_account_id) if deduction_account_id else False,
+            'recovery_account_id': int(recovery_account_id) if recovery_account_id else False,
+        }
+
+    def _confirm_asset_custody(self):
+        """Freeze the book value of each asset and post the custody transfer.
+
+        Dr  Assets Under Employee Custody   (book value at hand-over)
+        Cr  Fixed Asset Account of the asset
+        """
+        self.ensure_one()
+
+        lines = self.asset_line_ids.filtered(lambda l: l.state == 'draft')
+        if not lines:
+            raise UserError(_("Add at least one asset line before confirming."))
+
+        missing = lines.filtered(lambda l: not l.asset_account_id)
+        if missing:
+            raise UserError(_(
+                "The following assets have no fixed asset account: %s",
+                ", ".join(missing.mapped('asset_id.display_name'))))
+
+        config = self._get_asset_custody_settings()
+        partner = self.employee_id.work_contact_id
+        move_lines = []
+
+        for line in lines:
+            book_value = line.asset_id.book_value
+            line.write({
+                'book_value_at_handover': book_value,
+                'state': 'confirmed',
+            })
+            if self.company_currency_id.is_zero(book_value):
+                continue
+            label = _("Custody hand-over - %s") % line.asset_id.display_name
+            move_lines += [
+                (0, 0, {
+                    'name': label,
+                    'account_id': config['custody_account_id'],
+                    'partner_id': partner.id if partner else False,
+                    'debit': book_value,
+                    'credit': 0.0,
+                }),
+                (0, 0, {
+                    'name': label,
+                    'account_id': line.asset_account_id.id,
+                    'partner_id': partner.id if partner else False,
+                    'debit': 0.0,
+                    'credit': book_value,
+                }),
+            ]
+
+        if move_lines:
+            move = self.env['account.move'].create({
+                'move_type': 'entry',
+                'journal_id': config['journal_id'],
+                'date': self.date or fields.Date.context_today(self),
+                'ref': _("Asset Custody Hand-over - %s") % self.name,
+                'custody_request_id': self.id,
+                'line_ids': move_lines,
+            })
+            move.action_post()
+            self.entry_id = move
+
+        self.state = 'entry_created'
+        self.message_post(body=_(
+            "%s asset(s) handed over to %s.",
+            len(lines), self.employee_id.display_name))
+
+    def action_open_asset_depreciation_entries(self):
+        """All posted depreciation entries booked while the assets were out."""
+        self.ensure_one()
+        moves = self.env['account.move']
+        for line in self.asset_line_ids:
+            moves |= line._get_custody_depreciation_moves()
+        if not moves:
+            raise UserError(_("No posted depreciation entry found for the custody period."))
+        action = self.env['ir.actions.actions']._for_xml_id('account.action_move_journal_line')
+        action['domain'] = [('id', 'in', moves.ids)]
+        action['context'] = {'create': False}
+        action['target'] = 'current'
+        return action
 
     def action_reverse_entry(self):
         self.ensure_one()
@@ -338,7 +451,7 @@ class CustodyRequest(models.Model):
         """Ensure that the combination of employee and custody account is unique."""
 
         for rec in self:
-            if rec.custody_type == 'product':
+            if rec.custody_type == 'asset':
                 continue
             custody_account = rec.env['custody.request'].sudo().search([
                 ('employee_id', '=', rec.employee_id.id),
@@ -354,7 +467,7 @@ class CustodyRequest(models.Model):
     def _check_amount(self):
         """Ensure that the requested amount is greater than zero when sent for approval."""
         for rec in self:
-            if rec.custody_type == 'product':
+            if rec.custody_type == 'asset':
                 continue
             if rec.amount <= 0 and rec.state == 'draft':
                 raise UserError(_("Requested amount must be greater than zero."))
@@ -503,14 +616,18 @@ class CustodyRequest(models.Model):
 
             rec.total_taken = total
 
-    @api.depends('product_line_ids.total_value', 'product_line_ids.quantity')
-    def _compute_product_totals(self):
-        """Summarise the product custody lines (count / qty / value)."""
+    @api.depends('asset_line_ids.original_value',
+                 'asset_line_ids.current_book_value',
+                 'asset_line_ids.depreciation_during_custody',
+                 'asset_line_ids.state')
+    def _compute_asset_totals(self):
+        """Summarise the asset custody lines (count / original / book value)."""
         for rec in self:
-            lines = rec.product_line_ids
-            rec.product_line_count = len(lines)
-            rec.product_total_qty = sum(lines.mapped('quantity'))
-            rec.product_total_value = sum(lines.mapped('total_value'))
+            lines = rec.asset_line_ids
+            rec.asset_line_count = len(lines)
+            rec.asset_total_original_value = sum(lines.mapped('original_value'))
+            rec.asset_total_book_value = sum(lines.mapped('current_book_value'))
+            rec.asset_total_depreciation = sum(lines.mapped('depreciation_during_custody'))
 
     @api.depends('total_taken', 'balance')
     def _compute_total_payment(self):

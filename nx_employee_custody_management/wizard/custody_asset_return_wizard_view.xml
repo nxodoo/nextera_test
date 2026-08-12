@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_custody_asset_return_wizard" model="ir.ui.view">
+        <field name="name">custody.asset.return.wizard.form</field>
+        <field name="model">custody.asset.return.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Return Asset Custody">
+                <field name="custody_id" invisible="1"/>
+                <field name="company_currency_id" invisible="1"/>
+                <div class="alert alert-info" role="alert">
+                    Each asset shows what it originally cost, what it was worth at
+                    hand-over and what it is worth <strong>now</strong> in the books.
+                    A <strong>deduction</strong> is suggested when the asset comes back
+                    after its expiration date or is flagged as lost / damaged - you can
+                    edit it before confirming.
+                </div>
+                <group>
+                    <field name="date"/>
+                </group>
+                <field name="line_ids">
+                    <list editable="bottom" create="0" delete="0">
+                        <field name="asset_line_id" column_invisible="1"/>
+                        <field name="company_currency_id" column_invisible="1"/>
+                        <field name="is_expired" column_invisible="1"/>
+                        <field name="to_return" widget="boolean_toggle"/>
+                        <field name="asset_id" readonly="1"/>
+                        <field name="acquisition_date" readonly="1" optional="hide"/>
+                        <field name="handover_date" readonly="1"/>
+                        <field name="expiration_date" readonly="1"/>
+                        <field name="remaining_period" readonly="1"
+                               decoration-success="not is_expired"
+                               decoration-danger="is_expired"/>
+                        <field name="original_value" readonly="1" sum="Original Value"/>
+                        <field name="book_value_at_handover" readonly="1"/>
+                        <field name="current_book_value" readonly="1" sum="Book Value Now"/>
+                        <field name="value_lost" readonly="1" optional="show"/>
+                        <field name="depreciation_during_custody" readonly="1"
+                               sum="Depreciated in Custody"/>
+                        <field name="posted_depreciation_count" readonly="1" optional="show"/>
+                        <field name="lost_or_damaged" widget="boolean_toggle"/>
+                        <field name="line_deduction"
+                               readonly="not to_return"
+                               decoration-danger="line_deduction &gt; 0"/>
+                        <button name="action_open_depreciation_entries"
+                                type="object"
+                                string="Posted Entries"
+                                class="btn-link"
+                                icon="fa-book"
+                                invisible="posted_depreciation_count == 0"/>
+                    </list>
+                </field>
+                <group class="oe_subtotal_footer">
+                    <field name="total_original_value"/>
+                    <field name="total_book_value"/>
+                    <field name="total_depreciation"/>
+                    <field name="deduction_total"/>
+                </group>
+                <footer>
+                    <button name="action_confirm_return"
+                            string="Confirm Return"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

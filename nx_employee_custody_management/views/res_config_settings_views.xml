@@ -34,19 +34,24 @@
                             <field name="custody_journal_temporary_id"/>
                         </setting>
 
-                        <setting string="Product Custody Journal"
-                                 help="Journal used to post product custody deduction entries.">
-                            <field name="custody_product_journal_id"/>
+                        <setting string="Asset Custody Journal"
+                                 help="Journal used to post the asset custody hand-over and return entries.">
+                            <field name="custody_asset_journal_id"/>
                         </setting>
 
-                        <setting string="Product Custody Account"
-                                 help="Asset account holding the value of products under employee custody.">
-                            <field name="custody_product_account_id"/>
+                        <setting string="Assets Under Custody Account"
+                                 help="Account holding the book value of the assets currently handed over to employees.">
+                            <field name="custody_asset_account_id"/>
                         </setting>
 
                         <setting string="Custody Deduction Account"
-                                 help="Account charged when a still-valid product custody is returned (deduction).">
+                                 help="Account debited when an asset is returned late, lost or damaged.">
                             <field name="custody_deduction_account_id"/>
+                        </setting>
+
+                        <setting string="Custody Recovery Account"
+                                 help="Counterpart credited with the recovered value of a custody deduction.">
+                            <field name="custody_asset_recovery_account_id"/>
                         </setting>
 
                     </block>

@@ -4,12 +4,12 @@
     'version': '1.0',
     'summary': 'This module allows you manage employees custodies.',
     'description': '''
-        Using this module, You can manage hemployee custody by creating a custody request and journal entry related to it
+        Manage employee custody of money and of accounting assets, with the related journal entries.
     ''',
     'category': 'Accounting',
     'author': 'Sayed Anwar',
     'company': 'Nextera MEA',
-    'depends': ['base', 'mail', 'accountant', 'hr', 'stock', 'product_expiry'],
+    'depends': ['base', 'mail', 'accountant', 'account_asset', 'hr'],
     'data': [
         'security/custody_security.xml',
         'security/ir.model.access.csv',
@@ -17,7 +17,7 @@
         'views/action.xml',
         'views/menu.xml',
         'wizard/custody_create_wizard_view.xml',
-        'wizard/custody_product_return_wizard_view.xml',
+        'wizard/custody_asset_return_wizard_view.xml',
         'views/custody_request_views.xml',
         'views/res_config_settings_views.xml',
 		'wizard/custody_bill_payment_wizard_view.xml',
