@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_hr_documents" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.nx.hr.documents</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="HR Documents"
+                     name="nx_hr_documents_bridge"
+                     data-string="HR Documents"
+                     groups="hr.group_hr_manager">
+                    <block title="Employee Document Filing"
+                           id="nx_hr_documents_filing">
+                        <setting string="HR Documents Folder"
+                                 help="Employee documents uploaded on the HR checklist are
+                                       copied into this Documents-app folder so they can be
+                                       browsed and searched there. A document type can
+                                       override this with its own folder.">
+                            <field name="nx_hr_documents_folder_id"
+                                   options="{'no_create': True}"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

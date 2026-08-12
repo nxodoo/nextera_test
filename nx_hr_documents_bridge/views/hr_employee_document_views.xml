@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Show where the file was filed, with a way to jump to it. -->
+    <record id="view_hr_employee_document_form_documents" model="ir.ui.view">
+        <field name="name">hr.employee.document.form.documents</field>
+        <field name="model">hr.employee.document</field>
+        <field name="inherit_id"
+               ref="nx_hr_analytics_dashboard.view_hr_employee_document_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@string='File']" position="after">
+                <group string="Documents App" invisible="not document_file">
+                    <field name="documents_document_id" readonly="1"
+                           options="{'no_open': True, 'no_create': True}"
+                           placeholder="Not filed — set a folder in Settings"/>
+                    <button name="action_open_documents_entry" type="object"
+                            string="Open in Documents" class="btn-link"
+                            icon="fa-external-link"
+                            invisible="not documents_document_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Per-type folder override, beside the rest of the definition. -->
+    <record id="view_hr_employee_document_type_form_documents" model="ir.ui.view">
+        <field name="name">hr.employee.document.type.form.documents</field>
+        <field name="model">hr.employee.document.type</field>
+        <field name="inherit_id"
+               ref="nx_hr_analytics_dashboard.view_hr_employee_document_type_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="before">
+                <field name="documents_folder_id"
+                       options="{'no_create': True}"
+                       placeholder="Default folder from Settings"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
