@@ -197,6 +197,35 @@ class HrPayslip(models.Model):
         )
         return payload
 
+    def _get_kpi_base_amount(self):
+        """Return the salary of this payslip period used as the KPI base."""
+        self.ensure_one()
+        contract = self.contract_id
+        if not contract:
+            return 0.0
+        if not contract._is_worked_amount_based():
+            return contract.wage
+        worked_amount = sum(self.worked_days_line_ids.mapped("amount"))
+        if worked_amount:
+            return worked_amount
+        return contract._get_kpi_base_amount(self.date_from, self.date_to)
+
+    def _get_kpi_target_amount(self):
+        """Return the KPI amount carved out of this payslip's basic salary.
+
+        The deduction is taken on every payslip, not only on the month the KPI
+        is paid: a quarterly KPI withholds its monthly share each month and pays
+        the whole quarter back in the payout month, so the cycle balances out.
+        """
+        self.ensure_one()
+        contract = self.contract_id
+        if not contract or not contract.kpi_type or contract.kpi_value <= 0:
+            return 0.0
+        if contract.kpi_type == "fixed":
+            months = 3 if contract.kpi_frequency == "quarterly" else 1
+            return contract.kpi_value / months
+        return self._get_kpi_base_amount() * (contract.kpi_value / 100.0)
+
     def _build_kpi_rule_name(self, evaluation_line):
         """Build a readable KPI rule name for the current payslip."""
         self.ensure_one()

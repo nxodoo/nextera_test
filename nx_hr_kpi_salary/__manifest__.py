@@ -1,6 +1,6 @@
 {
     "name": "HR KPI Variable Salary",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.0.1",
     "summary": "Manage KPI-based variable salary and payroll integration",
     "author": "Ahmed Tarek",
     "license": "LGPL-3",

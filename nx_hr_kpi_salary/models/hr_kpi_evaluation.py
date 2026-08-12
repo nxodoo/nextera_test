@@ -712,22 +712,45 @@ class HrKpiEvaluationLine(models.Model):
         "contract_id.kpi_type",
         "contract_id.kpi_value",
         "contract_id.wage",
+        "contract_id.hourly_wage",
+        "contract_id.wage_type",
+        "contract_id.work_entry_source",
+        "evaluation_id.period_start",
+        "evaluation_id.period_end",
+        "payslip_id",
+        "payslip_id.worked_days_line_ids.amount",
         "kpi_percentage",
     )
     def _compute_payout_value(self):
         for line in self:
-            if not line.contract_id:
-                line.payout_value = 0.0
-                continue
-            if not line.kpi_percentage:
-                line.payout_value = 0.0
-                continue
-            evaluation_ratio = line.kpi_percentage / 100.0
-            if line.contract_id.kpi_type == "fixed":
-                line.payout_value = line.contract_id.kpi_value * evaluation_ratio
-                continue
-            contract_ratio = line.contract_id.kpi_value / 100.0
-            line.payout_value = line.contract_id.wage * contract_ratio * evaluation_ratio
+            line.payout_value = line._get_payout_value()
+
+    def _get_kpi_base_amount(self):
+        """Return the salary the percentage KPI is calculated on."""
+        self.ensure_one()
+        if not self.contract_id:
+            return 0.0
+        return self.contract_id._get_kpi_base_amount(
+            self.evaluation_id.period_start,
+            self.evaluation_id.period_end,
+        )
+
+    def _get_kpi_target_amount(self):
+        """Return the full KPI amount for a 100% evaluation."""
+        self.ensure_one()
+        contract = self.contract_id
+        if not contract:
+            return 0.0
+        if contract.kpi_type == "fixed":
+            return contract.kpi_value
+        return self._get_kpi_base_amount() * (contract.kpi_value / 100.0)
+
+    def _get_payout_value(self):
+        """Return the KPI amount earned for the evaluated percentage."""
+        self.ensure_one()
+        if not self.contract_id or not self.kpi_percentage:
+            return 0.0
+        return self._get_kpi_target_amount() * (self.kpi_percentage / 100.0)
 
     def action_open_evaluation(self):
         """Open the parent KPI evaluation form."""
