@@ -52,6 +52,32 @@
         tr.o_row_warning:hover { background: rgba(227, 164, 26, .16); }
     }
     .o_nx_hr_alert { background: #1F252D; }
+    // The tinted-card washes are mixed against a dark surface here, so the
+    // same percentages would read as muddy stains — lift them instead.
+    .o_nx_hr_card[class*="o_tint_"] {
+        background:
+            radial-gradient(120% 90% at 100% 0%,
+                color-mix(in srgb, var(--tint) 16%, transparent) 0%, transparent 62%),
+            var(--nx-card-bg);
+        border-color: color-mix(in srgb, var(--tint) 26%, var(--nx-border));
+    }
+    .o_tint_green  { --tint: #1faa72; --tint2: #4FD9A2; }
+    .o_tint_blue   { --tint: #3987e5; --tint2: #79B4F7; }
+    .o_tint_amber  { --tint: #e3a41a; --tint2: #F2C862; }
+    .o_tint_violet { --tint: #9B72FA; --tint2: #C2A4FF; }
+    .o_tint_coral  { --tint: #d95926; --tint2: #F08E62; }
+    // Ground shadow under the extruded ring needs to be darker, not lighter.
+    .o_nx_hr_donut::after {
+        background: radial-gradient(ellipse at center, rgba(0,0,0,.45) 0%, transparent 72%);
+    }
+    .o_nx_hr_tabs button.o_active {
+        background: linear-gradient(135deg, var(--nx-green), #2F8F65); color: #0E1A14;
+    }
+    .o_nx_hr_alert {
+        &.o_danger  { background: linear-gradient(100deg, rgba(230,103,103,.14), transparent 55%); }
+        &.o_warning { background: linear-gradient(100deg, rgba(227,164,26,.14), transparent 55%); }
+        &.o_info    { background: linear-gradient(100deg, rgba(57,135,229,.14), transparent 55%); }
+    }
     .o_nx_hr_select { background: var(--nx-card-bg); color: var(--nx-text); }
     .o_nx_hr_search { background: var(--nx-card-bg); color: var(--nx-text); }
     // The native date picker icon is near-invisible on a dark field.

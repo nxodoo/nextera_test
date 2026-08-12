@@ -32,7 +32,8 @@
 <t t-name="nx_hr_analytics_dashboard.StatTiles">
     <div class="o_nx_stats">
         <t t-foreach="tiles" t-as="s" t-key="s.key">
-            <div class="o_nx_stat o_clickable" t-attf-style="--accent:{{s.accent}}"
+            <div class="o_nx_stat o_clickable"
+                 t-attf-style="--accent:{{s.accent}};--accent2:{{s.accent2 or s.accent}}"
                  t-att-title="'Open ' + s.label"
                  t-on-click="() => this.openStat(scope, s.key)">
                 <div class="o_nx_stat_top">
@@ -155,12 +156,13 @@
             <!-- KPI cards -->
             <div class="o_nx_hr_kpis">
                 <t t-foreach="kpiCards" t-as="c" t-key="c.key">
-                    <div t-attf-class="o_nx_hr_kpi {{ c.clickable ? 'o_clickable' : '' }}"
-                         t-attf-style="--accent:{{c.accent}}"
+                    <div t-attf-class="o_nx_hr_kpi {{ c.clickable ? 'o_clickable' : '' }} {{ c.hero ? 'o_hero' : '' }}"
+                         t-attf-style="--accent:{{c.accent}};--accent2:{{c.accent2 or c.accent}}"
                          t-on-click="() => c.clickable ? this.openKpi(c.key) : null">
+                        <span class="o_nx_hr_kpi_blob"/>
                         <div class="o_nx_hr_kpi_body">
                             <span class="o_nx_hr_kpi_label" t-esc="c.label"/>
-                            <span class="o_nx_hr_kpi_value" t-esc="fmt(c.value)"/>
+                            <span class="o_nx_hr_kpi_value" t-esc="fmt(counted('kpi_' + c.key, c.value))"/>
                             <t t-if="c.sub and c.sub.kind === 'delta'">
                                 <span class="o_nx_hr_kpi_delta o_up" t-if="c.sub.value >= 0">
                                     <i class="fa fa-arrow-up"/> <t t-esc="fmt(c.sub.value)"/> this month
@@ -240,6 +242,39 @@
                                 <b t-esc="fmt(state.data.social_insurance.not_insured)"/></div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Row 1b: distribution shape + month-over-month net change -->
+            <div class="o_nx_hr_row">
+                <div class="o_nx_hr_card o_tint_blue" t-if="deptPolar.length">
+                    <div class="o_nx_hr_cardhead">
+                        <h3>Workforce Distribution</h3>
+                        <button class="o_nx_hr_iconbtn"
+                                t-att-title="isTableView('deptPolar') ? 'Show chart' : 'Show numbers'"
+                                t-on-click="() => this.toggleTableView('deptPolar')">
+                            <i t-attf-class="fa {{ isTableView('deptPolar') ? 'fa-pie-chart' : 'fa-table' }}"/>
+                        </button>
+                    </div>
+                    <div t-if="!isTableView('deptPolar')" class="o_nx_hr_chartbox o_nx_hr_chartbox_polar">
+                        <canvas t-ref="deptPolarChart"/>
+                    </div>
+                    <t t-else="">
+                        <t t-call="nx_hr_analytics_dashboard.ChartTable">
+                            <t t-set="head" t-value="'Department'"/>
+                            <t t-set="rows" t-value="tableRows(deptPolar)"/>
+                        </t>
+                    </t>
+                </div>
+                <div class="o_nx_hr_card o_span2 o_tint_green" t-if="netChangeSeries.length">
+                    <div class="o_nx_hr_cardhead">
+                        <h3>Net Headcount Change per Month</h3>
+                        <span class="o_nx_hr_chiplegend">
+                            <span class="o_dot o_good"/>+<t t-esc="fmt(netChangeSummary.up)"/>
+                            <span class="o_dot o_crit ms-2"/>−<t t-esc="fmt(netChangeSummary.down)"/>
+                        </span>
+                    </div>
+                    <div class="o_nx_hr_chartbox"><canvas t-ref="netChangeChart"/></div>
                 </div>
             </div>
 
@@ -384,6 +419,62 @@
                         <div class="o_nx_hr_paytax_row">
                             <span>Prepared By</span><b t-esc="state.payroll.prepared_by"/>
                         </div>
+                    </div>
+                </div>
+
+                <div class="o_nx_hr_row">
+                    <div class="o_nx_hr_card o_tint_violet" t-if="payMix.length">
+                        <h3>Where the Gross Goes</h3>
+                        <div class="o_nx_hr_donutwrap">
+                            <div class="o_nx_hr_donut o_lg">
+                                <canvas t-ref="payMixChart"/>
+                                <div class="o_nx_hr_donut_hero">
+                                    <b><t t-esc="_pctOf(state.payroll.totals.net, state.payroll.totals.gross)"/>%</b>
+                                    <small>net</small>
+                                </div>
+                            </div>
+                            <div class="o_nx_hr_legend">
+                                <t t-foreach="payMix" t-as="m" t-key="m.key">
+                                    <div>
+                                        <span t-attf-class="o_dot o_mix_{{m.key}}"/><t t-esc="m.label"/>
+                                        <b t-esc="fmt(m.value)"/>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="o_nx_hr_card o_span2 o_tint_blue" t-if="payCompByDept.length">
+                        <div class="o_nx_hr_cardhead">
+                            <h3>Net vs Withholdings by Department</h3>
+                            <span class="o_nx_hr_chiplegend">stacked · <t t-esc="state.payroll.currency"/></span>
+                        </div>
+                        <div class="o_nx_hr_chartbox o_nx_hr_chartbox_auto"
+                             t-attf-style="height:{{ barBoxHeight(payCompByDept.length, {row: 44, min: 250}) }}px">
+                            <canvas t-ref="payCompDeptChart"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="o_nx_hr_row">
+                    <div class="o_nx_hr_card o_span2 o_tint_amber" t-if="payRateByDept.length">
+                        <div class="o_nx_hr_cardhead">
+                            <h3>Effective Tax Rate by Department (%)</h3>
+                            <button class="o_nx_hr_iconbtn"
+                                    t-att-title="isTableView('payRate') ? 'Show chart' : 'Show numbers'"
+                                    t-on-click="() => this.toggleTableView('payRate')">
+                                <i t-attf-class="fa {{ isTableView('payRate') ? 'fa-bar-chart' : 'fa-table' }}"/>
+                            </button>
+                        </div>
+                        <div t-if="!isTableView('payRate')" class="o_nx_hr_chartbox o_nx_hr_chartbox_auto"
+                             t-attf-style="height:{{ barBoxHeight(payRateByDept.length) }}px">
+                            <canvas t-ref="payRateChart"/>
+                        </div>
+                        <t t-else="">
+                            <t t-call="nx_hr_analytics_dashboard.ChartTable">
+                                <t t-set="head" t-value="'Department'"/>
+                                <t t-set="rows" t-value="tableRows(payRateByDept)"/>
+                            </t>
+                        </t>
                     </div>
                 </div>
 
@@ -538,7 +629,28 @@
                     </div>
                 </div>
                 <div class="o_nx_hr_row">
-                    <div class="o_nx_hr_card">
+                    <div class="o_nx_hr_card o_tint_blue" t-if="docComplianceByDept.length >= 3">
+                        <div class="o_nx_hr_cardhead">
+                            <h3>Compliance Profile by Department</h3>
+                            <span class="o_nx_hr_chiplegend"><span class="o_dot o_cat1"/>Avg. % complete</span>
+                        </div>
+                        <div class="o_nx_hr_chartbox o_nx_hr_chartbox_polar">
+                            <canvas t-ref="docRadarChart"/>
+                        </div>
+                    </div>
+                    <div class="o_nx_hr_card o_span2 o_tint_amber" t-if="docStatusByDept.length">
+                        <div class="o_nx_hr_cardhead">
+                            <h3>Document Status by Department</h3>
+                            <span class="o_nx_hr_chiplegend">stacked · documents</span>
+                        </div>
+                        <div class="o_nx_hr_chartbox o_nx_hr_chartbox_auto"
+                             t-attf-style="height:{{ barBoxHeight(docStatusByDept.length, {row: 42, min: 240}) }}px">
+                            <canvas t-ref="docStatusDeptChart"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="o_nx_hr_row">
+                    <div class="o_nx_hr_card o_tint_green">
                         <h3>Document Compliance</h3>
                         <div class="o_nx_hr_donutwrap">
                             <div class="o_nx_hr_donut">
@@ -706,9 +818,30 @@
                         </table>
                     </div>
                 </div>
+                <div class="o_nx_hr_row" t-if="insCoverageByDept.length or insWageScatter.length">
+                    <div class="o_nx_hr_card o_span2 o_tint_green" t-if="insCoverageByDept.length">
+                        <div class="o_nx_hr_cardhead">
+                            <h3>Coverage by Department</h3>
+                            <span class="o_nx_hr_chiplegend">stacked · employees</span>
+                        </div>
+                        <div class="o_nx_hr_chartbox o_nx_hr_chartbox_auto"
+                             t-attf-style="height:{{ barBoxHeight(insCoverageByDept.length, {row: 40, min: 230}) }}px">
+                            <canvas t-ref="insCoverDeptChart"/>
+                        </div>
+                    </div>
+                    <div class="o_nx_hr_card o_tint_violet" t-if="insWageScatter.length">
+                        <div class="o_nx_hr_cardhead">
+                            <h3>Wage vs Insurance Reference</h3>
+                            <span class="o_nx_hr_chiplegend">one dot = one employee</span>
+                        </div>
+                        <div class="o_nx_hr_chartbox o_nx_hr_chartbox_polar">
+                            <canvas t-ref="insScatterChart"/>
+                        </div>
+                    </div>
+                </div>
                 <div class="o_nx_section"><h4>Status Overview</h4></div>
                 <div class="o_nx_hr_row">
-                    <div class="o_nx_hr_card">
+                    <div class="o_nx_hr_card o_tint_blue">
                         <h3>Social Insurance Status</h3>
                         <div class="o_nx_hr_donutwrap">
                             <div class="o_nx_hr_donut">

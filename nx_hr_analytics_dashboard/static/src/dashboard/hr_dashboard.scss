@@ -102,16 +102,26 @@
             border: 0; background: transparent; color: var(--nx-muted);
             font-weight: 600; font-size: 13px; padding: 8px 16px;
             border-radius: 9px; cursor: pointer; transition: all .18s ease;
-            &:hover { color: var(--nx-green); }
-            &.o_active { background: var(--nx-green-soft); color: var(--nx-green); }
+            &:hover { color: var(--nx-green); transform: translateY(-1px); }
+            &.o_active {
+                background: linear-gradient(135deg, var(--nx-green), #2E8C5A);
+                color: #fff;
+                box-shadow: 0 4px 12px color-mix(in srgb, var(--nx-green) 38%, transparent);
+            }
         }
     }
+
+    .o_nx_hr_tabpane { animation: nxHrPane .4s cubic-bezier(.2,.8,.3,1) both; }
 
     // ── Loading ───────────────────────────────────────────────────────────
     .o_nx_hr_loading {
         position: absolute; inset: 0; display: flex; align-items: center;
         justify-content: center; background: rgba(244, 246, 248, .6); z-index: 5;
-        i { font-size: 34px; color: var(--nx-green); }
+        i {
+            font-size: 34px; color: var(--nx-green);
+            filter: drop-shadow(0 4px 12px color-mix(in srgb, var(--nx-green) 40%, transparent));
+            animation: nxHrPulse 1.4s ease-in-out infinite;
+        }
     }
 
     // ── KPI cards ─────────────────────────────────────────────────────────
@@ -120,19 +130,76 @@
         gap: 16px; margin-bottom: 16px;
     }
     .o_nx_hr_kpi {
-        position: relative; background: var(--nx-card-bg);
-        border: 1px solid var(--nx-border); border-radius: var(--nx-radius);
+        position: relative;
+        // Each card carries a soft wash of its own accent instead of the same
+        // white — the colour is decoration on top of the label, never the only
+        // thing telling the cards apart.
+        background:
+            linear-gradient(135deg,
+                color-mix(in srgb, var(--accent, #1A5C3A) 10%, var(--nx-card-bg)) 0%,
+                color-mix(in srgb, var(--accent2, var(--accent, #1A5C3A)) 4%, var(--nx-card-bg)) 55%,
+                var(--nx-card-bg) 100%);
+        border: 1px solid color-mix(in srgb, var(--accent, #1A5C3A) 18%, var(--nx-border));
+        border-radius: var(--nx-radius);
         box-shadow: var(--nx-shadow); padding: 16px 18px 18px;
         display: flex; justify-content: space-between; align-items: flex-start;
-        overflow: hidden; transition: transform .18s ease, box-shadow .18s ease;
-        animation: nxHrRise .5s ease both;
+        overflow: hidden;
+        transition: transform .22s cubic-bezier(.2,.8,.3,1),
+                    box-shadow .22s ease, border-color .22s ease;
+        animation: nxHrRise .55s cubic-bezier(.2,.8,.3,1) both;
         &::after {
             content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px;
-            background: var(--accent, var(--nx-green));
+            background: linear-gradient(90deg,
+                var(--accent, var(--nx-green)), var(--accent2, var(--accent)));
         }
-        &:hover { transform: translateY(-3px); box-shadow: var(--nx-shadow-hover); }
+        &:hover {
+            transform: translateY(-5px) scale(1.012);
+            box-shadow: 0 14px 34px color-mix(in srgb, var(--accent, #1A5C3A) 26%, transparent);
+            border-color: color-mix(in srgb, var(--accent, #1A5C3A) 45%, transparent);
+        }
         &.o_clickable { cursor: pointer; }
         &.o_clickable:hover .o_nx_hr_kpi_go { opacity: 1; transform: translateX(0); }
+        &:hover .o_nx_hr_kpi_blob { transform: scale(1.35) translate(6px, -6px); }
+        &:hover .o_nx_hr_kpi_icon { transform: rotate(-8deg) scale(1.1); }
+    }
+
+    // Decorative accent blob in the corner — pure ornament, drawn behind the
+    // content and hidden from assistive tech (it carries no data).
+    .o_nx_hr_kpi_blob {
+        position: absolute; right: -26px; top: -30px; width: 96px; height: 96px;
+        border-radius: 50%; pointer-events: none; z-index: 0;
+        background: radial-gradient(circle at 35% 35%,
+            color-mix(in srgb, var(--accent2, var(--accent)) 40%, transparent) 0%,
+            transparent 68%);
+        transition: transform .35s cubic-bezier(.2,.8,.3,1);
+    }
+    .o_nx_hr_kpi_body, .o_nx_hr_kpi_icon, .o_nx_hr_kpi_go { position: relative; z-index: 1; }
+
+    // ── Hero KPI — the lead figure, full-bleed accent like a cover card ────
+    .o_nx_hr_kpi.o_hero {
+        background: linear-gradient(135deg,
+            var(--accent) 0%, var(--accent2, var(--accent)) 100%);
+        border-color: transparent;
+        color: #fff;
+        // Diagonal sheen sweeping across the gradient.
+        &::before {
+            content: ""; position: absolute; inset: 0; pointer-events: none;
+            background: linear-gradient(100deg,
+                transparent 35%, rgba(255,255,255,.22) 50%, transparent 65%);
+            transform: translateX(-120%);
+            animation: nxHrSheen 4.5s ease-in-out 1.2s infinite;
+        }
+        &::after { background: rgba(255, 255, 255, .35); }
+        .o_nx_hr_kpi_label { color: rgba(255,255,255,.86); }
+        .o_nx_hr_kpi_value { color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,.18); }
+        .o_nx_hr_kpi_delta { color: #fff; &.o_muted { color: rgba(255,255,255,.8); } }
+        .o_nx_hr_kpi_icon {
+            background: rgba(255,255,255,.20); color: #fff;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.35);
+        }
+        .o_nx_hr_kpi_go { color: #fff; }
+        .o_nx_hr_kpi_blob { background: radial-gradient(circle at 35% 35%,
+            rgba(255,255,255,.30) 0%, transparent 70%); }
     }
     .o_nx_hr_kpi_go {
         position: absolute; right: 14px; bottom: 12px; color: var(--accent, var(--nx-green));
@@ -147,13 +214,18 @@
         &.o_up { color: #16A34A; } &.o_down { color: #DC2626; } &.o_muted { color: var(--nx-muted); font-weight: 500; }
     }
     .o_nx_hr_kpi_icon {
-        width: 38px; height: 38px; border-radius: 11px; display: flex;
-        align-items: center; justify-content: center; font-size: 16px;
-        color: var(--accent, var(--nx-green));
-        background: color-mix(in srgb, var(--accent, #1A5C3A) 12%, white);
+        width: 40px; height: 40px; border-radius: 12px; display: flex;
+        align-items: center; justify-content: center; font-size: 17px;
+        color: #fff;
+        background: linear-gradient(140deg,
+            var(--accent, #1A5C3A), var(--accent2, var(--accent, #1A5C3A)));
+        box-shadow: 0 4px 12px color-mix(in srgb, var(--accent, #1A5C3A) 38%, transparent),
+                    inset 0 1px 0 rgba(255,255,255,.28);
+        transition: transform .28s cubic-bezier(.2,.8,.3,1);
     }
     @for $i from 1 through 6 {
-        .o_nx_hr_kpi:nth-child(#{$i}) { animation-delay: #{$i * 0.05}s; }
+        .o_nx_hr_kpi:nth-child(#{$i}) { animation-delay: #{$i * 0.06}s; }
+        .o_nx_stat:nth-child(#{$i}) { animation-delay: #{$i * 0.05}s; }
     }
 
     // ── Card grid (flex so hidden cards free their space) ─────────────────
@@ -161,10 +233,42 @@
         display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; align-items: stretch;
     }
     .o_nx_hr_card {
+        position: relative; overflow: hidden;
         background: var(--nx-card-bg); border: 1px solid var(--nx-border);
         border-radius: var(--nx-radius); box-shadow: var(--nx-shadow); padding: 20px;
-        animation: nxHrFade .5s ease both;
+        animation: nxHrRise .55s cubic-bezier(.2,.8,.3,1) both;
+        transition: transform .22s cubic-bezier(.2,.8,.3,1), box-shadow .22s ease;
+        &:hover { box-shadow: var(--nx-shadow-hover); }
     }
+    // Stagger the cards down the page so a tab arrives in sequence.
+    @for $i from 1 through 8 {
+        .o_nx_hr_row:nth-of-type(#{$i}) > .o_nx_hr_card { animation-delay: #{$i * 0.05}s; }
+    }
+
+    // ── Tinted cards ──────────────────────────────────────────────────────
+    // A wash of the card's subject colour plus a matching top rail, so a wall
+    // of charts stops reading as one undifferentiated grid of white boxes.
+    // The tint is decoration: every card still names its own subject in text.
+    .o_nx_hr_card[class*="o_tint_"] {
+        &::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--tint), var(--tint2, var(--tint)));
+        }
+        background:
+            radial-gradient(120% 90% at 100% 0%,
+                color-mix(in srgb, var(--tint) 9%, transparent) 0%, transparent 60%),
+            var(--nx-card-bg);
+        border-color: color-mix(in srgb, var(--tint) 16%, var(--nx-border));
+        &:hover {
+            box-shadow: 0 10px 30px color-mix(in srgb, var(--tint) 20%, transparent);
+        }
+    }
+    .o_tint_green  { --tint: #12855a; --tint2: #43C88A; }
+    .o_tint_blue   { --tint: #2a78d6; --tint2: #63A6F5; }
+    .o_tint_amber  { --tint: #eda100; --tint2: #F5C64E; }
+    .o_tint_violet { --tint: #8B5CF6; --tint2: #B794FA; }
+    .o_tint_coral  { --tint: #eb6834; --tint2: #F79B6E; }
+
     .o_nx_hr_row > .o_nx_hr_card { flex: 1 1 300px; min-width: 0; }
     .o_nx_hr_row > .o_span2 { flex: 2 1 460px; }
     .o_nx_hr_chartbox { height: 264px; min-height: 264px; position: relative; }
@@ -173,6 +277,9 @@
     .o_nx_hr_chartbox_auto { min-height: 0; }
     // The waterfall needs headroom for the value label above the tallest bar.
     .o_nx_hr_chartbox_wf { height: 300px; min-height: 300px; }
+    // Radial marks (polar / radar / scatter) want a squarer, taller box than a
+    // bar chart, and the extruded wall needs a few pixels below the ring.
+    .o_nx_hr_chartbox_polar { height: 296px; min-height: 296px; position: relative; }
 
     // ── Card head (title + affordances) ───────────────────────────────────
     .o_nx_hr_cardhead {
@@ -207,6 +314,13 @@
         &.o_warn   { background: var(--nx-chart-warning); }
         &.o_crit   { background: var(--nx-chart-critical); }
         &.o_series { background: var(--nx-chart-series); }
+        &.o_cat1   { background: var(--nx-cat-1); }
+        &.o_cat2   { background: var(--nx-cat-2); }
+        // Legend dots for the payroll mix ring — same slots the chart uses.
+        &.o_mix_net        { background: var(--nx-chart-good); }
+        &.o_mix_tax        { background: var(--nx-chart-critical); }
+        &.o_mix_insurance  { background: var(--nx-cat-1); }
+        &.o_mix_deductions { background: var(--nx-cat-2); }
     }
 
     // ── Donut hero number ─────────────────────────────────────────────────
@@ -242,23 +356,44 @@
     }
     .o_nx_stat {
         position: relative; overflow: hidden;
-        background: var(--nx-card-bg); border: 1px solid var(--nx-border);
+        background:
+            linear-gradient(140deg,
+                color-mix(in srgb, var(--accent, #1A5C3A) 9%, var(--nx-card-bg)) 0%,
+                var(--nx-card-bg) 62%);
+        border: 1px solid color-mix(in srgb, var(--accent, #1A5C3A) 16%, var(--nx-border));
         border-radius: 14px; box-shadow: var(--nx-shadow);
         padding: 14px 16px 15px 18px;
         display: flex; flex-direction: column; gap: 7px;
-        animation: nxHrRise .45s ease both;
-        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+        animation: nxHrRise .5s cubic-bezier(.2,.8,.3,1) both;
+        transition: transform .22s cubic-bezier(.2,.8,.3,1),
+                    box-shadow .22s ease, border-color .22s ease;
 
         // Accent rail — the tile's semantic colour, never carrying meaning alone.
         &::before {
             content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-            background: var(--accent, var(--nx-green));
+            background: linear-gradient(180deg,
+                var(--accent, var(--nx-green)), var(--accent2, var(--accent)));
         }
-        &:hover { transform: translateY(-2px); box-shadow: var(--nx-shadow-hover); }
+        // Corner ornament, matching the KPI cards above it.
+        &::after {
+            content: ""; position: absolute; right: -22px; top: -26px;
+            width: 78px; height: 78px; border-radius: 50%; pointer-events: none;
+            background: radial-gradient(circle at 35% 35%,
+                color-mix(in srgb, var(--accent2, var(--accent)) 32%, transparent) 0%,
+                transparent 68%);
+            transition: transform .35s cubic-bezier(.2,.8,.3,1);
+        }
+        &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px color-mix(in srgb, var(--accent, #1A5C3A) 24%, transparent);
+        }
+        &:hover::after { transform: scale(1.3) translate(5px, -5px); }
+        &:hover .o_nx_stat_icon { transform: rotate(-8deg) scale(1.12); }
         &.o_clickable { cursor: pointer; }
-        &.o_clickable:hover { border-color: var(--accent, var(--nx-green)); }
+        &.o_clickable:hover { border-color: color-mix(in srgb, var(--accent, #1A5C3A) 48%, transparent); }
     }
     .o_nx_stat_top {
+        position: relative; z-index: 1;
         display: flex; align-items: center; justify-content: space-between; gap: 8px;
     }
     .o_nx_stat_label {
@@ -266,12 +401,17 @@
         text-transform: uppercase; letter-spacing: .045em; line-height: 1.3;
     }
     .o_nx_stat_icon {
-        flex: 0 0 auto; width: 26px; height: 26px; border-radius: 8px;
-        display: flex; align-items: center; justify-content: center; font-size: 12px;
-        color: var(--accent, var(--nx-green));
-        background: color-mix(in srgb, var(--accent, #1A5C3A) 13%, transparent);
+        flex: 0 0 auto; width: 28px; height: 28px; border-radius: 9px;
+        display: flex; align-items: center; justify-content: center; font-size: 12.5px;
+        color: #fff;
+        background: linear-gradient(140deg,
+            var(--accent, #1A5C3A), var(--accent2, var(--accent, #1A5C3A)));
+        box-shadow: 0 3px 9px color-mix(in srgb, var(--accent, #1A5C3A) 36%, transparent),
+                    inset 0 1px 0 rgba(255,255,255,.28);
+        transition: transform .28s cubic-bezier(.2,.8,.3,1);
     }
     .o_nx_stat_value {
+        position: relative; z-index: 1;
         font-size: 25px; font-weight: 700; line-height: 1.05;
         // Proportional figures on display-size numbers; tabular only in tables.
         font-variant-numeric: proportional-nums;
@@ -352,7 +492,19 @@
 
     // ── Donuts + legends ──────────────────────────────────────────────────
     .o_nx_hr_donutwrap { display: flex; align-items: center; gap: 16px; }
-    .o_nx_hr_donut { width: 150px; height: 150px; position: relative; flex: 0 0 auto; }
+    .o_nx_hr_donut {
+        width: 150px; height: 150px; position: relative; flex: 0 0 auto;
+        &.o_lg { width: 178px; height: 178px; }
+        // Ground shadow beneath the extruded ring, so it sits on the card
+        // instead of floating over it.
+        &::after {
+            content: ""; position: absolute; left: 14%; right: 14%; bottom: 2px;
+            height: 12px; border-radius: 50%; z-index: 0; pointer-events: none;
+            background: radial-gradient(ellipse at center,
+                rgba(16,24,40,.20) 0%, transparent 72%);
+        }
+        canvas { position: relative; z-index: 1; }
+    }
     .o_nx_hr_legend {
         display: flex; flex-direction: column; gap: 10px; font-size: 13px; flex: 1;
         div { display: flex; align-items: center; gap: 8px; }
@@ -381,9 +533,18 @@
         border: 1px solid var(--nx-border); border-left: 4px solid var(--nx-muted);
         background: #FBFCFD; transition: transform .15s ease;
         &:hover { transform: translateX(2px); }
-        &.o_danger { border-left-color: #EF4444; }
-        &.o_warning { border-left-color: #F59E0B; }
-        &.o_info { border-left-color: #3B82F6; }
+        &.o_danger {
+            border-left-color: #d03b3b;
+            background: linear-gradient(100deg, rgba(208,59,59,.09), transparent 55%);
+        }
+        &.o_warning {
+            border-left-color: #eda100;
+            background: linear-gradient(100deg, rgba(237,161,0,.10), transparent 55%);
+        }
+        &.o_info {
+            border-left-color: #2a78d6;
+            background: linear-gradient(100deg, rgba(42,120,214,.09), transparent 55%);
+        }
         .o_nx_hr_alert_txt { display: flex; flex-direction: column; }
         b { font-size: 14px; } small { color: var(--nx-muted); }
     }
@@ -571,15 +732,22 @@
 @keyframes nxHrHero { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: none; } }
 @keyframes nxHrGrow  { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes nxHrGrowX { from { flex-basis: 0; opacity: .3; } to { opacity: 1; } }
+@keyframes nxHrPane  { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes nxHrSheen { 0% { transform: translateX(-120%); } 55%, 100% { transform: translateX(120%); } }
+@keyframes nxHrPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(.9); } }
 
 // Motion is an enhancement — drop it entirely when the OS asks us to.
 @media (prefers-reduced-motion: reduce) {
     .o_nx_hr_dash {
         .o_nx_hr_kpi, .o_nx_hr_card, .o_nx_hr_tile, .o_nx_stat,
-        .o_nx_hr_donut_hero, .o_nx_hr_datatable,
+        .o_nx_hr_donut_hero, .o_nx_hr_datatable, .o_nx_hr_tabpane,
+        .o_nx_hr_kpi.o_hero::before, .o_nx_hr_loading i,
         .o_nx_meter span { animation: none !important; }
-        .o_nx_hr_kpi:hover, .o_nx_hr_alert:hover,
-        .o_nx_hr_iconbtn:hover, .o_nx_stat:hover { transform: none; }
+        .o_nx_hr_kpi:hover, .o_nx_hr_alert:hover, .o_nx_hr_tabs button:hover,
+        .o_nx_hr_iconbtn:hover, .o_nx_stat:hover,
+        .o_nx_hr_kpi:hover .o_nx_hr_kpi_blob, .o_nx_stat:hover::after,
+        .o_nx_hr_kpi:hover .o_nx_hr_kpi_icon,
+        .o_nx_stat:hover .o_nx_stat_icon { transform: none; }
         * { transition-duration: .01ms !important; }
     }
 }

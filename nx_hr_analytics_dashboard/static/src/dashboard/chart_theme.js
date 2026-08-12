@@ -141,15 +141,172 @@ export function areaGradient(chartCtx, area, hex) {
 }
 
 export function withAlpha(hex, alpha) {
-    const h = (hex || "").replace("#", "").trim();
-    if (h.length !== 6) {
-        return hex;
-    }
-    const r = parseInt(h.slice(0, 2), 16);
-    const g = parseInt(h.slice(2, 4), 16);
-    const b = parseInt(h.slice(4, 6), 16);
-    return `rgba(${r},${g},${b},${alpha})`;
+    const c = toRgb(hex);
+    return c ? `rgba(${c.r},${c.g},${c.b},${alpha})` : hex;
 }
+
+/** Parse "#rgb" / "#rrggbb" / "rgb()" / "rgba()" into {r,g,b,a}. */
+export function toRgb(color) {
+    const s = String(color || "").trim();
+    if (s.startsWith("#")) {
+        let h = s.slice(1);
+        if (h.length === 3) {
+            h = h.split("").map((ch) => ch + ch).join("");
+        }
+        if (h.length !== 6) {
+            return null;
+        }
+        return {
+            r: parseInt(h.slice(0, 2), 16),
+            g: parseInt(h.slice(2, 4), 16),
+            b: parseInt(h.slice(4, 6), 16),
+            a: 1,
+        };
+    }
+    const m = s.match(/rgba?\(([^)]+)\)/);
+    if (!m) {
+        return null;
+    }
+    const p = m[1].split(",").map((v) => parseFloat(v));
+    return { r: p[0] | 0, g: p[1] | 0, b: p[2] | 0, a: p.length > 3 ? p[3] : 1 };
+}
+
+/**
+ * Move a colour toward black (amount < 0) or white (amount > 0).
+ * Used for the lit top face and the shaded side wall of the 3D marks.
+ */
+export function shade(color, amount, alpha) {
+    const c = toRgb(color);
+    if (!c) {
+        return color;
+    }
+    const t = amount < 0 ? 0 : 255;
+    const k = Math.abs(amount);
+    const mix = (v) => Math.round(v + (t - v) * k);
+    return `rgba(${mix(c.r)},${mix(c.g)},${mix(c.b)},${alpha ?? c.a})`;
+}
+
+/** Ordered categorical ramp — identity slots, never state. */
+export function catPalette(t) {
+    return [t.cat1, t.cat3, t.cat4, t.cat2, t.series, t.good, t.critical, t.warning];
+}
+
+/**
+ * Glossy fill for a bar: a lighter tint at the base fading into the full hue,
+ * so a flat rectangle reads as a lit, rounded solid.
+ */
+export function barGradient(chartCtx, area, hex, horizontal = false) {
+    if (!area) {
+        return withAlpha(hex, 0.9);
+    }
+    const g = horizontal
+        ? chartCtx.createLinearGradient(area.left, 0, area.right, 0)
+        : chartCtx.createLinearGradient(0, area.bottom, 0, area.top);
+    g.addColorStop(0, shade(hex, -0.12, 0.95));
+    g.addColorStop(0.55, withAlpha(hex, 0.95));
+    g.addColorStop(1, shade(hex, 0.34, 0.98));
+    return g;
+}
+
+/**
+ * Extrudes doughnut / pie / polar-area slices: the same arc path is stamped
+ * repeatedly a pixel lower each time, in a progressively darker shade, so the
+ * ring gains a solid side wall. The real Chart.js arcs stay untouched on top,
+ * which keeps hover hit-testing exact — a squashed/rotated canvas transform
+ * would have moved the marks away from their hit boxes.
+ */
+export const arcDepth = {
+    id: "nxArcDepth",
+    beforeDatasetsDraw(chart, _args, opts) {
+        if (opts?.enabled === false) {
+            return;
+        }
+        const meta = chart.getDatasetMeta(0);
+        if (!meta?.data?.length) {
+            return;
+        }
+        const depth = Math.max(1, Math.round(opts?.depth ?? 14));
+        const colors = chart.data.datasets[0]?.backgroundColor || [];
+        const { ctx } = chart;
+        ctx.save();
+        for (let layer = depth; layer >= 1; layer--) {
+            // Deepest layer darkest — the wall falls away from the light.
+            const k = layer / depth;
+            meta.data.forEach((arc, i) => {
+                const base = Array.isArray(colors) ? colors[i] : colors;
+                const off = arc.options?.offset || 0;
+                const mid = (arc.startAngle + arc.endAngle) / 2;
+                ctx.save();
+                ctx.translate(Math.cos(mid) * off, Math.sin(mid) * off + layer);
+                ctx.fillStyle = shade(base, -(0.18 + 0.34 * k), 1);
+                ctx.beginPath();
+                ctx.arc(arc.x, arc.y, arc.outerRadius, arc.startAngle, arc.endAngle);
+                if (arc.innerRadius > 0) {
+                    ctx.arc(arc.x, arc.y, arc.innerRadius, arc.endAngle, arc.startAngle, true);
+                } else {
+                    ctx.lineTo(arc.x, arc.y);
+                }
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            });
+        }
+        ctx.restore();
+    },
+    /** Specular sheen across the top face, clipped to the ring itself. */
+    afterDatasetsDraw(chart, _args, opts) {
+        if (opts?.enabled === false || opts?.gloss === false) {
+            return;
+        }
+        const meta = chart.getDatasetMeta(0);
+        const first = meta?.data?.[0];
+        if (!first) {
+            return;
+        }
+        const { ctx } = chart;
+        const { x, y, outerRadius, innerRadius } = first;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x, y, outerRadius, 0, Math.PI * 2);
+        if (innerRadius > 0) {
+            ctx.arc(x, y, innerRadius, Math.PI * 2, 0, true);
+        }
+        ctx.clip();
+        const g = ctx.createLinearGradient(x, y - outerRadius, x, y + outerRadius);
+        g.addColorStop(0, "rgba(255,255,255,.30)");
+        g.addColorStop(0.42, "rgba(255,255,255,.05)");
+        g.addColorStop(1, "rgba(0,0,0,.10)");
+        ctx.fillStyle = g;
+        ctx.fillRect(x - outerRadius, y - outerRadius, outerRadius * 2, outerRadius * 2);
+        ctx.restore();
+    },
+};
+
+/**
+ * Casts a soft drop shadow under the marks of a dataset, so bars and lines sit
+ * above the card rather than being painted onto it. Scoped to the dataset draw
+ * so it never bleeds onto the grid or the axis text.
+ */
+export const markShadow = {
+    id: "nxMarkShadow",
+    beforeDatasetDraw(chart, _args, opts) {
+        if (opts?.enabled === false) {
+            return;
+        }
+        const { ctx } = chart;
+        ctx.save();
+        ctx.shadowColor = opts?.color || "rgba(16,24,40,.22)";
+        ctx.shadowBlur = opts?.blur ?? 10;
+        ctx.shadowOffsetX = opts?.offsetX ?? 0;
+        ctx.shadowOffsetY = opts?.offsetY ?? 4;
+    },
+    afterDatasetDraw(chart, _args, opts) {
+        if (opts?.enabled === false) {
+            return;
+        }
+        chart.ctx.restore();
+    },
+};
 
 /**
  * Draws the value at the end of each bar, so a value is never reachable only

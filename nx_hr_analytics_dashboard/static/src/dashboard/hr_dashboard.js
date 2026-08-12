@@ -5,13 +5,18 @@ import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { loadBundle } from "@web/core/assets";
 import {
+    arcDepth,
     areaGradient,
+    barGradient,
     barValueLabels,
     baseOptions,
+    catPalette,
     categoryAxis,
     entryAnimation,
+    markShadow,
     prefersReducedMotion,
     readTokens,
+    shade,
     shortLabel,
     tooltipStyle,
     valueAxis,
@@ -76,6 +81,21 @@ export class HrAnalyticsDashboard extends Component {
         this.docDistChart = useRef("docDistChart");
         this.docMissingDeptChart = useRef("docMissingDeptChart");
         this.insUninsuredChart = useRef("insUninsuredChart");
+        // Added visualisations — one extra angle per tab.
+        this.deptPolarChart = useRef("deptPolarChart");
+        this.netChangeChart = useRef("netChangeChart");
+        this.payMixChart = useRef("payMixChart");
+        this.payCompDeptChart = useRef("payCompDeptChart");
+        this.payRateChart = useRef("payRateChart");
+        this.docRadarChart = useRef("docRadarChart");
+        this.docStatusDeptChart = useRef("docStatusDeptChart");
+        this.insCoverDeptChart = useRef("insCoverDeptChart");
+        this.insScatterChart = useRef("insScatterChart");
+
+        // Count-up targets, keyed by tile id. Rendered by OWL (never by
+        // touching the DOM behind its back) and tweened on a rAF loop.
+        this.counters = useState({});
+        this._rafs = {};
 
         onWillStart(async () => {
             await loadBundle("web.chartjs_lib");
@@ -99,7 +119,57 @@ export class HrAnalyticsDashboard extends Component {
                 JSON.stringify(this.state.tableView),
             ],
         );
-        onWillUnmount(() => this.destroyCharts());
+        onWillUnmount(() => {
+            this.destroyCharts();
+            this.stopCounters();
+        });
+    }
+
+    // ── Count-up numbers ──────────────────────────────────────────────────
+    /**
+     * Tween a headline figure from 0 to its value. Purely decorative, so it
+     * snaps straight to the target when the OS asks for reduced motion.
+     */
+    countTo(key, target) {
+        const end = Number(target) || 0;
+        if (prefersReducedMotion() || !end) {
+            this.counters[key] = end;
+            return end;
+        }
+        if (this.counters[key] === end || this._rafs[key]?.target === end) {
+            return this.counters[key] ?? end;
+        }
+        cancelAnimationFrame(this._rafs[key]?.id);
+        const from = 0;
+        const duration = 900;
+        let started = null;
+        const step = (ts) => {
+            if (started === null) {
+                started = ts;
+            }
+            const p = Math.min(1, (ts - started) / duration);
+            // easeOutQuart — fast start, gentle settle.
+            const eased = 1 - Math.pow(1 - p, 4);
+            this.counters[key] = Math.round(from + (end - from) * eased);
+            if (p < 1) {
+                this._rafs[key] = { id: requestAnimationFrame(step), target: end };
+            } else {
+                delete this._rafs[key];
+            }
+        };
+        this._rafs[key] = { id: requestAnimationFrame(step), target: end };
+        return this.counters[key] ?? 0;
+    }
+    stopCounters() {
+        for (const k of Object.keys(this._rafs)) {
+            cancelAnimationFrame(this._rafs[k].id);
+            delete this._rafs[k];
+        }
+    }
+    /** Value to render for a counter tile: the tween while it runs. */
+    counted(key, value) {
+        this.countTo(key, value);
+        return this.counters[key] ?? 0;
     }
 
     // ── Data ────────────────────────────────────────────────────────────
@@ -315,22 +385,25 @@ export class HrAnalyticsDashboard extends Component {
     }
     get kpiCards() {
         const k = this.kpis;
+        // `accent` drives the card's tint, rail, icon chip and hover glow;
+        // `accent2` is the second stop of its gradient wash. The lead card is
+        // rendered as a full-bleed hero so the eye has somewhere to land first.
         return [
             { key: "total", label: "Total Employees", value: k.total_employees,
-              accent: "#1A5C3A", icon: "fa-users",
+              accent: "#1A5C3A", accent2: "#3FA46A", icon: "fa-users", hero: true,
               sub: { kind: "delta", value: k.net_change ?? 0 }, clickable: true },
             { key: "active", label: "Active Employees", value: k.active_employees,
-              accent: "#22C55E", icon: "fa-user-plus", clickable: true },
+              accent: "#12855a", accent2: "#43C88A", icon: "fa-user-circle-o", clickable: true },
             { key: "new_hires", label: "New Hires", value: k.new_hires,
-              accent: "#3B82F6", icon: "fa-user-plus",
+              accent: "#2a78d6", accent2: "#63A6F5", icon: "fa-user-plus",
               sub: { kind: "note", text: "this month" }, clickable: true },
             { key: "resignations", label: "Resignations", value: k.resignations,
-              accent: "#F59E0B", icon: "fa-user-times",
+              accent: "#8B5CF6", accent2: "#B794FA", icon: "fa-user-times",
               sub: { kind: "note", text: "this month" }, clickable: true },
             { key: "uninsured", label: "Uninsured", value: k.uninsured,
-              accent: "#EF4444", icon: "fa-shield", clickable: true },
+              accent: "#eb6834", accent2: "#F79B6E", icon: "fa-shield", clickable: true },
             { key: "missing_documents", label: "Missing Documents", value: k.missing_documents,
-              accent: "#EF4444", icon: "fa-file-text-o", clickable: true },
+              accent: "#d03b3b", accent2: "#EE7676", icon: "fa-file-text-o", clickable: true },
         ];
     }
 
@@ -461,7 +534,7 @@ export class HrAnalyticsDashboard extends Component {
      * never reads as a single solid colour, and a 2px surface gap separates
      * the remaining segments instead of a drawn border.
      */
-    _donutConfig(ref, entries) {
+    _donutConfig(ref, entries, { depth = 13, cutout = "66%" } = {}) {
         const t = this._tokens(ref);
         const live = (entries || []).filter((e) => (e.value || 0) > 0);
         return {
@@ -470,23 +543,28 @@ export class HrAnalyticsDashboard extends Component {
                 labels: live.map((e) => e.label),
                 datasets: [{
                     data: live.map((e) => e.value),
-                    backgroundColor: live.map((e) => e.color),
+                    // The lit top face — a touch brighter than the extruded
+                    // wall the nxArcDepth plugin stamps underneath.
+                    backgroundColor: live.map((e) => shade(e.color, 0.06, 1)),
                     // 2px surface-coloured gap between segments (spacer rule).
                     borderColor: t.surface,
                     borderWidth: 2,
                     hoverBorderColor: t.surface,
-                    hoverOffset: 6,
+                    hoverOffset: 10,
                     borderRadius: 4,
                 }],
             },
             options: {
                 ...baseOptions(t),
-                cutout: "72%",
+                cutout,
+                // Room for the extruded wall, so the ring is not clipped.
+                layout: { padding: { bottom: depth + 4 } },
                 animation: prefersReducedMotion()
                     ? { duration: 0 }
-                    : { animateRotate: true, animateScale: true, duration: 850, easing: "easeOutQuart" },
+                    : { animateRotate: true, animateScale: true, duration: 1100, easing: "easeOutQuart" },
                 plugins: {
                     legend: { display: false },
+                    nxArcDepth: { depth, gloss: true },
                     tooltip: tooltipStyle(t, {
                         callbacks: {
                             label: (c) => {
@@ -498,6 +576,297 @@ export class HrAnalyticsDashboard extends Component {
                     }),
                 },
             },
+            plugins: [arcDepth],
+        };
+    }
+
+    /**
+     * Polar area: one wedge per category, radius = magnitude. Reads the shape
+     * of a distribution at a glance where a bar list reads its ranking, and
+     * carries the categorical ramp so each department keeps its own identity.
+     */
+    _polarConfig(ref, items, { depth = 10 } = {}) {
+        const t = this._tokens(ref);
+        const ramp = catPalette(t);
+        const live = (items || []).filter((r) => (r.value || 0) > 0);
+        return {
+            type: "polarArea",
+            data: {
+                labels: live.map((r) => shortLabel(r.label, 18)),
+                datasets: [{
+                    data: live.map((r) => r.value),
+                    backgroundColor: live.map((_, i) => withAlpha(ramp[i % ramp.length], 0.88)),
+                    hoverBackgroundColor: live.map((_, i) => ramp[i % ramp.length]),
+                    borderColor: t.surface,
+                    borderWidth: 2,
+                    hoverOffset: 8,
+                }],
+            },
+            options: {
+                ...baseOptions(t),
+                layout: { padding: { bottom: depth + 2 } },
+                animation: prefersReducedMotion()
+                    ? { duration: 0 }
+                    : { animateRotate: true, animateScale: true, duration: 1200, easing: "easeOutQuart" },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        grid: { color: t.grid, circular: true },
+                        angleLines: { color: t.grid },
+                        ticks: {
+                            display: true, backdropColor: "transparent",
+                            color: t.textMuted, font: { size: 10 }, maxTicksLimit: 4,
+                        },
+                        pointLabels: { display: false },
+                    },
+                },
+                plugins: {
+                    legend: {
+                        display: true, position: "right",
+                        labels: {
+                            color: t.text, boxWidth: 10, boxHeight: 10,
+                            usePointStyle: true, pointStyle: "circle",
+                            font: { size: 11.5 }, padding: 10,
+                        },
+                    },
+                    nxArcDepth: { depth, gloss: false },
+                    tooltip: tooltipStyle(t, {
+                        callbacks: {
+                            title: (c) => live[c[0].dataIndex]?.label ?? "",
+                            label: (c) => ` ${this.fmt(c.raw)}`,
+                        },
+                    }),
+                },
+            },
+            plugins: [arcDepth],
+        };
+    }
+
+    /**
+     * Radar: several categories scored on the same 0–100 scale. The filled
+     * polygon makes an uneven profile obvious in a way six separate bars do not.
+     */
+    _radarConfig(ref, items, { color, suffix = "%", max = 100 } = {}) {
+        const t = this._tokens(ref);
+        const hue = color || t.cat1;
+        return {
+            type: "radar",
+            data: {
+                labels: items.map((r) => shortLabel(r.label, 14)),
+                datasets: [{
+                    data: items.map((r) => r.value),
+                    borderColor: hue,
+                    backgroundColor: withAlpha(hue, 0.24),
+                    pointBackgroundColor: hue,
+                    pointBorderColor: t.surface,
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 7,
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.15,
+                }],
+            },
+            options: {
+                ...baseOptions(t),
+                animation: prefersReducedMotion()
+                    ? { duration: 0 }
+                    : { duration: 1100, easing: "easeOutQuart" },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        suggestedMax: max,
+                        grid: { color: t.grid },
+                        angleLines: { color: t.grid },
+                        ticks: {
+                            display: true, backdropColor: "transparent",
+                            color: t.textMuted, font: { size: 10 }, maxTicksLimit: 4,
+                        },
+                        pointLabels: { color: t.text, font: { size: 11 } },
+                    },
+                },
+                plugins: {
+                    legend: { display: false },
+                    nxMarkShadow: { blur: 12, offsetY: 3, color: withAlpha(hue, 0.35) },
+                    tooltip: tooltipStyle(t, {
+                        callbacks: {
+                            title: (c) => items[c[0].dataIndex]?.label ?? "",
+                            label: (c) => ` ${this.fmt(c.raw)}${suffix}`,
+                        },
+                    }),
+                },
+            },
+            plugins: [markShadow],
+        };
+    }
+
+    /**
+     * Stacked composition — the parts of each category and their total in one
+     * mark. Horizontal by default so long department names stay readable.
+     */
+    _stackedBarConfig(ref, labels, series, { horizontal = true, suffix = "" } = {}) {
+        const t = this._tokens(ref);
+        return {
+            type: "bar",
+            data: {
+                labels: labels.map((l) => shortLabel(l)),
+                datasets: series.map((s) => ({
+                    label: s.label,
+                    data: s.values,
+                    backgroundColor: (c) =>
+                        barGradient(c.chart.ctx, c.chart.chartArea, s.color, horizontal),
+                    hoverBackgroundColor: shade(s.color, 0.18, 1),
+                    borderRadius: 4,
+                    borderSkipped: false,
+                    maxBarThickness: horizontal ? 26 : 56,
+                })),
+            },
+            options: {
+                ...baseOptions(t),
+                indexAxis: horizontal ? "y" : "x",
+                animation: entryAnimation({ stagger: 55 }),
+                interaction: { mode: "index", intersect: false },
+                scales: {
+                    x: horizontal
+                        ? { ...valueAxis(t), stacked: true }
+                        : { ...categoryAxis(t, { ticks: { color: t.text, font: { size: 11.5 } } }), stacked: true },
+                    y: horizontal
+                        ? categoryAxis(t, { ticks: { color: t.text, font: { size: 12 } }, stacked: true })
+                        : { ...valueAxis(t), stacked: true },
+                },
+                plugins: {
+                    legend: {
+                        display: true, position: "bottom",
+                        labels: {
+                            color: t.text, boxWidth: 10, boxHeight: 10,
+                            usePointStyle: true, pointStyle: "circle",
+                            font: { size: 11.5 }, padding: 14,
+                        },
+                    },
+                    nxMarkShadow: { blur: 8, offsetY: 3 },
+                    tooltip: tooltipStyle(t, {
+                        displayColors: true,
+                        callbacks: {
+                            title: (c) => labels[c[0].dataIndex] ?? "",
+                            label: (c) => ` ${c.dataset.label}: ${this.fmt(c.raw)}${suffix}`,
+                        },
+                    }),
+                },
+            },
+            plugins: [markShadow],
+        };
+    }
+
+    /**
+     * Diverging bars around a zero baseline — gains above, losses below, so the
+     * sign of each month is carried by direction first and colour second.
+     */
+    _divergingBarConfig(ref, items, { suffix = "" } = {}) {
+        const t = this._tokens(ref);
+        const hue = (v) => (v >= 0 ? t.good : t.critical);
+        return {
+            type: "bar",
+            data: {
+                labels: items.map((r) => r.label),
+                datasets: [{
+                    data: items.map((r) => r.value),
+                    backgroundColor: (c) => {
+                        const v = items[c.dataIndex]?.value ?? 0;
+                        return barGradient(c.chart.ctx, c.chart.chartArea, hue(v), false);
+                    },
+                    hoverBackgroundColor: items.map((r) => shade(hue(r.value), 0.15, 1)),
+                    borderRadius: 5,
+                    borderSkipped: false,
+                    maxBarThickness: 34,
+                }],
+            },
+            options: {
+                ...baseOptions(t),
+                animation: entryAnimation({ stagger: 45 }),
+                layout: { padding: { top: 22, bottom: 14 } },
+                scales: {
+                    y: {
+                        ...valueAxis(t, { ticks: { display: false } }),
+                        beginAtZero: true,
+                        grid: { color: t.grid, drawTicks: false },
+                    },
+                    x: categoryAxis(t, { ticks: { color: t.textMuted, font: { size: 11 } } }),
+                },
+                plugins: {
+                    legend: { display: false },
+                    nxMarkShadow: { blur: 10, offsetY: 4 },
+                    tooltip: tooltipStyle(t, {
+                        callbacks: {
+                            label: (c) => ` ${c.raw > 0 ? "+" : ""}${this.fmt(c.raw)}${suffix}`,
+                        },
+                    }),
+                    nxBarValueLabels: {
+                        horizontal: false, color: t.text,
+                        format: (v) => `${v > 0 ? "+" : ""}${this.fmt(v)}`,
+                    },
+                },
+            },
+            plugins: [barValueLabels, markShadow],
+        };
+    }
+
+    /**
+     * Scatter — two amounts per employee plotted against each other, with a
+     * 45° reference line. Points far below the line are the ones whose
+     * insurance base lags their actual wage.
+     */
+    _scatterConfig(ref, groups, { xLabel, yLabel } = {}) {
+        const t = this._tokens(ref);
+        return {
+            type: "scatter",
+            data: {
+                datasets: groups.map((g) => ({
+                    label: g.label,
+                    data: g.points,
+                    backgroundColor: withAlpha(g.color, 0.72),
+                    hoverBackgroundColor: g.color,
+                    borderColor: t.surface,
+                    borderWidth: 1,
+                    pointRadius: 5,
+                    pointHoverRadius: 9,
+                })),
+            },
+            options: {
+                ...baseOptions(t),
+                animation: prefersReducedMotion()
+                    ? { duration: 0 }
+                    : { duration: 900, easing: "easeOutQuart" },
+                interaction: { mode: "nearest", intersect: true },
+                scales: {
+                    x: valueAxis(t, {
+                        title: { display: !!xLabel, text: xLabel, color: t.textMuted,
+                                 font: { size: 11 } },
+                    }),
+                    y: valueAxis(t, {
+                        title: { display: !!yLabel, text: yLabel, color: t.textMuted,
+                                 font: { size: 11 } },
+                    }),
+                },
+                plugins: {
+                    legend: {
+                        display: true, position: "bottom",
+                        labels: {
+                            color: t.text, boxWidth: 9, boxHeight: 9,
+                            usePointStyle: true, pointStyle: "circle",
+                            font: { size: 11.5 }, padding: 14,
+                        },
+                    },
+                    nxMarkShadow: { blur: 8, offsetY: 2 },
+                    tooltip: tooltipStyle(t, {
+                        callbacks: {
+                            title: (c) => c[0].raw.name || "",
+                            label: (c) =>
+                                ` ${xLabel}: ${this.fmt(c.raw.x)}  ·  ${yLabel}: ${this.fmt(c.raw.y)}`,
+                        },
+                    }),
+                },
+            },
+            plugins: [markShadow],
         };
     }
 
@@ -511,10 +880,12 @@ export class HrAnalyticsDashboard extends Component {
                 labels: items.map((r) => shortLabel(r.label)),
                 datasets: [{
                     data: items.map((r) => r.value),
-                    // One series → one colour. Length already encodes magnitude.
-                    backgroundColor: withAlpha(hue, 0.88),
-                    hoverBackgroundColor: hue,
-                    borderRadius: 4,
+                    // One series → one colour; the gradient is a lit surface,
+                    // not a second encoding. Length still carries magnitude.
+                    backgroundColor: (c) =>
+                        barGradient(c.chart.ctx, c.chart.chartArea, hue, true),
+                    hoverBackgroundColor: shade(hue, 0.18, 1),
+                    borderRadius: 5,
                     borderSkipped: false,
                     maxBarThickness: 22,
                 }],
@@ -550,9 +921,10 @@ export class HrAnalyticsDashboard extends Component {
                         },
                     }),
                     nxBarValueLabels: { horizontal: true, color: t.text, format: (v) => this.fmt(v) },
+                    nxMarkShadow: { blur: 9, offsetX: 3, offsetY: 3 },
                 },
             },
-            plugins: [barValueLabels],
+            plugins: [barValueLabels, markShadow],
         };
     }
 
@@ -570,9 +942,10 @@ export class HrAnalyticsDashboard extends Component {
                 labels: items.map((r) => r.label),
                 datasets: [{
                     data: items.map((r) => r.value),
-                    backgroundColor: withAlpha(hue, 0.88),
-                    hoverBackgroundColor: hue,
-                    borderRadius: 4,
+                    backgroundColor: (c) =>
+                        barGradient(c.chart.ctx, c.chart.chartArea, hue, false),
+                    hoverBackgroundColor: shade(hue, 0.18, 1),
+                    borderRadius: 6,
                     borderSkipped: false,
                     maxBarThickness: 54,
                 }],
@@ -591,9 +964,10 @@ export class HrAnalyticsDashboard extends Component {
                         callbacks: { label: (c) => ` ${this.fmt(c.raw)} employees` },
                     }),
                     nxBarValueLabels: { horizontal: false, color: t.text, format: (v) => this.fmt(v) },
+                    nxMarkShadow: { blur: 11, offsetY: 5 },
                 },
             },
-            plugins: [barValueLabels],
+            plugins: [barValueLabels, markShadow],
         };
     }
 
@@ -618,9 +992,10 @@ export class HrAnalyticsDashboard extends Component {
                 labels: steps.map((s) => s.label),
                 datasets: [{
                     data: steps.map((s) => [s.from, s.to]),
-                    backgroundColor: steps.map((s) => withAlpha(colorFor(s), 0.9)),
-                    hoverBackgroundColor: steps.map(colorFor),
-                    borderRadius: 4,
+                    backgroundColor: (c) =>
+                        barGradient(c.chart.ctx, c.chart.chartArea, colorFor(steps[c.dataIndex]), false),
+                    hoverBackgroundColor: steps.map((s) => shade(colorFor(s), 0.18, 1)),
+                    borderRadius: 6,
                     borderSkipped: false,
                     maxBarThickness: 76,
                 }],
@@ -656,9 +1031,10 @@ export class HrAnalyticsDashboard extends Component {
                         downColor: t.cat2,
                         format: (v) => this.fmt(Math.round(v)),
                     },
+                    nxMarkShadow: { blur: 12, offsetY: 5 },
                 },
             },
-            plugins: [waterfallConnectors, waterfallLabels],
+            plugins: [waterfallConnectors, waterfallLabels, markShadow],
         };
     }
 
@@ -718,11 +1094,13 @@ export class HrAnalyticsDashboard extends Component {
                 },
                 plugins: {
                     legend: { display: false },
+                    nxMarkShadow: { blur: 14, offsetY: 6, color: withAlpha(hue, 0.35) },
                     tooltip: tooltipStyle(t, {
                         callbacks: { label: (c) => ` ${this.fmt(c.raw)}${tooltipSuffix}` },
                     }),
                 },
             },
+            plugins: [markShadow],
         };
     }
 
@@ -763,6 +1141,35 @@ export class HrAnalyticsDashboard extends Component {
         if (byGross.length && !this.isTableView("payGrossDept")) {
             this._make(this.payGrossDeptChart, "payGrossDept",
                 this._hBarConfig(this.payGrossDeptChart, byGross, { color: t.series }));
+        }
+
+        // Where the gross ends up, as a part-to-whole ring.
+        const mix = this.payMix;
+        if (mix.length) {
+            const hue = { net: t.good, tax: t.critical, insurance: t.cat1, deductions: t.cat2 };
+            this._make(this.payMixChart, "payMix",
+                this._donutConfig(this.payMixChart,
+                    mix.map((m) => ({ ...m, color: hue[m.key] || t.series })),
+                    { depth: 15, cutout: "58%" }));
+        }
+
+        // Net vs. each withholding, department by department.
+        const comp = this.payCompByDept;
+        if (comp.length) {
+            this._make(this.payCompDeptChart, "payCompDept",
+                this._stackedBarConfig(this.payCompDeptChart, comp.map((r) => r.label), [
+                    { label: "Net", color: t.good, values: comp.map((r) => Math.round(r.net)) },
+                    { label: "Tax", color: t.critical, values: comp.map((r) => Math.round(r.tax_due)) },
+                    { label: "Insurance", color: t.cat1, values: comp.map((r) => Math.round(r.insurance)) },
+                    { label: "Deductions", color: t.cat2, values: comp.map((r) => Math.round(r.deductions)) },
+                ]));
+        }
+
+        // Effective rate — the comparable number a raw tax total cannot give.
+        const rates = this.payRateByDept;
+        if (rates.length && !this.isTableView("payRate")) {
+            this._make(this.payRateChart, "payRate",
+                this._hBarConfig(this.payRateChart, rates, { color: t.cat4 }));
         }
     }
 
@@ -827,6 +1234,20 @@ export class HrAnalyticsDashboard extends Component {
                     onPointClick: (i) => this.openTurnoverMonth(i),
                 }));
         }
+
+        // Workforce distribution — the shape of the org, not its ranking.
+        const polar = this.deptPolar;
+        if (polar.length && !this.isTableView("deptPolar")) {
+            this._make(this.deptPolarChart, "deptPolar",
+                this._polarConfig(this.deptPolarChart, polar));
+        }
+
+        // Month-over-month net change — growth and shrink around zero.
+        const net = this.netChangeSeries;
+        if (net.length) {
+            this._make(this.netChangeChart, "netChange",
+                this._divergingBarConfig(this.netChangeChart, net));
+        }
     }
 
     _renderDocumentCharts() {
@@ -861,6 +1282,24 @@ export class HrAnalyticsDashboard extends Component {
             this._make(this.docMissingDeptChart, "docMissingDept",
                 this._hBarConfig(this.docMissingDeptChart, byDept, { color: t.critical }));
         }
+
+        // Completeness profile across departments, on one shared 0–100 scale.
+        const radar = this.docComplianceByDept;
+        if (radar.length >= 3) {
+            this._make(this.docRadarChart, "docRadar",
+                this._radarConfig(this.docRadarChart, radar, { color: t.cat1 }));
+        }
+
+        // What each department's file actually consists of.
+        const status = this.docStatusByDept;
+        if (status.length) {
+            this._make(this.docStatusDeptChart, "docStatusDept",
+                this._stackedBarConfig(this.docStatusDeptChart, status.map((r) => r.label), [
+                    { label: "Complete", color: t.good, values: status.map((r) => r.complete) },
+                    { label: "Missing", color: t.warning, values: status.map((r) => r.missing) },
+                    { label: "Expired", color: t.critical, values: status.map((r) => r.expired) },
+                ]));
+        }
     }
 
     _renderInsuranceCharts() {
@@ -889,6 +1328,25 @@ export class HrAnalyticsDashboard extends Component {
         if (uninsured.length && !this.isTableView("insUninsured")) {
             this._make(this.insUninsuredChart, "insUninsured",
                 this._hBarConfig(this.insUninsuredChart, uninsured, { color: t.critical }));
+        }
+
+        // Covered vs. uncovered inside each department, in one stacked mark.
+        const cover = this.insCoverageByDept;
+        if (cover.length) {
+            this._make(this.insCoverDeptChart, "insCoverDept",
+                this._stackedBarConfig(this.insCoverDeptChart, cover.map((r) => r.label), [
+                    { label: "Insured", color: t.good, values: cover.map((r) => r.insured) },
+                    { label: "Not Insured", color: t.critical, values: cover.map((r) => r.uninsured) },
+                ]));
+        }
+
+        // Wage against declared reference — the under-declaration view.
+        const scatter = this.insWageScatter;
+        if (scatter.length) {
+            this._make(this.insScatterChart, "insScatter",
+                this._scatterConfig(this.insScatterChart,
+                    scatter.map((g) => ({ ...g, color: t[g.color] })),
+                    { xLabel: "Basic Wage", yLabel: "Reference Amount" }));
         }
     }
 
@@ -919,6 +1377,50 @@ export class HrAnalyticsDashboard extends Component {
 
     _pctOf(part, total) {
         return total ? Math.round((part / total) * 1000) / 10 : 0;
+    }
+
+    /** Group rows by key, summing several numeric fields at once. */
+    _groupMulti(rows, keyField, valueFields, { limit = 7 } = {}) {
+        const acc = new Map();
+        for (const r of rows || []) {
+            const key = r[keyField] || "Undefined";
+            const cur = acc.get(key) || Object.fromEntries(valueFields.map((f) => [f, 0]));
+            for (const f of valueFields) {
+                cur[f] += Number(r[f]) || 0;
+            }
+            acc.set(key, cur);
+        }
+        return [...acc.entries()]
+            .map(([label, v]) => ({ label, ...v }))
+            .sort((a, b) => (b[valueFields[0]] || 0) - (a[valueFields[0]] || 0))
+            .slice(0, limit);
+    }
+
+    // ── Dashboard: added angles ───────────────────────────────────────────
+    /** Department headcount as a distribution shape (top 7). */
+    get deptPolar() {
+        return (this.state.data?.headcount_by_department || []).slice(0, 7);
+    }
+    /**
+     * Month-over-month change in headcount, derived from the trend series —
+     * the growth/shrink signal the cumulative line hides.
+     */
+    get netChangeSeries() {
+        const trend = this.state.data?.headcount_trend;
+        if (!trend?.values?.length) {
+            return [];
+        }
+        const out = [];
+        for (let i = 1; i < trend.values.length; i++) {
+            out.push({ label: trend.labels[i], value: trend.values[i] - trend.values[i - 1] });
+        }
+        return out;
+    }
+    get netChangeSummary() {
+        const s = this.netChangeSeries;
+        const up = s.filter((r) => r.value > 0).reduce((a, r) => a + r.value, 0);
+        const down = s.filter((r) => r.value < 0).reduce((a, r) => a - r.value, 0);
+        return { up, down, net: up - down };
     }
 
     // ── Payroll Tax ───────────────────────────────────────────────────────
@@ -961,6 +1463,32 @@ export class HrAnalyticsDashboard extends Component {
         });
         return { gross: t.gross, net: running, steps };
     }
+    /** Part-to-whole complement of the waterfall: where the gross ends up. */
+    get payMix() {
+        const t = this.state.payroll?.totals;
+        if (!t || !t.gross) {
+            return [];
+        }
+        return [
+            { key: "net", label: "Net Payout", value: Math.round(t.net) },
+            { key: "tax", label: "Tax Due", value: Math.round(t.tax_due) },
+            { key: "insurance", label: "Insurance", value: Math.round(t.insurance) },
+            { key: "deductions", label: "Other Deductions", value: Math.round(t.deductions) },
+        ].filter((r) => r.value > 0);
+    }
+    /** Net vs. each withholding, stacked per department. */
+    get payCompByDept() {
+        return this._groupMulti(this.state.payroll?.rows, "department",
+            ["gross", "net", "tax_due", "insurance", "deductions"]);
+    }
+    /** Effective tax rate per department — tax as a share of that dept's gross. */
+    get payRateByDept() {
+        return this._groupMulti(this.state.payroll?.rows, "department",
+            ["gross", "tax_due"], { limit: 8 })
+            .filter((r) => r.gross > 0)
+            .map((r) => ({ label: r.label, value: this._pctOf(r.tax_due, r.gross) }))
+            .sort((a, b) => b.value - a.value);
+    }
     get payTaxByDept() {
         return this._groupSum(this.state.payroll?.rows, "department", "tax_due");
     }
@@ -976,20 +1504,20 @@ export class HrAnalyticsDashboard extends Component {
         const cur = p.currency;
         return [
             { key: "emp", label: "Employees", value: this.fmt(t.employees),
-              icon: "fa-users", accent: "#1A5C3A" },
+              icon: "fa-users", accent: "#1A5C3A", accent2: "#3FA46A" },
             { key: "gross", label: "Total Wages", value: this.fmt(t.gross), unit: cur,
-              icon: "fa-money", accent: "#2a78d6" },
+              icon: "fa-money", accent: "#2a78d6", accent2: "#63A6F5" },
             { key: "exempt", label: "Exemptions", value: this.fmt(t.exemptions), unit: cur,
-              icon: "fa-scissors", accent: "#1baf7a",
+              icon: "fa-scissors", accent: "#1baf7a", accent2: "#57D6A8",
               meter: this._pctOf(t.exemptions, t.gross), foot: "of gross wages" },
             { key: "base", label: "Taxable Base", value: this.fmt(t.taxable_base), unit: cur,
-              icon: "fa-balance-scale", accent: "#eda100",
+              icon: "fa-balance-scale", accent: "#eda100", accent2: "#F5C64E",
               meter: this._pctOf(t.taxable_base, t.gross), foot: "of gross wages" },
             { key: "tax", label: "Total Tax Due", value: this.fmt(t.tax_due), unit: cur,
-              icon: "fa-university", accent: "#d03b3b",
+              icon: "fa-university", accent: "#d03b3b", accent2: "#EE7676",
               meter: this._pctOf(t.tax_due, t.gross), foot: "effective rate" },
             { key: "net", label: "Net Payout", value: this.fmt(t.net), unit: cur,
-              icon: "fa-check-circle", accent: "#12855a",
+              icon: "fa-check-circle", accent: "#12855a", accent2: "#43C88A",
               meter: this._pctOf(t.net, t.gross), foot: "of gross wages" },
         ];
     }
@@ -1013,6 +1541,29 @@ export class HrAnalyticsDashboard extends Component {
     get docMissingByDept() {
         return this._groupSum(this.state.documents?.rows, "department", "missing");
     }
+    /**
+     * Average file completeness per department, on the shared 0–100 scale a
+     * radar needs — an uneven polygon names the departments to chase.
+     */
+    get docComplianceByDept() {
+        const acc = new Map();
+        for (const r of this.state.documents?.rows || []) {
+            const k = r.department || "Undefined";
+            const cur = acc.get(k) || { sum: 0, n: 0 };
+            cur.sum += Number(r.pct) || 0;
+            cur.n += 1;
+            acc.set(k, cur);
+        }
+        return [...acc.entries()]
+            .map(([label, v]) => ({ label, value: Math.round(v.sum / v.n) }))
+            .sort((a, b) => b.value - a.value)
+            .slice(0, 8);
+    }
+    /** Complete / missing / expired documents stacked per department. */
+    get docStatusByDept() {
+        return this._groupMulti(this.state.documents?.rows, "department",
+            ["complete", "missing", "expired"]);
+    }
     get docStats() {
         const k = this.state.documents?.kpis;
         if (!k) {
@@ -1021,19 +1572,19 @@ export class HrAnalyticsDashboard extends Component {
         const total = k.total_employees || 0;
         return [
             { key: "total", label: "Total Employees", value: this.fmt(total),
-              icon: "fa-users", accent: "#1A5C3A" },
+              icon: "fa-users", accent: "#1A5C3A", accent2: "#3FA46A" },
             { key: "complete", label: "Complete Files", value: this.fmt(k.complete_files),
-              icon: "fa-check-circle", accent: "#12855a",
+              icon: "fa-check-circle", accent: "#12855a", accent2: "#43C88A",
               meter: this._pctOf(k.complete_files, total), foot: "of employees" },
             { key: "incomplete", label: "Incomplete Files", value: this.fmt(k.incomplete_files),
-              icon: "fa-exclamation-circle", accent: "#eda100",
+              icon: "fa-exclamation-circle", accent: "#eda100", accent2: "#F5C64E",
               meter: this._pctOf(k.incomplete_files, total), foot: "of employees" },
             { key: "missing", label: "Missing Documents", value: this.fmt(k.missing_documents),
-              icon: "fa-file-o", accent: "#eda100" },
+              icon: "fa-file-o", accent: "#eda100", accent2: "#F5C64E" },
             { key: "expired", label: "Expired Documents", value: this.fmt(k.expired_documents),
-              icon: "fa-times-circle", accent: "#d03b3b" },
+              icon: "fa-times-circle", accent: "#d03b3b", accent2: "#EE7676" },
             { key: "soon", label: "Expiring Soon", value: this.fmt(k.expiring_soon),
-              icon: "fa-clock-o", accent: "#eb6834" },
+              icon: "fa-clock-o", accent: "#eb6834", accent2: "#F79B6E" },
         ];
     }
 
@@ -1061,6 +1612,29 @@ export class HrAnalyticsDashboard extends Component {
             .sort((a, b) => b.wage - a.wage)
             .slice(0, 8);
     }
+    /** Insured vs. uninsured headcount, stacked per department. */
+    get insCoverageByDept() {
+        const rows = (this.state.insurance?.rows || []).map((r) => ({
+            department: r.department,
+            insured: r.status === "insured" ? 1 : 0,
+            uninsured: r.status === "insured" ? 0 : 1,
+        }));
+        return this._groupMulti(rows, "department", ["insured", "uninsured"], { limit: 8 });
+    }
+    /**
+     * Basic wage against the declared insurance reference, one point per
+     * employee. Points sitting low carry a reference well under their wage.
+     */
+    get insWageScatter() {
+        const rows = (this.state.insurance?.rows || []).filter((r) => r.basic_wage > 0);
+        const point = (r) => ({ x: r.basic_wage, y: r.reference_amount, name: r.name });
+        return [
+            { key: "insured", label: "Insured", color: "good",
+              points: rows.filter((r) => r.status === "insured").map(point) },
+            { key: "not", label: "Not Insured", color: "critical",
+              points: rows.filter((r) => r.status !== "insured").map(point) },
+        ].filter((g) => g.points.length);
+    }
     get insUninsuredByDept() {
         const rows = (this.state.insurance?.rows || [])
             .filter((r) => r.status !== "insured")
@@ -1075,19 +1649,19 @@ export class HrAnalyticsDashboard extends Component {
         const total = k.total_employees || 0;
         return [
             { key: "total", label: "Total Employees", value: this.fmt(total),
-              icon: "fa-users", accent: "#1A5C3A" },
+              icon: "fa-users", accent: "#1A5C3A", accent2: "#3FA46A" },
             { key: "insured", label: "Insured", value: this.fmt(k.insured),
-              icon: "fa-shield", accent: "#12855a",
+              icon: "fa-shield", accent: "#12855a", accent2: "#43C88A",
               meter: this._pctOf(k.insured, total), foot: "of employees" },
             { key: "not", label: "Not Insured", value: this.fmt(k.not_insured),
-              icon: "fa-exclamation-triangle", accent: "#d03b3b",
+              icon: "fa-exclamation-triangle", accent: "#d03b3b", accent2: "#EE7676",
               meter: this._pctOf(k.not_insured, total), foot: "of employees" },
             { key: "coverage", label: "Coverage", value: `${k.coverage}`, unit: "%",
-              icon: "fa-pie-chart", accent: "#2a78d6", meter: Number(k.coverage) || 0 },
+              icon: "fa-pie-chart", accent: "#2a78d6", accent2: "#63A6F5", meter: Number(k.coverage) || 0 },
             { key: "ref", label: "Total Reference", value: this.fmt(k.total_reference),
-              unit: this.state.insurance.currency, icon: "fa-money", accent: "#1baf7a" },
+              unit: this.state.insurance.currency, icon: "fa-money", accent: "#1baf7a", accent2: "#57D6A8" },
             { key: "nocontract", label: "No Contract", value: this.fmt(k.no_contract),
-              icon: "fa-file-text-o", accent: "#eda100" },
+              icon: "fa-file-text-o", accent: "#eda100", accent2: "#F5C64E" },
         ];
     }
 
