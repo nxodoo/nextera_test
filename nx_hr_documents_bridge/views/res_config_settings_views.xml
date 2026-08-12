@@ -16,9 +16,19 @@
                                  help="Employee documents uploaded on the HR checklist are
                                        copied into this Documents-app folder so they can be
                                        browsed and searched there. A document type can
-                                       override this with its own folder.">
+                                       override this with its own folder. Left empty, the
+                                       company's standard HR workspace is used.">
                             <field name="nx_hr_documents_folder_id"
                                    options="{'no_create': True}"/>
+                        </setting>
+                        <setting string="File Existing Documents"
+                                 help="Documents uploaded before this feature was installed
+                                       have no entry in the Documents app yet. Run this once
+                                       to file them. Safe to re-run — already-filed documents
+                                       are refreshed, not duplicated.">
+                            <button name="action_nx_file_existing_documents"
+                                    type="object" string="File Existing Documents"
+                                    class="btn-primary" icon="fa-folder-open-o"/>
                         </setting>
                     </block>
                 </app>
