@@ -502,6 +502,16 @@ class NxHrDashboardService(models.AbstractModel):
             "value": g.get("document_type_id_count", g.get("__count", 0)),
         } for g in groups]
 
+        # Earliest expiry per employee, so the table can be filtered by
+        # "what runs out between these dates". One extra search rather than a
+        # per-employee query.
+        next_expiry = {}
+        for doc in Document.search(doc_domain + [("expiry_date", "!=", False)]):
+            emp_id = doc.employee_id.id
+            current = next_expiry.get(emp_id)
+            if not current or doc.expiry_date < current:
+                next_expiry[emp_id] = doc.expiry_date
+
         rows = [{
             "id": e.id,
             "code": self._emp_code(e),
@@ -514,6 +524,9 @@ class NxHrDashboardService(models.AbstractModel):
             "expired": e.document_expired_count,
             "pct": round(e.document_compliance_rate),
             "status": e.document_status or "complete",
+            # ISO, for range comparison; the table renders it locale-style.
+            "next_expiry": (fields.Date.to_string(next_expiry[e.id])
+                            if e.id in next_expiry else False),
         } for e in emps]
 
         return {
@@ -569,6 +582,10 @@ class NxHrDashboardService(models.AbstractModel):
                 "department": emp.department_id.name or "",
                 "job": emp.job_id.name or "",
                 "contract_start": start or "---",
+                # ISO alongside the display string, so the date-range filter
+                # can compare without re-parsing "dd/mm/yyyy".
+                "contract_start_iso": (fields.Date.to_string(contract.date_start)
+                                       if contract and contract.date_start else False),
                 "has_contract": bool(contract),
                 "basic_wage": round(basic, 2),
                 "reference_amount": round(amount, 2),

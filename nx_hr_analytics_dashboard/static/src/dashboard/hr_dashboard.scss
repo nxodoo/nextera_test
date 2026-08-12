@@ -423,18 +423,72 @@
         b { color: var(--nx-text); }
     }
 
+    // One row: search flexes, the status select and date filter keep their
+    // natural width beside it, and the record count is pushed to the far
+    // right. `space-between` used to spread the controls apart and push the
+    // select onto a line of its own once the date filter was added.
     .o_nx_hr_tabletools {
-        display: flex; align-items: center; justify-content: space-between;
-        gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
+        display: flex; align-items: center;
+        gap: 10px; margin-bottom: 14px; flex-wrap: wrap;
     }
     .o_nx_hr_search {
-        flex: 1; min-width: 220px; max-width: 360px;
+        flex: 1 1 190px; min-width: 170px; max-width: 320px;
         border: 1px solid var(--nx-border); border-radius: 10px; padding: 8px 12px;
         font-size: 13px; outline: none;
         &:focus { border-color: var(--nx-green); box-shadow: 0 0 0 3px var(--nx-green-soft); }
     }
-    .o_nx_hr_count { color: var(--nx-muted); font-size: 13px; margin-left: auto; }
+    .o_nx_hr_count {
+        color: var(--nx-muted); font-size: 13px;
+        margin-left: auto; flex: 0 0 auto; white-space: nowrap;
+    }
+
+    // ── Date-range filter beside a table's search box ─────────────────────
+    .o_nx_hr_datefilter {
+        // Stays on the toolbar line beside the select, and keeps its own
+        // controls on a single line rather than wrapping internally.
+        flex: 0 0 auto;
+        display: inline-flex; align-items: center; gap: 6px; flex-wrap: nowrap;
+        padding: 4px 8px; border: 1px solid var(--nx-border);
+        border-radius: 10px; background: var(--nx-card-bg);
+        transition: border-color .15s ease, box-shadow .15s ease;
+
+        > i.fa-filter { color: var(--nx-muted); font-size: 12px; margin-right: 2px; }
+        // A set range is a hidden state otherwise — make it visible.
+        &.o_active {
+            border-color: var(--nx-green);
+            box-shadow: 0 0 0 3px var(--nx-green-soft);
+        }
+    }
+    .o_nx_hr_dash_sep { color: var(--nx-muted); font-size: 12px; }
+    .o_nx_hr_dateinput {
+        border: 0; background: transparent; outline: none;
+        color: var(--nx-text); font-size: 12.5px; font-weight: 600;
+        font-family: inherit; padding: 3px 2px; width: 112px; flex: 0 0 auto;
+        &::-webkit-calendar-picker-indicator { opacity: .45; cursor: pointer; }
+        &:hover::-webkit-calendar-picker-indicator { opacity: .8; }
+        &:focus { color: var(--nx-green); }
+    }
+    .o_nx_hr_chipbtn {
+        border: 1px solid var(--nx-border); background: transparent;
+        color: var(--nx-muted); font-size: 11.5px; font-weight: 600;
+        padding: 4px 9px; border-radius: 7px; cursor: pointer; white-space: nowrap;
+        transition: color .15s ease, border-color .15s ease, background .15s ease;
+        &:hover {
+            color: var(--nx-green); border-color: var(--nx-green);
+            background: var(--nx-green-soft);
+        }
+        &:focus-visible { outline: 2px solid var(--nx-green); outline-offset: 1px; }
+    }
+    .o_nx_hr_linkbtn {
+        border: 0; background: transparent; color: var(--nx-green);
+        font-size: 11.5px; font-weight: 700; padding: 4px 6px;
+        border-radius: 6px; cursor: pointer; white-space: nowrap;
+        &:hover { background: var(--nx-green-soft); }
+        &:focus-visible { outline: 2px solid var(--nx-green); outline-offset: 1px; }
+    }
     .o_nx_hr_select {
+        // Never stretch or wrap to its own line — it belongs beside the search.
+        flex: 0 0 auto; width: auto;
         border: 1px solid var(--nx-border); border-radius: 10px; padding: 8px 12px;
         font-size: 13px; font-weight: 600; color: var(--nx-text); background: #fff;
         outline: none; cursor: pointer;

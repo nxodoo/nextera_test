@@ -54,6 +54,9 @@
     .o_nx_hr_alert { background: #1F252D; }
     .o_nx_hr_select { background: var(--nx-card-bg); color: var(--nx-text); }
     .o_nx_hr_search { background: var(--nx-card-bg); color: var(--nx-text); }
+    // The native date picker icon is near-invisible on a dark field.
+    .o_nx_hr_dateinput::-webkit-calendar-picker-indicator { filter: invert(1); opacity: .5; }
+    .o_nx_hr_dateinput:hover::-webkit-calendar-picker-indicator { opacity: .85; }
     .o_nx_hr_kpi_icon {
         background: color-mix(in srgb, var(--accent, #4FBF88) 20%, transparent);
     }

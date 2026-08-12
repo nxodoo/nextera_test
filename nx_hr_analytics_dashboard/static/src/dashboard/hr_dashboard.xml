@@ -55,6 +55,33 @@
     </div>
 </t>
 
+<!-- Date-range filter placed beside a table's search box. `rangeKey` selects
+     which table's range it drives; `hint` names the date being filtered. -->
+<t t-name="nx_hr_analytics_dashboard.DateFilter">
+    <div t-attf-class="o_nx_hr_datefilter {{ isRangeActive(rangeKey) ? 'o_active' : '' }}">
+        <i class="fa fa-filter" t-att-title="hint"/>
+        <input type="date" class="o_nx_hr_dateinput" placeholder="From"
+               t-att-title="hint + ' — from'"
+               t-att-value="dateRange(rangeKey).from"
+               t-on-change="(ev) => this.onDateRangeChange(rangeKey, 'from', ev)"/>
+        <span class="o_nx_hr_dash_sep">–</span>
+        <input type="date" class="o_nx_hr_dateinput" placeholder="To"
+               t-att-title="hint + ' — to'"
+               t-att-value="dateRange(rangeKey).to"
+               t-on-change="(ev) => this.onDateRangeChange(rangeKey, 'to', ev)"/>
+        <button class="o_nx_hr_chipbtn" t-on-click="() => this.setRangeThisMonth(rangeKey)">
+            This Month
+        </button>
+        <button class="o_nx_hr_chipbtn" t-on-click="() => this.setRangeThisYear(rangeKey)">
+            This Year
+        </button>
+        <button class="o_nx_hr_linkbtn" t-if="isRangeActive(rangeKey)"
+                t-on-click="() => this.clearRange(rangeKey)">
+            Clear
+        </button>
+    </div>
+</t>
+
 <t t-name="nx_hr_analytics_dashboard.HrAnalyticsDashboard">
     <div class="o_nx_hr_dash" t-ref="root">
 
@@ -558,6 +585,10 @@
                             <option value="incomplete">Incomplete</option>
                             <option value="expired">Expired</option>
                         </select>
+                        <t t-call="nx_hr_analytics_dashboard.DateFilter">
+                            <t t-set="rangeKey" t-value="'documents'"/>
+                            <t t-set="hint" t-value="'Next document expiry'"/>
+                        </t>
                         <span class="o_nx_hr_count">Showing <t t-esc="docRows.length"/> of <t t-esc="state.documents.rows.length"/> records</span>
                     </div>
                     <div class="o_nx_hr_tablewrap">
@@ -565,7 +596,7 @@
                             <thead><tr>
                                 <th>Emp. Code</th><th>Employee Name</th><th>Department</th><th>Job Title</th>
                                 <th class="o_num">Required</th><th class="o_num">Complete</th><th class="o_num">Missing</th>
-                                <th class="o_num">Expired</th><th class="o_num">% Complete</th><th>File Status</th><th>Actions</th>
+                                <th class="o_num">Expired</th><th>Next Expiry</th><th class="o_num">% Complete</th><th>File Status</th><th>Actions</th>
                             </tr></thead>
                             <tbody>
                                 <t t-foreach="docRows" t-as="r" t-key="r.id">
@@ -578,6 +609,8 @@
                                         <td class="o_num o_ok" t-esc="r.complete"/>
                                         <td class="o_num o_danger" t-esc="r.missing"/>
                                         <td class="o_num o_danger" t-esc="r.expired"/>
+                                        <td t-attf-class="{{ r.next_expiry ? '' : 'o_note' }}"
+                                            t-esc="r.next_expiry or '—'"/>
                                         <td>
                                             <span class="o_nx_hr_minibar">
                                                 <span class="o_track">
@@ -594,7 +627,7 @@
                                         </td>
                                     </tr>
                                 </t>
-                                <tr t-if="!docRows.length"><td colspan="11" class="o_empty">No records.</td></tr>
+                                <tr t-if="!docRows.length"><td colspan="12" class="o_empty">No records.</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -720,6 +753,10 @@
                             <option value="insured">Insured</option>
                             <option value="not_insured">Not Insured</option>
                         </select>
+                        <t t-call="nx_hr_analytics_dashboard.DateFilter">
+                            <t t-set="rangeKey" t-value="'insurance'"/>
+                            <t t-set="hint" t-value="'Contract start date'"/>
+                        </t>
                         <span class="o_nx_hr_count">Showing <t t-esc="insRows.length"/> of <t t-esc="state.insurance.rows.length"/> records</span>
                     </div>
                     <div class="o_nx_hr_tablewrap">

@@ -48,6 +48,11 @@ export class HrAnalyticsDashboard extends Component {
             insFilter: "all",
             // Per-chart "show the numbers instead" toggles (table-view twin).
             tableView: {},
+            // Per-table date-range filters, keyed by table name.
+            dateRange: {
+                documents: { from: "", to: "" },
+                insurance: { from: "", to: "" },
+            },
         });
 
         // Root ref — the design tokens are declared on it, so it is the
@@ -220,11 +225,66 @@ export class HrAnalyticsDashboard extends Component {
         });
     }
 
+    // ── Date-range filter (shared by the tables that carry a date) ────────
+    /** Local YYYY-MM-DD, so presets line up with what the user sees. */
+    _isoDay(d) {
+        const p = (n) => String(n).padStart(2, "0");
+        return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+    }
+    dateRange(key) {
+        return this.state.dateRange[key] || { from: "", to: "" };
+    }
+    onDateRangeChange(key, bound, ev) {
+        this.state.dateRange[key][bound] = ev.target.value || "";
+    }
+    setRangeThisMonth(key) {
+        const now = new Date();
+        const first = new Date(now.getFullYear(), now.getMonth(), 1);
+        const last = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        this.state.dateRange[key] = { from: this._isoDay(first), to: this._isoDay(last) };
+    }
+    setRangeThisYear(key) {
+        const y = new Date().getFullYear();
+        this.state.dateRange[key] = { from: `${y}-01-01`, to: `${y}-12-31` };
+    }
+    clearRange(key) {
+        this.state.dateRange[key] = { from: "", to: "" };
+    }
+    isRangeActive(key) {
+        const r = this.dateRange(key);
+        return !!(r.from || r.to);
+    }
+
+    /**
+     * Keep a row when its date falls inside the range. Rows with no date are
+     * dropped only once a range is actually set, so an unfiltered table still
+     * shows everyone.
+     */
+    _inRange(value, range) {
+        if (!range || (!range.from && !range.to)) {
+            return true;
+        }
+        if (!value) {
+            return false;
+        }
+        // ISO yyyy-mm-dd strings compare correctly as plain strings.
+        if (range.from && value < range.from) {
+            return false;
+        }
+        if (range.to && value > range.to) {
+            return false;
+        }
+        return true;
+    }
+
     // Filtered rows for the documents / insurance tables (client-side search).
-    _filterRows(rows, query, statusKey, statusFilter) {
+    _filterRows(rows, query, statusKey, statusFilter, { dateField, range } = {}) {
         const q = (query || "").trim().toLowerCase();
         return (rows || []).filter((r) => {
             if (statusFilter && statusFilter !== "all" && r[statusKey] !== statusFilter) {
+                return false;
+            }
+            if (dateField && !this._inRange(r[dateField], range)) {
                 return false;
             }
             if (!q) {
@@ -237,11 +297,13 @@ export class HrAnalyticsDashboard extends Component {
     }
     get docRows() {
         return this._filterRows(
-            this.state.documents?.rows, this.state.docSearch, "status", this.state.docFilter);
+            this.state.documents?.rows, this.state.docSearch, "status", this.state.docFilter,
+            { dateField: "next_expiry", range: this.dateRange("documents") });
     }
     get insRows() {
         return this._filterRows(
-            this.state.insurance?.rows, this.state.insSearch, "status", this.state.insFilter);
+            this.state.insurance?.rows, this.state.insSearch, "status", this.state.insFilter,
+            { dateField: "contract_start_iso", range: this.dateRange("insurance") });
     }
 
     // ── Formatting helpers ────────────────────────────────────────────────
