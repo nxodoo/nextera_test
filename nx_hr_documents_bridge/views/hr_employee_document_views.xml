@@ -8,7 +8,7 @@
         <field name="inherit_id"
                ref="nx_hr_analytics_dashboard.view_hr_employee_document_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//group[@string='File']" position="after">
+            <xpath expr="//group[@name='file']" position="after">
                 <group string="Documents App" invisible="not document_file">
                     <field name="documents_document_id" readonly="1"
                            options="{'no_open': True, 'no_create': True}"

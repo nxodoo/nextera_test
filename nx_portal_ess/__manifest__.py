@@ -17,7 +17,7 @@
           * Letters    - HR letter requests (new model)
           * Trips      - business trip requests (new model)
     """,
-    'author': 'NEXTERA MEA',
+    'author': 'Ahmed Tarek',
     'company': 'NEXTERA MEA',
     'category': 'Website',
     'license': 'LGPL-3',
