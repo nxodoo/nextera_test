@@ -1,0 +1,465 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* nx_hr_position_hierarchy
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-16 00:00+0000\n"
+"PO-Revision-Date: 2026-08-16 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ar_001\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+
+#. module: nx_hr_position_hierarchy
+#. odoo-python
+#: code:addons/nx_hr_position_hierarchy/models/hr_job.py:0
+msgid "A job position cannot be a parent of itself."
+msgstr "لا يمكن أن يكون المنصب الوظيفي أباً لنفسه."
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "Activate"
+msgstr "تفعيل"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields.selection,name:nx_hr_position_hierarchy.selection__hr_job__recruitment_state__active
+msgid "Active"
+msgstr "نشط"
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_search_position_hierarchy
+msgid "Active Positions"
+msgstr "المناصب النشطة"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-javascript
+#: code:addons/nx_hr_position_hierarchy/static/src/xml/position_org_chart.xml:0
+msgid "All departments"
+msgstr "كل الأقسام"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-javascript
+#: code:addons/nx_hr_position_hierarchy/static/src/xml/position_org_chart.xml:0
+msgid "All levels"
+msgstr "كل المستويات"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_applicant__application_deadline
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__application_deadline
+msgid "Application Deadline"
+msgstr "آخر موعد للتقديم"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-python
+#: code:addons/nx_hr_position_hierarchy/models/hr_applicant.py:0
+msgid "Applications can only be created for open or active job positions."
+msgstr "لا يمكن إنشاء طلبات التوظيف إلا للمناصب الوظيفية المفتوحة أو النشطة."
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_position_level_search
+msgid "Archived"
+msgstr "مؤرشف"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__assigned_employee_ids
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__assigned_employee_count
+msgid "Assigned Employees"
+msgstr "الموظفون المعينون"
+
+#. module: nx_hr_position_hierarchy
+#: model:hr.position.level,name:nx_hr_position_hierarchy.position_level_assistant
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_position_level_search
+msgid "Assistant"
+msgstr "مساعد"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_position_level__is_assistant
+msgid "Assistant Level"
+msgstr "مستوى المساعد"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__is_assistant_position
+msgid "Assistant Position"
+msgstr "منصب مساعد"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.module.module,summary:base.module_nx_hr_position_hierarchy
+msgid "Build the HR org chart from job position hierarchy with vacancy support"
+msgstr "بناء الهيكل التنظيمي للموارد البشرية من التسلسل الهرمي للمناصب الوظيفية مع دعم الشواغر"
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields.selection,name:nx_hr_position_hierarchy.selection__hr_job__recruitment_state__cancelled
+msgid "Cancelled"
+msgstr "ملغي"
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "Close"
+msgstr "إغلاق"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields.selection,name:nx_hr_position_hierarchy.selection__hr_job__recruitment_state__closed
+msgid "Closed"
+msgstr "مغلق"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,help:nx_hr_position_hierarchy.field_hr_job__time_to_fill
+msgid "Days between opening the job posting and the first hire date."
+msgstr "عدد الأيام بين فتح الإعلان الوظيفي وتاريخ أول تعيين."
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__days_to_deadline
+msgid "Days to Deadline"
+msgstr "الأيام حتى آخر موعد"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-javascript
+#: code:addons/nx_hr_position_hierarchy/static/src/xml/position_org_chart.xml:0
+msgid "Department"
+msgstr "القسم"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__child_ids
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__child_count
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "Direct Sub Positions"
+msgstr "المناصب الفرعية المباشرة"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields.selection,name:nx_hr_position_hierarchy.selection__hr_job__recruitment_state__draft
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "e.g. domain.com"
+msgstr "مثال: domain.com"
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "e.g. jobs"
+msgstr "مثال: jobs"
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "Email Alias"
+msgstr "الاسم البديل للبريد الإلكتروني"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-python
+#: code:addons/nx_hr_position_hierarchy/models/hr_job.py:0
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "Employees"
+msgstr "الموظفون"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields.selection,name:nx_hr_position_hierarchy.selection__hr_job__recruitment_state__expired
+msgid "Expired"
+msgstr "منتهي الصلاحية"
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_search_position_hierarchy
+msgid "Expired Positions"
+msgstr "المناصب منتهية الصلاحية"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-python
+#. odoo-javascript
+#: model:ir.model.fields.selection,name:nx_hr_position_hierarchy.selection__hr_job__position_status__filled
+#: code:addons/nx_hr_position_hierarchy/static/src/xml/position_org_chart.xml:0
+msgid "Filled"
+msgstr "مشغول"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-python
+#. odoo-javascript
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__headcount
+#: code:addons/nx_hr_position_hierarchy/static/src/xml/position_org_chart.xml:0
+msgid "Headcount"
+msgstr "عدد الوظائف"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-python
+#: code:addons/nx_hr_position_hierarchy/models/hr_job.py:0
+#: model:ir.model.constraint,message:nx_hr_position_hierarchy.constraint_hr_job_headcount_non_negative
+msgid "Headcount must be zero or greater."
+msgstr "يجب أن يكون عدد الوظائف صفراً أو أكثر."
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "Hiring Details"
+msgstr "تفاصيل التوظيف"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.module.module,shortdesc:base.module_nx_hr_position_hierarchy
+msgid "HR Position Based Org Chart"
+msgstr "الهيكل التنظيمي المبني على المناصب"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model,name:nx_hr_position_hierarchy.model_hr_position_level
+msgid "HR Position Level"
+msgstr "مستوى المنصب الوظيفي"
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "Job Details"
+msgstr "تفاصيل الوظيفة"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.actions.act_window,name:nx_hr_position_hierarchy.action_hr_job_position_structure
+#: model:ir.actions.client,name:nx_hr_position_hierarchy.action_hr_job_position_cards
+#: model:ir.ui.menu,name:nx_hr_position_hierarchy.menu_hr_job_position_structure
+msgid "Job Positions"
+msgstr "المناصب الوظيفية"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-python
+#: code:addons/nx_hr_position_hierarchy/models/hr_job.py:0
+msgid "Job positions must be created from Employees > Configuration > Job Positions."
+msgstr "يجب إنشاء المناصب الوظيفية من الموظفون > التهيئة > المناصب الوظيفية."
+
+#. module: nx_hr_position_hierarchy
+#. odoo-javascript
+#: code:addons/nx_hr_position_hierarchy/static/src/xml/position_org_chart.xml:0
+msgid "Level"
+msgstr "المستوى"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields.selection,name:nx_hr_position_hierarchy.selection__hr_job__position_level__1
+#: model:hr.position.level,name:nx_hr_position_hierarchy.position_level_ceo
+msgid "Level 1 - CEO"
+msgstr "المستوى 1 - الرئيس التنفيذي"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields.selection,name:nx_hr_position_hierarchy.selection__hr_job__position_level__2
+#: model:hr.position.level,name:nx_hr_position_hierarchy.position_level_director
+msgid "Level 2 - Director"
+msgstr "المستوى 2 - مدير عام"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields.selection,name:nx_hr_position_hierarchy.selection__hr_job__position_level__3
+#: model:hr.position.level,name:nx_hr_position_hierarchy.position_level_department_manager
+msgid "Level 3 - Department Manager"
+msgstr "المستوى 3 - مدير قسم"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields.selection,name:nx_hr_position_hierarchy.selection__hr_job__position_level__4
+#: model:hr.position.level,name:nx_hr_position_hierarchy.position_level_team_leader
+msgid "Level 4 - Team Leader"
+msgstr "المستوى 4 - قائد فريق"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields.selection,name:nx_hr_position_hierarchy.selection__hr_job__position_level__5
+#: model:hr.position.level,name:nx_hr_position_hierarchy.position_level_senior_employee
+msgid "Level 5 - Senior Employee"
+msgstr "المستوى 5 - موظف أول"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields.selection,name:nx_hr_position_hierarchy.selection__hr_job__position_level__6
+#: model:hr.position.level,name:nx_hr_position_hierarchy.position_level_employee
+msgid "Level 6 - Employee"
+msgstr "المستوى 6 - موظف"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-javascript
+#: code:addons/nx_hr_position_hierarchy/static/src/xml/position_org_chart.xml:0
+msgid "Loading..."
+msgstr "جارٍ التحميل..."
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "Mission Dates"
+msgstr "تواريخ المهمة"
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "new Employees"
+msgstr "موظف جديد"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-javascript
+#: code:addons/nx_hr_position_hierarchy/static/src/xml/position_org_chart.xml:0
+msgid "No assignee"
+msgstr "لا يوجد مُعيَّن"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-javascript
+#: code:addons/nx_hr_position_hierarchy/static/src/xml/position_org_chart.xml:0
+msgid "No positions match the selected filters."
+msgstr "لا توجد مناصب مطابقة للمرشحات المحددة."
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields.selection,name:nx_hr_position_hierarchy.selection__hr_job__recruitment_state__open
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "Open"
+msgstr "مفتوح"
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_search_position_hierarchy
+msgid "Open Positions"
+msgstr "المناصب المفتوحة"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-python
+#: code:addons/nx_hr_position_hierarchy/models/hr_job.py:0
+msgid "Operation not supported for Days to Deadline."
+msgstr "هذه العملية غير مدعومة لحقل الأيام حتى آخر موعد."
+
+#. module: nx_hr_position_hierarchy
+#. odoo-python
+#: code:addons/nx_hr_position_hierarchy/models/hr_employee.py:0
+#: code:addons/nx_hr_position_hierarchy/models/hr_job.py:0
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+#: model:ir.actions.client,name:nx_hr_position_hierarchy.action_position_org_chart
+#: model:ir.ui.menu,name:hr_org_chart.menu_hr_employee_org_chart
+#: model:ir.ui.menu,name:nx_hr_position_hierarchy.menu_position_org_chart_root
+msgid "Org Chart"
+msgstr "الهيكل التنظيمي"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-javascript
+#: code:addons/nx_hr_position_hierarchy/static/src/xml/position_org_chart.xml:0
+msgid "Org chart view mode"
+msgstr "وضع عرض الهيكل التنظيمي"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__parent_id
+msgid "Parent Position"
+msgstr "المنصب الأعلى"
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "Position"
+msgstr "المنصب"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__position_level
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__position_level_id
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_search_position_hierarchy
+msgid "Position Level"
+msgstr "مستوى المنصب"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.constraint,message:nx_hr_position_hierarchy.constraint_hr_position_level_code_unique
+msgid "Position level code must be unique."
+msgstr "يجب أن يكون كود مستوى المنصب فريداً."
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.actions.act_window,name:nx_hr_position_hierarchy.action_hr_position_level
+#: model:ir.ui.menu,name:nx_hr_position_hierarchy.menu_hr_position_level
+msgid "Position Levels"
+msgstr "مستويات المناصب"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__position_status
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_search_position_hierarchy
+msgid "Position Status"
+msgstr "حالة المنصب"
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "Position Structure"
+msgstr "هيكل المناصب"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-javascript
+#: code:addons/nx_hr_position_hierarchy/static/src/xml/position_org_chart.xml:0
+msgid "Position View"
+msgstr "عرض المناصب"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-javascript
+#: code:addons/nx_hr_position_hierarchy/static/src/xml/position_org_chart.xml:0
+msgid "Positions"
+msgstr "المناصب"
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_search_position_hierarchy
+msgid "Positions Near Deadline"
+msgstr "المناصب القريبة من آخر موعد"
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "Recruitment Deadline"
+msgstr "آخر موعد للتوظيف"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_applicant__recruitment_state
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__recruitment_state
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_search_position_hierarchy
+msgid "Recruitment Status"
+msgstr "حالة التوظيف"
+
+#. module: nx_hr_position_hierarchy
+#: model_terms:ir.ui.view,arch_db:nx_hr_position_hierarchy.view_hr_job_form_position_hierarchy
+msgid "Remote"
+msgstr "عن بُعد"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,help:nx_hr_position_hierarchy.field_hr_job__is_assistant_position
+msgid "Show this position as an assistant branch under its parent in the position org chart."
+msgstr "إظهار هذا المنصب كفرع مساعد أسفل المنصب الأعلى في الهيكل التنظيمي."
+
+#. module: nx_hr_position_hierarchy
+#. odoo-javascript
+#: code:addons/nx_hr_position_hierarchy/static/src/xml/position_org_chart.xml:0
+msgid "Show vacant"
+msgstr "إظهار الشاغر"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-javascript
+#: code:addons/nx_hr_position_hierarchy/static/src/xml/position_org_chart.xml:0
+msgid "Target"
+msgstr "المستهدف"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-python
+#: code:addons/nx_hr_position_hierarchy/models/hr_applicant.py:0
+msgid "The application deadline for this job position has expired."
+msgstr "انتهى آخر موعد للتقديم على هذا المنصب الوظيفي."
+
+#. module: nx_hr_position_hierarchy
+#. odoo-python
+#: code:addons/nx_hr_position_hierarchy/models/hr_job.py:0
+msgid "The parent position level must be higher than the child position level."
+msgstr "يجب أن يكون مستوى المنصب الأعلى أعلى من مستوى المنصب الفرعي."
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__time_to_fill
+msgid "Time to Fill Position"
+msgstr "زمن شغل المنصب"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__child_all_count
+msgid "Total Sub Positions"
+msgstr "إجمالي المناصب الفرعية"
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,help:nx_hr_position_hierarchy.field_hr_position_level__is_assistant
+msgid "Use this level for assistant positions that appear beside the main reporting line."
+msgstr "استخدم هذا المستوى للمناصب المساعدة التي تظهر بجانب خط التبعية الرئيسي."
+
+#. module: nx_hr_position_hierarchy
+#: model:ir.model.fields,field_description:nx_hr_position_hierarchy.field_hr_job__vacancy_count
+msgid "Vacancies"
+msgstr "الشواغر"
+
+#. module: nx_hr_position_hierarchy
+#. odoo-python
+#. odoo-javascript
+#: model:ir.model.fields.selection,name:nx_hr_position_hierarchy.selection__hr_job__position_status__vacant
+#: code:addons/nx_hr_position_hierarchy/static/src/xml/position_org_chart.xml:0
+msgid "Vacant"
+msgstr "شاغر"

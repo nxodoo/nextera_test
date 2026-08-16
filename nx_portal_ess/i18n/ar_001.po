@@ -1,0 +1,730 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* nx_portal_ess
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-16 00:00+0000\n"
+"PO-Revision-Date: 2026-08-16 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ar_001\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+msgid "active"
+msgstr "نشط"
+
+#. module: nx_portal_ess
+#. odoo-python
+#. odoo-javascript
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_letter_request__addressed_to
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+msgid "Addressed To"
+msgstr "موجّه إلى"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+msgid "allocated"
+msgstr "مخصص"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/payroll_tab.xml:0
+msgid "Amount"
+msgstr "المبلغ"
+
+#. module: nx_portal_ess
+#: model_terms:ir.ui.view,arch_db:nx_portal_ess.view_hr_business_trip_form
+#: model_terms:ir.ui.view,arch_db:nx_portal_ess.view_hr_letter_request_form
+msgid "Approve"
+msgstr "اعتماد"
+
+#. module: nx_portal_ess
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_business_trip__state__approved
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_letter_request__state__approved
+msgid "Approved"
+msgstr "معتمد"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/attendance_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+msgid "Attendance"
+msgstr "الحضور"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+msgid "avatar"
+msgstr "الصورة الشخصية"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/attendance_tab.xml:0
+msgid "Avg / day"
+msgstr "المتوسط / اليوم"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/payroll_tab.xml:0
+msgid "Basic"
+msgstr "الأساسي"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+#: model_terms:ir.ui.view,arch_db:nx_portal_ess.view_hr_business_trip_form
+msgid "Business Trip"
+msgstr "رحلة عمل"
+
+#. module: nx_portal_ess
+#: model:ir.model,name:nx_portal_ess.model_hr_business_trip
+msgid "Business Trip Request"
+msgstr "طلب رحلة عمل"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+#: model_terms:ir.ui.view,arch_db:nx_portal_ess.view_hr_business_trip_list
+#: model:ir.actions.act_window,name:nx_portal_ess.action_hr_business_trip
+#: model:ir.ui.menu,name:nx_portal_ess.menu_hr_business_trip_root
+msgid "Business Trips"
+msgstr "رحلات العمل"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/attendance_tab.xml:0
+msgid "Check In"
+msgstr "تسجيل الحضور"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/attendance_tab.xml:0
+msgid "Check Out"
+msgstr "تسجيل الانصراف"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/payroll_tab.xml:0
+msgid "Code"
+msgstr "الكود"
+
+#. module: nx_portal_ess
+#: model_terms:ir.ui.view,arch_db:nx_portal_ess.view_hr_business_trip_form
+msgid "Complete"
+msgstr "إنهاء"
+
+#. module: nx_portal_ess
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_business_trip__state__done
+msgid "Completed"
+msgstr "مكتمل"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+msgid "Cost"
+msgstr "التكلفة"
+
+#. module: nx_portal_ess
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_business_trip__currency_id
+msgid "Currency"
+msgstr "العملة"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+msgid "Date"
+msgstr "التاريخ"
+
+#. module: nx_portal_ess
+#. odoo-python
+#. odoo-javascript
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_business_trip__duration
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+msgid "Days"
+msgstr "الأيام"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+msgid "days left"
+msgstr "يوم متبقٍ"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/payroll_tab.xml:0
+msgid "Description"
+msgstr "الوصف"
+
+#. module: nx_portal_ess
+#. odoo-python
+#. odoo-javascript
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_business_trip__destination
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+msgid "Destination"
+msgstr "الوجهة"
+
+#. module: nx_portal_ess
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_business_trip__state__draft
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_letter_request__state__draft
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+msgid "e.g. Embassy, Bank…"
+msgstr "مثال: سفارة، بنك…"
+
+#. module: nx_portal_ess
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_letter_request__letter_type__embassy
+msgid "Embassy Letter"
+msgstr "خطاب للسفارة"
+
+#. module: nx_portal_ess
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_business_trip__employee_id
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_letter_request__employee_id
+msgid "Employee"
+msgstr "الموظف"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/ess_app.xml:0
+msgid "Employee Portal"
+msgstr "بوابة الموظف"
+
+#. module: nx_portal_ess
+#: model:ir.module.module,summary:base.module_nx_portal_ess
+msgid "Employee Self-Service portal mode (OWL single-page app)"
+msgstr "بوابة الخدمة الذاتية للموظفين (تطبيق صفحة واحدة بتقنية OWL)"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/ess_app.xml:0
+msgid "ESS"
+msgstr "الخدمة الذاتية"
+
+#. module: nx_portal_ess
+#. odoo-python
+#. odoo-javascript
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_business_trip__estimated_cost
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+msgid "Estimated Cost"
+msgstr "التكلفة التقديرية"
+
+#. module: nx_portal_ess
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_letter_request__letter_type__experience
+msgid "Experience Letter"
+msgstr "شهادة خبرة"
+
+#. module: nx_portal_ess
+#. odoo-python
+#. odoo-javascript
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_business_trip__date_from
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+msgid "From"
+msgstr "من"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+msgid "Good day"
+msgstr "طاب يومك"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/attendance_tab.xml:0
+msgid "h"
+msgstr "ساعة"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/attendance_tab.xml:0
+msgid "History"
+msgstr "السجل"
+
+#. module: nx_portal_ess
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_letter_request__letter_type__hr
+msgid "HR Letter"
+msgstr "خطاب موارد بشرية"
+
+#. module: nx_portal_ess
+#: model:ir.model,name:nx_portal_ess.model_hr_letter_request
+msgid "HR Letter Request"
+msgstr "طلب خطاب موارد بشرية"
+
+#. module: nx_portal_ess
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_letter_request__state__issued
+msgid "Issued"
+msgstr "تم الإصدار"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+msgid "items"
+msgstr "عنصر"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+msgid "Latest Payslip"
+msgstr "أحدث قسيمة راتب"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+msgid "Leave History"
+msgstr "سجل الإجازات"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+msgid "Leave Management"
+msgstr "إدارة الإجازات"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+msgid "Leave Type"
+msgstr "نوع الإجازة"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+#: model_terms:ir.ui.view,arch_db:nx_portal_ess.view_hr_letter_request_form
+msgid "Letter Request"
+msgstr "طلب خطاب"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+#: model_terms:ir.ui.view,arch_db:nx_portal_ess.view_hr_letter_request_list
+#: model:ir.actions.act_window,name:nx_portal_ess.action_hr_letter_request
+#: model:ir.ui.menu,name:nx_portal_ess.menu_hr_letter_request_root
+msgid "Letter Requests"
+msgstr "طلبات الخطابات"
+
+#. module: nx_portal_ess
+#. odoo-python
+#. odoo-javascript
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_letter_request__letter_type
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+msgid "Letter Type"
+msgstr "نوع الخطاب"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/ess_app.xml:0
+msgid "Log out"
+msgstr "تسجيل الخروج"
+
+#. module: nx_portal_ess
+#: model_terms:ir.ui.view,arch_db:nx_portal_ess.view_hr_letter_request_form
+msgid "Mark Issued"
+msgstr "وضع علامة تم الإصدار"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+msgid "My Business Trips"
+msgstr "رحلات عملي"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+msgid "My Letter Requests"
+msgstr "طلبات خطاباتي"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/payroll_tab.xml:0
+msgid "My Payslips"
+msgstr "قسائم رواتبي"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/payroll_tab.xml:0
+msgid "Net"
+msgstr "الصافي"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+msgid "New Business Trip"
+msgstr "رحلة عمل جديدة"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+msgid "New Leave Request"
+msgstr "طلب إجازة جديد"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+msgid "New Letter Request"
+msgstr "طلب خطاب جديد"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+msgid "New Request"
+msgstr "طلب جديد"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+msgid "New Trip"
+msgstr "رحلة جديدة"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/attendance_tab.xml:0
+msgid "No attendance records."
+msgstr "لا توجد سجلات حضور."
+
+#. module: nx_portal_ess
+#: model_terms:ir.actions.act_window,help:nx_portal_ess.action_hr_business_trip
+msgid "No business trips yet"
+msgstr "لا توجد رحلات عمل بعد"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+msgid "No business trips yet."
+msgstr "لا توجد رحلات عمل بعد."
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/attendance_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/payroll_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+msgid "No employee linked to your account."
+msgstr "لا يوجد موظف مرتبط بحسابك."
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+msgid "No leave allocations found."
+msgstr "لا توجد أرصدة إجازات."
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+msgid "No leave requests yet."
+msgstr "لا توجد طلبات إجازة بعد."
+
+#. module: nx_portal_ess
+#: model_terms:ir.actions.act_window,help:nx_portal_ess.action_hr_letter_request
+msgid "No letter requests yet"
+msgstr "لا توجد طلبات خطابات بعد"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+msgid "No letter requests yet."
+msgstr "لا توجد طلبات خطابات بعد."
+
+#. module: nx_portal_ess
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_letter_request__letter_type__noc
+msgid "No Objection Certificate"
+msgstr "شهادة عدم ممانعة"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/payroll_tab.xml:0
+msgid "No payslips available."
+msgstr "لا توجد قسائم رواتب متاحة."
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+msgid "No requests yet."
+msgstr "لا توجد طلبات بعد."
+
+#. module: nx_portal_ess
+#: model:ir.module.module,shortdesc:base.module_nx_portal_ess
+msgid "NX Portal ESS"
+msgstr "بوابة الخدمة الذاتية - نكستيرا"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+msgid "Open Requests"
+msgstr "الطلبات المفتوحة"
+
+#. module: nx_portal_ess
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_letter_request__letter_type__other
+msgid "Other"
+msgstr "أخرى"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/payroll_tab.xml:0
+msgid "Payroll"
+msgstr "الرواتب"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/payroll_tab.xml:0
+msgid "Payslip"
+msgstr "قسيمة الراتب"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+msgid "Pending Approvals"
+msgstr "بانتظار الاعتماد"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/payroll_tab.xml:0
+msgid "Period"
+msgstr "الفترة"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+msgid "Plan and request your business travel"
+msgstr "خطّط لسفر العمل الخاص بك وقدّم طلبك"
+
+#. module: nx_portal_ess
+#. odoo-python
+#. odoo-javascript
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_business_trip__purpose
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+#: model_terms:ir.ui.view,arch_db:nx_portal_ess.view_hr_business_trip_form
+msgid "Purpose"
+msgstr "الغرض"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+msgid "Quick Actions"
+msgstr "إجراءات سريعة"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+msgid "Reason (optional)"
+msgstr "السبب (اختياري)"
+
+#. module: nx_portal_ess
+#. odoo-python
+#. odoo-javascript
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_letter_request__reason
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+#: model_terms:ir.ui.view,arch_db:nx_portal_ess.view_hr_letter_request_form
+msgid "Reason / Notes"
+msgstr "السبب / ملاحظات"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+msgid "Recent Requests"
+msgstr "أحدث الطلبات"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/attendance_tab.xml:0
+msgid "Records"
+msgstr "السجلات"
+
+#. module: nx_portal_ess
+#. odoo-python
+#. odoo-javascript
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_business_trip__name
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_letter_request__name
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/payroll_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+msgid "Reference"
+msgstr "المرجع"
+
+#. module: nx_portal_ess
+#: model_terms:ir.ui.view,arch_db:nx_portal_ess.view_hr_business_trip_form
+#: model_terms:ir.ui.view,arch_db:nx_portal_ess.view_hr_letter_request_form
+msgid "Refuse"
+msgstr "رفض"
+
+#. module: nx_portal_ess
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_business_trip__state__refused
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_letter_request__state__refused
+msgid "Refused"
+msgstr "مرفوض"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+msgid "Reports to"
+msgstr "يتبع"
+
+#. module: nx_portal_ess
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_letter_request__request_date
+msgid "Request Date"
+msgstr "تاريخ الطلب"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+msgid "Request HR letters and certificates"
+msgstr "اطلب خطابات وشهادات الموارد البشرية"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+msgid "Request Leave"
+msgstr "طلب إجازة"
+
+#. module: nx_portal_ess
+#: model:ir.ui.menu,name:nx_portal_ess.menu_ess_employee_requests
+msgid "Requests"
+msgstr "الطلبات"
+
+#. module: nx_portal_ess
+#: model_terms:ir.actions.act_window,help:nx_portal_ess.action_hr_letter_request
+msgid "Requests submitted by employees from the ESS portal appear here."
+msgstr "تظهر هنا الطلبات المقدَّمة من الموظفين عبر بوابة الخدمة الذاتية."
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+msgid "Review your balances and submit new time-off requests"
+msgstr "راجع أرصدتك وقدّم طلبات إجازة جديدة"
+
+#. module: nx_portal_ess
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_letter_request__letter_type__salary
+msgid "Salary Certificate"
+msgstr "شهادة راتب"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+msgid "Select…"
+msgstr "اختر…"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/ess_app.xml:0
+msgid "Self-Service"
+msgstr "الخدمة الذاتية"
+
+#. module: nx_portal_ess
+#. odoo-python
+#. odoo-javascript
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_business_trip__state
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_letter_request__state
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/payroll_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+msgid "Status"
+msgstr "الحالة"
+
+#. module: nx_portal_ess
+#: model_terms:ir.ui.view,arch_db:nx_portal_ess.view_hr_business_trip_form
+#: model_terms:ir.ui.view,arch_db:nx_portal_ess.view_hr_letter_request_form
+msgid "Submit"
+msgstr "إرسال"
+
+#. module: nx_portal_ess
+#. odoo-python
+#. odoo-javascript
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_business_trip__state__submitted
+#: model:ir.model.fields.selection,name:nx_portal_ess.selection__hr_letter_request__state__submitted
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+msgid "Submitted"
+msgstr "تم الإرسال"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+msgid "taken /"
+msgstr "مستخدم /"
+
+#. module: nx_portal_ess
+#. odoo-python
+#. odoo-javascript
+#: model:ir.model.fields,field_description:nx_portal_ess.field_hr_business_trip__date_to
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/trips_tab.xml:0
+msgid "To"
+msgstr "إلى"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/attendance_tab.xml:0
+msgid "Total Hours"
+msgstr "إجمالي الساعات"
+
+#. module: nx_portal_ess
+#: model_terms:ir.actions.act_window,help:nx_portal_ess.action_hr_business_trip
+msgid "Trip requests submitted by employees from the ESS portal appear here."
+msgstr "تظهر هنا طلبات رحلات العمل المقدَّمة من الموظفين عبر بوابة الخدمة الذاتية."
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/leave_tab.xml:0
+#: code:addons/nx_portal_ess/static/src/js/components/letters_tab.xml:0
+msgid "Type"
+msgstr "النوع"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/payroll_tab.xml:0
+msgid "View"
+msgstr "عرض"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/attendance_tab.xml:0
+msgid "Worked Hours"
+msgstr "ساعات العمل"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/payroll_tab.xml:0
+msgid "Your payslips history"
+msgstr "سجل قسائم رواتبك"
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/dashboard_tab.xml:0
+msgid "Your portal account is not linked to an employee record yet. Please contact HR."
+msgstr "حساب البوابة الخاص بك غير مرتبط بسجل موظف بعد. يُرجى التواصل مع الموارد البشرية."
+
+#. module: nx_portal_ess
+#. odoo-javascript
+#: code:addons/nx_portal_ess/static/src/js/components/attendance_tab.xml:0
+msgid "Your recent check-in and check-out history"
+msgstr "سجل حضورك وانصرافك الأخير"

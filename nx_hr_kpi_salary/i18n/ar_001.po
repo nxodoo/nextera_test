@@ -1,0 +1,503 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* nx_hr_kpi_salary
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-16 00:00+0000\n"
+"PO-Revision-Date: 2026-08-16 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ar_001\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_kpi_evaluation.py:0
+msgid "%(label)s KPI Evaluation"
+msgstr "تقييم مؤشرات الأداء %(label)s"
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_payslip.py:0
+msgid "<p>Automatically calculates the KPI bonus from the confirmed KPI evaluation that matches the payslip period.</p>"
+msgstr "<p>يحتسب مكافأة مؤشرات الأداء تلقائياً من تقييم مؤشرات الأداء المؤكد المطابق لفترة قسيمة الراتب.</p>"
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_kpi_evaluation.py:0
+msgid "A KPI evaluation already exists for %(period)s and these departments: %(departments)s"
+msgstr "يوجد بالفعل تقييم مؤشرات أداء للفترة %(period)s وهذه الأقسام: %(departments)s"
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_kpi_evaluation.py:0
+msgid "A KPI evaluation must include at least one employee line."
+msgstr "يجب أن يتضمن تقييم مؤشرات الأداء سطر موظف واحداً على الأقل."
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.constraint,message:nx_hr_kpi_salary.constraint_hr_kpi_evaluation_kpi_period_company_frequency_unique
+msgid "A KPI evaluation reference must be unique within the selected period."
+msgstr "يجب أن يكون مرجع تقييم مؤشرات الأداء فريداً ضمن الفترة المحددة."
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_kpi_evaluation.py:0
+msgid "Add at least one employee before confirming the KPI evaluation."
+msgstr "أضف موظفاً واحداً على الأقل قبل تأكيد تقييم مؤشرات الأداء."
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.constraint,message:nx_hr_kpi_salary.constraint_hr_kpi_evaluation_line_kpi_evaluation_employee_unique
+msgid "An employee can only appear once in the same KPI evaluation."
+msgstr "لا يمكن أن يظهر الموظف أكثر من مرة في نفس تقييم مؤشرات الأداء."
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_res_company__auto_generate_kpi_evaluations
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.res_config_settings_view_form_inherit_kpi
+msgid "Auto Generate KPI Evaluations"
+msgstr "توليد تقييمات مؤشرات الأداء تلقائياً"
+
+#. module: nx_hr_kpi_salary
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.res_config_settings_view_form_inherit_kpi
+msgid "Automatically create draft KPI evaluations for monthly and quarterly payroll periods."
+msgstr "إنشاء تقييمات مؤشرات أداء كمسودة تلقائياً لفترات الرواتب الشهرية والربع سنوية."
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,help:nx_hr_kpi_salary.field_res_company__auto_generate_kpi_evaluations
+msgid "Automatically create draft KPI evaluations for monthly and quarterly periods."
+msgstr "إنشاء تقييمات مؤشرات أداء كمسودة تلقائياً للفترات الشهرية والربع سنوية."
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__company_id
+msgid "Company"
+msgstr "الشركة"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation_line__configured_kpi_value
+msgid "Configured KPI"
+msgstr "مؤشر الأداء المُعد"
+
+#. module: nx_hr_kpi_salary
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_form
+msgid "Confirm"
+msgstr "تأكيد"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields.selection,name:nx_hr_kpi_salary.selection__hr_kpi_evaluation__state__confirmed
+#: model:ir.model.fields.selection,name:nx_hr_kpi_salary.selection__hr_kpi_evaluation_line__line_state__confirmed
+msgid "Confirmed"
+msgstr "مؤكد"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation_line__contract_id
+msgid "Contract"
+msgstr "العقد"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation_line__currency_id
+msgid "Currency"
+msgstr "العملة"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__department_names
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation_line__department_id
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_tree
+msgid "Department"
+msgstr "القسم"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__department_ids
+msgid "Departments"
+msgstr "الأقسام"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_payslip_line__accounting_description
+msgid "Description"
+msgstr "الوصف"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,help:nx_hr_kpi_salary.field_hr_payslip_line__accounting_description
+msgid "Description used on the generated accounting journal items."
+msgstr "الوصف المستخدم في قيود اليومية المحاسبية المولّدة."
+
+#. module: nx_hr_kpi_salary
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_form
+msgid "Details"
+msgstr "التفاصيل"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields.selection,name:nx_hr_kpi_salary.selection__hr_kpi_evaluation__state__draft
+#: model:ir.model.fields.selection,name:nx_hr_kpi_salary.selection__hr_kpi_evaluation_line__line_state__draft
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: nx_hr_kpi_salary
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_line_form
+msgid "Employee"
+msgstr "الموظف"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.actions.act_window,name:nx_hr_kpi_salary.action_hr_kpi_evaluation_line
+msgid "Employee KPI History"
+msgstr "سجل مؤشرات أداء الموظف"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation_line__employee_id
+msgid "Employee Name"
+msgstr "اسم الموظف"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_payslip_kpi_missing_wizard__missing_employee_names
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__line_count
+msgid "Employees"
+msgstr "الموظفون"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__evaluated_by_id
+msgid "Evaluated By"
+msgstr "قام بالتقييم"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__name
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation_line__evaluation_id
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_line_form
+msgid "Evaluation"
+msgstr "التقييم"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__evaluation_date
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation_line__evaluation_date
+msgid "Evaluation Date"
+msgstr "تاريخ التقييم"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__line_ids
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_form
+msgid "Evaluation Lines"
+msgstr "سطور التقييم"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields.selection,name:nx_hr_kpi_salary.selection__hr_contract__kpi_type__fixed
+msgid "Fixed Amount"
+msgstr "مبلغ ثابت"
+
+#. module: nx_hr_kpi_salary
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_search
+msgid "Frequency"
+msgstr "التكرار"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__generated_by_scheduler
+msgid "Generated By Scheduler"
+msgstr "مولّد بواسطة المجدول"
+
+#. module: nx_hr_kpi_salary
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_payslip_kpi_missing_wizard_form
+msgid "Go Back"
+msgstr "رجوع"
+
+#. module: nx_hr_kpi_salary
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_search
+msgid "Group By"
+msgstr "تجميع حسب"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_contract__has_kpi_configuration
+msgid "Has KPI Configuration"
+msgstr "لديه إعداد مؤشرات أداء"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.module.module,shortdesc:base.module_nx_hr_kpi_salary
+msgid "HR KPI Variable Salary"
+msgstr "الراتب المتغير حسب مؤشرات الأداء"
+
+#. module: nx_hr_kpi_salary
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_payslip_form_inherit_kpi
+msgid "KPI"
+msgstr "مؤشرات الأداء"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation_line__kpi_percentage
+msgid "KPI (%)"
+msgstr "مؤشر الأداء (%)"
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_payslip.py:0
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_payslip__kpi_bonus_amount
+#: model:hr.salary.rule,name:nx_hr_kpi_salary.salary_rule_kpi_bonus_template
+msgid "KPI Bonus"
+msgstr "مكافأة مؤشرات الأداء"
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_payslip.py:0
+msgid "KPI Bonus - %(period)s"
+msgstr "مكافأة مؤشرات الأداء - %(period)s"
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_payslip.py:0
+msgid "KPI Bonus - %(period)s (%(score)s%%)"
+msgstr "مكافأة مؤشرات الأداء - %(period)s (%(score)s%%)"
+
+#. module: nx_hr_kpi_salary
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_line_form
+msgid "KPI Details"
+msgstr "تفاصيل مؤشرات الأداء"
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_kpi_evaluation.py:0
+#: model:ir.model,name:nx_hr_kpi_salary.model_hr_kpi_evaluation
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_form
+msgid "KPI Evaluation"
+msgstr "تقييم مؤشرات الأداء"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model,name:nx_hr_kpi_salary.model_hr_kpi_evaluation_line
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_payslip__kpi_evaluation_line_id
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_line_form
+msgid "KPI Evaluation Line"
+msgstr "سطر تقييم مؤشرات الأداء"
+
+#. module: nx_hr_kpi_salary
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_line_tree
+msgid "KPI Evaluation Lines"
+msgstr "سطور تقييم مؤشرات الأداء"
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_employee.py:0
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_employee__kpi_evaluation_line_count
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_employee_form_inherit_kpi
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_tree
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_search
+#: model:ir.actions.act_window,name:nx_hr_kpi_salary.action_hr_kpi_evaluation
+#: model:ir.ui.menu,name:nx_hr_kpi_salary.menu_hr_kpi_evaluation
+msgid "KPI Evaluations"
+msgstr "تقييمات مؤشرات الأداء"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_contract__kpi_frequency
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__frequency
+msgid "KPI Frequency"
+msgstr "تكرار مؤشرات الأداء"
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_payslip.py:0
+msgid "KPI has already been calculated for %(employee)s in %(period)s."
+msgstr "تم احتساب مؤشرات الأداء بالفعل للموظف %(employee)s في الفترة %(period)s."
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.constraint,message:nx_hr_kpi_salary.constraint_hr_kpi_evaluation_line_kpi_percentage_range
+msgid "KPI percentage must be between 0 and 100."
+msgstr "يجب أن تكون نسبة مؤشرات الأداء بين 0 و100."
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_contract__kpi_type
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation_line__configured_kpi_type
+msgid "KPI Type"
+msgstr "نوع مؤشر الأداء"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_contract__kpi_value
+msgid "KPI Value"
+msgstr "قيمة مؤشر الأداء"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_payslip__kpi_warning_message
+msgid "KPI Warning"
+msgstr "تنبيه مؤشرات الأداء"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.module.module,summary:base.module_nx_hr_kpi_salary
+msgid "Manage KPI-based variable salary and payroll integration"
+msgstr "إدارة الراتب المتغير المبني على مؤشرات الأداء وتكامله مع الرواتب"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model,name:nx_hr_kpi_salary.model_hr_payslip_kpi_missing_wizard
+msgid "Missing KPI Evaluation Warning"
+msgstr "تنبيه تقييم مؤشرات أداء ناقص"
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_payslip_kpi_missing_wizard_form
+#: code:addons/nx_hr_kpi_salary/models/hr_payslip.py:0
+msgid "Missing KPI Evaluations"
+msgstr "تقييمات مؤشرات الأداء الناقصة"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_payslip_kpi_missing_wizard__missing_payslip_ids
+msgid "Missing KPI Payslips"
+msgstr "قسائم الرواتب بدون تقييم مؤشرات أداء"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__period_label
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation_line__period_label
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_tree
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_search
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_form
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_line_tree
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_line_form
+msgid "Month"
+msgstr "الشهر"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields.selection,name:nx_hr_kpi_salary.selection__hr_contract__kpi_frequency__monthly
+#: model:ir.model.fields.selection,name:nx_hr_kpi_salary.selection__hr_kpi_evaluation__frequency__monthly
+msgid "Monthly"
+msgstr "شهري"
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_kpi_evaluation.py:0
+msgid "New"
+msgstr "جديد"
+
+#. module: nx_hr_kpi_salary
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_line_form
+msgid "No notes"
+msgstr "لا توجد ملاحظات"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation_line__notes
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_line_form
+msgid "Notes"
+msgstr "ملاحظات"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields.selection,name:nx_hr_kpi_salary.selection__hr_kpi_evaluation__state__paid
+#: model:ir.model.fields.selection,name:nx_hr_kpi_salary.selection__hr_kpi_evaluation_line__line_state__paid
+msgid "Paid"
+msgstr "مدفوع"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation_line__payslip_id
+msgid "Payslip"
+msgstr "قسيمة الراتب"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_payslip_kpi_missing_wizard__payslip_ids
+msgid "Payslips"
+msgstr "قسائم الرواتب"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields.selection,name:nx_hr_kpi_salary.selection__hr_contract__kpi_type__percentage
+msgid "Percentage"
+msgstr "نسبة مئوية"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__period_end
+msgid "Period End"
+msgstr "نهاية الفترة"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__period_start
+msgid "Period Start"
+msgstr "بداية الفترة"
+
+#. module: nx_hr_kpi_salary
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_payslip_kpi_missing_wizard_form
+msgid "Proceed With KPI = 0"
+msgstr "المتابعة بمؤشر أداء = 0"
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_kpi_evaluation.py:0
+msgid "Quarter ending %(month)s"
+msgstr "الربع المنتهي في %(month)s"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields.selection,name:nx_hr_kpi_salary.selection__hr_contract__kpi_frequency__quarterly
+#: model:ir.model.fields.selection,name:nx_hr_kpi_salary.selection__hr_kpi_evaluation__frequency__quarterly
+msgid "Quarterly"
+msgstr "ربع سنوي"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_contract__quarterly_kpi_months
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__quarterly_kpi_months
+msgid "Quarterly KPI Months"
+msgstr "أشهر مؤشرات الأداء الربع سنوية"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__reference
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_form
+msgid "Reference"
+msgstr "المرجع"
+
+#. module: nx_hr_kpi_salary
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_form
+msgid "Reset To Draft"
+msgstr "إعادة إلى مسودة"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation__state
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation_line__line_state
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_search
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_form
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_kpi_evaluation_line_tree
+msgid "Status"
+msgstr "الحالة"
+
+#. module: nx_hr_kpi_salary
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_payslip_kpi_missing_wizard_form
+msgid "The following employees have no KPI defined."
+msgstr "الموظفون التالون ليس لديهم مؤشر أداء محدد."
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_payslip.py:0
+msgid "The following employees have no KPI defined: %(employee)s"
+msgstr "الموظفون التالون ليس لديهم مؤشر أداء محدد: %(employee)s"
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_kpi_evaluation.py:0
+msgid "The KPI period does not match the configured KPI cycle for: %(employees)s. Create the evaluation for the contract payout month instead."
+msgstr "فترة مؤشرات الأداء لا تطابق دورة مؤشرات الأداء المُعدة للموظفين: %(employees)s. أنشئ التقييم لشهر الصرف المحدد في العقد بدلاً من ذلك."
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,help:nx_hr_kpi_salary.field_hr_contract__quarterly_kpi_months
+msgid "The months in which a quarterly KPI is calculated."
+msgstr "الأشهر التي يُحتسب فيها مؤشر الأداء الربع سنوي."
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields.selection,name:nx_hr_kpi_salary.selection__hr_kpi_evaluation__state__under_pay
+#: model:ir.model.fields.selection,name:nx_hr_kpi_salary.selection__hr_kpi_evaluation_line__line_state__under_pay
+msgid "Under Pay"
+msgstr "قيد الصرف"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,field_description:nx_hr_kpi_salary.field_hr_kpi_evaluation_line__payout_value
+msgid "Value"
+msgstr "القيمة"
+
+#. module: nx_hr_kpi_salary
+#: model:ir.model.fields,help:nx_hr_kpi_salary.field_hr_contract__kpi_value
+msgid "Variable salary component defined on the contract. When the KPI type is Percentage, this value is a percentage of the wage. When the KPI type is Fixed Amount, this value is the fixed KPI amount."
+msgstr "مكوّن الراتب المتغير المحدد في العقد. عندما يكون نوع مؤشر الأداء نسبة مئوية تكون هذه القيمة نسبة من الأجر، وعندما يكون مبلغاً ثابتاً تكون هذه القيمة مبلغ مؤشر الأداء الثابت."
+
+#. module: nx_hr_kpi_salary
+#: model_terms:ir.ui.view,arch_db:nx_hr_kpi_salary.view_hr_payslip_kpi_missing_wizard_form
+msgid "You can proceed and calculate KPI as 0, or close this window and complete the evaluation first."
+msgstr "يمكنك المتابعة واحتساب مؤشر الأداء كصفر، أو إغلاق هذه النافذة واستكمال التقييم أولاً."
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_kpi_evaluation.py:0
+msgid "You cannot reset KPI evaluations that are already under payroll or paid."
+msgstr "لا يمكنك إعادة تعيين تقييمات مؤشرات الأداء التي دخلت الرواتب أو تم صرفها."
+
+#. module: nx_hr_kpi_salary
+#. odoo-python
+#: code:addons/nx_hr_kpi_salary/models/hr_kpi_evaluation.py:0
+msgid "You cannot return an evaluation to Draft once it is linked to payslips."
+msgstr "لا يمكنك إعادة التقييم إلى مسودة بعد ارتباطه بقسائم رواتب."
