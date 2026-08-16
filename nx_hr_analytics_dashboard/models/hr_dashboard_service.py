@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+import babel.dates
 from dateutil.relativedelta import relativedelta
 
 from odoo import _, api, fields, models
 from odoo.exceptions import AccessError
+from odoo.tools.misc import get_lang
 
 
 class NxHrDashboardService(models.AbstractModel):
@@ -27,6 +29,18 @@ class NxHrDashboardService(models.AbstractModel):
 
     def _has_model(self, model):
         return model in self.env
+
+    def _format_month(self, date, fmt="MMM yy"):
+        """Month label in the user's language (Arabic months in an Arabic UI).
+
+        Falls back to the C-locale ``strftime`` when the language code is not
+        one Babel knows about.
+        """
+        try:
+            return babel.dates.format_date(
+                date, format=fmt, locale=get_lang(self.env).code)
+        except Exception:  # pragma: no cover - defensive, unknown locale
+            return date.strftime("%b %y" if fmt == "MMM yy" else "%B %Y")
 
     # ── Public entry point ─────────────────────────────────────────────────
     @api.model
@@ -108,7 +122,7 @@ class NxHrDashboardService(models.AbstractModel):
             domain, ["department_id"], ["department_id"], orderby="__count desc")
         return [{
             "id": g["department_id"][0] if g["department_id"] else False,
-            "label": g["department_id"][1] if g["department_id"] else "Undefined",
+            "label": g["department_id"][1] if g["department_id"] else _("Undefined"),
             "value": g["department_id_count"] if "department_id_count" in g else g["__count"],
         } for g in groups]
 
@@ -189,7 +203,7 @@ class NxHrDashboardService(models.AbstractModel):
                 "|", ("departure_date", "=", False),
                 ("departure_date", ">", month_end),
             ])
-            labels.append(month_end.strftime("%b %y"))
+            labels.append(self._format_month(month_end))
             values.append(count)
         return {"labels": labels, "values": values}
 
@@ -234,7 +248,7 @@ class NxHrDashboardService(models.AbstractModel):
                 ("departure_date", ">", last),
             ]) or 1
             rate = round((departures / headcount) * 100.0, 2)
-            labels.append(first.strftime("%b %y"))
+            labels.append(self._format_month(first))
             values.append(rate)
             starts.append(fields.Date.to_string(first))
             ends.append(fields.Date.to_string(last))
@@ -327,7 +341,7 @@ class NxHrDashboardService(models.AbstractModel):
 
         filing_deadline = month_end + relativedelta(days=15)
         return {
-            "month_label": month_start.strftime("%B %Y"),
+            "month_label": self._format_month(month_start, "MMMM y"),
             "month_value": month_start.strftime("%Y-%m"),
             "source": source,
             "config_name": config_name,
@@ -347,7 +361,8 @@ class NxHrDashboardService(models.AbstractModel):
         opts = []
         for i in range(0, 12):
             d = today.replace(day=1) - relativedelta(months=i)
-            opts.append({"value": d.strftime("%Y-%m"), "label": d.strftime("%B %Y")})
+            opts.append({"value": d.strftime("%Y-%m"),
+                         "label": self._format_month(d, "MMMM y")})
         return opts
 
     def _emp_code(self, employee):
@@ -399,9 +414,9 @@ class NxHrDashboardService(models.AbstractModel):
             # Red "error" only for genuine calculation problems; a missing
             # national ID is a softer "warning".
             if gross <= 0:
-                status, note = "error", "Calculation discrepancy"
+                status, note = "error", _("Calculation discrepancy")
             elif not emp.identification_id:
-                status, note = "warning", "Missing national ID"
+                status, note = "warning", _("Missing national ID")
             else:
                 status, note = self._payslip_status(slip), ""
             rows.append({
@@ -444,9 +459,9 @@ class NxHrDashboardService(models.AbstractModel):
                 insurance = round(ref * 0.11, 2)
             taxable_base = max(0.0, gross - exemption_month - insurance)
             if not emp.identification_id:
-                status, note = "warning", "Missing national ID · projected"
+                status, note = "warning", _("Missing national ID · projected")
             else:
-                status, note = "draft", "Projected from contract"
+                status, note = "draft", _("Projected from contract")
             rows.append({
                 "id": emp.id,
                 "code": self._emp_code(emp),
@@ -498,7 +513,7 @@ class NxHrDashboardService(models.AbstractModel):
             doc_domain + [("state", "=", "missing")],
             ["document_type_id"], ["document_type_id"], orderby="__count desc")
         by_type = [{
-            "label": g["document_type_id"][1] if g["document_type_id"] else "Other",
+            "label": g["document_type_id"][1] if g["document_type_id"] else _("Other"),
             "value": g.get("document_type_id_count", g.get("__count", 0)),
         } for g in groups]
 
@@ -570,7 +585,7 @@ class NxHrDashboardService(models.AbstractModel):
             if is_insured:
                 insured += 1
                 total_ref += amount
-                dept = emp.department_id.name or "Undefined"
+                dept = emp.department_id.name or _("Undefined")
                 by_dept_insured[dept] = by_dept_insured.get(dept, 0) + 1
             else:
                 not_insured += 1
@@ -623,9 +638,9 @@ class NxHrDashboardService(models.AbstractModel):
         if status and status["not_insured"]:
             alerts.append({
                 "type": "danger",
-                "title": "%s Employees Not Enrolled in Insurance" % status["not_insured"],
-                "subtitle": "No active social insurance coverage",
-                "action_label": "View Employee List",
+                "title": _("%s Employees Not Enrolled in Insurance") % status["not_insured"],
+                "subtitle": _("No active social insurance coverage"),
+                "action_label": _("View Employee List"),
                 "action": "employees_uninsured",
             })
 
@@ -636,9 +651,9 @@ class NxHrDashboardService(models.AbstractModel):
             if incomplete_emps:
                 alerts.append({
                     "type": "warning",
-                    "title": "%s Employees with Incomplete Documents" % incomplete_emps,
-                    "subtitle": "Files require completion",
-                    "action_label": "View Document Report",
+                    "title": _("%s Employees with Incomplete Documents") % incomplete_emps,
+                    "subtitle": _("Files require completion"),
+                    "action_label": _("View Document Report"),
                     "action": "documents_incomplete",
                 })
             expiring = self.env["hr.employee.document"].search_count(
@@ -647,9 +662,9 @@ class NxHrDashboardService(models.AbstractModel):
             if expiring:
                 alerts.append({
                     "type": "warning",
-                    "title": "%s Documents Expired or Expiring Soon" % expiring,
-                    "subtitle": "Action required within 30 days",
-                    "action_label": "View Details",
+                    "title": _("%s Documents Expired or Expiring Soon") % expiring,
+                    "subtitle": _("Action required within 30 days"),
+                    "action_label": _("View Details"),
                     "action": "documents_expiring",
                 })
 
@@ -657,9 +672,9 @@ class NxHrDashboardService(models.AbstractModel):
         if payroll:
             alerts.append({
                 "type": "info",
-                "title": "Payroll Tax Configuration Active",
+                "title": _("Payroll Tax Configuration Active"),
                 "subtitle": payroll["name"],
-                "action_label": "Review",
+                "action_label": _("Review"),
                 "action": "payroll_tax",
             })
 

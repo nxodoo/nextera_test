@@ -2,6 +2,7 @@
 
 import { Component, useState, useRef } from "@odoo/owl";
 import { registry } from "@web/core/registry";
+import { _t } from "@web/core/l10n/translation";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 import { getDataURLFromFile } from "@web/core/utils/urls";
 
@@ -28,7 +29,7 @@ export class NxFileDropzone extends Component {
     }
     get fileName() {
         const { fileNameField, record } = this.props;
-        return (fileNameField && record.data[fileNameField]) || "File";
+        return (fileNameField && record.data[fileNameField]) || _t("File");
     }
 
     onDragOver(ev) {
@@ -86,7 +87,7 @@ export class NxFileDropzone extends Component {
 
 export const nxFileDropzone = {
     component: NxFileDropzone,
-    displayName: "File Dropzone",
+    displayName: _t("File Dropzone"),
     supportedTypes: ["binary"],
     extractProps: ({ attrs, options }) => ({
         fileNameField: (options && options.filename_field) || attrs.filename,

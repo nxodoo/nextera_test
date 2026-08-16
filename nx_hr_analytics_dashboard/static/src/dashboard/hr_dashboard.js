@@ -2,6 +2,7 @@
 
 import { Component, onWillStart, onWillUnmount, useEffect, useState, useRef } from "@odoo/owl";
 import { registry } from "@web/core/registry";
+import { _t } from "@web/core/l10n/translation";
 import { useService } from "@web/core/utils/hooks";
 import { loadBundle } from "@web/core/assets";
 import {
@@ -263,9 +264,40 @@ export class HrAnalyticsDashboard extends Component {
 
     statusLabel(s) {
         return {
-            approved: "Approved", reviewed: "Reviewed", waiting: "Waiting",
-            draft: "Draft", warning: "Review", error: "Error", cancelled: "Cancelled",
+            approved: _t("Approved"), reviewed: _t("Reviewed"), waiting: _t("Waiting"),
+            draft: _t("Draft"), warning: _t("Review"), error: _t("Error"),
+            cancelled: _t("Cancelled"),
+            // Document file statuses share this cell renderer.
+            complete: _t("Complete"), incomplete: _t("Incomplete"), expired: _t("Expired"),
         }[s] || s;
+    }
+
+    /**
+     * Strings used inside template *expressions* (t-value / t-att-*). OWL only
+     * translates static text nodes and static attributes, so anything computed
+     * has to come through `_t` here.
+     */
+    get labels() {
+        return {
+            category: _t("Category"),
+            department: _t("Department"),
+            documentType: _t("Document Type"),
+            nextExpiry: _t("Next document expiry"),
+            contractStart: _t("Contract start date"),
+        };
+    }
+    /** Title of a chart's "show the numbers instead" toggle. */
+    viewToggleTitle(key) {
+        return this.isTableView(key) ? _t("Show chart") : _t("Show numbers");
+    }
+    openLabel(label) {
+        return _t("Open %s", label);
+    }
+    rangeTitle(hint, bound) {
+        return bound === "from" ? _t("%s — from", hint) : _t("%s — to", hint);
+    }
+    insuranceLabel(status) {
+        return status === "insured" ? _t("Insured") : _t("Not Insured");
     }
 
     exportDashboard() {
@@ -288,7 +320,7 @@ export class HrAnalyticsDashboard extends Component {
         }
         this.action.doAction({
             type: "ir.actions.act_window",
-            name: name || "Employees",
+            name: name || _t("Employees"),
             res_model: "hr.employee",
             views: [[false, "list"], [false, "kanban"], [false, "form"]],
             domain: [["active", "=", true], [field, "=", id]],
@@ -389,20 +421,20 @@ export class HrAnalyticsDashboard extends Component {
         // `accent2` is the second stop of its gradient wash. The lead card is
         // rendered as a full-bleed hero so the eye has somewhere to land first.
         return [
-            { key: "total", label: "Total Employees", value: k.total_employees,
+            { key: "total", label: _t("Total Employees"), value: k.total_employees,
               accent: "#1A5C3A", accent2: "#3FA46A", icon: "fa-users", hero: true,
               sub: { kind: "delta", value: k.net_change ?? 0 }, clickable: true },
-            { key: "active", label: "Active Employees", value: k.active_employees,
+            { key: "active", label: _t("Active Employees"), value: k.active_employees,
               accent: "#12855a", accent2: "#43C88A", icon: "fa-user-circle-o", clickable: true },
-            { key: "new_hires", label: "New Hires", value: k.new_hires,
+            { key: "new_hires", label: _t("New Hires"), value: k.new_hires,
               accent: "#2a78d6", accent2: "#63A6F5", icon: "fa-user-plus",
-              sub: { kind: "note", text: "this month" }, clickable: true },
-            { key: "resignations", label: "Resignations", value: k.resignations,
+              sub: { kind: "note", text: _t("this month") }, clickable: true },
+            { key: "resignations", label: _t("Resignations"), value: k.resignations,
               accent: "#8B5CF6", accent2: "#B794FA", icon: "fa-user-times",
-              sub: { kind: "note", text: "this month" }, clickable: true },
-            { key: "uninsured", label: "Uninsured", value: k.uninsured,
+              sub: { kind: "note", text: _t("this month") }, clickable: true },
+            { key: "uninsured", label: _t("Uninsured"), value: k.uninsured,
               accent: "#eb6834", accent2: "#F79B6E", icon: "fa-shield", clickable: true },
-            { key: "missing_documents", label: "Missing Documents", value: k.missing_documents,
+            { key: "missing_documents", label: _t("Missing Documents"), value: k.missing_documents,
               accent: "#d03b3b", accent2: "#EE7676", icon: "fa-file-text-o", clickable: true },
         ];
     }
@@ -424,14 +456,14 @@ export class HrAnalyticsDashboard extends Component {
         });
         switch (key) {
             case "total":
-                return employees("Employees", []);
+                return employees(_t("Employees"), []);
             case "active":
-                return employees("Active Employees", [["active", "=", true]]);
+                return employees(_t("Active Employees"), [["active", "=", true]]);
             case "new_hires":
-                return employees("New Hires (this month)",
+                return employees(_t("New Hires (this month)"),
                     [["create_date", ">=", this._monthStart()]]);
             case "resignations":
-                return employees("Resignations (this month)",
+                return employees(_t("Resignations (this month)"),
                     [["departure_date", ">=", this._monthStart()]], { active_test: false });
             case "uninsured":
                 return this.setTab("insurance");
@@ -502,7 +534,7 @@ export class HrAnalyticsDashboard extends Component {
             return null;
         }
         const total = (s.insured || 0) + (s.not_insured || 0);
-        return { value: this._pct(s.insured, total), caption: "insured" };
+        return { value: this._pct(s.insured, total), caption: _t("insured") };
     }
     get complianceHero() {
         const c = this.state.data?.document_compliance;
@@ -510,7 +542,7 @@ export class HrAnalyticsDashboard extends Component {
             return null;
         }
         const total = (c.complete || 0) + (c.incomplete || 0) + (c.expired || 0);
-        return { value: this._pct(c.complete, total), caption: "complete" };
+        return { value: this._pct(c.complete, total), caption: _t("complete") };
     }
     get docComplianceHero() {
         const c = this.state.documents?.compliance;
@@ -518,7 +550,7 @@ export class HrAnalyticsDashboard extends Component {
             return null;
         }
         const total = (c.complete || 0) + (c.incomplete || 0) + (c.expired || 0);
-        return { value: this._pct(c.complete, total), caption: "complete" };
+        return { value: this._pct(c.complete, total), caption: _t("complete") };
     }
     get insStatusHero() {
         const s = this.state.insurance?.status;
@@ -526,7 +558,7 @@ export class HrAnalyticsDashboard extends Component {
             return null;
         }
         const total = (s.insured || 0) + (s.not_insured || 0);
-        return { value: this._pct(s.insured, total), caption: "insured" };
+        return { value: this._pct(s.insured, total), caption: _t("insured") };
     }
 
     /**
@@ -961,7 +993,7 @@ export class HrAnalyticsDashboard extends Component {
                 plugins: {
                     legend: { display: false },
                     tooltip: tooltipStyle(t, {
-                        callbacks: { label: (c) => ` ${this.fmt(c.raw)} employees` },
+                        callbacks: { label: (c) => _t(" %s employees", this.fmt(c.raw)) },
                     }),
                     nxBarValueLabels: { horizontal: false, color: t.text, format: (v) => this.fmt(v) },
                     nxMarkShadow: { blur: 11, offsetY: 5 },
@@ -1020,7 +1052,8 @@ export class HrAnalyticsDashboard extends Component {
                             label: (c) => {
                                 const s = steps[c.dataIndex];
                                 const sign = s.kind === "down" ? "−" : "";
-                                return ` ${sign}${this.fmt(Math.round(s.value))}  ·  ${s.pct}% of gross`;
+                                return _t(" %(amount)s  ·  %(pct)s% of gross",
+                                    { amount: `${sign}${this.fmt(Math.round(s.value))}`, pct: s.pct });
                             },
                         },
                     }),
@@ -1158,10 +1191,10 @@ export class HrAnalyticsDashboard extends Component {
         if (comp.length) {
             this._make(this.payCompDeptChart, "payCompDept",
                 this._stackedBarConfig(this.payCompDeptChart, comp.map((r) => r.label), [
-                    { label: "Net", color: t.good, values: comp.map((r) => Math.round(r.net)) },
-                    { label: "Tax", color: t.critical, values: comp.map((r) => Math.round(r.tax_due)) },
-                    { label: "Insurance", color: t.cat1, values: comp.map((r) => Math.round(r.insurance)) },
-                    { label: "Deductions", color: t.cat2, values: comp.map((r) => Math.round(r.deductions)) },
+                    { label: _t("Net"), color: t.good, values: comp.map((r) => Math.round(r.net)) },
+                    { label: _t("Tax"), color: t.critical, values: comp.map((r) => Math.round(r.tax_due)) },
+                    { label: _t("Insurance"), color: t.cat1, values: comp.map((r) => Math.round(r.insurance)) },
+                    { label: _t("Deductions"), color: t.cat2, values: comp.map((r) => Math.round(r.deductions)) },
                 ]));
         }
 
@@ -1200,8 +1233,8 @@ export class HrAnalyticsDashboard extends Component {
         if (ins && !this.isTableView("insurance")) {
             this._make(this.insuranceChart, "insurance",
                 this._donutConfig(this.insuranceChart, [
-                    { label: "Insured", value: ins.insured, color: t.good },
-                    { label: "Not Insured", value: ins.not_insured, color: t.critical },
+                    { label: _t("Insured"), value: ins.insured, color: t.good },
+                    { label: _t("Not Insured"), value: ins.not_insured, color: t.critical },
                 ]));
         }
 
@@ -1210,9 +1243,9 @@ export class HrAnalyticsDashboard extends Component {
         if (comp && !this.isTableView("compliance")) {
             this._make(this.complianceChart, "compliance",
                 this._donutConfig(this.complianceChart, [
-                    { label: "Complete", value: comp.complete, color: t.good },
-                    { label: "Incomplete", value: comp.incomplete, color: t.warning },
-                    { label: "Expired", value: comp.expired, color: t.critical },
+                    { label: _t("Complete"), value: comp.complete, color: t.good },
+                    { label: _t("Incomplete"), value: comp.incomplete, color: t.warning },
+                    { label: _t("Expired"), value: comp.expired, color: t.critical },
                 ]));
         }
 
@@ -1230,7 +1263,7 @@ export class HrAnalyticsDashboard extends Component {
                 this._areaConfig(this.turnoverChart, turn, {
                     color: t.warning,
                     yOpts: { ticks: { callback: (v) => `${v}%` } },
-                    tooltipSuffix: "%  ·  click to see who left",
+                    tooltipSuffix: _t("%  ·  click to see who left"),
                     onPointClick: (i) => this.openTurnoverMonth(i),
                 }));
         }
@@ -1260,9 +1293,9 @@ export class HrAnalyticsDashboard extends Component {
         if (!this.isTableView("docCompliance")) {
             this._make(this.docComplianceChart, "docCompliance",
                 this._donutConfig(this.docComplianceChart, [
-                    { label: "Complete", value: comp.complete, color: t.good },
-                    { label: "Incomplete", value: comp.incomplete, color: t.warning },
-                    { label: "Expired", value: comp.expired, color: t.critical },
+                    { label: _t("Complete"), value: comp.complete, color: t.good },
+                    { label: _t("Incomplete"), value: comp.incomplete, color: t.warning },
+                    { label: _t("Expired"), value: comp.expired, color: t.critical },
                 ]));
         }
 
@@ -1295,9 +1328,9 @@ export class HrAnalyticsDashboard extends Component {
         if (status.length) {
             this._make(this.docStatusDeptChart, "docStatusDept",
                 this._stackedBarConfig(this.docStatusDeptChart, status.map((r) => r.label), [
-                    { label: "Complete", color: t.good, values: status.map((r) => r.complete) },
-                    { label: "Missing", color: t.warning, values: status.map((r) => r.missing) },
-                    { label: "Expired", color: t.critical, values: status.map((r) => r.expired) },
+                    { label: _t("Complete"), color: t.good, values: status.map((r) => r.complete) },
+                    { label: _t("Missing"), color: t.warning, values: status.map((r) => r.missing) },
+                    { label: _t("Expired"), color: t.critical, values: status.map((r) => r.expired) },
                 ]));
         }
     }
@@ -1312,8 +1345,8 @@ export class HrAnalyticsDashboard extends Component {
         if (!this.isTableView("insStatus")) {
             this._make(this.insStatusChart, "insStatus",
                 this._donutConfig(this.insStatusChart, [
-                    { label: "Insured", value: s.insured, color: t.good },
-                    { label: "Not Insured", value: s.not_insured, color: t.critical },
+                    { label: _t("Insured"), value: s.insured, color: t.good },
+                    { label: _t("Not Insured"), value: s.not_insured, color: t.critical },
                 ]));
         }
 
@@ -1335,8 +1368,8 @@ export class HrAnalyticsDashboard extends Component {
         if (cover.length) {
             this._make(this.insCoverDeptChart, "insCoverDept",
                 this._stackedBarConfig(this.insCoverDeptChart, cover.map((r) => r.label), [
-                    { label: "Insured", color: t.good, values: cover.map((r) => r.insured) },
-                    { label: "Not Insured", color: t.critical, values: cover.map((r) => r.uninsured) },
+                    { label: _t("Insured"), color: t.good, values: cover.map((r) => r.insured) },
+                    { label: _t("Not Insured"), color: t.critical, values: cover.map((r) => r.uninsured) },
                 ]));
         }
 
@@ -1346,7 +1379,7 @@ export class HrAnalyticsDashboard extends Component {
             this._make(this.insScatterChart, "insScatter",
                 this._scatterConfig(this.insScatterChart,
                     scatter.map((g) => ({ ...g, color: t[g.color] })),
-                    { xLabel: "Basic Wage", yLabel: "Reference Amount" }));
+                    { xLabel: _t("Basic Wage"), yLabel: _t("Reference Amount") }));
         }
     }
 
@@ -1359,7 +1392,7 @@ export class HrAnalyticsDashboard extends Component {
     _groupSum(rows, keyField, valueField, { limit = 8 } = {}) {
         const acc = new Map();
         for (const r of rows || []) {
-            const key = r[keyField] || "Undefined";
+            const key = r[keyField] || _t("Undefined");
             acc.set(key, (acc.get(key) || 0) + (Number(r[valueField]) || 0));
         }
         const out = [...acc.entries()]
@@ -1372,7 +1405,7 @@ export class HrAnalyticsDashboard extends Component {
         // Never silently truncate — the tail is folded into an explicit "Other".
         const head = out.slice(0, limit - 1);
         const rest = out.slice(limit - 1).reduce((s, r) => s + r.value, 0);
-        return [...head, { label: `Other (${out.length - limit + 1})`, value: rest }];
+        return [...head, { label: _t("Other (%s)", out.length - limit + 1), value: rest }];
     }
 
     _pctOf(part, total) {
@@ -1383,7 +1416,7 @@ export class HrAnalyticsDashboard extends Component {
     _groupMulti(rows, keyField, valueFields, { limit = 7 } = {}) {
         const acc = new Map();
         for (const r of rows || []) {
-            const key = r[keyField] || "Undefined";
+            const key = r[keyField] || _t("Undefined");
             const cur = acc.get(key) || Object.fromEntries(valueFields.map((f) => [f, 0]));
             for (const f of valueFields) {
                 cur[f] += Number(r[f]) || 0;
@@ -1437,13 +1470,13 @@ export class HrAnalyticsDashboard extends Component {
         const steps = [];
         let running = t.gross;
         steps.push({
-            key: "gross", label: "Gross Wage", kind: "total",
+            key: "gross", label: _t("Gross Wage"), kind: "total",
             from: 0, to: t.gross, value: t.gross, pct: 100,
         });
         for (const [field, label] of [
-            ["tax_due", "Tax Due"],
-            ["insurance", "Insurance"],
-            ["deductions", "Deductions"],
+            ["tax_due", _t("Tax Due")],
+            ["insurance", _t("Insurance")],
+            ["deductions", _t("Deductions")],
         ]) {
             const amount = t[field] || 0;
             if (amount <= 0) {
@@ -1457,7 +1490,7 @@ export class HrAnalyticsDashboard extends Component {
             running -= amount;
         }
         steps.push({
-            key: "net", label: "Net Salary", kind: "total",
+            key: "net", label: _t("Net Salary"), kind: "total",
             from: 0, to: running, value: running,
             pct: this._pctOf(running, t.gross),
         });
@@ -1470,10 +1503,10 @@ export class HrAnalyticsDashboard extends Component {
             return [];
         }
         return [
-            { key: "net", label: "Net Payout", value: Math.round(t.net) },
-            { key: "tax", label: "Tax Due", value: Math.round(t.tax_due) },
-            { key: "insurance", label: "Insurance", value: Math.round(t.insurance) },
-            { key: "deductions", label: "Other Deductions", value: Math.round(t.deductions) },
+            { key: "net", label: _t("Net Payout"), value: Math.round(t.net) },
+            { key: "tax", label: _t("Tax Due"), value: Math.round(t.tax_due) },
+            { key: "insurance", label: _t("Insurance"), value: Math.round(t.insurance) },
+            { key: "deductions", label: _t("Other Deductions"), value: Math.round(t.deductions) },
         ].filter((r) => r.value > 0);
     }
     /** Net vs. each withholding, stacked per department. */
@@ -1503,22 +1536,22 @@ export class HrAnalyticsDashboard extends Component {
         const t = p.totals;
         const cur = p.currency;
         return [
-            { key: "emp", label: "Employees", value: this.fmt(t.employees),
+            { key: "emp", label: _t("Employees"), value: this.fmt(t.employees),
               icon: "fa-users", accent: "#1A5C3A", accent2: "#3FA46A" },
-            { key: "gross", label: "Total Wages", value: this.fmt(t.gross), unit: cur,
+            { key: "gross", label: _t("Total Wages"), value: this.fmt(t.gross), unit: cur,
               icon: "fa-money", accent: "#2a78d6", accent2: "#63A6F5" },
-            { key: "exempt", label: "Exemptions", value: this.fmt(t.exemptions), unit: cur,
+            { key: "exempt", label: _t("Exemptions"), value: this.fmt(t.exemptions), unit: cur,
               icon: "fa-scissors", accent: "#1baf7a", accent2: "#57D6A8",
-              meter: this._pctOf(t.exemptions, t.gross), foot: "of gross wages" },
-            { key: "base", label: "Taxable Base", value: this.fmt(t.taxable_base), unit: cur,
+              meter: this._pctOf(t.exemptions, t.gross), foot: _t("of gross wages") },
+            { key: "base", label: _t("Taxable Base"), value: this.fmt(t.taxable_base), unit: cur,
               icon: "fa-balance-scale", accent: "#eda100", accent2: "#F5C64E",
-              meter: this._pctOf(t.taxable_base, t.gross), foot: "of gross wages" },
-            { key: "tax", label: "Total Tax Due", value: this.fmt(t.tax_due), unit: cur,
+              meter: this._pctOf(t.taxable_base, t.gross), foot: _t("of gross wages") },
+            { key: "tax", label: _t("Total Tax Due"), value: this.fmt(t.tax_due), unit: cur,
               icon: "fa-university", accent: "#d03b3b", accent2: "#EE7676",
-              meter: this._pctOf(t.tax_due, t.gross), foot: "effective rate" },
-            { key: "net", label: "Net Payout", value: this.fmt(t.net), unit: cur,
+              meter: this._pctOf(t.tax_due, t.gross), foot: _t("effective rate") },
+            { key: "net", label: _t("Net Payout"), value: this.fmt(t.net), unit: cur,
               icon: "fa-check-circle", accent: "#12855a", accent2: "#43C88A",
-              meter: this._pctOf(t.net, t.gross), foot: "of gross wages" },
+              meter: this._pctOf(t.net, t.gross), foot: _t("of gross wages") },
         ];
     }
 
@@ -1548,7 +1581,7 @@ export class HrAnalyticsDashboard extends Component {
     get docComplianceByDept() {
         const acc = new Map();
         for (const r of this.state.documents?.rows || []) {
-            const k = r.department || "Undefined";
+            const k = r.department || _t("Undefined");
             const cur = acc.get(k) || { sum: 0, n: 0 };
             cur.sum += Number(r.pct) || 0;
             cur.n += 1;
@@ -1571,19 +1604,19 @@ export class HrAnalyticsDashboard extends Component {
         }
         const total = k.total_employees || 0;
         return [
-            { key: "total", label: "Total Employees", value: this.fmt(total),
+            { key: "total", label: _t("Total Employees"), value: this.fmt(total),
               icon: "fa-users", accent: "#1A5C3A", accent2: "#3FA46A" },
-            { key: "complete", label: "Complete Files", value: this.fmt(k.complete_files),
+            { key: "complete", label: _t("Complete Files"), value: this.fmt(k.complete_files),
               icon: "fa-check-circle", accent: "#12855a", accent2: "#43C88A",
-              meter: this._pctOf(k.complete_files, total), foot: "of employees" },
-            { key: "incomplete", label: "Incomplete Files", value: this.fmt(k.incomplete_files),
+              meter: this._pctOf(k.complete_files, total), foot: _t("of employees") },
+            { key: "incomplete", label: _t("Incomplete Files"), value: this.fmt(k.incomplete_files),
               icon: "fa-exclamation-circle", accent: "#eda100", accent2: "#F5C64E",
-              meter: this._pctOf(k.incomplete_files, total), foot: "of employees" },
-            { key: "missing", label: "Missing Documents", value: this.fmt(k.missing_documents),
+              meter: this._pctOf(k.incomplete_files, total), foot: _t("of employees") },
+            { key: "missing", label: _t("Missing Documents"), value: this.fmt(k.missing_documents),
               icon: "fa-file-o", accent: "#eda100", accent2: "#F5C64E" },
-            { key: "expired", label: "Expired Documents", value: this.fmt(k.expired_documents),
+            { key: "expired", label: _t("Expired Documents"), value: this.fmt(k.expired_documents),
               icon: "fa-times-circle", accent: "#d03b3b", accent2: "#EE7676" },
-            { key: "soon", label: "Expiring Soon", value: this.fmt(k.expiring_soon),
+            { key: "soon", label: _t("Expiring Soon"), value: this.fmt(k.expiring_soon),
               icon: "fa-clock-o", accent: "#eb6834", accent2: "#F79B6E" },
         ];
     }
@@ -1597,7 +1630,7 @@ export class HrAnalyticsDashboard extends Component {
         const rows = (this.state.insurance?.rows || []).filter((r) => r.status === "insured");
         const byDept = new Map();
         for (const r of rows) {
-            const k = r.department || "Undefined";
+            const k = r.department || _t("Undefined");
             const cur = byDept.get(k) || { wage: 0, ref: 0 };
             cur.wage += Number(r.basic_wage) || 0;
             cur.ref += Number(r.reference_amount) || 0;
@@ -1629,9 +1662,9 @@ export class HrAnalyticsDashboard extends Component {
         const rows = (this.state.insurance?.rows || []).filter((r) => r.basic_wage > 0);
         const point = (r) => ({ x: r.basic_wage, y: r.reference_amount, name: r.name });
         return [
-            { key: "insured", label: "Insured", color: "good",
+            { key: "insured", label: _t("Insured"), color: "good",
               points: rows.filter((r) => r.status === "insured").map(point) },
-            { key: "not", label: "Not Insured", color: "critical",
+            { key: "not", label: _t("Not Insured"), color: "critical",
               points: rows.filter((r) => r.status !== "insured").map(point) },
         ].filter((g) => g.points.length);
     }
@@ -1648,19 +1681,19 @@ export class HrAnalyticsDashboard extends Component {
         }
         const total = k.total_employees || 0;
         return [
-            { key: "total", label: "Total Employees", value: this.fmt(total),
+            { key: "total", label: _t("Total Employees"), value: this.fmt(total),
               icon: "fa-users", accent: "#1A5C3A", accent2: "#3FA46A" },
-            { key: "insured", label: "Insured", value: this.fmt(k.insured),
+            { key: "insured", label: _t("Insured"), value: this.fmt(k.insured),
               icon: "fa-shield", accent: "#12855a", accent2: "#43C88A",
-              meter: this._pctOf(k.insured, total), foot: "of employees" },
-            { key: "not", label: "Not Insured", value: this.fmt(k.not_insured),
+              meter: this._pctOf(k.insured, total), foot: _t("of employees") },
+            { key: "not", label: _t("Not Insured"), value: this.fmt(k.not_insured),
               icon: "fa-exclamation-triangle", accent: "#d03b3b", accent2: "#EE7676",
-              meter: this._pctOf(k.not_insured, total), foot: "of employees" },
-            { key: "coverage", label: "Coverage", value: `${k.coverage}`, unit: "%",
+              meter: this._pctOf(k.not_insured, total), foot: _t("of employees") },
+            { key: "coverage", label: _t("Coverage"), value: `${k.coverage}`, unit: "%",
               icon: "fa-pie-chart", accent: "#2a78d6", accent2: "#63A6F5", meter: Number(k.coverage) || 0 },
-            { key: "ref", label: "Total Reference", value: this.fmt(k.total_reference),
+            { key: "ref", label: _t("Total Reference"), value: this.fmt(k.total_reference),
               unit: this.state.insurance.currency, icon: "fa-money", accent: "#1baf7a", accent2: "#57D6A8" },
-            { key: "nocontract", label: "No Contract", value: this.fmt(k.no_contract),
+            { key: "nocontract", label: _t("No Contract"), value: this.fmt(k.no_contract),
               icon: "fa-file-text-o", accent: "#eda100", accent2: "#F5C64E" },
         ];
     }
@@ -1669,7 +1702,7 @@ export class HrAnalyticsDashboard extends Component {
     /** Open an employee list restricted to an explicit set of ids. */
     _openEmployeeIds(name, ids, { includeArchived = false } = {}) {
         if (!ids || !ids.length) {
-            return this.notification.add(`No employees behind “${name}”.`, { type: "info" });
+            return this.notification.add(_t("No employees behind “%s”.", name), { type: "info" });
         }
         return this.action.doAction({
             type: "ir.actions.act_window",
@@ -1715,7 +1748,7 @@ export class HrAnalyticsDashboard extends Component {
         const end = trend.ends[index];
         const label = trend.labels[index];
         if ((trend.departures?.[index] || 0) === 0) {
-            return this.notification.add(`No departures recorded in ${label}.`, { type: "info" });
+            return this.notification.add(_t("No departures recorded in %s.", label), { type: "info" });
         }
         const domain = [["departure_date", ">=", start], ["departure_date", "<=", end]];
         const f = this.state.filters;
@@ -1727,7 +1760,7 @@ export class HrAnalyticsDashboard extends Component {
         }
         return this.action.doAction({
             type: "ir.actions.act_window",
-            name: `Departures — ${label}`,
+            name: _t("Departures — %s", label),
             res_model: "hr.employee",
             domain,
             // Departed employees are archived, so they only appear with
@@ -1749,17 +1782,17 @@ export class HrAnalyticsDashboard extends Component {
             const rows = this.state.insurance?.rows || [];
             switch (key) {
                 case "total":
-                    return this._openEmployeeIds("Employees", empIds(rows, () => true));
+                    return this._openEmployeeIds(_t("Employees"), empIds(rows, () => true));
                 case "insured":
                 case "coverage":
                 case "ref":
-                    return this._openEmployeeIds("Insured Employees",
+                    return this._openEmployeeIds(_t("Insured Employees"),
                         empIds(rows, (r) => r.status === "insured"));
                 case "not":
-                    return this._openEmployeeIds("Not Insured",
+                    return this._openEmployeeIds(_t("Not Insured"),
                         empIds(rows, (r) => r.status !== "insured"));
                 case "nocontract":
-                    return this._openEmployeeIds("No Contract",
+                    return this._openEmployeeIds(_t("No Contract"),
                         empIds(rows, (r) => !r.has_contract));
                 default:
                     return undefined;
@@ -1772,17 +1805,17 @@ export class HrAnalyticsDashboard extends Component {
                 case "total":
                     return this._openEmployeeIds("Employees", empIds(rows, () => true));
                 case "complete":
-                    return this._openEmployeeIds("Complete Files",
+                    return this._openEmployeeIds(_t("Complete Files"),
                         empIds(rows, (r) => r.status === "complete"));
                 case "incomplete":
-                    return this._openEmployeeIds("Incomplete Files",
+                    return this._openEmployeeIds(_t("Incomplete Files"),
                         empIds(rows, (r) => r.status !== "complete"));
                 case "missing":
-                    return this._openDocuments("Missing Documents", "missing");
+                    return this._openDocuments(_t("Missing Documents"), "missing");
                 case "expired":
-                    return this._openDocuments("Expired Documents", "expired");
+                    return this._openDocuments(_t("Expired Documents"), "expired");
                 case "soon":
-                    return this._openDocuments("Expiring Soon", "expiring");
+                    return this._openDocuments(_t("Expiring Soon"), "expiring");
                 default:
                     return undefined;
             }
@@ -1792,14 +1825,14 @@ export class HrAnalyticsDashboard extends Component {
             const rows = this.state.payroll?.rows || [];
             const ids = empIds(rows, () => true);
             const names = {
-                emp: "Employees in this payroll run",
-                gross: "Employees — Total Wages",
-                exempt: "Employees — Exemptions",
-                base: "Employees — Taxable Base",
-                tax: "Employees — Tax Due",
-                net: "Employees — Net Payout",
+                emp: _t("Employees in this payroll run"),
+                gross: _t("Employees — Total Wages"),
+                exempt: _t("Employees — Exemptions"),
+                base: _t("Employees — Taxable Base"),
+                tax: _t("Employees — Tax Due"),
+                net: _t("Employees — Net Payout"),
             };
-            return this._openEmployeeIds(names[key] || "Employees", ids);
+            return this._openEmployeeIds(names[key] || _t("Employees"), ids);
         }
 
         return undefined;
@@ -1820,7 +1853,7 @@ export class HrAnalyticsDashboard extends Component {
             employees_uninsured: () => this.action.doAction({
                 type: "ir.actions.act_window",
                 res_model: "hr.employee",
-                name: "Employees",
+                name: _t("Employees"),
                 views: [[false, "list"], [false, "form"]],
                 domain: [["active", "=", true]],
             }),
@@ -1831,7 +1864,7 @@ export class HrAnalyticsDashboard extends Component {
             payroll_tax: () => this.action.doAction({
                 type: "ir.actions.act_window",
                 res_model: "nx.egypt.payroll.tax",
-                name: "Payroll Tax",
+                name: _t("Payroll Tax"),
                 views: [[false, "list"], [false, "form"]],
             }),
         };

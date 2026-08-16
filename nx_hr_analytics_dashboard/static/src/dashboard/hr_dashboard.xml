@@ -7,7 +7,7 @@
         <table class="o_nx_hr_minitable">
             <thead>
                 <tr>
-                    <th t-esc="head or 'Category'"/>
+                    <th t-esc="head or labels.category"/>
                     <th class="o_num">Value</th>
                     <th class="o_num">Share</th>
                 </tr>
@@ -34,7 +34,7 @@
         <t t-foreach="tiles" t-as="s" t-key="s.key">
             <div class="o_nx_stat o_clickable"
                  t-attf-style="--accent:{{s.accent}};--accent2:{{s.accent2 or s.accent}}"
-                 t-att-title="'Open ' + s.label"
+                 t-att-title="openLabel(s.label)"
                  t-on-click="() => this.openStat(scope, s.key)">
                 <div class="o_nx_stat_top">
                     <span class="o_nx_stat_label" t-esc="s.label"/>
@@ -62,12 +62,12 @@
     <div t-attf-class="o_nx_hr_datefilter {{ isRangeActive(rangeKey) ? 'o_active' : '' }}">
         <i class="fa fa-filter" t-att-title="hint"/>
         <input type="date" class="o_nx_hr_dateinput" placeholder="From"
-               t-att-title="hint + ' — from'"
+               t-att-title="rangeTitle(hint, 'from')"
                t-att-value="dateRange(rangeKey).from"
                t-on-change="(ev) => this.onDateRangeChange(rangeKey, 'from', ev)"/>
         <span class="o_nx_hr_dash_sep">–</span>
         <input type="date" class="o_nx_hr_dateinput" placeholder="To"
-               t-att-title="hint + ' — to'"
+               t-att-title="rangeTitle(hint, 'to')"
                t-att-value="dateRange(rangeKey).to"
                t-on-change="(ev) => this.onDateRangeChange(rangeKey, 'to', ev)"/>
         <button class="o_nx_hr_chipbtn" t-on-click="() => this.setRangeThisMonth(rangeKey)">
@@ -186,7 +186,7 @@
                     <div class="o_nx_hr_cardhead">
                         <h3>Headcount by Department</h3>
                         <button class="o_nx_hr_iconbtn"
-                                t-att-title="isTableView('dept') ? 'Show chart' : 'Show numbers'"
+                                t-att-title="viewToggleTitle('dept')"
                                 t-on-click="() => this.toggleTableView('dept')">
                             <i t-attf-class="fa {{ isTableView('dept') ? 'fa-bar-chart' : 'fa-table' }}"/>
                         </button>
@@ -197,7 +197,7 @@
                     </div>
                     <t t-else="">
                         <t t-call="nx_hr_analytics_dashboard.ChartTable">
-                            <t t-set="head" t-value="'Department'"/>
+                            <t t-set="head" t-value="labels.department"/>
                             <t t-set="rows" t-value="tableRows(state.data?.headcount_by_department)"/>
                         </t>
                     </t>
@@ -251,7 +251,7 @@
                     <div class="o_nx_hr_cardhead">
                         <h3>Workforce Distribution</h3>
                         <button class="o_nx_hr_iconbtn"
-                                t-att-title="isTableView('deptPolar') ? 'Show chart' : 'Show numbers'"
+                                t-att-title="viewToggleTitle('deptPolar')"
                                 t-on-click="() => this.toggleTableView('deptPolar')">
                             <i t-attf-class="fa {{ isTableView('deptPolar') ? 'fa-pie-chart' : 'fa-table' }}"/>
                         </button>
@@ -261,7 +261,7 @@
                     </div>
                     <t t-else="">
                         <t t-call="nx_hr_analytics_dashboard.ChartTable">
-                            <t t-set="head" t-value="'Department'"/>
+                            <t t-set="head" t-value="labels.department"/>
                             <t t-set="rows" t-value="tableRows(deptPolar)"/>
                         </t>
                     </t>
@@ -460,7 +460,7 @@
                         <div class="o_nx_hr_cardhead">
                             <h3>Effective Tax Rate by Department (%)</h3>
                             <button class="o_nx_hr_iconbtn"
-                                    t-att-title="isTableView('payRate') ? 'Show chart' : 'Show numbers'"
+                                    t-att-title="viewToggleTitle('payRate')"
                                     t-on-click="() => this.toggleTableView('payRate')">
                                 <i t-attf-class="fa {{ isTableView('payRate') ? 'fa-bar-chart' : 'fa-table' }}"/>
                             </button>
@@ -471,7 +471,7 @@
                         </div>
                         <t t-else="">
                             <t t-call="nx_hr_analytics_dashboard.ChartTable">
-                                <t t-set="head" t-value="'Department'"/>
+                                <t t-set="head" t-value="labels.department"/>
                                 <t t-set="rows" t-value="tableRows(payRateByDept)"/>
                             </t>
                         </t>
@@ -483,7 +483,7 @@
                         <div class="o_nx_hr_cardhead">
                             <h3>Tax Due by Department</h3>
                             <button class="o_nx_hr_iconbtn"
-                                    t-att-title="isTableView('payTaxDept') ? 'Show chart' : 'Show numbers'"
+                                    t-att-title="viewToggleTitle('payTaxDept')"
                                     t-on-click="() => this.toggleTableView('payTaxDept')">
                                 <i t-attf-class="fa {{ isTableView('payTaxDept') ? 'fa-bar-chart' : 'fa-table' }}"/>
                             </button>
@@ -494,7 +494,7 @@
                         </div>
                         <t t-else="">
                             <t t-call="nx_hr_analytics_dashboard.ChartTable">
-                                <t t-set="head" t-value="'Department'"/>
+                                <t t-set="head" t-value="labels.department"/>
                                 <t t-set="rows" t-value="tableRows(payTaxByDept)"/>
                             </t>
                         </t>
@@ -503,7 +503,7 @@
                         <div class="o_nx_hr_cardhead">
                             <h3>Gross Wages by Department</h3>
                             <button class="o_nx_hr_iconbtn"
-                                    t-att-title="isTableView('payGrossDept') ? 'Show chart' : 'Show numbers'"
+                                    t-att-title="viewToggleTitle('payGrossDept')"
                                     t-on-click="() => this.toggleTableView('payGrossDept')">
                                 <i t-attf-class="fa {{ isTableView('payGrossDept') ? 'fa-bar-chart' : 'fa-table' }}"/>
                             </button>
@@ -514,7 +514,7 @@
                         </div>
                         <t t-else="">
                             <t t-call="nx_hr_analytics_dashboard.ChartTable">
-                                <t t-set="head" t-value="'Department'"/>
+                                <t t-set="head" t-value="labels.department"/>
                                 <t t-set="rows" t-value="tableRows(payGrossByDept)"/>
                             </t>
                         </t>
@@ -611,7 +611,7 @@
                         <div class="o_nx_hr_cardhead">
                             <h3>Missing by Department</h3>
                             <button class="o_nx_hr_iconbtn"
-                                    t-att-title="isTableView('docMissingDept') ? 'Show chart' : 'Show numbers'"
+                                    t-att-title="viewToggleTitle('docMissingDept')"
                                     t-on-click="() => this.toggleTableView('docMissingDept')">
                                 <i t-attf-class="fa {{ isTableView('docMissingDept') ? 'fa-bar-chart' : 'fa-table' }}"/>
                             </button>
@@ -622,7 +622,7 @@
                         </div>
                         <t t-else="">
                             <t t-call="nx_hr_analytics_dashboard.ChartTable">
-                                <t t-set="head" t-value="'Department'"/>
+                                <t t-set="head" t-value="labels.department"/>
                                 <t t-set="rows" t-value="tableRows(docMissingByDept)"/>
                             </t>
                         </t>
@@ -671,7 +671,7 @@
                         <div class="o_nx_hr_cardhead">
                             <h3>Missing Documents by Type</h3>
                             <button class="o_nx_hr_iconbtn"
-                                    t-att-title="isTableView('missingType') ? 'Show chart' : 'Show numbers'"
+                                    t-att-title="viewToggleTitle('missingType')"
                                     t-on-click="() => this.toggleTableView('missingType')">
                                 <i t-attf-class="fa {{ isTableView('missingType') ? 'fa-bar-chart' : 'fa-table' }}"/>
                             </button>
@@ -682,7 +682,7 @@
                         </div>
                         <t t-else="">
                             <t t-call="nx_hr_analytics_dashboard.ChartTable">
-                                <t t-set="head" t-value="'Document Type'"/>
+                                <t t-set="head" t-value="labels.documentType"/>
                                 <t t-set="rows" t-value="tableRows(state.documents?.missing_by_type)"/>
                             </t>
                         </t>
@@ -699,7 +699,7 @@
                         </select>
                         <t t-call="nx_hr_analytics_dashboard.DateFilter">
                             <t t-set="rangeKey" t-value="'documents'"/>
-                            <t t-set="hint" t-value="'Next document expiry'"/>
+                            <t t-set="hint" t-value="labels.nextExpiry"/>
                         </t>
                         <span class="o_nx_hr_count">Showing <t t-esc="docRows.length"/> of <t t-esc="state.documents.rows.length"/> records</span>
                     </div>
@@ -770,7 +770,7 @@
                         <div class="o_nx_hr_cardhead">
                             <h3>Uninsured by Department</h3>
                             <button class="o_nx_hr_iconbtn"
-                                    t-att-title="isTableView('insUninsured') ? 'Show chart' : 'Show numbers'"
+                                    t-att-title="viewToggleTitle('insUninsured')"
                                     t-on-click="() => this.toggleTableView('insUninsured')">
                                 <i t-attf-class="fa {{ isTableView('insUninsured') ? 'fa-bar-chart' : 'fa-table' }}"/>
                             </button>
@@ -781,7 +781,7 @@
                         </div>
                         <t t-else="">
                             <t t-call="nx_hr_analytics_dashboard.ChartTable">
-                                <t t-set="head" t-value="'Department'"/>
+                                <t t-set="head" t-value="labels.department"/>
                                 <t t-set="rows" t-value="tableRows(insUninsuredByDept)"/>
                             </t>
                         </t>
@@ -861,7 +861,7 @@
                         <div class="o_nx_hr_cardhead">
                             <h3>Insured Employees by Department</h3>
                             <button class="o_nx_hr_iconbtn"
-                                    t-att-title="isTableView('insByDept') ? 'Show chart' : 'Show numbers'"
+                                    t-att-title="viewToggleTitle('insByDept')"
                                     t-on-click="() => this.toggleTableView('insByDept')">
                                 <i t-attf-class="fa {{ isTableView('insByDept') ? 'fa-bar-chart' : 'fa-table' }}"/>
                             </button>
@@ -872,7 +872,7 @@
                         </div>
                         <t t-else="">
                             <t t-call="nx_hr_analytics_dashboard.ChartTable">
-                                <t t-set="head" t-value="'Department'"/>
+                                <t t-set="head" t-value="labels.department"/>
                                 <t t-set="rows" t-value="tableRows(state.insurance?.by_department)"/>
                             </t>
                         </t>
@@ -888,7 +888,7 @@
                         </select>
                         <t t-call="nx_hr_analytics_dashboard.DateFilter">
                             <t t-set="rangeKey" t-value="'insurance'"/>
-                            <t t-set="hint" t-value="'Contract start date'"/>
+                            <t t-set="hint" t-value="labels.contractStart"/>
                         </t>
                         <span class="o_nx_hr_count">Showing <t t-esc="insRows.length"/> of <t t-esc="state.insurance.rows.length"/> records</span>
                     </div>
@@ -910,7 +910,7 @@
                                         <td class="o_num" t-esc="fmt(r.basic_wage)"/>
                                         <td class="o_num" t-esc="fmt(r.reference_amount)"/>
                                         <td><span t-attf-class="o_nx_hr_status o_{{r.status === 'insured' ? 'approved' : 'error'}}"
-                                                  t-esc="r.status === 'insured' ? 'Insured' : 'Not Insured'"/></td>
+                                                  t-esc="insuranceLabel(r.status)"/></td>
                                         <td><button class="o_nx_hr_link" t-on-click="() => this.openEmployee(r.id)">View</button></td>
                                     </tr>
                                 </t>

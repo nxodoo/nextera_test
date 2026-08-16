@@ -79,18 +79,7 @@
         <field name="model_id" ref="hr.model_hr_employee"/>
         <field name="state">code</field>
         <field name="code">
-records = env['hr.employee'].with_context(active_test=False).search([])
-records._sync_required_documents()
-action = {
-    'type': 'ir.actions.client',
-    'tag': 'display_notification',
-    'params': {
-        'title': 'Employee Documents',
-        'message': '%s employees processed.' % len(records),
-        'type': 'success',
-        'sticky': False,
-    },
-}
+action = env['hr.employee'].action_generate_all_documents()
         </field>
     </record>
 

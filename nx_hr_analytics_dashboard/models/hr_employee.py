@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
 
 class HrEmployee(models.Model):
@@ -68,6 +68,26 @@ class HrEmployee(models.Model):
         """Button: (re)generate the required-document checklist."""
         self._sync_required_documents()
         return True
+
+    @api.model
+    def action_generate_all_documents(self):
+        """Backfill the checklist for every employee (server-action target).
+
+        Lives here rather than in the server action's inline code so its
+        notification text goes through the translation export.
+        """
+        employees = self.with_context(active_test=False).search([])
+        employees._sync_required_documents()
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": _("Employee Documents"),
+                "message": _("%s employees processed.") % len(employees),
+                "type": "success",
+                "sticky": False,
+            },
+        }
 
     @api.model_create_multi
     def create(self, vals_list):

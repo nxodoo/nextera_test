@@ -1,0 +1,1573 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* nx_hr_analytics_dashboard
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-16 00:00+0000\n"
+"PO-Revision-Date: 2026-08-16 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ar_001\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "%  ·  click to see who left"
+msgstr "%  ·  اضغط لعرض من غادروا"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "% Complete"
+msgstr "نسبة الاكتمال"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid " %(amount)s  ·  %(pct)s% of gross"
+msgstr " %(amount)s  ·  %(pct)s% من الإجمالي"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "%s Documents Expired or Expiring Soon"
+msgstr "%s مستندات منتهية الصلاحية أو قاربت على الانتهاء"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid " %s employees"
+msgstr " %s موظف"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "%s Employees Not Enrolled in Insurance"
+msgstr "%s موظفين غير مسجلين في التأمين"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_employee.py:0
+msgid "%s employees processed."
+msgstr "تمت معالجة %s موظف."
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "%s Employees with Incomplete Documents"
+msgstr "%s موظفين لديهم مستندات غير مكتملة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "%s — from"
+msgstr "%s — من"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "%s — to"
+msgstr "%s — إلى"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,help:nx_hr_analytics_dashboard.field_hr_employee_document_type__expiry_alert_days
+msgid "A document is flagged as 'Expiring Soon' this many days before its expiry date."
+msgstr "يتم وسم المستند بأنه \"قارب على الانتهاء\" قبل تاريخ انتهائه بهذا العدد من الأيام."
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "Action required within 30 days"
+msgstr "إجراء مطلوب خلال 30 يوماً"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Actions"
+msgstr "إجراءات"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document_type__active
+msgid "Active"
+msgstr "نشط"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "active alerts"
+msgstr "تنبيه نشط"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Active Brackets"
+msgstr "الشرائح النشطة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Active Employees"
+msgstr "الموظفون النشطون"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Alerts & Required Actions"
+msgstr "التنبيهات والإجراءات المطلوبة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: model:ir.model.fields.selection,name:nx_hr_analytics_dashboard.selection__hr_employee_document_type__applies_to_gender__all
+msgid "All"
+msgstr "الكل"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "All Branches"
+msgstr "كل الفروع"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "All Departments"
+msgstr "كل الأقسام"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_type_form
+msgid "All departments"
+msgstr "كل الأقسام"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_type_form
+msgid "All job positions"
+msgstr "كل المناصب الوظيفية"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_type_form
+msgid "Applicability Rules"
+msgstr "قواعد الانطباق"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document_type__applies_to_gender
+msgid "Applies To (Gender)"
+msgstr "ينطبق على (النوع)"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Approved"
+msgstr "معتمد"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Avg. % complete"
+msgstr "متوسط نسبة الاكتمال"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Avg. Salary"
+msgstr "متوسط الراتب"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Basic Wage"
+msgstr "الأجر الأساسي"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Branch:"
+msgstr "الفرع:"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "Calculation discrepancy"
+msgstr "تباين في الحساب"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Cancelled"
+msgstr "ملغي"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Category"
+msgstr "الفئة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Clear"
+msgstr "مسح"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document_type__code
+msgid "Code"
+msgstr "الكود"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document_type__company_id
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document__company_id
+msgid "Company"
+msgstr "الشركة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+#: model:ir.model.fields.selection,name:nx_hr_analytics_dashboard.selection__hr_employee_document__state__complete
+#: model:ir.model.fields.selection,name:nx_hr_analytics_dashboard.selection__hr_employee__document_status__complete
+msgid "Complete"
+msgstr "مكتمل"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "complete"
+msgstr "مكتمل"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_employee_form_documents
+msgid "complete /"
+msgstr "مكتمل /"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee__document_complete_count
+msgid "Complete Documents"
+msgstr "المستندات المكتملة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Complete Files"
+msgstr "الملفات المكتملة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Compliance Profile by Department"
+msgstr "ملف الالتزام حسب القسم"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Compliance Shape"
+msgstr "شكل الالتزام"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_employee_form_documents
+msgid "Compliance:"
+msgstr "الالتزام:"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Config:"
+msgstr "الإعداد:"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Configuration"
+msgstr "الإعداد"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Contract Start"
+msgstr "بداية العقد"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Contract start date"
+msgstr "تاريخ بداية العقد"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Contracts"
+msgstr "العقود"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Coverage"
+msgstr "التغطية"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Coverage by Department"
+msgstr "التغطية حسب القسم"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Coverage Gaps"
+msgstr "فجوات التغطية"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Covered"
+msgstr "المغطى"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.actions.act_window,help:nx_hr_analytics_dashboard.action_hr_employee_document_type
+msgid "Create your first document type"
+msgstr "أنشئ أول نوع مستند"
+
+#. module: nx_hr_analytics_dashboard
+#: model:hr.employee.document.type,name:nx_hr_analytics_dashboard.doc_type_criminal_record
+msgid "Criminal Record"
+msgstr "صحيفة الحالة الجنائية"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: model:ir.ui.menu,name:nx_hr_analytics_dashboard.menu_nx_hr_dashboard
+msgid "Dashboard"
+msgstr "لوحة المعلومات"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "deduction step(s)"
+msgstr "خطوة استقطاع"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Deductions"
+msgstr "الاستقطاعات"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.actions.act_window,help:nx_hr_analytics_dashboard.action_hr_employee_document_type
+msgid ""
+"Define the documents HR requires from employees. Applicability rules\n"
+"               let a document apply only to certain genders, departments or jobs."
+msgstr "عرّف المستندات التي تطلبها الموارد البشرية من الموظفين. تتيح قواعد الانطباق تطبيق المستند على نوع أو قسم أو وظيفة معينة فقط."
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_type_form
+msgid "Definition"
+msgstr "التعريف"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document__department_id
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_search
+msgid "Department"
+msgstr "القسم"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Department:"
+msgstr "القسم:"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document_type__department_ids
+msgid "Departments"
+msgstr "الأقسام"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_departure_list
+msgid "Departures"
+msgstr "المغادرون"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Departures — %s"
+msgstr "المغادرون — %s"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document_type__description
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_type_form
+msgid "Description"
+msgstr "الوصف"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_form
+msgid "Document"
+msgstr "مستند"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_compliance_list
+#: model:ir.actions.act_window,name:nx_hr_analytics_dashboard.action_hr_employee_document
+msgid "Document Compliance"
+msgstr "التزام المستندات"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee__document_compliance_rate
+msgid "Document Compliance %"
+msgstr "نسبة التزام المستندات"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Document Status by Department"
+msgstr "حالة المستندات حسب القسم"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document_type__name
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document__document_type_id
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_search
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_type_form
+msgid "Document Type"
+msgstr "نوع المستند"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_type_list
+#: model:ir.actions.act_window,name:nx_hr_analytics_dashboard.action_hr_employee_document_type
+#: model:ir.ui.menu,name:nx_hr_analytics_dashboard.menu_hr_employee_document_type
+msgid "Document Types"
+msgstr "أنواع المستندات"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee__document_ids
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee__document_count
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_list
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_employee_form_documents
+msgid "Documents"
+msgstr "المستندات"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Documents feature not available"
+msgstr "ميزة المستندات غير متاحة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/fields/file_dropzone.xml:0
+msgid "Drag & drop or click"
+msgstr "اسحب وأفلت أو اضغط"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_type_form
+msgid "e.g. National ID"
+msgstr "مثال: الرقم القومي"
+
+#. module: nx_hr_analytics_dashboard
+#: model:hr.employee.document.type,name:nx_hr_analytics_dashboard.doc_type_education_certificate
+msgid "Education Certificate"
+msgstr "المؤهل الدراسي"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "effective rate"
+msgstr "المعدل الفعلي"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Effective Tax Rate by Department (%)"
+msgstr "معدل الضريبة الفعلي حسب القسم (%)"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "Egypt Payroll Tax · %s active brackets"
+msgstr "ضريبة رواتب مصر · %s شريحة نشطة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Emp. Code"
+msgstr "كود الموظف"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document__employee_id
+msgid "Employee"
+msgstr "الموظف"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Employee Detail"
+msgstr "تفاصيل الموظفين"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model,name:nx_hr_analytics_dashboard.model_hr_employee_document
+msgid "Employee Document"
+msgstr "مستند الموظف"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model,name:nx_hr_analytics_dashboard.model_hr_employee_document_type
+msgid "Employee Document Type"
+msgstr "نوع مستند الموظف"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_employee.py:0
+msgid "Employee Documents"
+msgstr "مستندات الموظفين"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Employee Name"
+msgstr "اسم الموظف"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Employee Turnover Rate (%)"
+msgstr "معدل دوران الموظفين (%)"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "employees"
+msgstr "موظف"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Employees"
+msgstr "الموظفون"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Employees by File Completeness"
+msgstr "الموظفون حسب اكتمال الملف"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Employees in this payroll run"
+msgstr "الموظفون في دورة الرواتب هذه"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Employees — Exemptions"
+msgstr "الموظفون — الإعفاءات"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Employees — Net Payout"
+msgstr "الموظفون — صافي المدفوع"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Employees — Tax Due"
+msgstr "الموظفون — الضريبة المستحقة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Employees — Taxable Base"
+msgstr "الموظفون — الوعاء الضريبي"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Employees — Total Wages"
+msgstr "الموظفون — إجمالي الأجور"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Error"
+msgstr "خطأ"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Executive overview of HR metrics, compliance status, and actionable alerts"
+msgstr "نظرة تنفيذية على مؤشرات الموارد البشرية وحالة الالتزام والتنبيهات المطلوب التصرف بشأنها"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Exemptions"
+msgstr "الإعفاءات"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+#: model:ir.model.fields.selection,name:nx_hr_analytics_dashboard.selection__hr_employee_document__state__expired
+#: model:ir.model.fields.selection,name:nx_hr_analytics_dashboard.selection__hr_employee__document_status__expired
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_search
+msgid "Expired"
+msgstr "منتهي الصلاحية"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_employee_form_documents
+msgid "expired"
+msgstr "منتهي الصلاحية"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee__document_expired_count
+msgid "Expired Documents"
+msgstr "المستندات منتهية الصلاحية"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+#: model:ir.model.fields.selection,name:nx_hr_analytics_dashboard.selection__hr_employee_document__state__expiring
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_search
+msgid "Expiring Soon"
+msgstr "قاربت على الانتهاء"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document_type__expiry_alert_days
+msgid "Expiry Alert (days)"
+msgstr "تنبيه الانتهاء (أيام)"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document__expiry_date
+msgid "Expiry Date"
+msgstr "تاريخ الانتهاء"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Export"
+msgstr "تصدير"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields.selection,name:nx_hr_analytics_dashboard.selection__hr_employee_document_type__applies_to_gender__female
+msgid "Female"
+msgstr "أنثى"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/fields/file_dropzone.js:0
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document__document_file
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_form
+msgid "File"
+msgstr "ملف"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/fields/file_dropzone.js:0
+msgid "File Dropzone"
+msgstr "منطقة إفلات الملفات"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document__document_filename
+msgid "File Name"
+msgstr "اسم الملف"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee__document_status
+msgid "File Status"
+msgstr "حالة الملف"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "Files require completion"
+msgstr "الملفات تحتاج إلى استكمال"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Filing Deadline"
+msgstr "آخر موعد للتقديم"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Filing Deadline:"
+msgstr "آخر موعد للتقديم:"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Filing Status"
+msgstr "حالة التقديم"
+
+#. module: nx_hr_analytics_dashboard
+#: model:hr.employee.document.type,name:nx_hr_analytics_dashboard.doc_type_form_111
+msgid "Form 111"
+msgstr "استمارة 111"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "From"
+msgstr "من"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.actions.server,name:nx_hr_analytics_dashboard.action_generate_all_employee_documents
+#: model:ir.ui.menu,name:nx_hr_analytics_dashboard.menu_generate_all_employee_documents
+msgid "Generate Employee Documents"
+msgstr "توليد مستندات الموظفين"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_employee_form_documents
+msgid "Generate Required Documents"
+msgstr "توليد المستندات المطلوبة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Gross Wage"
+msgstr "الأجر الإجمالي"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Gross Wage → Net Salary"
+msgstr "الأجر الإجمالي ← صافي الراتب"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Gross Wages by Department"
+msgstr "الأجور الإجمالية حسب القسم"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_search
+msgid "Group By"
+msgstr "تجميع حسب"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document_type__expiry_required
+msgid "Has Expiry Date"
+msgstr "له تاريخ انتهاء"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Headcount"
+msgstr "عدد الموظفين"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Headcount by Department"
+msgstr "عدد الموظفين حسب القسم"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Headcount Trend — Last 12 Months"
+msgstr "اتجاه عدد الموظفين — آخر 12 شهراً"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: model:ir.actions.client,name:nx_hr_analytics_dashboard.action_nx_hr_dashboard
+msgid "HR Analytics Dashboard"
+msgstr "لوحة تحليلات الموارد البشرية"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model,name:nx_hr_analytics_dashboard.model_nx_hr_dashboard_service
+msgid "HR Analytics Dashboard Service"
+msgstr "خدمة لوحة تحليلات الموارد البشرية"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.module.module,summary:base.module_nx_hr_analytics_dashboard
+msgid "HR analytics landing dashboard and employee document compliance"
+msgstr "لوحة تحليلات الموارد البشرية والتزام مستندات الموظفين"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,help:nx_hr_analytics_dashboard.field_hr_employee_document_type__expiry_required
+msgid "If enabled, the document is considered expired once the expiry date is reached."
+msgstr "عند التفعيل، يُعتبر المستند منتهي الصلاحية بمجرد بلوغ تاريخ الانتهاء."
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+#: model:ir.model.fields.selection,name:nx_hr_analytics_dashboard.selection__hr_employee__document_status__incomplete
+msgid "Incomplete"
+msgstr "غير مكتمل"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Incomplete Files"
+msgstr "الملفات غير المكتملة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Insurance"
+msgstr "التأمين"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Insurance data not available"
+msgstr "بيانات التأمين غير متاحة"
+
+#. module: nx_hr_analytics_dashboard
+#: model:hr.employee.document.type,name:nx_hr_analytics_dashboard.doc_type_insurance_no
+msgid "Insurance No."
+msgstr "رقم التأمين"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Insurance Reference vs Basic Wage"
+msgstr "الأجر التأميني مقابل الأجر الأساسي"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Insured"
+msgstr "مؤمَّن عليه"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "insured"
+msgstr "مؤمَّن عليهم"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Insured Employees"
+msgstr "الموظفون المؤمَّن عليهم"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Insured Employees by Department"
+msgstr "الموظفون المؤمَّن عليهم حسب القسم"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document__issue_date
+msgid "Issue Date"
+msgstr "تاريخ الإصدار"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Job Position"
+msgstr "المنصب الوظيفي"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document_type__job_ids
+msgid "Job Positions"
+msgstr "المناصب الوظيفية"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Job Title"
+msgstr "المسمى الوظيفي"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,help:nx_hr_analytics_dashboard.field_hr_employee_document_type__department_ids
+msgid "Leave empty to apply to every department."
+msgstr "اتركه فارغاً ليطبَّق على كل الأقسام."
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,help:nx_hr_analytics_dashboard.field_hr_employee_document_type__job_ids
+msgid "Leave empty to apply to every job position."
+msgstr "اتركه فارغاً ليطبَّق على كل المناصب الوظيفية."
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields.selection,name:nx_hr_analytics_dashboard.selection__hr_employee_document_type__applies_to_gender__male
+msgid "Male"
+msgstr "ذكر"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document_type__mandatory
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_search
+msgid "Mandatory"
+msgstr "إلزامي"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,help:nx_hr_analytics_dashboard.field_hr_employee_document_type__mandatory
+msgid "Mandatory documents are counted towards compliance and generate 'missing' alerts when not uploaded."
+msgstr "تُحتسب المستندات الإلزامية ضمن الالتزام وتولّد تنبيهات \"ناقص\" عند عدم رفعها."
+
+#. module: nx_hr_analytics_dashboard
+#: model:hr.employee.document.type,name:nx_hr_analytics_dashboard.doc_type_military_service
+msgid "Military Service"
+msgstr "الموقف من التجنيد"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+#: model:ir.model.fields.selection,name:nx_hr_analytics_dashboard.selection__hr_employee_document__state__missing
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_search
+msgid "Missing"
+msgstr "ناقص"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_employee_form_documents
+msgid "missing /"
+msgstr "ناقص /"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Missing by Department"
+msgstr "الناقص حسب القسم"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee__document_missing_count
+msgid "Missing Documents"
+msgstr "المستندات الناقصة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Missing Documents by Type"
+msgstr "المستندات الناقصة حسب النوع"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "Missing national ID"
+msgstr "الرقم القومي غير مسجل"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "Missing national ID · projected"
+msgstr "الرقم القومي غير مسجل · تقديري"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Month:"
+msgstr "الشهر:"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: model:hr.employee.document.type,name:nx_hr_analytics_dashboard.doc_type_national_id
+msgid "National ID"
+msgstr "الرقم القومي"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "net"
+msgstr "صافي"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Net"
+msgstr "الصافي"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Net Headcount Change per Month"
+msgstr "صافي التغير في عدد الموظفين شهرياً"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Net Payout"
+msgstr "صافي المدفوع"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Net Salary"
+msgstr "صافي الراتب"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Net vs Withholdings by Department"
+msgstr "الصافي مقابل الاستقطاعات حسب القسم"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "New Hires"
+msgstr "التعيينات الجديدة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "New Hires (this month)"
+msgstr "التعيينات الجديدة (هذا الشهر)"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Next document expiry"
+msgstr "أقرب انتهاء صلاحية مستند"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Next Expiry"
+msgstr "أقرب انتهاء صلاحية"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.module.module,shortdesc:base.module_nx_hr_analytics_dashboard
+msgid "Nextera HR Analytics Dashboard"
+msgstr "لوحة تحليلات الموارد البشرية - نكستيرا"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "No active social insurance coverage"
+msgstr "لا توجد تغطية تأمين اجتماعي فعّالة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "No Contract"
+msgstr "بدون عقد"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "No data for this selection."
+msgstr "لا توجد بيانات لهذا التحديد."
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "No departures recorded in %s."
+msgstr "لا توجد مغادرات مسجلة في %s."
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "No employees behind “%s”."
+msgstr "لا يوجد موظفون ضمن “%s”."
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "No payroll records for this period."
+msgstr "لا توجد سجلات رواتب لهذه الفترة."
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "No records."
+msgstr "لا توجد سجلات."
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "No running contracts."
+msgstr "لا توجد عقود سارية."
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Not Insured"
+msgstr "غير مؤمَّن عليه"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document__notes
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_form
+msgid "Notes"
+msgstr "ملاحظات"
+
+#. module: nx_hr_analytics_dashboard
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_type_form
+msgid "Notes for HR..."
+msgstr "ملاحظات للموارد البشرية..."
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "of"
+msgstr "من"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "of employees"
+msgstr "من الموظفين"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "of gross wages"
+msgstr "من الأجور الإجمالية"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "one dot = one employee"
+msgstr "كل نقطة = موظف واحد"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Open %s"
+msgstr "فتح %s"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Open Configuration"
+msgstr "فتح الإعداد"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "Other"
+msgstr "أخرى"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Other (%s)"
+msgstr "أخرى (%s)"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Other Deductions"
+msgstr "استقطاعات أخرى"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Payroll Breakdown"
+msgstr "تفصيل الرواتب"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Payroll Tax"
+msgstr "ضريبة الرواتب"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "Payroll Tax Configuration Active"
+msgstr "إعداد ضريبة الرواتب فعّال"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Payroll Tax Declaration —"
+msgstr "إقرار ضريبة الرواتب —"
+
+#. module: nx_hr_analytics_dashboard
+#: model:hr.employee.document.type,name:nx_hr_analytics_dashboard.doc_type_personal_photos
+msgid "Personal Photos"
+msgstr "صور شخصية"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Prepared By"
+msgstr "أعدّه"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Print"
+msgstr "طباعة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Projected (no posted payslips)"
+msgstr "تقديري (لا توجد قسائم رواتب مرحّلة)"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "Projected from contract"
+msgstr "تقديري من العقد"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "records"
+msgstr "سجل"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Reference"
+msgstr "الأجر التأميني"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document__reference
+msgid "Reference / No."
+msgstr "المرجع / الرقم"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Reference Amount"
+msgstr "مبلغ الأجر التأميني"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/fields/file_dropzone.xml:0
+msgid "Remove"
+msgstr "إزالة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Required"
+msgstr "المطلوب"
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee__document_required_count
+msgid "Required Documents"
+msgstr "المستندات المطلوبة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Resignations"
+msgstr "الاستقالات"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Resignations (this month)"
+msgstr "الاستقالات (هذا الشهر)"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "Review"
+msgstr "مراجعة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Reviewed"
+msgstr "تمت المراجعة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Search by employee name..."
+msgstr "البحث باسم الموظف..."
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Search by name, code, or national ID..."
+msgstr "البحث بالاسم أو الكود أو الرقم القومي..."
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document_type__sequence
+msgid "Sequence"
+msgstr "التسلسل"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Share"
+msgstr "النسبة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Show chart"
+msgstr "عرض الرسم البياني"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Show numbers"
+msgstr "عرض الأرقام"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Showing"
+msgstr "عرض"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Social Insurance Status"
+msgstr "حالة التأمين الاجتماعي"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "stacked ·"
+msgstr "تراكمي ·"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "stacked · documents"
+msgstr "تراكمي · مستندات"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "stacked · employees"
+msgstr "تراكمي · موظفون"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: model:ir.model.fields,field_description:nx_hr_analytics_dashboard.field_hr_employee_document__state
+#: model_terms:ir.ui.view,arch_db:nx_hr_analytics_dashboard.view_hr_employee_document_search
+msgid "Status"
+msgstr "الحالة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Status Overview"
+msgstr "نظرة عامة على الحالة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Tax"
+msgstr "الضريبة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Tax Due"
+msgstr "الضريبة المستحقة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Tax Due by Department"
+msgstr "الضريبة المستحقة حسب القسم"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Taxable Base"
+msgstr "الوعاء الضريبي"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "The contract field \"Social Insurance Reference Amount\" (Egypt payroll) is not present on this database."
+msgstr "حقل العقد \"مبلغ الأجر التأميني\" (رواتب مصر) غير موجود في قاعدة البيانات هذه."
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "The employee document module is not installed on this database."
+msgstr "وحدة مستندات الموظفين غير مثبّتة على قاعدة البيانات هذه."
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_employee_document.py:0
+msgid "The expiry date cannot be earlier than the issue date."
+msgstr "لا يمكن أن يكون تاريخ الانتهاء أقدم من تاريخ الإصدار."
+
+#. module: nx_hr_analytics_dashboard
+#: model:ir.model.constraint,message:nx_hr_analytics_dashboard.constraint_hr_employee_document_uniq_employee_type
+msgid "This document type already exists for the employee."
+msgstr "نوع المستند هذا موجود بالفعل لهذا الموظف."
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "This Month"
+msgstr "هذا الشهر"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "this month"
+msgstr "هذا الشهر"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "This Year"
+msgstr "هذه السنة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "To"
+msgstr "إلى"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Top Paid Job Positions"
+msgstr "المناصب الوظيفية الأعلى راتباً"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Total Employees"
+msgstr "إجمالي الموظفين"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Total Reference"
+msgstr "إجمالي الأجر التأميني"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Total Tax Due"
+msgstr "إجمالي الضريبة المستحقة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Total Wages"
+msgstr "إجمالي الأجور"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Turnover %"
+msgstr "نسبة الدوران %"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "Undefined"
+msgstr "غير محدد"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Uninsured"
+msgstr "غير مؤمَّن عليهم"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Uninsured by Department"
+msgstr "غير المؤمَّن عليهم حسب القسم"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Upload"
+msgstr "رفع"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Value"
+msgstr "القيمة"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "View"
+msgstr "عرض"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "View Details"
+msgstr "عرض التفاصيل"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "View Document Report"
+msgstr "عرض تقرير المستندات"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-python
+#: code:addons/nx_hr_analytics_dashboard/models/hr_dashboard_service.py:0
+msgid "View Employee List"
+msgstr "عرض قائمة الموظفين"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Wage vs Insurance Reference"
+msgstr "الأجر مقابل الأجر التأميني"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.js:0
+msgid "Waiting"
+msgstr "في الانتظار"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Where the Gross Goes"
+msgstr "أين يذهب الأجر الإجمالي"
+
+#. module: nx_hr_analytics_dashboard
+#. odoo-javascript
+#: code:addons/nx_hr_analytics_dashboard/static/src/dashboard/hr_dashboard.xml:0
+msgid "Workforce Distribution"
+msgstr "توزيع القوى العاملة"

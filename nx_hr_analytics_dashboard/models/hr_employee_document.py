@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -76,4 +76,4 @@ class HrEmployeeDocument(models.Model):
         for rec in self:
             if rec.issue_date and rec.expiry_date and rec.expiry_date < rec.issue_date:
                 raise ValidationError(
-                    "The expiry date cannot be earlier than the issue date.")
+                    _("The expiry date cannot be earlier than the issue date."))
