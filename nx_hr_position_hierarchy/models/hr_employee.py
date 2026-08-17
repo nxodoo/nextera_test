@@ -6,9 +6,10 @@ from odoo import _, api, fields, models
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
+    # The Job Position drives the Department, not the other way round, so the
+    # job list is never filtered by department -- only by company.
     job_id = fields.Many2one(
-        domain="['&', '|', ('department_id', '=', False), ('department_id', '=', department_id),"
-               " '|', ('company_id', '=', False), ('company_id', '=', company_id)]",
+        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
         context={'nx_forbid_job_creation': True},
     )
 
