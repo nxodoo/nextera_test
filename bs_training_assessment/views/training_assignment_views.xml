@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_training_goal_search" model="ir.ui.view">
+            <field name="name">training.assignment.search</field>
+            <field name="model">training.assignment</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="reference_no"/>
+                    <field name="training_title" string="Training Name"/>
+                    <field name="employee_id"/>
+                    <field name="training_year"/>
+                    <field name="source_type"/>
+                    <field name="requirement_category"/>
+                    <field name="department_ids" string="Department"/>
+                    <field name="venue"/>
+                    <field name="employee_ids"/>
+                    <field name="proposed_priority"/>
+                    <field name="stage_id"/>
+                    <filter string="Draft" name="filter_draft" domain="[('stage_code', '=', 'draft')]"/>
+                    <filter string="Submitted" name="filter_submitted" domain="[('stage_code', '=', 'submit')]"/>
+                    <filter string="Approved" name="filter_approved" domain="[('stage_code', '=', 'approve')]"/>
+                    <filter string="Ongoing" name="filter_ongoing" domain="[('stage_code', '=', 'ongoing')]"/>
+                    <filter string="Completed" name="filter_completed" domain="[('stage_code', '=', 'completed')]"/>
+                    <filter string="Closed" name="filter_closed" domain="[('stage_code', '=', 'closed')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Training Year" name="group_training_year"
+                                context="{'group_by': 'training_year'}"/>
+                        <filter string="Source Type" name="group_source_type" context="{'group_by': 'source_type'}"/>
+                        <filter string="Requirement Category" name="group_requirement_category"
+                                context="{'group_by': 'requirement_category'}"/>
+                        <filter string="Department" name="group_department" context="{'group_by': 'department_ids'}"/>
+                        <filter string="Venue" name="group_venue" context="{'group_by': 'venue'}"/>
+                        <filter string="Stage" name="group_stage" context="{'group_by': 'stage_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_training_goal_list" model="ir.ui.view">
+            <field name="name">training.assignment.list</field>
+            <field name="model">training.assignment</field>
+            <field name="arch" type="xml">
+                <list default_order="id desc">
+                    <field name="reference_no"/>
+                    <field name="training_title"/>
+                    <field name="employee_id" optional="hide"/>
+                    <field name="training_year"/>
+                    <field name="source_type"/>
+                    <field name="requirement_category"/>
+                    <field name="department_ids" widget="many2many_tags" optional="hide"/>
+                    <field name="employee_ids" widget="many2many_tags" optional="hide"/>
+                    <field name="proposed_priority"/>
+                    <field name="stage_id" widget="badge"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_training_goal_kanban" model="ir.ui.view">
+            <field name="name">training.assignment.kanban</field>
+            <field name="model">training.assignment</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="stage_id">
+                    <field name="reference_no"/>
+                    <field name="training_title"/>
+                    <field name="stage_id"/>
+                    <field name="start_date"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="d-block">
+                                        <field name="reference_no"/>
+                                    </strong>
+                                    <div class="mt-1">
+                                        <field name="training_title"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <div class="mb-2">
+                                    <span class="text-muted me-2">Stage:</span>
+                                    <field name="stage_id"/>
+                                </div>
+                                <div>
+                                    <span class="text-muted me-2">Start Date:</span>
+                                    <field name="start_date"/>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="view_training_goal_form" model="ir.ui.view">
+            <field name="name">training.assignment.form</field>
+            <field name="model">training.assignment</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_submit" type="object" string="Submit"
+                                class="btn-primary" invisible="stage_code != 'draft'"/>
+                        <button name="action_approve" type="object" string="Approve"
+                                class="btn-success" invisible="stage_code != 'submit'"/>
+                        <button name="action_send_survey_mail" type="object" string="Send Survey Mail"
+                                invisible="stage_code != 'completed'"/>
+                        <button name="action_close" type="object" string="Close"
+                                class="btn-primary" invisible="stage_code != 'completed'"/>
+                        <button name="action_set_draft" type="object" string="Reset to Draft"
+                                invisible="stage_code == 'draft'"/>
+                        <field name="stage_code" invisible="1"/>
+                        <field name="stage_id" widget="statusbar" options="{'fold_field': 'fold'}" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="reference_no"/>
+                            <h2>
+                                <field name="reference_no" readonly="1"/>
+                            </h2>
+                            <h1>
+                                <field name="training_title" placeholder="Training Name or Title..."/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="employee_id" readonly="1"/>
+                                <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                                <field name="training_year"/>
+                                <field name="source_type"/>
+                                <field name="requirement_category"/>
+                                <field name="department_ids"
+                                       widget="many2many_tags"
+                                       invisible="requirement_category != 'department_wise'"/>
+                                <field name="employee_ids"
+                                       widget="many2many_tags"
+                                       invisible="requirement_category != 'individual'"/>
+                            </group>
+                            <group>
+                                <field name="proposed_priority"/>
+                                <field name="trainer_type"/>
+                                <field name="internal_trainer" widget="many2many_tags"
+                                       invisible="trainer_type == 'external'"/>
+                                <field name="external_trainer" widget="many2many_tags"
+                                       invisible="trainer_type == 'internal'"/>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                <field name="budget"/>
+                                <field name="duration"/>
+                                <field name="manhour" readonly="1"/>
+                                <field name="venue" options="{'no_create_edit': True, 'no_create': True}"/>
+                                <field name="approver_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Details">
+                                <group>
+                                    <field name="reason_for_need"
+                                           placeholder="Provide the business justification for this training need..."/>
+                                    <field name="survey_id"/>
+                                </group>
+                            </page>
+                            <page string="Training Attendance">
+                                <field name="training_attendance_ids" nolabel="1" readonly="1">
+                                    <list create="false" edit="false" delete="false"
+                                          default_order="attendance_date desc">
+                                        <field name="attendance_date"/>
+                                        <field name="duration"/>
+                                        <field name="facilitator_id"/>
+                                        <field name="present_count"/>
+                                        <field name="absent_count"/>
+                                        <button name="action_view_record"
+                                                string="View"
+                                                type="object"
+                                                class="btn-link"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_training_goal_calendar" model="ir.ui.view">
+            <field name="name">training.assignment.calendar</field>
+            <field name="model">training.assignment</field>
+            <field name="arch" type="xml">
+                <calendar date_start="start_date" date_stop="end_date" color="id" mode="month"
+                          form_view_id="%(bs_training_assessment.view_training_goal_form)d"
+                          create="false" edit="false" event_open_popup="false">
+                    <field name="training_title" filters="1"/>
+                    <field name="reference_no"/>
+                    <field name="stage_id"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record id="action_training_goal" model="ir.actions.act_window">
+            <field name="name">Training Assignment</field>
+            <field name="res_model">training.assignment</field>
+            <field name="view_mode">kanban,list,calendar,form</field>
+            <field name="search_view_id" ref="view_training_goal_search"/>
+        </record>
+
+        <menuitem id="menu_training_assessment_root"
+                  name="Training"
+                  web_icon="bs_training_assessment,static/description/icon.png"
+                  sequence="185"/>
+
+        <menuitem id="menu_training_goal"
+                  name="Training Assignment"
+                  parent="menu_training_assessment_root"
+                  action="action_training_goal"
+                  sequence="10"/>
+    </data>
+</odoo>

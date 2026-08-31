@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_training_plan_search" model="ir.ui.view">
+            <field name="name">training.plan.search</field>
+            <field name="model">training.plan</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="serial_no"/>
+                    <field name="employee_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="state"/>
+                    <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Submitted" name="filter_submitted" domain="[('state', '=', 'submit')]"/>
+                    <filter string="Approved" name="filter_approved" domain="[('state', '=', 'approved')]"/>
+                    <filter string="Ongoing" name="filter_ongoing" domain="[('state', '=', 'ongoing')]"/>
+                    <filter string="Completed" name="filter_completed" domain="[('state', '=', 'completed')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Prepared By" name="group_employee" context="{'group_by': 'employee_id'}"/>
+                        <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"/>
+                        <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_training_plan_list" model="ir.ui.view">
+            <field name="name">training.plan.list</field>
+            <field name="model">training.plan</field>
+            <field name="arch" type="xml">
+                <list default_order="start_date desc, id desc">
+                    <field name="serial_no"/>
+                    <field name="employee_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="assignment_count"/>
+                    <field name="total_participants"/>
+                    <field name="total_duration"/>
+                    <field name="total_manhour"/>
+                    <field name="total_budget"/>
+                    <field name="state" widget="badge"
+                           decoration-info="state == 'draft'"
+                           decoration-warning="state == 'submit' or state == 'ongoing'"
+                           decoration-success="state == 'approved' or state == 'completed'"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_training_plan_form" model="ir.ui.view">
+            <field name="name">training.plan.form</field>
+            <field name="model">training.plan</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_submit" type="object" string="Submit"
+                                class="btn-primary" invisible="state != 'draft'"/>
+                        <button name="action_set_draft" type="object" string="Reset to Draft"
+                                invisible="state == 'draft'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,submit,approved,ongoing,completed,rejected"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="serial_no"/>
+                            <h2>
+                                <field name="serial_no" readonly="1"/>
+                            </h2>
+                            <h1>
+                                <span>Training Plan</span>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="employee_id" readonly="1"/>
+                                <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                            </group>
+                            <group>
+                                <field name="assignment_count" readonly="1"/>
+                                <field name="total_participants" readonly="1"/>
+                                <field name="total_duration" readonly="1"/>
+                                <field name="total_manhour" readonly="1"/>
+                                <field name="total_budget" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Training Assignments">
+                                <field name="training_assignment_ids" nolabel="1">
+                                    <list editable="bottom" create="false" delete="false" default_order="start_date asc">
+                                        <field name="reference_no" readonly="1"/>
+                                        <field name="training_title" readonly="1"/>
+                                        <field name="employee_id" readonly="1"/>
+                                        <field name="department_ids" widget="many2many_tags" optional="hide" readonly="1"/>
+                                        <field name="start_date" readonly="1"/>
+                                        <field name="end_date" readonly="1"/>
+                                        <field name="duration" readonly="1"/>
+                                        <field name="manhour" readonly="1"/>
+                                        <field name="budget" readonly="1"/>
+                                        <field name="stage_id" widget="badge" readonly="1"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_training_plan_calendar" model="ir.ui.view">
+            <field name="name">training.plan.calendar</field>
+            <field name="model">training.plan</field>
+            <field name="arch" type="xml">
+                <calendar date_start="start_date" date_stop="end_date" color="serial_no" mode="month"
+                          form_view_id="%(bs_training_assessment.view_training_plan_form)d">
+                    <field name="serial_no" filters="1"/>
+                    <field name="employee_id"/>
+                    <field name="assignment_count"/>
+                    <field name="total_participants"/>
+                    <field name="state"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record id="action_training_plan" model="ir.actions.act_window">
+            <field name="name">Training Plan</field>
+            <field name="res_model">training.plan</field>
+            <field name="view_mode">calendar,list,form</field>
+            <field name="search_view_id" ref="view_training_plan_search"/>
+        </record>
+
+        <menuitem id="menu_training_plan"
+                  name="Training Plan"
+                  parent="menu_training_assessment_root"
+                  action="action_training_plan"
+                  sequence="20"/>
+    </data>
+</odoo>

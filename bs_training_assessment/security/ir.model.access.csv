@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_training_assignment_stage_user,training.assignment.stage user,model_training_assignment_stage,base.group_user,1,0,0,0
+access_training_assignment_stage_hr_user,training.assignment.stage hr user,model_training_assignment_stage,hr.group_hr_user,1,1,1,1
+access_training_assignment_user,training.assignment user,model_training_assignment,base.group_user,1,1,1,0
+access_training_assignment_hr_user,training.assignment hr user,model_training_assignment,hr.group_hr_user,1,1,1,1
+access_training_plan_user,training.plan user,model_training_plan,base.group_user,1,0,0,0
+access_training_plan_hr_user,training.plan hr user,model_training_plan,hr.group_hr_user,1,1,1,1
+access_training_attendance_user,training.attendance user,model_training_attendance,base.group_user,1,0,0,0
+access_training_attendance_hr_user,training.attendance hr user,model_training_attendance,hr.group_hr_user,1,1,1,1
+access_training_attendance_line_user,training.attendance.line user,model_training_attendance_line,base.group_user,1,0,0,0
+access_training_attendance_line_hr_user,training.attendance.line hr user,model_training_attendance_line,hr.group_hr_user,1,1,1,1

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Template: Training Approved (sent to trainees) -->
+    <record id="mail_template_training_approved" model="mail.template">
+        <field name="name">Training: Approved Notification</field>
+        <field name="model_id" ref="model_training_assignment"/>
+        <field name="subject">Training Approved: {{ object.training_title }}</field>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html" type="html">
+            <div style="font-family: Arial, sans-serif; color: #333333; padding: 20px;">
+                <p>Dear <strong><t t-out="ctx.get('employee_name', '')"/></strong>,</p>
+                <p>A training has been assigned to you.</p>
+                <p><strong>Training:</strong> <t t-out="object.training_title or '-'"/></p>
+                <p><strong>Reference No:</strong> <t t-out="object.reference_no or '-'"/></p>
+                <p><strong>Schedule:</strong> <t t-out="ctx.get('schedule', '-')"/></p>
+                <p>Please contact HR or your reporting manager for further instructions if needed.</p>
+                <br/>
+                <p>Best regards,<br/><strong>HR Team</strong></p>
+            </div>
+        </field>
+    </record>
+
+    <!-- Template: Pending Approval (sent to approver) -->
+    <record id="mail_template_training_pending_approval" model="mail.template">
+        <field name="name">Training: Pending Approval</field>
+        <field name="model_id" ref="model_training_assignment"/>
+        <field name="email_to">{{ object.approver_id.work_email }}</field>
+        <field name="subject">Training Assignment Pending Approval: {{ object.training_title }}</field>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html" type="html">
+            <div style="font-family: Arial, sans-serif; color: #333333; padding: 20px;">
+                <p>Dear <strong><t t-out="object.approver_id.name or ''"/></strong>,</p>
+                <p>A training assignment has been submitted and is awaiting your approval.</p>
+                <p><strong>Training:</strong> <t t-out="object.training_title or '-'"/></p>
+                <p><strong>Reference No:</strong> <t t-out="object.reference_no or '-'"/></p>
+                <p><strong>Requested By:</strong> <t t-out="object.employee_id.name or '-'"/></p>
+                <p style="text-align: center; margin: 30px 0;">
+                    <a t-attf-href="{{ object.get_base_url() }}/web#id={{ object.id }}&amp;model=training.assignment&amp;view_type=form"
+                       style="background-color: #007bff; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                        View Training Assignment
+                    </a>
+                </p>
+                <br/>
+                <p>Best regards,<br/><strong>HR Team</strong></p>
+            </div>
+        </field>
+    </record>
+
+    <!-- Template: Survey Feedback (sent to trainees) -->
+    <record id="mail_template_training_survey" model="mail.template">
+        <field name="name">Training: Feedback Survey</field>
+        <field name="model_id" ref="model_training_assignment"/>
+        <field name="subject">Training Feedback: {{ object.training_title }}</field>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html" type="html">
+            <div style="font-family: Arial, sans-serif; color: #333333; padding: 20px;">
+                <p>Dear <strong><t t-out="ctx.get('employee_name', '')"/></strong>,</p>
+                <p>We hope this email finds you well.</p>
+                <p>Thank you for participating in the training program: <strong><t t-out="object.training_title"/></strong>.</p>
+                <p>Your feedback is valuable to us. Please take a moment to share your experience by clicking the button below:</p>
+                <p style="text-align: center; margin: 30px 0;">
+                    <a t-att-href="ctx.get('survey_link', '#')"
+                       style="background-color: #007bff; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                        Give Feedback
+                    </a>
+                </p>
+                <p>Or copy and paste this link in your browser: <br/>
+                <a t-att-href="ctx.get('survey_link', '#')" style="color: #007bff;"><t t-out="ctx.get('survey_link', '')"/></a></p>
+                <p>This survey will help us improve future training sessions.</p>
+                <p>Thank you for your time and cooperation.</p>
+                <br/>
+                <p>Best regards,<br/>
+                <strong>HR Team</strong></p>
+            </div>
+        </field>
+    </record>
+
+</odoo>

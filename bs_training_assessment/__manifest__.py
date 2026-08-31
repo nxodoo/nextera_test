@@ -1,0 +1,32 @@
+{
+    'name': 'Training Needs Assessment',
+    'version': '18.0.1.0.1',
+    'summary': 'Manage employee training goals and identified skill gaps',
+    'category': 'Human Resources',
+    'author': 'ERP23',
+    'website': 'https://erp-23.com',
+    'support': 'erp23@brainstation-23.com',
+    'images': [
+        'static/description/banner.gif',
+    ],
+    'depends': [
+        'mail',
+        'base',
+        'hr',
+        'survey',
+    ],
+    'data': [
+        'data/ir_sequence.xml',
+        'security/ir.model.access.csv',
+        'data/training_assignment_stage_data.xml',
+        'data/mail_template_data.xml',
+        'views/training_assignment_views.xml',
+        'views/training_assignment_stage_views.xml',
+        'views/training_attendance_views.xml',
+        'views/training_plan_views.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
+    'company': 'ERP23',
+}

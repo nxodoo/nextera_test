@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sequences should not be updated on module upgrade -->
+    <data noupdate="1">
+        <record id="seq_training_assignment" model="ir.sequence">
+            <field name="name">Training Needs Assessment</field>
+            <field name="code">training.assignment</field>
+            <field name="prefix">TNA/%(year)s/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">1</field>
+        </record>
+
+        <record id="seq_training_plan" model="ir.sequence">
+            <field name="name">Training Plan</field>
+            <field name="code">training.plan</field>
+            <field name="prefix">TP/%(year)s/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">1</field>
+        </record>
+    </data>
+
+    <!-- Cron jobs should be updated on module upgrade -->
+    <data noupdate="0">
+        <record id="ir_cron_training_assignment_schedule_state" model="ir.cron">
+            <field name="name">Training Assignment Schedule State Sync</field>
+            <field name="model_id" ref="model_training_assignment"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_sync_schedule_state()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="ir_cron_training_plan_schedule_state" model="ir.cron">
+            <field name="name">Training Plan Schedule State Sync</field>
+            <field name="model_id" ref="model_training_plan"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_sync_schedule_state()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

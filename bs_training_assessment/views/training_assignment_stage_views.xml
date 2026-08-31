@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_training_assignment_stage_list" model="ir.ui.view">
+            <field name="name">training.assignment.stage.list</field>
+            <field name="model">training.assignment.stage</field>
+            <field name="arch" type="xml">
+                <list editable="bottom">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="fold"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_training_assignment_stage_form" model="ir.ui.view">
+            <field name="name">training.assignment.stage.form</field>
+            <field name="model">training.assignment.stage</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="code"/>
+                            </group>
+                            <group>
+                                <field name="sequence"/>
+                                <field name="fold"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_training_assignment_stage" model="ir.actions.act_window">
+            <field name="name">Training Stages</field>
+            <field name="res_model">training.assignment.stage</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_training_configuration"
+                  name="Configuration"
+                  parent="menu_training_assessment_root"
+                  sequence="90"
+                  groups="hr.group_hr_manager"/>
+
+        <menuitem id="menu_training_assignment_stage"
+                  name="Training Stages"
+                  parent="menu_training_configuration"
+                  action="action_training_assignment_stage"
+                  sequence="10"
+                  groups="hr.group_hr_manager"/>
+    </data>
+</odoo>

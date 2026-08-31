@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="training_assignment_stage_draft" model="training.assignment.stage">
+        <field name="name">Draft</field>
+        <field name="sequence">10</field>
+        <field name="code">draft</field>
+    </record>
+
+    <record id="training_assignment_stage_submit" model="training.assignment.stage">
+        <field name="name">Submitted</field>
+        <field name="sequence">20</field>
+        <field name="code">submit</field>
+    </record>
+
+    <record id="training_assignment_stage_approve" model="training.assignment.stage">
+        <field name="name">Approved</field>
+        <field name="sequence">30</field>
+        <field name="code">approve</field>
+    </record>
+
+    <record id="training_assignment_stage_ongoing" model="training.assignment.stage">
+        <field name="name">Ongoing</field>
+        <field name="sequence">40</field>
+        <field name="code">ongoing</field>
+    </record>
+
+    <record id="training_assignment_stage_completed" model="training.assignment.stage">
+        <field name="name">Completed</field>
+        <field name="sequence">50</field>
+        <field name="code">completed</field>
+    </record>
+
+    <record id="training_assignment_stage_closed" model="training.assignment.stage">
+        <field name="name">Closed</field>
+        <field name="sequence">60</field>
+        <field name="code">closed</field>
+        <field name="fold">True</field>
+    </record>
+</odoo>
