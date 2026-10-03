@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_check_action_request" model="ir.sequence">
+        <field name="name">Check Approval Requests</field>
+        <field name="code">sa.check.action.request</field>
+        <field name="prefix">REQ/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="check_print_leaf">
+        <!-- One check leaf, every value placed in millimetres from the top-left corner -->
+        <div t-attf-style="position:relative;width:{{layout.page_width}}mm;height:{{layout.page_height}}mm;overflow:hidden;font-family:'DejaVu Sans',sans-serif;page-break-after:always;">
+            <t t-if="test">
+                <div style="position:absolute;inset:0;border:0.3mm dashed #999;"/>
+            </t>
+            <span t-if="layout.print_crossing" t-att-style="layout._style(layout.crossing_top, layout.crossing_left, extra='font-weight:bold;border-top:0.3mm solid #000;border-bottom:0.3mm solid #000;padding:0 2mm;')"
+                  t-out="layout.crossing_text"/>
+            <span t-att-style="layout._style(layout.date_top, layout.date_left)" t-out="row['date']"/>
+            <span t-att-style="layout._style(layout.payee_top, layout.payee_left, layout.payee_width)" t-out="row['payee']"/>
+            <span t-att-style="layout._style(layout.amount_top, layout.amount_left, extra='font-weight:bold;')" t-out="row['figures']"/>
+            <span t-att-style="layout._style(layout.words_top, layout.words_left, layout.words_width, extra='line-height:1.6;' + ('direction:rtl;text-align:right;' if layout.words_language == 'ar' else ''))"
+                  t-out="row['words']"/>
+        </div>
+    </template>
+
+    <template id="report_check_print">
+        <t t-call="web.html_container">
+            <t t-foreach="rows" t-as="row">
+                <t t-set="layout" t-value="row['layout']"/>
+                <div class="article" style="margin:0;padding:0;">
+                    <t t-call="sa_check_management_print.check_print_leaf"/>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_check_layout_test">
+        <t t-call="web.html_container">
+            <t t-foreach="rows" t-as="row">
+                <t t-set="layout" t-value="row['layout']"/>
+                <t t-set="test" t-value="True"/>
+                <div class="article" style="margin:0;padding:0;">
+                    <t t-call="sa_check_management_print.check_print_leaf"/>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_check_print" model="ir.actions.report">
+        <field name="name">Printed Check</field>
+        <field name="model">check.check</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sa_check_management_print.report_check_print</field>
+        <field name="report_file">sa_check_management_print.report_check_print</field>
+        <field name="print_report_name">'Check - %s' % object.check_number</field>
+    </record>
+
+    <record id="action_report_check_layout_test" model="ir.actions.report">
+        <field name="name">Check Layout Test Page</field>
+        <field name="model">check.print.layout</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sa_check_management_print.report_check_layout_test</field>
+        <field name="report_file">sa_check_management_print.report_check_layout_test</field>
+        <field name="print_report_name">'Check Layout - %s' % object.name</field>
+    </record>
+</odoo>

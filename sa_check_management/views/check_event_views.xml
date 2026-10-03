@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="check_event_view_list" model="ir.ui.view">
+        <field name="name">check.event.view.list</field>
+        <field name="model">check.event</field>
+        <field name="arch" type="xml">
+            <list string="Check History" create="0" edit="0" delete="0">
+                <field name="date"/>
+                <field name="check_id"/>
+                <field name="check_type" optional="show"/>
+                <field name="partner_id" optional="show"/>
+                <field name="event_type"/>
+                <field name="old_state" optional="show"/>
+                <field name="new_state"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="note" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="check_event_view_form" model="ir.ui.view">
+        <field name="name">check.event.view.form</field>
+        <field name="model">check.event</field>
+        <field name="arch" type="xml">
+            <form string="Check Event" create="0" edit="0" delete="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="check_id"/>
+                            <field name="event_type"/>
+                            <field name="date"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="old_state"/>
+                            <field name="new_state"/>
+                            <field name="res_model"/>
+                            <field name="res_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <field name="note"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="check_event_view_search" model="ir.ui.view">
+        <field name="name">check.event.view.search</field>
+        <field name="model">check.event</field>
+        <field name="arch" type="xml">
+            <search string="Check History">
+                <field name="check_id"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="event_type"/>
+                <filter name="filter_incoming" string="Incoming" domain="[('check_type', '=', 'incoming')]"/>
+                <filter name="filter_outgoing" string="Outgoing" domain="[('check_type', '=', 'outgoing')]"/>
+                <group string="Group By">
+                    <filter name="group_check" string="Check" context="{'group_by': 'check_id'}"/>
+                    <filter name="group_type" string="Event Type" context="{'group_by': 'event_type'}"/>
+                    <filter name="group_user" string="User" context="{'group_by': 'user_id'}"/>
+                    <filter name="group_date" string="Date" context="{'group_by': 'date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_check_event" model="ir.actions.act_window">
+        <field name="name">Check History</field>
+        <field name="res_model">check.event</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="check_event_view_search"/>
+        <field name="context">{'create': False}</field>
+    </record>
+</odoo>

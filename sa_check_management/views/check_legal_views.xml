@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="check_check_view_list_legal" model="ir.ui.view">
+        <field name="name">check.check.view.list.legal</field>
+        <field name="model">check.check</field>
+        <field name="priority">50</field>
+        <field name="arch" type="xml">
+            <list string="Legal Cases" create="0" decoration-muted="state != 'legal'">
+                <field name="currency_id" column_invisible="True"/>
+                <field name="company_currency_id" column_invisible="True"/>
+                <field name="legal_case_number"/>
+                <field name="legal_date"/>
+                <field name="legal_days"/>
+                <field name="partner_id"/>
+                <field name="legal_lawyer_id"/>
+                <field name="legal_court" optional="show"/>
+                <field name="check_number"/>
+                <field name="bank_id" optional="show"/>
+                <field name="due_date" optional="hide"/>
+                <field name="last_bounce_reason_id" optional="show"/>
+                <field name="amount"/>
+                <field name="company_amount" sum="Total" optional="hide"/>
+                <field name="state" widget="badge" decoration-danger="state == 'legal'"
+                       decoration-success="state in ('settled', 'replaced')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="check_check_view_pivot_legal" model="ir.ui.view">
+        <field name="name">check.check.view.pivot.legal</field>
+        <field name="model">check.check</field>
+        <field name="arch" type="xml">
+            <pivot string="Legal Cases">
+                <field name="legal_lawyer_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="company_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_check_legal_cases" model="ir.actions.act_window">
+        <field name="name">Legal Cases</field>
+        <field name="res_model">check.check</field>
+        <field name="view_mode">list,pivot,form</field>
+        <field name="domain">[('check_type', '=', 'incoming'), ('legal_case_number', '!=', False)]</field>
+        <field name="context">{'search_default_filter_open_cases': 1, 'create': False}</field>
+        <field name="search_view_id" ref="check_check_view_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('check_check_view_list_legal')}),
+            (0, 0, {'view_mode': 'pivot', 'view_id': ref('check_check_view_pivot_legal')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No legal cases.</p>
+            <p>Bounced checks sent to a lawyer or court appear here until they are settled, replaced or returned.</p>
+        </field>
+    </record>
+    <record id="check_check_view_pivot_bounce" model="ir.ui.view">
+        <field name="name">check.check.view.pivot.bounce</field>
+        <field name="model">check.check</field>
+        <field name="arch" type="xml">
+            <pivot string="Bounce Analysis" sample="1">
+                <field name="last_bounce_reason_id" type="row"/>
+                <field name="check_type" type="col"/>
+                <field name="company_amount" type="measure"/>
+                <field name="bounce_count" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="check_check_view_graph_bounce" model="ir.ui.view">
+        <field name="name">check.check.view.graph.bounce</field>
+        <field name="model">check.check</field>
+        <field name="arch" type="xml">
+            <graph string="Bounce Analysis" type="pie" sample="1">
+                <field name="last_bounce_reason_id"/>
+                <field name="company_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_check_bounce_analysis" model="ir.actions.act_window">
+        <field name="name">Bounce Analysis</field>
+        <field name="res_model">check.check</field>
+        <field name="view_mode">pivot,graph,list,form</field>
+        <field name="domain">[('bounce_count', '>', 0)]</field>
+        <field name="context">{'create': False}</field>
+        <field name="search_view_id" ref="check_check_view_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'pivot', 'view_id': ref('check_check_view_pivot_bounce')}),
+            (0, 0, {'view_mode': 'graph', 'view_id': ref('check_check_view_graph_bounce')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No bounced checks.</p>
+            <p>Every check that ever bounced, by its last bounce reason, partner or bank.</p>
+        </field>
+    </record>
+</odoo>

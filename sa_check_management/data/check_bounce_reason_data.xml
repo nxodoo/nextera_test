@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="bounce_reason_insufficient_funds" model="check.bounce.reason">
+        <field name="name">Insufficient funds</field>
+        <field name="code">insufficient_funds</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="bounce_reason_signature_mismatch" model="check.bounce.reason">
+        <field name="name">Signature mismatch</field>
+        <field name="code">signature_mismatch</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="bounce_reason_account_closed" model="check.bounce.reason">
+        <field name="name">Account closed or frozen</field>
+        <field name="code">account_closed</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="bounce_reason_payment_stopped" model="check.bounce.reason">
+        <field name="name">Payment stopped</field>
+        <field name="code">payment_stopped</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="bounce_reason_invalid_details" model="check.bounce.reason">
+        <field name="name">Incorrect or invalid check details</field>
+        <field name="code">invalid_details</field>
+        <field name="sequence">50</field>
+    </record>
+    <record id="bounce_reason_stale" model="check.bounce.reason">
+        <field name="name">Stale or expired check</field>
+        <field name="code">stale</field>
+        <field name="sequence">60</field>
+    </record>
+    <record id="bounce_reason_bank_technical" model="check.bounce.reason">
+        <field name="name">Technical or bank processing reason</field>
+        <field name="code">bank_technical</field>
+        <field name="sequence">70</field>
+    </record>
+    <record id="bounce_reason_other" model="check.bounce.reason">
+        <field name="name">Other</field>
+        <field name="code">other</field>
+        <field name="sequence">100</field>
+        <field name="requires_note" eval="True"/>
+    </record>
+</odoo>

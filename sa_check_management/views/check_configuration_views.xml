@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="check_bounce_reason_view_list" model="ir.ui.view">
+        <field name="name">check.bounce.reason.view.list</field>
+        <field name="model">check.bounce.reason</field>
+        <field name="arch" type="xml">
+            <list string="Bounce Reasons" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="requires_note"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_check_bounce_reason" model="ir.actions.act_window">
+        <field name="name">Bounce Reasons</field>
+        <field name="res_model">check.bounce.reason</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+
+    <record id="check_location_view_list" model="ir.ui.view">
+        <field name="name">check.location.view.list</field>
+        <field name="model">check.location</field>
+        <field name="arch" type="xml">
+            <list string="Custody Locations">
+                <field name="name"/>
+                <field name="location_type"/>
+                <field name="user_id"/>
+                <field name="journal_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="check_location_view_form" model="ir.ui.view">
+        <field name="name">check.location.view.form</field>
+        <field name="model">check.location</field>
+        <field name="arch" type="xml">
+            <form string="Custody Location">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <field name="active" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="location_type"/>
+                        </group>
+                        <group>
+                            <field name="user_id" invisible="location_type not in ('person', 'safe', 'branch')"/>
+                            <field name="journal_id" invisible="location_type != 'bank'"
+                                   required="location_type == 'bank'"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="Notes..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_check_location" model="ir.actions.act_window">
+        <field name="name">Custody Locations</field>
+        <field name="res_model">check.location</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No custody locations yet.</p>
+            <p>Add the safes, branches and banks where physical checks are kept.</p>
+        </field>
+    </record>
+    <record id="check_discount_term_view_list" model="ir.ui.view">
+        <field name="name">check.discount.term.view.list</field>
+        <field name="model">check.discount.term</field>
+        <field name="arch" type="xml">
+            <list string="Bank Discount Terms" editable="bottom">
+                <field name="currency_id" column_invisible="True"/>
+                <field name="journal_id" options="{'no_create': True}"/>
+                <field name="advance_rate"/>
+                <field name="interest_rate"/>
+                <field name="fixed_fee"/>
+                <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_check_discount_term" model="ir.actions.act_window">
+        <field name="name">Bank Discount Terms</field>
+        <field name="res_model">check.discount.term</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'active_test': False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No bank discounts post-dated checks yet.</p>
+            <p>Add each bank that discounts checks: the share it advances, its annual interest and any fixed fee.</p>
+        </field>
+    </record>
+</odoo>

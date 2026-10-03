@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="check_action_wizard_view_form" model="ir.ui.view">
+        <field name="name">check.action.wizard.view.form</field>
+        <field name="model">check.action.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Check Action">
+                <field name="check_action" invisible="1"/>
+                <field name="reason_required" invisible="1"/>
+                <field name="recipient_required" invisible="1"/>
+                <field name="date_required" invisible="1"/>
+                <field name="reference_required" invisible="1"/>
+                <group>
+                    <group>
+                        <field name="check_ids" widget="many2many_tags"/>
+                        <field name="action_date" invisible="not date_required"/>
+                        <field name="recipient" invisible="not recipient_required"
+                               required="recipient_required"/>
+                        <field name="reference" invisible="not reference_required"
+                               required="reference_required"/>
+                    </group>
+                    <group>
+                        <field name="attachment" filename="attachment_name"
+                               invisible="check_action == 'reject'"/>
+                        <field name="attachment_name" invisible="1"/>
+                    </group>
+                </group>
+                <field name="reason" invisible="not reason_required" required="reason_required"
+                       placeholder="Reason..."/>
+                <field name="note" invisible="check_action != 'deliver'" placeholder="Notes..."/>
+                <footer>
+                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary"
+                            data-hotkey="q"/>
+                    <button string="Discard" special="cancel" class="btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

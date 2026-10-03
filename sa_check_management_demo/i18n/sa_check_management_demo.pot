@@ -1,0 +1,301 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sa_check_management_demo
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-02 13:59+0000\n"
+"PO-Revision-Date: 2026-10-02 13:59+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sa_check_management_demo
+#. odoo-python
+#: code:addons/sa_check_management_demo/wizard/check_demo_wizard.py:0
+msgid "Ask for at least one check."
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model,name:sa_check_management_demo.model_check_check
+msgid "Check"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model,name:sa_check_management_demo.model_check_demo_generator
+msgid "Check Demo Data Generator"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model,name:sa_check_management_demo.model_check_demo_job
+msgid "Check Demo Data Job"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__done
+msgid "Checks Created"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__requested
+msgid "Checks Requested"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.actions.server,name:sa_check_management_demo.ir_cron_check_demo_ir_actions_server
+msgid "Checks: generate queued demo data"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__company_id
+msgid "Company"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__create_users
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__create_users
+msgid "Create Demo Users"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__create_uid
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__create_date
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.ui.menu,name:sa_check_management_demo.menu_check_demo
+msgid "Demo Data"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_job_view_form
+msgid "Demo Data Job"
+msgstr ""
+
+#. module: sa_check_management_demo
+#. odoo-python
+#: code:addons/sa_check_management_demo/wizard/check_demo_wizard.py:0
+#: model:ir.actions.act_window,name:sa_check_management_demo.action_check_demo_job
+#: model:ir.ui.menu,name:sa_check_management_demo.menu_check_demo_jobs
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_job_view_list
+msgid "Demo Data Jobs"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__user_password
+msgid "Demo Users Password"
+msgstr ""
+
+#. module: sa_check_management_demo
+#. odoo-python
+#: code:addons/sa_check_management_demo/models/check_demo_job.py:0
+msgid "Demo data %s"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_wizard_view_form
+msgid "Discard"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__display_name
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields.selection,name:sa_check_management_demo.selection__check_demo_job__state__done
+msgid "Done"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_wizard_view_form
+msgid ""
+"For test or demo databases only: every generated check posts real invoices, "
+"payments and entries."
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__months_ahead
+msgid "Future Due Dates (Months)"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_wizard_view_form
+msgid "Generate"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model,name:sa_check_management_demo.model_check_demo_wizard
+msgid "Generate Check Demo Data"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.actions.act_window,name:sa_check_management_demo.action_check_demo_wizard
+#: model:ir.ui.menu,name:sa_check_management_demo.menu_check_demo_generate
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_wizard_view_form
+msgid "Generate Demo Data"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__months_back
+msgid "History (Months)"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__id
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__incoming_share
+msgid "Incoming (%)"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__incoming_share
+msgid "Incoming Checks (%)"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_check__is_demo
+msgid "Is Demo"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__write_uid
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__write_date
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__months_ahead
+msgid "Months Ahead"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__months_back
+msgid "Months Back"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__name
+msgid "Name"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__next_index
+msgid "Next Index"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__count
+msgid "Number of Checks"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,help:sa_check_management_demo.field_check_demo_wizard__create_users
+msgid ""
+"One user per check role (clerk, treasury, approver, manager, accountant, "
+"auditor, sales reps); every action in the history is done by the user of its"
+" role."
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__user_password
+msgid "Password for Demo Users"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__progress
+msgid "Progress"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields.selection,name:sa_check_management_demo.selection__check_demo_job__state__queued
+msgid "Queued"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__seed
+msgid "Random Seed"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields.selection,name:sa_check_management_demo.selection__check_demo_job__state__running
+msgid "Running"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__failed
+msgid "Scenarios Failed"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__seconds
+msgid "Seconds Spent"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__seed
+msgid "Seed"
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__state
+msgid "State"
+msgstr ""
+
+#. module: sa_check_management_demo
+#. odoo-python
+#: code:addons/sa_check_management_demo/wizard/check_demo_wizard.py:0
+msgid "The incoming share is a percentage between 0 and 100."
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,help:sa_check_management_demo.field_check_demo_wizard__seed
+msgid "The same seed gives the same data."
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_wizard_view_form
+msgid ""
+"Up to 300 checks are created right away; larger requests run in the background in batches of 200.\n"
+"                    When the data is ready you can uninstall this module: the generated data stays."
+msgstr ""
+
+#. module: sa_check_management_demo
+#. odoo-python
+#: code:addons/sa_check_management_demo/wizard/check_demo_wizard.py:0
+msgid "Use a password of at least 8 characters for the demo users."
+msgstr ""
+
+#. module: sa_check_management_demo
+#. odoo-python
+#: code:addons/sa_check_management_demo/wizard/check_demo_wizard.py:0
+msgid "Use at least 2 months of history and 1 month of future due dates."
+msgstr ""
+
+#. module: sa_check_management_demo
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_wizard_view_form
+msgid "Users"
+msgstr ""

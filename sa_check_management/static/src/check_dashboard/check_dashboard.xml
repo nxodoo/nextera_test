@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sa_check_management.CheckKpiCard">
+        <div t-attf-class="o_sacd_kpi o_sacd_kpi_{{card.color}} {{kpi.domain ? 'o_sacd_clickable' : ''}}"
+             t-on-click="() => this.openKpi(card)">
+            <span class="o_sacd_kpi_icon"><i t-attf-class="fa {{card.icon}}"/></span>
+            <div class="o_sacd_kpi_body">
+                <div class="o_sacd_kpi_label"><t t-esc="cardLabel(card)"/></div>
+                <div class="o_sacd_kpi_value"><t t-esc="money(kpi.amount)"/></div>
+                <div class="o_sacd_kpi_count" t-if="!card.noCount">
+                    <t t-esc="kpi.count"/> <t t-if="kpi.count == 1">check</t><t t-else="">checks</t>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="sa_check_management.CheckDashboard">
+        <div class="o_sa_check_dashboard o_action">
+            <div class="o_sacd_header">
+                <div>
+                    <h2>Checks Dashboard</h2>
+                    <span>Treasury position from open checks, in company currency</span>
+                </div>
+                <button class="btn btn-light o_sacd_refresh" t-on-click="() => this.load()" title="Refresh">
+                    <i t-attf-class="fa fa-refresh {{state.loading ? 'fa-spin' : ''}}"/>
+                </button>
+            </div>
+
+            <t t-if="state.data">
+                <t t-foreach="rows" t-as="row" t-key="row_index">
+                    <div t-attf-class="o_sacd_kpis o_sacd_kpis_row{{row_index}}">
+                        <t t-foreach="row" t-as="card" t-key="card.key">
+                            <t t-call="sa_check_management.CheckKpiCard">
+                                <t t-set="kpi" t-value="kpi(card.key)"/>
+                            </t>
+                        </t>
+                    </div>
+                </t>
+
+                <div class="o_sacd_grid">
+                    <div class="o_sacd_card o_sacd_gauge_card o_sacd_clickable" t-on-click="() => this.openMaturity()">
+                        <div class="o_sacd_card_header">
+                            <h3>Collection Rate</h3>
+                            <span>Collected vs. bounced bank results, last <t t-esc="state.data.collection_rate.days"/> days</span>
+                        </div>
+                        <div class="o_sacd_gauge_wrap">
+                            <svg viewBox="0 0 160 160">
+                                <circle cx="80" cy="80" r="70" class="o_sacd_gauge_track"/>
+                                <circle cx="80" cy="80" r="70" class="o_sacd_gauge_value"
+                                        t-att-style="'stroke-dashoffset:' + gaugeOffset"/>
+                            </svg>
+                            <div class="o_sacd_gauge_center">
+                                <strong><t t-esc="state.data.collection_rate.percent"/>%</strong>
+                                <span>Collected</span>
+                            </div>
+                        </div>
+                        <div class="o_sacd_gauge_legend">
+                            <span class="o_sacd_dot o_sacd_dot_in"/><t t-esc="state.data.collection_rate.collected"/> collected
+                            <span class="o_sacd_dot o_sacd_dot_out"/><t t-esc="state.data.collection_rate.bounced"/> bounced
+                        </div>
+                    </div>
+
+                    <div class="o_sacd_card o_sacd_flow_card">
+                        <div class="o_sacd_card_header o_sacd_clickable" t-on-click="() => this.openCashFlow()">
+                            <h3>Expected Cash Flow</h3>
+                            <span>Payment checks by due month · click to open the report</span>
+                        </div>
+                        <div class="o_sacd_flow">
+                            <t t-foreach="state.data.cash_flow" t-as="row" t-key="row.month">
+                                <div class="o_sacd_flow_row" t-on-click="() => this.openCashFlow()">
+                                    <div class="o_sacd_flow_month">
+                                        <strong><t t-esc="monthLabel(row)"/></strong>
+                                        <small t-attf-class="{{row.net &lt; 0 ? 'o_sacd_negative' : 'o_sacd_positive'}}">
+                                            Net <t t-esc="money(row.net)"/>
+                                        </small>
+                                    </div>
+                                    <div class="o_sacd_flow_bars">
+                                        <div class="o_sacd_bar_line">
+                                            <div class="o_sacd_bar_track">
+                                                <div class="o_sacd_bar_fill o_sacd_bar_in" t-att-style="'width:' + barWidth(row.incoming) + '%'"/>
+                                            </div>
+                                            <span class="o_sacd_bar_amount"><t t-esc="money(row.incoming)"/></span>
+                                        </div>
+                                        <div class="o_sacd_bar_line">
+                                            <div class="o_sacd_bar_track">
+                                                <div class="o_sacd_bar_fill o_sacd_bar_out" t-att-style="'width:' + barWidth(row.outgoing) + '%'"/>
+                                            </div>
+                                            <span class="o_sacd_bar_amount"><t t-esc="money(row.outgoing)"/></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                            <div class="o_sacd_empty" t-if="!state.data.cash_flow.length">No open payment checks.</div>
+                        </div>
+                        <div class="o_sacd_flow_legend" t-if="state.data.cash_flow.length">
+                            <span class="o_sacd_dot o_sacd_dot_in"/>Expected in
+                            <span class="o_sacd_dot o_sacd_dot_out"/>Expected out
+                        </div>
+                    </div>
+                </div>
+
+                <div class="o_sacd_panels">
+                    <t t-foreach="panels" t-as="panel" t-key="panel.key">
+                        <t t-set="block" t-value="state.data[panel.key]"/>
+                        <div t-attf-class="o_sacd_card o_sacd_panel o_sacd_panel_{{panel.color}}">
+                            <div class="o_sacd_panel_head o_sacd_clickable"
+                                 t-on-click="() => panel.report ? this.openLegalReport() : this.openPanel(panel.key, panel.title)">
+                                <span class="o_sacd_kpi_icon"><i t-attf-class="fa {{panel.icon}}"/></span>
+                                <div class="o_sacd_card_header">
+                                    <h3><t t-esc="panel.title"/></h3>
+                                    <span><t t-esc="panel.subtitle"/></span>
+                                </div>
+                                <div class="o_sacd_panel_total">
+                                    <strong><t t-esc="money(block.amount)"/></strong>
+                                    <span><t t-esc="block.count"/> <t t-if="block.count == 1">check</t><t t-else="">checks</t></span>
+                                </div>
+                            </div>
+                            <div class="o_sacd_panel_rows">
+                                <t t-foreach="block.rows" t-as="row" t-key="row.id">
+                                    <div class="o_sacd_panel_row" t-on-click="() => this.openCheck(row.id)">
+                                        <div class="o_sacd_panel_main">
+                                            <strong><t t-esc="row.title"/></strong>
+                                            <small><t t-esc="row.subtitle"/><t t-if="row.detail"> · <t t-esc="row.detail"/></t></small>
+                                        </div>
+                                        <span class="o_sacd_panel_days"><t t-esc="row.days"/> <t t-esc="panel.daysLabel"/></span>
+                                        <strong class="o_sacd_panel_amount"><t t-esc="money(row.amount)"/></strong>
+                                    </div>
+                                </t>
+                                <div class="o_sacd_empty" t-if="!block.rows.length"><t t-esc="panel.empty"/></div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

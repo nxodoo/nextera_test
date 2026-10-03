@@ -1,0 +1,144 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-02 08:43+0000\n"
+"PO-Revision-Date: 2026-10-02 08:43+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+#. module: sa_check_management_sale
+#. odoo-python
+#: code:addons/sa_check_management_sale/models/sale_order.py:0
+msgid ""
+"%(partner)s has %(count)s bounced check(s) not yet resolved, total "
+"%(amount)s."
+msgstr "%(partner)s لديه %(count)s شيك مرتد لم يُحل بعد، بإجمالي %(amount)s."
+
+#. module: sa_check_management_sale
+#. odoo-python
+#: code:addons/sa_check_management_sale/models/sale_order.py:0
+msgid "A Check Manager must confirm this order."
+msgstr "يجب أن يؤكد مدير الشيكات هذا الأمر."
+
+#. module: sa_check_management_sale
+#: model:ir.model.fields.selection,name:sa_check_management_sale.selection__res_company__check_sale_bounce_policy__block
+msgid "Block confirmation"
+msgstr "منع التأكيد"
+
+#. module: sa_check_management_sale
+#: model_terms:ir.ui.view,arch_db:sa_check_management_sale.res_config_settings_view_form_inherit_sa_check_sale
+msgid "Bounced Checks on Sales"
+msgstr "الشيكات المرتدة في المبيعات"
+
+#. module: sa_check_management_sale
+#: model:ir.model.fields,help:sa_check_management_sale.field_res_company__check_sale_credit_include_checks
+#: model:ir.model.fields,help:sa_check_management_sale.field_res_config_settings__check_sale_credit_include_checks
+msgid ""
+"Checks that already settled invoices but are not collected yet still count "
+"as customer credit."
+msgstr ""
+"الشيكات التي سددت فواتير ولم تُحصّل بعد تظل محسوبة ضمن مديونية العميل."
+
+#. module: sa_check_management_sale
+#: model:ir.model,name:sa_check_management_sale.model_res_company
+msgid "Companies"
+msgstr "الشركات"
+
+#. module: sa_check_management_sale
+#: model:ir.model,name:sa_check_management_sale.model_res_config_settings
+msgid "Config Settings"
+msgstr "إعدادات التهيئة"
+
+#. module: sa_check_management_sale
+#: model:ir.model,name:sa_check_management_sale.model_res_partner
+msgid "Contact"
+msgstr "جهة الاتصال"
+
+#. module: sa_check_management_sale
+#: model:ir.model.fields,field_description:sa_check_management_sale.field_res_company__check_sale_credit_include_checks
+#: model:ir.model.fields,field_description:sa_check_management_sale.field_res_config_settings__check_sale_credit_include_checks
+msgid "Credit Limit Includes Open Checks"
+msgstr "حد الائتمان يشمل الشيكات المفتوحة"
+
+#. module: sa_check_management_sale
+#: model_terms:ir.ui.view,arch_db:sa_check_management_sale.res_config_settings_view_form_inherit_sa_check_sale
+msgid "Customer checks not collected yet count toward the credit limit."
+msgstr "شيكات العملاء التي لم تُحصّل بعد تُحسب ضمن حد الائتمان."
+
+#. module: sa_check_management_sale
+#: model:ir.model.fields,field_description:sa_check_management_sale.field_res_company__check_sale_bounce_policy
+#: model:ir.model.fields,field_description:sa_check_management_sale.field_res_config_settings__check_sale_bounce_policy
+msgid "Customers with Bounced Checks"
+msgstr "العملاء أصحاب الشيكات المرتدة"
+
+#. module: sa_check_management_sale
+#: model:ir.model.fields.selection,name:sa_check_management_sale.selection__res_company__check_sale_bounce_policy__none
+msgid "Do nothing"
+msgstr "لا شيء"
+
+#. module: sa_check_management_sale
+#. odoo-python
+#: code:addons/sa_check_management_sale/models/account_move.py:0
+msgid "Including customer checks not collected yet: %(amount)s"
+msgstr "شاملاً شيكات العملاء التي لم تُحصّل بعد: %(amount)s"
+
+#. module: sa_check_management_sale
+#: model:ir.model,name:sa_check_management_sale.model_account_move
+msgid "Journal Entry"
+msgstr "قيد اليومية"
+
+#. module: sa_check_management_sale
+#: model_terms:ir.ui.view,arch_db:sa_check_management_sale.res_config_settings_view_form_inherit_sa_check_sale
+msgid "Open Checks in Credit Limit"
+msgstr "الشيكات المفتوحة في حد الائتمان"
+
+#. module: sa_check_management_sale
+#: model:ir.model.fields,field_description:sa_check_management_sale.field_res_partner__sa_check_open_amount
+#: model:ir.model.fields,field_description:sa_check_management_sale.field_res_users__sa_check_open_amount
+msgid "Open Customer Checks"
+msgstr "شيكات العميل المفتوحة"
+
+#. module: sa_check_management_sale
+#: model:ir.model.fields,field_description:sa_check_management_sale.field_res_partner__sa_check_bounced_count
+#: model:ir.model.fields,field_description:sa_check_management_sale.field_res_users__sa_check_bounced_count
+msgid "Sa Check Bounced Count"
+msgstr "عدد الشيكات المرتدة"
+
+#. module: sa_check_management_sale
+#: model:ir.model.fields,field_description:sa_check_management_sale.field_res_partner__sa_check_open_count
+#: model:ir.model.fields,field_description:sa_check_management_sale.field_res_users__sa_check_open_count
+msgid "Sa Check Open Count"
+msgstr "عدد الشيكات المفتوحة"
+
+#. module: sa_check_management_sale
+#: model:ir.model.fields,field_description:sa_check_management_sale.field_sale_order__sa_check_warning
+msgid "Sa Check Warning"
+msgstr "تحذير الشيكات"
+
+#. module: sa_check_management_sale
+#: model_terms:ir.ui.view,arch_db:sa_check_management_sale.res_config_settings_view_form_inherit_sa_check_sale
+msgid "Sales"
+msgstr "المبيعات"
+
+#. module: sa_check_management_sale
+#: model:ir.model,name:sa_check_management_sale.model_sale_order
+msgid "Sales Order"
+msgstr "أمر البيع"
+
+#. module: sa_check_management_sale
+#: model:ir.model.fields.selection,name:sa_check_management_sale.selection__res_company__check_sale_bounce_policy__warning
+msgid "Warn on sales orders"
+msgstr "تحذير على أوامر البيع"
+
+#. module: sa_check_management_sale
+#: model_terms:ir.ui.view,arch_db:sa_check_management_sale.res_config_settings_view_form_inherit_sa_check_sale
+msgid ""
+"What happens when a customer with unresolved bounced checks orders again."
+msgstr "ما يحدث عندما يطلب عميل لديه شيكات مرتدة غير محلولة مرة أخرى."

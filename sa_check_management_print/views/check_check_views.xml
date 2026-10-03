@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="check_check_view_form_inherit_print" model="ir.ui.view">
+        <field name="name">check.check.view.form.inherit.print</field>
+        <field name="model">check.check</field>
+        <field name="inherit_id" ref="sa_check_management.check_check_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_issue']" position="before">
+                <button name="action_print_check" type="object" string="Print Check" icon="fa-print"
+                        invisible="check_type != 'outgoing' or not (state in ('approved', 'issued') or (state == 'draft' and not approval_required)) or print_count"
+                        groups="sa_check_management.group_check_treasury"/>
+                <button name="action_print_check" type="object" string="Reprint Check" icon="fa-print"
+                        invisible="check_type != 'outgoing' or state not in ('approved', 'issued') or not print_count"
+                        groups="sa_check_management.group_check_manager"
+                        confirm="This check was already printed. Reprinting creates a second paper copy of the same check. Continue?"/>
+            </xpath>
+            <xpath expr="//field[@name='amount']" position="after">
+                <field name="amount_in_words" invisible="check_type != 'outgoing' or not amount_in_words"/>
+                <field name="print_count" invisible="not print_count"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

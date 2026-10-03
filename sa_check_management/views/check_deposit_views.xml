@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="check_deposit_view_form" model="ir.ui.view">
+        <field name="name">check.deposit.view.form</field>
+        <field name="model">check.deposit</field>
+        <field name="arch" type="xml">
+            <form string="Check Deposit">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm Deposit" class="btn-primary"
+                            invisible="state != 'draft'" groups="sa_check_management.group_check_treasury"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state != 'draft'"
+                            groups="sa_check_management.group_check_treasury"/>
+                    <button name="action_cancel" type="object" string="Cancel Deposit"
+                            invisible="state != 'confirmed'" groups="sa_check_management.group_check_manager"
+                            confirm="Pending checks go back to their previous state. Continue?"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                </header>
+                <sheet>
+                    <field name="currency_id" invisible="1"/>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="journal_id" readonly="state != 'draft'"/>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="reference"/>
+                        </group>
+                        <group>
+                            <field name="check_count"/>
+                            <field name="total_amount"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Checks" name="checks">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom" decoration-muted="state in ('withdrawn', 'cancelled')"
+                                      decoration-danger="state == 'bounced'" decoration-success="state == 'collected'">
+                                    <field name="currency_id" column_invisible="True"/>
+                                    <field name="deposit_state" column_invisible="True"/>
+                                    <field name="check_id" options="{'no_create': True}"/>
+                                    <field name="partner_id"/>
+                                    <field name="check_number"/>
+                                    <field name="bank_id" optional="show"/>
+                                    <field name="due_date" decoration-warning="is_early"/>
+                                    <field name="is_early" column_invisible="True"/>
+                                    <field name="attempt" optional="show"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="result_date" optional="hide"/>
+                                    <button name="action_collect" type="object" string="Collect" icon="fa-check"
+                                            invisible="state != 'pending' or deposit_state != 'confirmed'"
+                                            groups="sa_check_management.group_check_treasury"/>
+                                    <button name="action_bounce" type="object" string="Bounce" icon="fa-times"
+                                            invisible="state != 'pending' or deposit_state != 'confirmed'"
+                                            groups="sa_check_management.group_check_treasury"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="check_deposit_view_list" model="ir.ui.view">
+        <field name="name">check.deposit.view.list</field>
+        <field name="model">check.deposit</field>
+        <field name="arch" type="xml">
+            <list string="Check Deposits" decoration-muted="state == 'cancelled'" decoration-info="state == 'draft'">
+                <field name="currency_id" column_invisible="True"/>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="journal_id"/>
+                <field name="reference" optional="show"/>
+                <field name="check_count"/>
+                <field name="total_amount" sum="Total"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="state" widget="badge" decoration-success="state == 'done'"
+                       decoration-warning="state == 'confirmed'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="check_deposit_view_search" model="ir.ui.view">
+        <field name="name">check.deposit.view.search</field>
+        <field name="model">check.deposit</field>
+        <field name="arch" type="xml">
+            <search string="Check Deposits">
+                <field name="name"/>
+                <field name="reference"/>
+                <field name="journal_id"/>
+                <field name="line_ids" string="Check" filter_domain="[('line_ids.check_id', 'ilike', self)]"/>
+                <filter name="filter_open" string="Awaiting Results" domain="[('state', '=', 'confirmed')]"/>
+                <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <group string="Group By">
+                    <filter name="group_journal" string="Bank" context="{'group_by': 'journal_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_date" string="Date" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_check_deposit" model="ir.actions.act_window">
+        <field name="name">Deposits</field>
+        <field name="res_model">check.deposit</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="check_deposit_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No deposits yet.</p>
+            <p>Group received checks into a deposit slip, confirm it, then record each check's bank result.</p>
+        </field>
+    </record>
+</odoo>

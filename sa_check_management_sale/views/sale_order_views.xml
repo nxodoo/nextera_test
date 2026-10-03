@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_sa_check" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.sa.check</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_credit_warning']/.." position="after">
+                <div class="alert alert-danger" role="alert" invisible="not sa_check_warning">
+                    <i class="fa fa-exclamation-triangle me-1"/>
+                    <field name="sa_check_warning"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

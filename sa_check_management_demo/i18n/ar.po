@@ -1,0 +1,307 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-02 13:59+0000\n"
+"PO-Revision-Date: 2026-10-02 13:59+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+#. module: sa_check_management_demo
+#. odoo-python
+#: code:addons/sa_check_management_demo/wizard/check_demo_wizard.py:0
+msgid "Ask for at least one check."
+msgstr "اطلب شيكاً واحداً على الأقل."
+
+#. module: sa_check_management_demo
+#: model:ir.model,name:sa_check_management_demo.model_check_check
+msgid "Check"
+msgstr "الشيك"
+
+#. module: sa_check_management_demo
+#: model:ir.model,name:sa_check_management_demo.model_check_demo_generator
+msgid "Check Demo Data Generator"
+msgstr "مولّد بيانات الشيكات التجريبية"
+
+#. module: sa_check_management_demo
+#: model:ir.model,name:sa_check_management_demo.model_check_demo_job
+msgid "Check Demo Data Job"
+msgstr "مهمة بيانات الشيكات التجريبية"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__done
+msgid "Checks Created"
+msgstr "الشيكات المنشأة"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__requested
+msgid "Checks Requested"
+msgstr "الشيكات المطلوبة"
+
+#. module: sa_check_management_demo
+#: model:ir.actions.server,name:sa_check_management_demo.ir_cron_check_demo_ir_actions_server
+msgid "Checks: generate queued demo data"
+msgstr "الشيكات: توليد البيانات التجريبية المجدولة"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__company_id
+msgid "Company"
+msgstr "الشركة"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__create_users
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__create_users
+msgid "Create Demo Users"
+msgstr "إنشاء مستخدمين تجريبيين"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__create_uid
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__create_uid
+msgid "Created by"
+msgstr "أنشئ بواسطة"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__create_date
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__create_date
+msgid "Created on"
+msgstr "أنشئ في"
+
+#. module: sa_check_management_demo
+#: model:ir.ui.menu,name:sa_check_management_demo.menu_check_demo
+msgid "Demo Data"
+msgstr "البيانات التجريبية"
+
+#. module: sa_check_management_demo
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_job_view_form
+msgid "Demo Data Job"
+msgstr "مهمة بيانات تجريبية"
+
+#. module: sa_check_management_demo
+#. odoo-python
+#: code:addons/sa_check_management_demo/wizard/check_demo_wizard.py:0
+#: model:ir.actions.act_window,name:sa_check_management_demo.action_check_demo_job
+#: model:ir.ui.menu,name:sa_check_management_demo.menu_check_demo_jobs
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_job_view_list
+msgid "Demo Data Jobs"
+msgstr "مهام البيانات التجريبية"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__user_password
+msgid "Demo Users Password"
+msgstr "كلمة مرور المستخدمين التجريبيين"
+
+#. module: sa_check_management_demo
+#. odoo-python
+#: code:addons/sa_check_management_demo/models/check_demo_job.py:0
+msgid "Demo data %s"
+msgstr "بيانات تجريبية %s"
+
+#. module: sa_check_management_demo
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_wizard_view_form
+msgid "Discard"
+msgstr "تجاهل"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__display_name
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__display_name
+msgid "Display Name"
+msgstr "الاسم المعروض"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields.selection,name:sa_check_management_demo.selection__check_demo_job__state__done
+msgid "Done"
+msgstr "منتهية"
+
+#. module: sa_check_management_demo
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_wizard_view_form
+msgid ""
+"For test or demo databases only: every generated check posts real invoices, "
+"payments and entries."
+msgstr ""
+"لقواعد البيانات التجريبية فقط: كل شيك يتم توليده يُرحّل فواتير ودفعات "
+"وقيوداً حقيقية."
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__months_ahead
+msgid "Future Due Dates (Months)"
+msgstr "تواريخ الاستحقاق المستقبلية (أشهر)"
+
+#. module: sa_check_management_demo
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_wizard_view_form
+msgid "Generate"
+msgstr "توليد"
+
+#. module: sa_check_management_demo
+#: model:ir.model,name:sa_check_management_demo.model_check_demo_wizard
+msgid "Generate Check Demo Data"
+msgstr "توليد بيانات شيكات تجريبية"
+
+#. module: sa_check_management_demo
+#: model:ir.actions.act_window,name:sa_check_management_demo.action_check_demo_wizard
+#: model:ir.ui.menu,name:sa_check_management_demo.menu_check_demo_generate
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_wizard_view_form
+msgid "Generate Demo Data"
+msgstr "توليد بيانات تجريبية"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__months_back
+msgid "History (Months)"
+msgstr "الفترة السابقة (أشهر)"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__id
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__id
+msgid "ID"
+msgstr "المعرف"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__incoming_share
+msgid "Incoming (%)"
+msgstr "الوارد (%)"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__incoming_share
+msgid "Incoming Checks (%)"
+msgstr "الشيكات الواردة (%)"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_check__is_demo
+msgid "Is Demo"
+msgstr "بيانات تجريبية"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__write_uid
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__write_uid
+msgid "Last Updated by"
+msgstr "آخر تحديث بواسطة"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__write_date
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__write_date
+msgid "Last Updated on"
+msgstr "آخر تحديث في"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__months_ahead
+msgid "Months Ahead"
+msgstr "الأشهر القادمة"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__months_back
+msgid "Months Back"
+msgstr "الأشهر السابقة"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__name
+msgid "Name"
+msgstr "الاسم"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__next_index
+msgid "Next Index"
+msgstr "الفهرس التالي"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__count
+msgid "Number of Checks"
+msgstr "عدد الشيكات"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,help:sa_check_management_demo.field_check_demo_wizard__create_users
+msgid ""
+"One user per check role (clerk, treasury, approver, manager, accountant, "
+"auditor, sales reps); every action in the history is done by the user of its"
+" role."
+msgstr ""
+"مستخدم لكل دور في الشيكات (موظف، خزينة، معتمد، مدير، محاسب، مراجع، مندوبين)؛"
+" وكل إجراء في السجل يتم باسم مستخدم دوره."
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__user_password
+msgid "Password for Demo Users"
+msgstr "كلمة مرور المستخدمين التجريبيين"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__progress
+msgid "Progress"
+msgstr "نسبة الإنجاز"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields.selection,name:sa_check_management_demo.selection__check_demo_job__state__queued
+msgid "Queued"
+msgstr "في الانتظار"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_wizard__seed
+msgid "Random Seed"
+msgstr "رقم عشوائي"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields.selection,name:sa_check_management_demo.selection__check_demo_job__state__running
+msgid "Running"
+msgstr "قيد التنفيذ"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__failed
+msgid "Scenarios Failed"
+msgstr "السيناريوهات الفاشلة"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__seconds
+msgid "Seconds Spent"
+msgstr "الوقت المستغرق (ثوانٍ)"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__seed
+msgid "Seed"
+msgstr "الرقم العشوائي"
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,field_description:sa_check_management_demo.field_check_demo_job__state
+msgid "State"
+msgstr "الحالة"
+
+#. module: sa_check_management_demo
+#. odoo-python
+#: code:addons/sa_check_management_demo/wizard/check_demo_wizard.py:0
+msgid "The incoming share is a percentage between 0 and 100."
+msgstr "نسبة الوارد نسبة مئوية بين 0 و100."
+
+#. module: sa_check_management_demo
+#: model:ir.model.fields,help:sa_check_management_demo.field_check_demo_wizard__seed
+msgid "The same seed gives the same data."
+msgstr "نفس الرقم العشوائي يعطي نفس البيانات."
+
+#. module: sa_check_management_demo
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_wizard_view_form
+msgid ""
+"Up to 300 checks are created right away; larger requests run in the background in batches of 200.\n"
+"                    When the data is ready you can uninstall this module: the generated data stays."
+msgstr ""
+"حتى 300 شيك تُنشأ فوراً؛ والطلبات الأكبر تعمل في الخلفية على دفعات من 200.\n"
+"                    عندما تجهز البيانات يمكنك إلغاء تثبيت هذا الموديول: البيانات المولّدة تبقى كما هي."
+
+#. module: sa_check_management_demo
+#. odoo-python
+#: code:addons/sa_check_management_demo/wizard/check_demo_wizard.py:0
+msgid "Use a password of at least 8 characters for the demo users."
+msgstr "استخدم كلمة مرور من 8 أحرف على الأقل للمستخدمين التجريبيين."
+
+#. module: sa_check_management_demo
+#. odoo-python
+#: code:addons/sa_check_management_demo/wizard/check_demo_wizard.py:0
+msgid "Use at least 2 months of history and 1 month of future due dates."
+msgstr ""
+"استخدم شهرين على الأقل من الفترة السابقة وشهراً واحداً على الأقل من تواريخ "
+"الاستحقاق المستقبلية."
+
+#. module: sa_check_management_demo
+#: model_terms:ir.ui.view,arch_db:sa_check_management_demo.check_demo_wizard_view_form
+msgid "Users"
+msgstr "المستخدمون"

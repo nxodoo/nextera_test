@@ -1,0 +1,447 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-02 08:43+0000\n"
+"PO-Revision-Date: 2026-10-02 08:43+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+#. module: sa_check_management_print
+#: model:ir.actions.report,print_report_name:sa_check_management_print.action_report_check_print
+msgid "'Check - %s' % object.check_number"
+msgstr "'شيك - %s' % object.check_number"
+
+#. module: sa_check_management_print
+#: model:ir.actions.report,print_report_name:sa_check_management_print.action_report_check_layout_test
+msgid "'Check Layout - %s' % object.name"
+msgstr "'نموذج طباعة - %s' % object.name"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__active
+msgid "Active"
+msgstr "نشط"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_check__amount_in_words
+msgid "Amount In Words"
+msgstr "يسار المبلغ بالحروف"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__amount_left
+msgid "Amount Left"
+msgstr "يسار المبلغ"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__amount_top
+msgid "Amount Top"
+msgstr "أعلى المبلغ"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__words_language
+msgid "Amount in Words"
+msgstr "المبلغ بالحروف"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields.selection,name:sa_check_management_print.selection__check_print_layout__words_language__ar
+msgid "Arabic"
+msgstr "العربية"
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Archived"
+msgstr "مؤرشف"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__bank_id
+msgid "Bank"
+msgstr "البنك"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,help:sa_check_management_print.field_check_print_layout__journal_ids
+msgid "Bank journals whose outgoing checks print with this layout."
+msgstr "دفاتر يومية البنوك التي تُطبع شيكاتها الصادرة بهذا النموذج."
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "Beneficiary Name Sample Co."
+msgstr "شركة المستفيد النموذجية"
+
+#. module: sa_check_management_print
+#: model:ir.model,name:sa_check_management_print.model_check_check
+msgid "Check"
+msgstr "الشيك"
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "Check %(check)s must be approved before printing."
+msgstr "يجب اعتماد الشيك %(check)s قبل طباعته."
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid ""
+"Check %(check)s was already printed; only a Check Manager can reprint it."
+msgstr ""
+"تمت طباعة الشيك %(check)s بالفعل؛ فقط مدير الشيكات يمكنه إعادة طباعته."
+
+#. module: sa_check_management_print
+#: model:ir.model,name:sa_check_management_print.model_check_event
+msgid "Check Event"
+msgstr "حدث الشيك"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__page_height
+msgid "Check Height (mm)"
+msgstr "ارتفاع الشيك (مم)"
+
+#. module: sa_check_management_print
+#: model:ir.actions.report,name:sa_check_management_print.action_report_check_layout_test
+#: model:ir.model,name:sa_check_management_print.model_report_sa_check_management_print_report_check_layout_test
+msgid "Check Layout Test Page"
+msgstr "صفحة اختبار نموذج الشيك"
+
+#. module: sa_check_management_print
+#: model:ir.model,name:sa_check_management_print.model_check_print_layout
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Check Print Layout"
+msgstr "نموذج طباعة الشيك"
+
+#. module: sa_check_management_print
+#: model:ir.actions.act_window,name:sa_check_management_print.action_check_print_layout
+#: model:ir.ui.menu,name:sa_check_management_print.menu_check_print_layout
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_list
+msgid "Check Print Layouts"
+msgstr "نماذج طباعة الشيكات"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__page_width
+msgid "Check Width (mm)"
+msgstr "عرض الشيك (مم)"
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_print_layout.py:0
+msgid "Check: %s"
+msgstr "شيك: %s"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__company_id
+msgid "Company"
+msgstr "الشركة"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__is_default
+msgid "Company Default"
+msgstr "الافتراضي للشركة"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__create_uid
+msgid "Created by"
+msgstr "أنشئ بواسطة"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__create_date
+msgid "Created on"
+msgstr "أنشئ في"
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Crossing"
+msgstr "التسطير"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__crossing_left
+msgid "Crossing Left"
+msgstr "يسار التسطير"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__crossing_text
+msgid "Crossing Text"
+msgstr "نص التسطير"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__crossing_top
+msgid "Crossing Top"
+msgstr "أعلى التسطير"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__date_format
+msgid "Date Format"
+msgstr "صيغة التاريخ"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__date_left
+msgid "Date Left"
+msgstr "يسار التاريخ"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__date_top
+msgid "Date Top"
+msgstr "أعلى التاريخ"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__display_name
+msgid "Display Name"
+msgstr "الاسم المعروض"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields.selection,name:sa_check_management_print.selection__check_print_layout__words_language__en
+msgid "English"
+msgstr "الإنجليزية"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_event__event_type
+msgid "Event Type"
+msgstr "نوع الحدث"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__font_size
+msgid "Font Size (pt)"
+msgstr "حجم الخط (نقطة)"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__id
+msgid "ID"
+msgstr "المعرف"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_check__last_printed_date
+msgid "Last Printed Date"
+msgstr "تاريخ آخر طباعة"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__write_uid
+msgid "Last Updated by"
+msgstr "آخر تحديث بواسطة"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__write_date
+msgid "Last Updated on"
+msgstr "آخر تحديث في"
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_print_layout.py:0
+msgid "Layout %s: positions cannot be negative."
+msgstr "النموذج %s: لا يمكن أن تكون المواضع سالبة."
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_print_layout.py:0
+msgid "Layout %s: size and font must be positive."
+msgstr "النموذج %s: يجب أن يكون المقاس والخط موجبين."
+
+#. module: sa_check_management_print
+#: model_terms:ir.actions.act_window,help:sa_check_management_print.action_check_print_layout
+msgid ""
+"Measure one leaf of each bank's checkbook, enter the positions in millimetres,\n"
+"               then print the test page on plain paper and hold it against a real leaf to calibrate."
+msgstr ""
+"قِس ورقة من دفتر شيكات كل بنك، وأدخل المواضع بالمليمتر،\n"
+"               ثم اطبع صفحة الاختبار على ورق عادي وطابقها على ورقة شيك حقيقية للمعايرة."
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__name
+msgid "Name"
+msgstr "الاسم"
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "No check layout is configured for %(journal)s."
+msgstr "لا يوجد نموذج طباعة شيكات للدفتر %(journal)s."
+
+#. module: sa_check_management_print
+#: model_terms:ir.actions.act_window,help:sa_check_management_print.action_check_print_layout
+msgid "No check layouts."
+msgstr "لا توجد نماذج طباعة شيكات."
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "Only Treasury Officers can print checks."
+msgstr "فقط مسؤولو الخزينة يمكنهم طباعة الشيكات."
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_print_layout.py:0
+msgid "Only one default check layout per company."
+msgstr "نموذج طباعة افتراضي واحد فقط لكل شركة."
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "Only outgoing checks can be printed."
+msgstr "لا يمكن طباعة إلا الشيكات الصادرة."
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Paper and Text"
+msgstr "الورق والنص"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__paperformat_id
+msgid "Paperformat"
+msgstr "تنسيق الورق"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__payee_left
+msgid "Payee Left"
+msgstr "يسار المستفيد"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__payee_top
+msgid "Payee Top"
+msgstr "أعلى المستفيد"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__payee_width
+msgid "Payee Width"
+msgstr "عرض المستفيد"
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Positions (mm from the top-left corner)"
+msgstr "المواضع (مم من الركن العلوي الأيسر)"
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_check_view_form_inherit_print
+msgid "Print Check"
+msgstr "طباعة الشيك"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__print_crossing
+msgid "Print Crossing"
+msgstr "طباعة التسطير"
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Print Test Page"
+msgstr "طباعة صفحة اختبار"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields.selection,name:sa_check_management_print.selection__check_event__event_type__printed
+msgid "Printed"
+msgstr "مطبوع"
+
+#. module: sa_check_management_print
+#: model:ir.actions.report,name:sa_check_management_print.action_report_check_print
+#: model:ir.model,name:sa_check_management_print.model_report_sa_check_management_print_report_check_print
+msgid "Printed Check"
+msgstr "شيك مطبوع"
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "Printed with layout %s"
+msgstr "طُبع بالنموذج %s"
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Printer Calibration"
+msgstr "معايرة الطابعة"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__offset_y
+msgid "Printer Offset Down (mm)"
+msgstr "إزاحة الطابعة لأسفل (مم)"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__offset_x
+msgid "Printer Offset Right (mm)"
+msgstr "إزاحة الطابعة لليمين (مم)"
+
+#. module: sa_check_management_print
+#: model:ir.model,name:sa_check_management_print.model_ir_actions_report
+msgid "Report Action"
+msgstr "إجراء التقرير"
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_check_view_form_inherit_print
+msgid "Reprint Check"
+msgstr "إعادة طباعة الشيك"
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "Reprinted (copy %s)"
+msgstr "أعيدت طباعته (نسخة %s)"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__sequence
+msgid "Sequence"
+msgstr "التسلسل"
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "Set the bank journal and check number before printing."
+msgstr "حدد دفتر يومية البنك ورقم الشيك قبل الطباعة."
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,help:sa_check_management_print.field_check_print_layout__offset_y
+msgid "Shift everything down (negative: up)."
+msgstr "تحريك كل شيء لأسفل (بالسالب: لأعلى)."
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,help:sa_check_management_print.field_check_print_layout__offset_x
+msgid "Shift everything right (negative: left)."
+msgstr "تحريك كل شيء لليمين (بالسالب: لليسار)."
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_check_view_form_inherit_print
+msgid ""
+"This check was already printed. Reprinting creates a second paper copy of "
+"the same check. Continue?"
+msgstr ""
+"تمت طباعة هذا الشيك بالفعل. إعادة الطباعة تُنشئ نسخة ورقية ثانية من نفس "
+"الشيك. هل تريد المتابعة؟"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_check__print_count
+msgid "Times Printed"
+msgstr "عدد مرات الطباعة"
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Usage"
+msgstr "الاستخدام"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__journal_ids
+msgid "Used For"
+msgstr "يُستخدم لـ"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,help:sa_check_management_print.field_check_print_layout__is_default
+msgid "Used for journals without a specific layout."
+msgstr "يُستخدم لدفاتر اليومية التي ليس لها نموذج محدد."
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__words_left
+msgid "Words Left"
+msgstr "يسار المبلغ بالحروف"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__words_top
+msgid "Words Top"
+msgstr "أعلى المبلغ بالحروف"
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__words_width
+msgid "Words Width"
+msgstr "عرض المبلغ بالحروف"
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "e.g. CIB check book"
+msgstr "مثال: دفتر شيكات البنك التجاري الدولي"

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="layout_generic_egypt" model="check.print.layout">
+        <field name="name">Standard Egyptian Check (175 x 80 mm)</field>
+        <field name="is_default" eval="True"/>
+    </record>
+</odoo>

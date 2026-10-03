@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Check receipt voucher -->
+    <template id="report_check_receipt_document">
+        <t t-call="web.external_layout">
+            <t t-set="check" t-value="doc"/>
+            <div class="page">
+                <h2>
+                    <t t-if="check.check_type == 'incoming'">Check Receipt Voucher</t>
+                    <t t-else="">Check Issue Voucher</t>
+                    <small class="text-muted" t-field="check.name"/>
+                </h2>
+                <table class="table table-sm table-borderless mt-4">
+                    <tr><th class="w-25">Partner</th><td><span t-field="check.partner_id"/></td></tr>
+                    <tr t-if="not check.drawer_is_partner"><th>Drawer</th><td><span t-field="check.drawer_name"/></td></tr>
+                    <tr><th>Check Number</th><td><span t-field="check.check_number"/></td></tr>
+                    <tr><th>Bank</th><td><span t-field="check.bank_id"/></td></tr>
+                    <tr><th>Amount</th><td><strong t-field="check.amount" t-options="{'widget': 'monetary', 'display_currency': check.currency_id}"/></td></tr>
+                    <tr><th>Issue Date</th><td><span t-field="check.issue_date"/></td></tr>
+                    <tr><th>Due Date</th><td><span t-field="check.due_date"/></td></tr>
+                    <tr><th>Purpose</th><td><span t-field="check.purpose"/></td></tr>
+                    <tr t-if="check.reference"><th>Reference</th><td><span t-field="check.reference"/></td></tr>
+                </table>
+                <t t-if="check.sudo().allocation_ids">
+                    <h5 class="mt-4">Settles</h5>
+                    <table class="table table-sm">
+                        <thead><tr><th>Document</th><th>Due Date</th><th class="text-end">Amount</th></tr></thead>
+                        <tbody>
+                            <tr t-foreach="check.sudo().allocation_ids" t-as="allocation">
+                                <td><span t-field="allocation.document_name"/></td>
+                                <td><span t-field="allocation.date_maturity"/></td>
+                                <td class="text-end"><span t-field="allocation.amount"
+                                    t-options="{'widget': 'monetary', 'display_currency': check.currency_id}"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </t>
+                <div class="row mt-5 pt-5">
+                    <div class="col-6 text-center">
+                        <div class="border-top pt-2">Received by</div>
+                    </div>
+                    <div class="col-6 text-center">
+                        <div class="border-top pt-2">Handed over by</div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_check_receipt">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="sa_check_management.report_check_receipt_document" t-lang="doc.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+    <!-- Deposit slip -->
+    <template id="report_check_deposit_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2>Check Deposit Slip <small class="text-muted" t-field="doc.name"/></h2>
+                <table class="table table-sm table-borderless mt-3">
+                    <tr><th class="w-25">Bank</th><td><span t-field="doc.journal_id"/></td></tr>
+                    <tr><th>Deposit Date</th><td><span t-field="doc.date"/></td></tr>
+                    <tr t-if="doc.reference"><th>Slip Number</th><td><span t-field="doc.reference"/></td></tr>
+                    <tr><th>Number of Checks</th><td><span t-field="doc.check_count"/></td></tr>
+                </table>
+                <table class="table table-sm mt-3">
+                    <thead>
+                        <tr><th>#</th><th>Check Number</th><th>Drawer / Partner</th><th>Bank</th><th>Due Date</th><th class="text-end">Amount</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="doc.line_ids.filtered(lambda l: l.state != 'cancelled')" t-as="line">
+                            <td t-out="line_index + 1"/>
+                            <td><span t-field="line.check_number"/></td>
+                            <td><span t-field="line.partner_id"/></td>
+                            <td><span t-field="line.bank_id"/></td>
+                            <td><span t-field="line.due_date"/></td>
+                            <td class="text-end"><span t-field="line.amount"
+                                t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="5" class="text-end">Total</th>
+                            <th class="text-end"><span t-field="doc.total_amount"
+                                t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="row mt-5 pt-5">
+                    <div class="col-6 text-center"><div class="border-top pt-2">Deposited by</div></div>
+                    <div class="col-6 text-center"><div class="border-top pt-2">Bank stamp</div></div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_check_deposit">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="sa_check_management.report_check_deposit_document"/>
+            </t>
+        </t>
+    </template>
+
+    <!-- Handover receipt -->
+    <template id="report_check_handover_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2>Check Handover Receipt <small class="text-muted" t-field="doc.name"/></h2>
+                <table class="table table-sm table-borderless mt-3">
+                    <tr><th class="w-25">From</th><td><span t-field="doc.from_location_id"/></td></tr>
+                    <tr><th>To</th><td><span t-field="doc.to_location_id"/></td></tr>
+                    <tr><th>Date</th><td><span t-field="doc.date"/></td></tr>
+                    <tr t-if="doc.accepted_by_id"><th>Accepted By</th><td><span t-field="doc.accepted_by_id"/> - <span t-field="doc.accepted_date"/></td></tr>
+                </table>
+                <table class="table table-sm mt-3">
+                    <thead>
+                        <tr><th>#</th><th>Reference</th><th>Check Number</th><th>Partner</th><th>Due Date</th><th class="text-end">Amount</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="doc.check_ids" t-as="check">
+                            <td t-out="check_index + 1"/>
+                            <td><span t-field="check.name"/></td>
+                            <td><span t-field="check.check_number"/></td>
+                            <td><span t-field="check.partner_id"/></td>
+                            <td><span t-field="check.due_date"/></td>
+                            <td class="text-end"><span t-field="check.amount"
+                                t-options="{'widget': 'monetary', 'display_currency': check.currency_id}"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p t-if="doc.note" t-field="doc.note"/>
+                <div class="row mt-5 pt-5">
+                    <div class="col-6 text-center"><div class="border-top pt-2">Handed over by</div></div>
+                    <div class="col-6 text-center"><div class="border-top pt-2">Received by</div></div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_check_handover">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="sa_check_management.report_check_handover_document"/>
+            </t>
+        </t>
+    </template>
+
+    <!-- Legal case sheet, for the lawyer -->
+    <template id="report_check_legal_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2>Legal Case Sheet <small class="text-muted" t-field="doc.legal_case_number"/></h2>
+                <div class="row mt-3">
+                    <div class="col-6">
+                        <h5>Case</h5>
+                        <table class="table table-sm table-borderless">
+                            <tr><th class="w-50">Filing Date</th><td><span t-field="doc.legal_date"/></td></tr>
+                            <tr><th>Lawyer</th><td><span t-field="doc.legal_lawyer_id"/></td></tr>
+                            <tr><th>Court</th><td><span t-field="doc.legal_court"/></td></tr>
+                            <tr><th>Status</th><td><span t-field="doc.state"/></td></tr>
+                        </table>
+                    </div>
+                    <div class="col-6">
+                        <h5>Check</h5>
+                        <table class="table table-sm table-borderless">
+                            <tr><th class="w-50">Check Number</th><td><span t-field="doc.check_number"/></td></tr>
+                            <tr><th>Drawer</th><td><span t-out="doc.drawer_name or doc.partner_id.name"/></td></tr>
+                            <tr><th>Drawer Account</th><td><span t-field="doc.drawer_account_number"/></td></tr>
+                            <tr><th>Bank</th><td><span t-field="doc.bank_id"/></td></tr>
+                            <tr><th>Amount</th><td><strong t-field="doc.amount" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></td></tr>
+                            <tr><th>Issue / Due Date</th><td><span t-field="doc.issue_date"/> / <span t-field="doc.due_date"/></td></tr>
+                        </table>
+                    </div>
+                </div>
+                <h5 class="mt-3">Bounce</h5>
+                <table class="table table-sm table-borderless">
+                    <tr><th class="w-25">Bounce Date</th><td><span t-field="doc.last_bounce_date"/></td></tr>
+                    <tr><th>Reason</th><td><span t-field="doc.last_bounce_reason_id"/></td></tr>
+                    <tr><th>Bank Reference</th><td><span t-field="doc.last_bounce_reference"/></td></tr>
+                    <tr><th>Times Bounced</th><td><span t-field="doc.bounce_count"/></td></tr>
+                </table>
+                <h5 class="mt-3">History</h5>
+                <table class="table table-sm">
+                    <thead><tr><th>Date</th><th>Event</th><th>By</th><th>Note</th></tr></thead>
+                    <tbody>
+                        <tr t-foreach="doc.event_ids.sorted('id')" t-as="event">
+                            <td><span t-field="event.date"/></td>
+                            <td><span t-field="event.event_type"/></td>
+                            <td><span t-field="event.user_id"/></td>
+                            <td><span t-field="event.note"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p t-if="doc.legal_note" class="mt-3"><strong>Notes: </strong><span t-field="doc.legal_note"/></p>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_check_legal">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="sa_check_management.report_check_legal_document"/>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_check_legal" model="ir.actions.report">
+        <field name="name">Legal Case Sheet</field>
+        <field name="model">check.check</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sa_check_management.report_check_legal</field>
+        <field name="report_file">sa_check_management.report_check_legal</field>
+        <field name="print_report_name">'Legal Case - %s' % (object.legal_case_number or object.name)</field>
+        <field name="binding_model_id" ref="model_check_check"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Partner check statement -->
+    <template id="report_check_partner_statement_document">
+        <t t-call="web.external_layout">
+            <t t-set="company_currency" t-value="doc.env.company.currency_id"/>
+            <div class="page">
+                <h2>Check Statement</h2>
+                <table class="table table-sm table-borderless">
+                    <tr><th class="w-25">Partner</th><td><span t-field="doc.partner_id"/></td></tr>
+                    <tr><th>Direction</th><td><span t-field="doc.check_type"/></td></tr>
+                    <tr><th>Period</th><td><span t-field="doc.date_from"/> - <span t-field="doc.date_to"/></td></tr>
+                </table>
+                <t t-foreach="doc._statement_sections()" t-as="section">
+                    <h5 class="mt-4"><t t-out="section['title']"/></h5>
+                    <p t-if="not section['checks']" class="text-muted">None.</p>
+                    <table t-if="section['checks']" class="table table-sm">
+                        <thead>
+                            <tr><th>Reference</th><th>Check Number</th><th>Bank</th><th>Issue Date</th><th>Due Date</th><th>Status</th><th class="text-end">Amount</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="section['checks']" t-as="check">
+                                <td><span t-field="check.name"/></td>
+                                <td><span t-field="check.check_number"/></td>
+                                <td><span t-field="check.bank_id"/></td>
+                                <td><span t-field="check.issue_date"/></td>
+                                <td><span t-field="check.due_date"/></td>
+                                <td><span t-field="check.state"/></td>
+                                <td class="text-end"><span t-field="check.amount" t-options="{'widget': 'monetary', 'display_currency': check.currency_id}"/></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="6" class="text-end">Total (company currency)</th>
+                                <th class="text-end"><span t-out="doc._totals(section['checks'])" t-options="{'widget': 'monetary', 'display_currency': company_currency}"/></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_check_partner_statement">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="sa_check_management.report_check_partner_statement_document" t-lang="doc.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_check_partner_statement" model="ir.actions.report">
+        <field name="name">Check Statement</field>
+        <field name="model">check.partner.statement.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sa_check_management.report_check_partner_statement</field>
+        <field name="report_file">sa_check_management.report_check_partner_statement</field>
+        <field name="print_report_name">'Check Statement - %s' % object.partner_id.name</field>
+    </record>
+
+    <record id="action_report_check_receipt" model="ir.actions.report">
+        <field name="name">Check Voucher</field>
+        <field name="model">check.check</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sa_check_management.report_check_receipt</field>
+        <field name="report_file">sa_check_management.report_check_receipt</field>
+        <field name="print_report_name">'Check Voucher - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_check_check"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_check_deposit" model="ir.actions.report">
+        <field name="name">Deposit Slip</field>
+        <field name="model">check.deposit</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sa_check_management.report_check_deposit</field>
+        <field name="report_file">sa_check_management.report_check_deposit</field>
+        <field name="print_report_name">'Deposit Slip - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_check_deposit"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_check_handover" model="ir.actions.report">
+        <field name="name">Handover Receipt</field>
+        <field name="model">check.handover</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sa_check_management.report_check_handover</field>
+        <field name="report_file">sa_check_management.report_check_handover</field>
+        <field name="print_report_name">'Handover - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_check_handover"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

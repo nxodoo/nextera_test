@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_check_management" model="ir.module.category">
+        <field name="name">Check Management</field>
+        <field name="description">Access to incoming and outgoing checks.</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="group_check_user" model="res.groups">
+        <field name="name">Check User</field>
+        <field name="category_id" ref="module_category_check_management"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Create checks and maintain draft operational data.</field>
+    </record>
+
+    <record id="group_check_treasury" model="res.groups">
+        <field name="name">Treasury Officer</field>
+        <field name="category_id" ref="module_category_check_management"/>
+        <field name="implied_ids" eval="[(4, ref('group_check_user'))]"/>
+        <field name="comment">Receipt, custody handovers, deposits and collection follow-up.</field>
+    </record>
+
+    <record id="group_check_manager" model="res.groups">
+        <field name="name">Check Manager</field>
+        <field name="category_id" ref="module_category_check_management"/>
+        <field name="implied_ids" eval="[(4, ref('group_check_treasury'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <field name="comment">Overrides, cancellations, resets and configuration.</field>
+    </record>
+
+    <record id="group_check_approver" model="res.groups">
+        <field name="name">Finance Approver</field>
+        <field name="category_id" ref="module_category_check_management"/>
+        <field name="implied_ids" eval="[(4, ref('group_check_user'))]"/>
+        <field name="comment">Approves outgoing checks and sensitive actions.</field>
+    </record>
+
+    <record id="group_check_accountant" model="res.groups">
+        <field name="name">Check Accountant</field>
+        <field name="category_id" ref="module_category_check_management"/>
+        <field name="implied_ids" eval="[(4, ref('group_check_user'))]"/>
+        <field name="comment">Accounting actions and reconciliation for checks.</field>
+    </record>
+
+    <record id="group_check_auditor" model="res.groups">
+        <field name="name">Check Auditor</field>
+        <field name="category_id" ref="module_category_check_management"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Read-only access to checks, history and references.</field>
+    </record>
+
+    <data noupdate="1">
+        <record id="check_check_company_rule" model="ir.rule">
+            <field name="name">Checks: allowed companies</field>
+            <field name="model_id" ref="model_check_check"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="check_event_company_rule" model="ir.rule">
+            <field name="name">Check events: allowed companies</field>
+            <field name="model_id" ref="model_check_event"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="check_allocation_company_rule" model="ir.rule">
+            <field name="name">Check allocations: allowed companies</field>
+            <field name="model_id" ref="model_check_allocation"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="check_deposit_company_rule" model="ir.rule">
+            <field name="name">Check deposits: allowed companies</field>
+            <field name="model_id" ref="model_check_deposit"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="check_deposit_line_company_rule" model="ir.rule">
+            <field name="name">Check deposit lines: allowed companies</field>
+            <field name="model_id" ref="model_check_deposit_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="check_endorsement_line_company_rule" model="ir.rule">
+            <field name="name">Check endorsement lines: allowed companies</field>
+            <field name="model_id" ref="model_check_endorsement_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="check_handover_company_rule" model="ir.rule">
+            <field name="name">Check handovers: allowed companies</field>
+            <field name="model_id" ref="model_check_handover"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="check_book_company_rule" model="ir.rule">
+            <field name="name">Checkbooks: allowed companies</field>
+            <field name="model_id" ref="model_check_book"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="check_book_line_company_rule" model="ir.rule">
+            <field name="name">Checkbook leaves: allowed companies</field>
+            <field name="model_id" ref="model_check_book_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="check_approval_rule_company_rule" model="ir.rule">
+            <field name="name">Check approval stages: allowed companies</field>
+            <field name="model_id" ref="model_check_approval_rule"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="check_approval_line_company_rule" model="ir.rule">
+            <field name="name">Check approvals: allowed companies</field>
+            <field name="model_id" ref="model_check_approval_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="check_maturity_report_company_rule" model="ir.rule">
+            <field name="name">Check maturity report: allowed companies</field>
+            <field name="model_id" ref="model_check_maturity_report"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="check_discount_term_company_rule" model="ir.rule">
+            <field name="name">Check discount terms: allowed companies</field>
+            <field name="model_id" ref="model_check_discount_term"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="check_action_rule_company_rule" model="ir.rule">
+            <field name="name">Sensitive action rules: allowed companies</field>
+            <field name="model_id" ref="model_check_action_rule"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="check_action_request_company_rule" model="ir.rule">
+            <field name="name">Check approval requests: allowed companies</field>
+            <field name="model_id" ref="model_check_action_request"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="check_location_company_rule" model="ir.rule">
+            <field name="name">Check locations: allowed companies</field>
+            <field name="model_id" ref="model_check_location"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

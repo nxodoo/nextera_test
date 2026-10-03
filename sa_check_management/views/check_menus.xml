@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_check_root" name="Check Management" sequence="45"
+              web_icon="sa_check_management,static/description/icon.png"
+              action="action_check_dashboard"
+              groups="group_check_user,group_check_auditor"/>
+
+    <menuitem id="menu_check_dashboard" name="Dashboard" parent="menu_check_root"
+              action="action_check_dashboard" sequence="1"/>
+
+    <menuitem id="menu_check_operations" name="Operations" parent="menu_check_root" sequence="10"/>
+    <menuitem id="menu_check_incoming" name="Incoming Checks" parent="menu_check_operations"
+              action="action_check_incoming" sequence="10"/>
+    <menuitem id="menu_check_outgoing" name="Outgoing Checks" parent="menu_check_operations"
+              action="action_check_outgoing" sequence="20"/>
+
+    <menuitem id="menu_check_deposit" name="Deposits" parent="menu_check_operations"
+              action="action_check_deposit" sequence="30"
+              groups="group_check_treasury,group_check_auditor"/>
+
+    <menuitem id="menu_check_handover" name="Handovers" parent="menu_check_operations"
+              action="action_check_handover" sequence="40"/>
+    <menuitem id="menu_check_book" name="Checkbooks" parent="menu_check_operations"
+              action="action_check_book" sequence="50"
+              groups="group_check_treasury,group_check_auditor"/>
+
+    <menuitem id="menu_check_action_request" name="Approval Requests" parent="menu_check_operations"
+              action="action_check_action_request" sequence="60"/>
+
+    <menuitem id="menu_check_reports" name="Reports" parent="menu_check_root" sequence="80"/>
+    <menuitem id="menu_check_cash_flow" name="Expected Cash Flow" parent="menu_check_reports"
+              action="action_check_cash_flow" sequence="5"/>
+    <menuitem id="menu_check_aging" name="Check Maturity" parent="menu_check_reports"
+              action="action_check_aging" sequence="7"/>
+    <menuitem id="menu_check_bounce_analysis" name="Bounce Analysis" parent="menu_check_reports"
+              action="action_check_bounce_analysis" sequence="9"/>
+    <menuitem id="menu_check_legal_cases" name="Legal Cases" parent="menu_check_reports"
+              action="action_check_legal_cases" sequence="8"/>
+    <menuitem id="menu_check_event" name="Check History" parent="menu_check_reports"
+              action="action_check_event" sequence="10"/>
+
+    <menuitem id="menu_check_configuration" name="Configuration" parent="menu_check_root"
+              sequence="100" groups="group_check_manager"/>
+    <menuitem id="menu_check_settings" name="Settings" parent="menu_check_configuration"
+              action="action_check_config_settings" sequence="1" groups="base.group_system"/>
+    <menuitem id="menu_check_bounce_reason" name="Bounce Reasons" parent="menu_check_configuration"
+              action="action_check_bounce_reason" sequence="10"/>
+    <menuitem id="menu_check_location" name="Custody Locations" parent="menu_check_configuration"
+              action="action_check_location" sequence="20"/>
+    <menuitem id="menu_check_approval_rule" name="Approval Stages" parent="menu_check_configuration"
+              action="action_check_approval_rule" sequence="30"/>
+    <menuitem id="menu_check_action_rule" name="Sensitive Action Rules" parent="menu_check_configuration"
+              action="action_check_action_rule" sequence="32"/>
+    <menuitem id="menu_check_discount_term" name="Bank Discount Terms" parent="menu_check_configuration"
+              action="action_check_discount_term" sequence="35"/>
+    <menuitem id="menu_check_import" name="Import Legacy Checks" parent="menu_check_configuration"
+              action="action_check_import_wizard" sequence="90"/>
+</odoo>

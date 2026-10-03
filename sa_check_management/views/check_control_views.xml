@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Handovers -->
+    <record id="check_handover_view_form" model="ir.ui.view">
+        <field name="name">check.handover.view.form</field>
+        <field name="model">check.handover</field>
+        <field name="arch" type="xml">
+            <form string="Check Handover">
+                <header>
+                    <button name="action_send" type="object" string="Hand Over" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_accept" type="object" string="Accept" class="btn-primary"
+                            invisible="state != 'pending'"/>
+                    <button name="action_reject" type="object" string="Refuse" invisible="state != 'pending'"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state not in ('draft', 'pending')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="from_location_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="to_location_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="receiver_id"/>
+                        </group>
+                        <group>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="sender_id"/>
+                            <field name="accepted_by_id" invisible="state != 'done'"/>
+                            <field name="accepted_date" invisible="state != 'done'"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <field name="check_ids" readonly="state != 'draft'"
+                           domain="[('check_type', '=', 'incoming'), ('state', 'in', ('received', 'bounced', 'legal')), ('current_location_id', '=', from_location_id)]"
+                           options="{'no_create': True}">
+                        <list>
+                            <field name="name"/>
+                            <field name="check_number"/>
+                            <field name="partner_id"/>
+                            <field name="due_date"/>
+                            <field name="amount"/>
+                            <field name="currency_id" column_invisible="True"/>
+                            <field name="state" widget="badge"/>
+                        </list>
+                    </field>
+                    <group>
+                        <field name="note" readonly="state not in ('draft', 'pending')"/>
+                        <field name="rejection_reason" invisible="state not in ('pending', 'cancelled')"
+                               readonly="state != 'pending'"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="check_handover_view_list" model="ir.ui.view">
+        <field name="name">check.handover.view.list</field>
+        <field name="model">check.handover</field>
+        <field name="arch" type="xml">
+            <list string="Check Handovers" decoration-info="state == 'pending'" decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="from_location_id"/>
+                <field name="to_location_id"/>
+                <field name="check_count"/>
+                <field name="sender_id" widget="many2one_avatar_user"/>
+                <field name="accepted_by_id" widget="many2one_avatar_user" optional="show"/>
+                <field name="state" widget="badge" decoration-success="state == 'done'" decoration-warning="state == 'pending'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="check_handover_view_search" model="ir.ui.view">
+        <field name="name">check.handover.view.search</field>
+        <field name="model">check.handover</field>
+        <field name="arch" type="xml">
+            <search string="Check Handovers">
+                <field name="name"/>
+                <field name="from_location_id"/>
+                <field name="to_location_id"/>
+                <field name="check_ids" string="Check"/>
+                <filter name="filter_pending" string="Awaiting Acceptance" domain="[('state', '=', 'pending')]"/>
+                <filter name="filter_mine" string="To Me" domain="[('to_location_id.user_id', '=', uid), ('state', '=', 'pending')]"/>
+                <group string="Group By">
+                    <filter name="group_to" string="To" context="{'group_by': 'to_location_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_check_handover" model="ir.actions.act_window">
+        <field name="name">Handovers</field>
+        <field name="res_model">check.handover</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="check_handover_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No handovers yet.</p>
+            <p>Record every time paper checks move between people, safes and branches.</p>
+        </field>
+    </record>
+
+    <!-- Checkbooks -->
+    <record id="check_book_view_form" model="ir.ui.view">
+        <field name="name">check.book.view.form</field>
+        <field name="model">check.book</field>
+        <field name="arch" type="xml">
+            <form string="Checkbook">
+                <header>
+                    <button name="action_activate" type="object" string="Start Using" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_open_leaf_import" type="object" string="Import Leaves"
+                            invisible="state != 'draft' or generation != 'list'"/>
+                    <button name="action_close" type="object" string="Close Checkbook" invisible="state != 'active'"
+                            confirm="Unused leaves will be voided. Continue?"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="journal_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="journal_require_leaf"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="generation" readonly="state != 'draft'" widget="radio"/>
+                            <field name="first_number" readonly="state != 'draft'" invisible="generation != 'range'"
+                                   required="generation == 'range'"/>
+                            <field name="last_number" readonly="state != 'draft'" invisible="generation != 'range'"
+                                   required="generation == 'range'"/>
+                            <field name="padding" readonly="state != 'draft'" invisible="generation != 'range'"/>
+                            <field name="available_count"/>
+                        </group>
+                    </group>
+                    <field name="leaf_ids">
+                        <list create="0" delete="0" decoration-muted="state in ('void', 'lost', 'damaged')"
+                              decoration-success="state == 'available'">
+                            <field name="number"/>
+                            <field name="state" widget="badge"/>
+                            <field name="check_id"/>
+                            <button name="action_mark_lost" type="object" string="Lost" icon="fa-question"
+                                    invisible="state != 'available'" groups="sa_check_management.group_check_manager"
+                                    confirm="Mark this leaf as lost?"/>
+                            <button name="action_mark_damaged" type="object" string="Damaged" icon="fa-chain-broken"
+                                    invisible="state != 'available'" groups="sa_check_management.group_check_manager"
+                                    confirm="Mark this leaf as damaged?"/>
+                        </list>
+                    </field>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="check_book_view_list" model="ir.ui.view">
+        <field name="name">check.book.view.list</field>
+        <field name="model">check.book</field>
+        <field name="arch" type="xml">
+            <list string="Checkbooks" decoration-muted="state == 'closed'">
+                <field name="name"/>
+                <field name="journal_id"/>
+                <field name="first_number"/>
+                <field name="last_number"/>
+                <field name="available_count"/>
+                <field name="state" widget="badge" decoration-success="state == 'active'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_check_book" model="ir.actions.act_window">
+        <field name="name">Checkbooks</field>
+        <field name="res_model">check.book</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No checkbooks registered.</p>
+            <p>Register each checkbook's number range so outgoing checks use controlled leaves.</p>
+        </field>
+    </record>
+
+    <!-- Approval stages -->
+    <record id="check_approval_rule_view_list" model="ir.ui.view">
+        <field name="name">check.approval.rule.view.list</field>
+        <field name="model">check.approval.rule</field>
+        <field name="arch" type="xml">
+            <list string="Approval Stages" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="name"/>
+                <field name="check_type"/>
+                <field name="purpose"/>
+                <field name="min_amount"/>
+                <field name="max_amount"/>
+                <field name="group_id" options="{'no_create': True}"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_check_approval_rule" model="ir.actions.act_window">
+        <field name="name">Approval Stages</field>
+        <field name="res_model">check.approval.rule</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'active_test': False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No approval stages.</p>
+            <p>Without stages, one Finance Approver approves every outgoing check. Add stages by amount,
+               for example Finance Manager from 0, CFO from 50,000 and General Manager from 500,000.</p>
+        </field>
+    </record>
+</odoo>

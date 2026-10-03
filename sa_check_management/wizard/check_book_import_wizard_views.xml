@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="check_book_import_wizard_view_form" model="ir.ui.view">
+        <field name="name">check.book.import.wizard.view.form</field>
+        <field name="model">check.book.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Leaves">
+                <group>
+                    <field name="book_id"/>
+                    <field name="file" filename="filename"/>
+                    <field name="filename" invisible="1"/>
+                </group>
+                <field name="numbers" placeholder="Paste the leaf numbers, one per line..."/>
+                <footer>
+                    <button name="action_import" type="object" string="Import" class="btn-primary" data-hotkey="q"/>
+                    <button string="Discard" special="cancel" class="btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

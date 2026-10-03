@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_sa_check_sale" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.sa.check.sale</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="sa_check_management.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@name='check_accounting_settings']" position="before">
+                <block title="Sales" name="check_sale_settings">
+                    <setting id="check_sale_bounce_policy" string="Bounced Checks on Sales"
+                             help="What happens when a customer with unresolved bounced checks orders again.">
+                        <field name="check_sale_bounce_policy" widget="radio"/>
+                    </setting>
+                    <setting id="check_sale_credit_include_checks" string="Open Checks in Credit Limit"
+                             help="Customer checks not collected yet count toward the credit limit.">
+                        <field name="check_sale_credit_include_checks"/>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

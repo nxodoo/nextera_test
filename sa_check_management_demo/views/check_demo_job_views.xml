@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="check_demo_job_view_list" model="ir.ui.view">
+        <field name="name">check.demo.job.view.list</field>
+        <field name="model">check.demo.job</field>
+        <field name="arch" type="xml">
+            <list string="Demo Data Jobs" create="0">
+                <field name="name"/>
+                <field name="requested"/>
+                <field name="done"/>
+                <field name="failed"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="seconds" optional="show"/>
+                <field name="state" widget="badge" decoration-success="state == 'done'" decoration-info="state == 'running'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="check_demo_job_view_form" model="ir.ui.view">
+        <field name="name">check.demo.job.view.form</field>
+        <field name="model">check.demo.job</field>
+        <field name="arch" type="xml">
+            <form string="Demo Data Job" create="0">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="requested"/>
+                            <field name="done"/>
+                            <field name="failed"/>
+                            <field name="progress" widget="progressbar"/>
+                        </group>
+                        <group>
+                            <field name="incoming_share"/>
+                            <field name="months_back"/>
+                            <field name="months_ahead"/>
+                            <field name="seed"/>
+                            <field name="create_users"/>
+                            <field name="seconds"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_check_demo_job" model="ir.actions.act_window">
+        <field name="name">Demo Data Jobs</field>
+        <field name="res_model">check.demo.job</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_check_demo" name="Demo Data" parent="sa_check_management.menu_check_configuration"
+              sequence="99" groups="base.group_system"/>
+    <menuitem id="menu_check_demo_generate" name="Generate Demo Data" parent="menu_check_demo"
+              action="action_check_demo_wizard" sequence="1"/>
+    <menuitem id="menu_check_demo_jobs" name="Demo Data Jobs" parent="menu_check_demo"
+              action="action_check_demo_job" sequence="2"/>
+</odoo>

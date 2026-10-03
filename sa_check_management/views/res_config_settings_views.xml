@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.sa.check</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Check Management" string="Check Management" name="sa_check_management"
+                     groups="base.group_system">
+                    <block title="Accounting" name="check_accounting_settings">
+                        <setting id="check_rate_policy" string="Foreign Currency Valuation"
+                                 help="Rate date for valuing foreign-currency checks in reports. Entries always use their own date.">
+                            <field name="check_rate_policy" widget="radio"/>
+                        </setting>
+                        <setting id="check_allow_manual_rate" string="Manual Valuation Rate"
+                                 help="Let Check Managers enter an approved rate on a foreign-currency check instead of the automatic one.">
+                            <field name="check_allow_manual_rate"/>
+                        </setting>
+                        <setting id="check_settlement_policy" string="Invoice Settlement"
+                                 help="When a check settles the invoices or bills it is allocated to.">
+                            <field name="check_settlement_policy" widget="radio"/>
+                        </setting>
+                        <setting id="check_holding_accounts" string="Check Accounts"
+                                 help="Holding accounts for checks in hand and checks issued.">
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label for="check_receivable_account_id" string="Incoming" class="col-lg-4 o_light_label"/>
+                                    <field name="check_receivable_account_id"/>
+                                </div>
+                                <div class="row">
+                                    <label for="check_payable_account_id" string="Outgoing" class="col-lg-4 o_light_label"/>
+                                    <field name="check_payable_account_id"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting id="check_portfolio_journal" string="Checks Portfolio"
+                                 help="Journal that holds incoming checks until they are deposited.">
+                            <field name="check_portfolio_journal_id"/>
+                        </setting>
+                        <setting id="check_guarantee_memorandum" string="Guarantee Memorandum"
+                                 help="Record guarantee and security checks in off-balance accounts while held or outstanding.">
+                            <field name="check_guarantee_memorandum"/>
+                        </setting>
+                        <setting id="check_advance_entries" string="Advance Checks"
+                                 help="Advance checks post accounting entries like payment checks.">
+                            <field name="check_advance_creates_entries"/>
+                        </setting>
+                    </block>
+                    <block title="Banking" name="check_banking_settings">
+                        <setting id="check_bounce_fees" string="Bounce Fees"
+                                 help="Who bears the bank fee when a check bounces.">
+                            <field name="check_bounce_fee_policy" widget="radio"/>
+                        </setting>
+                        <setting id="check_fee_account" string="Bank Charges Account"
+                                 help="Expense account for bank fees on checks.">
+                            <field name="check_fee_account_id"/>
+                        </setting>
+                        <setting id="check_deposit_entry" string="Checks Under Collection"
+                                 help="Post an entry when checks are deposited, moving them to an under-collection account.">
+                            <field name="check_deposit_entry"/>
+                            <div class="content-group" invisible="not check_deposit_entry">
+                                <div class="row mt8">
+                                    <label for="check_under_collection_account_id" string="Account" class="col-lg-4 o_light_label"/>
+                                    <field name="check_under_collection_account_id"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting id="check_discount_accounts" string="Check Discounting"
+                                 help="Discount post-dated checks at banks that have discount terms.">
+                            <field name="check_discount_enabled"/>
+                            <div class="content-group" invisible="not check_discount_enabled">
+                                <div class="row mt8">
+                                    <label for="check_discount_liability_account_id" string="Liability" class="col-lg-4 o_light_label"/>
+                                    <field name="check_discount_liability_account_id"/>
+                                </div>
+                                <div class="row">
+                                    <label for="check_discount_cost_account_id" string="Charges" class="col-lg-4 o_light_label"/>
+                                    <field name="check_discount_cost_account_id"/>
+                                </div>
+                                <div class="mt8">
+                                    <button name="%(sa_check_management.action_check_discount_term)d" type="action"
+                                            string="Bank Discount Terms" icon="oi-arrow-right" class="btn-link"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting id="check_max_redeposits" string="Re-deposit Limit"
+                                 help="Re-deposits per check before a Check Manager must do it.">
+                            <field name="check_max_redeposits"/>
+                        </setting>
+                    </block>
+                    <block title="Custody" name="check_custody_settings">
+                        <setting id="check_handover_confirmation" string="Handover Confirmation"
+                                 help="The receiver must accept a handover before custody moves.">
+                            <field name="check_handover_confirmation"/>
+                        </setting>
+                        <setting id="check_default_location" string="Default Location"
+                                 help="Where newly received checks are held.">
+                            <field name="check_default_location_id"/>
+                        </setting>
+                    </block>
+                    <block title="Reminders" name="check_reminder_settings">
+                        <setting id="check_horizons" string="Maturity Horizons"
+                                 help="Day ranges used by the maturity report and the dashboard.">
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label for="check_horizon_short_days" string="Due Soon" class="col-lg-4 o_light_label"/>
+                                    <field name="check_horizon_short_days"/>
+                                </div>
+                                <div class="row">
+                                    <label for="check_horizon_mid_days" string="Short Term" class="col-lg-4 o_light_label"/>
+                                    <field name="check_horizon_mid_days"/>
+                                </div>
+                                <div class="row">
+                                    <label for="check_horizon_long_days" string="Medium Term" class="col-lg-4 o_light_label"/>
+                                    <field name="check_horizon_long_days"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting id="check_reminder_due" string="Due Checks"
+                                 help="Days before the due date to remind the responsible user.">
+                            <field name="check_reminder_due_days"/>
+                        </setting>
+                        <setting id="check_reminder_guarantee" string="Guarantee Expiry"
+                                 help="Days before a guarantee check expires.">
+                            <field name="check_reminder_guarantee_days"/>
+                        </setting>
+                        <setting id="check_reminder_approval" string="Pending Approvals"
+                                 help="Alert approvers when a check waits longer than this.">
+                            <field name="check_reminder_approval_days"/>
+                        </setting>
+                        <setting id="check_escalation" string="Escalation"
+                                 help="Days after the first reminder before Check Managers are alerted.">
+                            <field name="check_escalation_days"/>
+                        </setting>
+                        <setting id="check_reminder_deposit" string="Deposit Results"
+                                 help="Alert when a confirmed deposit has no results after this many days.">
+                            <field name="check_reminder_deposit_days"/>
+                        </setting>
+                    </block>
+                    <block title="Outgoing Checks" name="check_outgoing_settings">
+                        <setting id="check_outgoing_approval" string="Approval Required"
+                                 help="Outgoing checks must be approved before they are issued.">
+                            <field name="check_outgoing_approval_required"/>
+                        </setting>
+                        <setting id="check_stale_months" string="Check Validity"
+                                 help="Months after the check date before an uncleared outgoing check is flagged stale.">
+                            <field name="check_stale_months"/>
+                        </setting>
+                        <setting id="check_approval_segregation" string="Segregation of Duties"
+                                 help="Users cannot approve checks they created or submitted."
+                                 invisible="not check_outgoing_approval_required">
+                            <field name="check_approval_segregation"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_check_config_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'sa_check_management', 'bin_size': False}</field>
+    </record>
+</odoo>

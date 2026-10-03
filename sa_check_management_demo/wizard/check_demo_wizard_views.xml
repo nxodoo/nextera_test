@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="check_demo_wizard_view_form" model="ir.ui.view">
+        <field name="name">check.demo.wizard.view.form</field>
+        <field name="model">check.demo.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Demo Data">
+                <div class="alert alert-warning" role="alert">
+                    For test or demo databases only: every generated check posts real invoices, payments and entries.
+                </div>
+                <group>
+                    <group>
+                        <field name="count"/>
+                        <field name="incoming_share"/>
+                    </group>
+                    <group>
+                        <field name="months_back"/>
+                        <field name="months_ahead"/>
+                        <field name="seed"/>
+                    </group>
+                    <group string="Users">
+                        <field name="create_users"/>
+                        <field name="user_password" invisible="not create_users" password="True"/>
+                    </group>
+                </group>
+                <div class="text-muted">
+                    Up to 300 checks are created right away; larger requests run in the background in batches of 200.
+                    When the data is ready you can uninstall this module: the generated data stays.
+                </div>
+                <footer>
+                    <button name="action_generate" type="object" string="Generate" class="btn-primary" data-hotkey="q"/>
+                    <button string="Discard" special="cancel" class="btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_check_demo_wizard" model="ir.actions.act_window">
+        <field name="name">Generate Demo Data</field>
+        <field name="res_model">check.demo.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

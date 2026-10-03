@@ -1,0 +1,444 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sa_check_management_print
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-02 08:43+0000\n"
+"PO-Revision-Date: 2026-10-02 08:43+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sa_check_management_print
+#: model:ir.actions.report,print_report_name:sa_check_management_print.action_report_check_print
+msgid "'Check - %s' % object.check_number"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.actions.report,print_report_name:sa_check_management_print.action_report_check_layout_test
+msgid "'Check Layout - %s' % object.name"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__active
+msgid "Active"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_check__amount_in_words
+msgid "Amount In Words"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__amount_left
+msgid "Amount Left"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__amount_top
+msgid "Amount Top"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__words_language
+msgid "Amount in Words"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields.selection,name:sa_check_management_print.selection__check_print_layout__words_language__ar
+msgid "Arabic"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Archived"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__bank_id
+msgid "Bank"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,help:sa_check_management_print.field_check_print_layout__journal_ids
+msgid "Bank journals whose outgoing checks print with this layout."
+msgstr ""
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "Beneficiary Name Sample Co."
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model,name:sa_check_management_print.model_check_check
+msgid "Check"
+msgstr ""
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "Check %(check)s must be approved before printing."
+msgstr ""
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid ""
+"Check %(check)s was already printed; only a Check Manager can reprint it."
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model,name:sa_check_management_print.model_check_event
+msgid "Check Event"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__page_height
+msgid "Check Height (mm)"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.actions.report,name:sa_check_management_print.action_report_check_layout_test
+#: model:ir.model,name:sa_check_management_print.model_report_sa_check_management_print_report_check_layout_test
+msgid "Check Layout Test Page"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model,name:sa_check_management_print.model_check_print_layout
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Check Print Layout"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.actions.act_window,name:sa_check_management_print.action_check_print_layout
+#: model:ir.ui.menu,name:sa_check_management_print.menu_check_print_layout
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_list
+msgid "Check Print Layouts"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__page_width
+msgid "Check Width (mm)"
+msgstr ""
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_print_layout.py:0
+msgid "Check: %s"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__company_id
+msgid "Company"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__is_default
+msgid "Company Default"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Crossing"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__crossing_left
+msgid "Crossing Left"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__crossing_text
+msgid "Crossing Text"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__crossing_top
+msgid "Crossing Top"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__date_format
+msgid "Date Format"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__date_left
+msgid "Date Left"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__date_top
+msgid "Date Top"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields.selection,name:sa_check_management_print.selection__check_print_layout__words_language__en
+msgid "English"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_event__event_type
+msgid "Event Type"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__font_size
+msgid "Font Size (pt)"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__id
+msgid "ID"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_check__last_printed_date
+msgid "Last Printed Date"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_print_layout.py:0
+msgid "Layout %s: positions cannot be negative."
+msgstr ""
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_print_layout.py:0
+msgid "Layout %s: size and font must be positive."
+msgstr ""
+
+#. module: sa_check_management_print
+#: model_terms:ir.actions.act_window,help:sa_check_management_print.action_check_print_layout
+msgid ""
+"Measure one leaf of each bank's checkbook, enter the positions in millimetres,\n"
+"               then print the test page on plain paper and hold it against a real leaf to calibrate."
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__name
+msgid "Name"
+msgstr ""
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "No check layout is configured for %(journal)s."
+msgstr ""
+
+#. module: sa_check_management_print
+#: model_terms:ir.actions.act_window,help:sa_check_management_print.action_check_print_layout
+msgid "No check layouts."
+msgstr ""
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "Only Treasury Officers can print checks."
+msgstr ""
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_print_layout.py:0
+msgid "Only one default check layout per company."
+msgstr ""
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "Only outgoing checks can be printed."
+msgstr ""
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Paper and Text"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__paperformat_id
+msgid "Paperformat"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__payee_left
+msgid "Payee Left"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__payee_top
+msgid "Payee Top"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__payee_width
+msgid "Payee Width"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Positions (mm from the top-left corner)"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_check_view_form_inherit_print
+msgid "Print Check"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__print_crossing
+msgid "Print Crossing"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Print Test Page"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields.selection,name:sa_check_management_print.selection__check_event__event_type__printed
+msgid "Printed"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.actions.report,name:sa_check_management_print.action_report_check_print
+#: model:ir.model,name:sa_check_management_print.model_report_sa_check_management_print_report_check_print
+msgid "Printed Check"
+msgstr ""
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "Printed with layout %s"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Printer Calibration"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__offset_y
+msgid "Printer Offset Down (mm)"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__offset_x
+msgid "Printer Offset Right (mm)"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model,name:sa_check_management_print.model_ir_actions_report
+msgid "Report Action"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_check_view_form_inherit_print
+msgid "Reprint Check"
+msgstr ""
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "Reprinted (copy %s)"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: sa_check_management_print
+#. odoo-python
+#: code:addons/sa_check_management_print/models/check_check.py:0
+msgid "Set the bank journal and check number before printing."
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,help:sa_check_management_print.field_check_print_layout__offset_y
+msgid "Shift everything down (negative: up)."
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,help:sa_check_management_print.field_check_print_layout__offset_x
+msgid "Shift everything right (negative: left)."
+msgstr ""
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_check_view_form_inherit_print
+msgid ""
+"This check was already printed. Reprinting creates a second paper copy of "
+"the same check. Continue?"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_check__print_count
+msgid "Times Printed"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "Usage"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__journal_ids
+msgid "Used For"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,help:sa_check_management_print.field_check_print_layout__is_default
+msgid "Used for journals without a specific layout."
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__words_left
+msgid "Words Left"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__words_top
+msgid "Words Top"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model:ir.model.fields,field_description:sa_check_management_print.field_check_print_layout__words_width
+msgid "Words Width"
+msgstr ""
+
+#. module: sa_check_management_print
+#: model_terms:ir.ui.view,arch_db:sa_check_management_print.check_print_layout_view_form
+msgid "e.g. CIB check book"
+msgstr ""

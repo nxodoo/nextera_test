@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="check_print_layout_view_form" model="ir.ui.view">
+        <field name="name">check.print.layout.view.form</field>
+        <field name="model">check.print.layout</field>
+        <field name="arch" type="xml">
+            <form string="Check Print Layout">
+                <header>
+                    <button name="action_print_test" type="object" string="Print Test Page" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title"><h1><field name="name" placeholder="e.g. CIB check book"/></h1></div>
+                    <group>
+                        <group string="Usage">
+                            <field name="bank_id"/>
+                            <field name="journal_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                            <field name="is_default"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Paper and Text">
+                            <field name="page_width"/>
+                            <field name="page_height"/>
+                            <field name="font_size"/>
+                            <field name="date_format"/>
+                            <field name="words_language"/>
+                        </group>
+                        <group string="Printer Calibration">
+                            <field name="offset_x"/>
+                            <field name="offset_y"/>
+                        </group>
+                        <group string="Crossing">
+                            <field name="print_crossing"/>
+                            <field name="crossing_text" invisible="not print_crossing"/>
+                            <field name="crossing_top" invisible="not print_crossing"/>
+                            <field name="crossing_left" invisible="not print_crossing"/>
+                        </group>
+                    </group>
+                    <group string="Positions (mm from the top-left corner)">
+                        <group>
+                            <field name="date_top"/>
+                            <field name="date_left"/>
+                            <field name="amount_top"/>
+                            <field name="amount_left"/>
+                        </group>
+                        <group>
+                            <field name="payee_top"/>
+                            <field name="payee_left"/>
+                            <field name="payee_width"/>
+                            <field name="words_top"/>
+                            <field name="words_left"/>
+                            <field name="words_width"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="check_print_layout_view_list" model="ir.ui.view">
+        <field name="name">check.print.layout.view.list</field>
+        <field name="model">check.print.layout</field>
+        <field name="arch" type="xml">
+            <list string="Check Print Layouts">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="bank_id"/>
+                <field name="journal_ids" widget="many2many_tags"/>
+                <field name="is_default"/>
+                <field name="words_language"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_check_print_layout" model="ir.actions.act_window">
+        <field name="name">Check Print Layouts</field>
+        <field name="res_model">check.print.layout</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No check layouts.</p>
+            <p>Measure one leaf of each bank's checkbook, enter the positions in millimetres,
+               then print the test page on plain paper and hold it against a real leaf to calibrate.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_check_print_layout" name="Check Print Layouts"
+              parent="sa_check_management.menu_check_configuration"
+              action="action_check_print_layout" sequence="40"/>
+</odoo>

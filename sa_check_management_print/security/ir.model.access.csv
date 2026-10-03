@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_check_print_layout_user,check.print.layout user,model_check_print_layout,sa_check_management.group_check_user,1,0,0,0
+access_check_print_layout_manager,check.print.layout manager,model_check_print_layout,sa_check_management.group_check_manager,1,1,1,1

@@ -1,0 +1,107 @@
+<section class="oe_container" style="padding:32px 16px 8px">
+    <div class="container" style="max-width:1100px;margin:auto">
+        <div style="text-align:center">
+            <h1 style="font-size:38px;font-weight:700;color:#1f2a37;margin-bottom:6px">Check Management - Check Printing</h1>
+            <p style="font-size:20px;color:#5b6b7c;margin:0 auto 18px;max-width:820px">
+                Print outgoing checks straight onto your bank's check leaves, with the amount in words in Arabic or English,
+                one calibrated layout per bank, and full control over reprints.
+            </p>
+            <p style="margin-bottom:24px">
+                <span style="display:inline-block;background:#e3f1fb;color:#1c7ed6;border-radius:20px;padding:5px 14px;margin:3px;font-weight:600">Add-on for Check Management</span>
+                <span style="display:inline-block;background:#fff4dc;color:#c98a04;border-radius:20px;padding:5px 14px;margin:3px;font-weight:600">Arabic &amp; English amount in words</span>
+                <span style="display:inline-block;background:#f1e9fb;color:#7c4dbd;border-radius:20px;padding:5px 14px;margin:3px;font-weight:600">Millimetre-precise layouts</span>
+            </p>
+        </div>
+        <img src="images/d07_check_printing.png" alt="How a check is printed" style="width:100%;border-radius:12px;border:1px solid #e3e8ee"/>
+        <p style="text-align:center;margin-top:18px">
+            <a href="/sa_check_management_print/static/description/sa_check_management_print_user_guide_en.pdf" target="_blank" style="display:inline-block;background:#1c7ed6;color:#fff;border:2px solid #1c7ed6;border-radius:8px;padding:9px 20px;margin:4px;font-weight:600;text-decoration:none">User guide (PDF)</a>
+            <a href="/sa_check_management_print/static/description/sa_check_management_print_user_guide_ar_msa.pdf" target="_blank" style="display:inline-block;background:#fff;color:#1c7ed6;border:2px solid #1c7ed6;border-radius:8px;padding:9px 20px;margin:4px;font-weight:600;text-decoration:none">دليل المستخدم - عربي فصحى (PDF)</a>
+            <a href="/sa_check_management_print/static/description/sa_check_management_print_user_guide_ar.pdf" target="_blank" style="display:inline-block;background:#fff;color:#1c7ed6;border:2px solid #1c7ed6;border-radius:8px;padding:9px 20px;margin:4px;font-weight:600;text-decoration:none">دليل المستخدم - عربي مصري (PDF)</a>
+        </p>
+    </div>
+</section>
+
+<section class="oe_container" style="padding:24px 16px">
+    <div class="container" style="max-width:1100px;margin:auto">
+        <h2 style="font-size:28px;font-weight:700;color:#1f2a37;border-bottom:3px solid #1c7ed6;padding-bottom:8px">What you get</h2>
+        <div class="row">
+            <div class="col-md-4" style="padding:10px"><div style="background:#f6f8fa;border-radius:10px;padding:16px;height:100%">
+                <h4 style="font-weight:700;color:#1c7ed6">A layout per bank</h4>
+                <p>Paper size, font, date format and the position of every field in millimetres. Link a layout to one or more bank journals, or mark one as the company default.</p></div></div>
+            <div class="col-md-4" style="padding:10px"><div style="background:#f6f8fa;border-radius:10px;padding:16px;height:100%">
+                <h4 style="font-weight:700;color:#1c7ed6">Amount in words</h4>
+                <p>Commercial Arabic wording as written on Egyptian checks (<i>فقط ... لا غير</i>) or English (<i>... Only</i>), for EGP, USD, EUR, SAR and AED, and the currency's own labels for any other currency.</p></div></div>
+            <div class="col-md-4" style="padding:10px"><div style="background:#f6f8fa;border-radius:10px;padding:16px;height:100%">
+                <h4 style="font-weight:700;color:#1c7ed6">Safe printing</h4>
+                <p>Only approved checks print. Treasury Officers print once; only a Check Manager can reprint, after a confirmation. Every print is counted and logged in the check history.</p></div></div>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container" style="padding:24px 16px">
+    <div class="container" style="max-width:1100px;margin:auto">
+        <h2 style="font-size:28px;font-weight:700;color:#1f2a37;border-bottom:3px solid #1c7ed6;padding-bottom:8px">How to set it up</h2>
+        <ol style="font-size:15.5px;line-height:1.9">
+            <li><b>Install</b> <i>Check Management - Check Printing</i> from <i>Apps</i> (it needs <i>Check Management</i>). A default layout,
+                <b>Standard Egyptian Check (175 × 80 mm)</b>, is created and marked as the company default.</li>
+            <li><b>Open the layout</b>: <i>Check Management → Configuration → Check Print Layouts</i> (Check Manager).</li>
+            <li><b>Measure one real leaf</b> of the bank's checkbook with a ruler and enter:
+                <ul>
+                    <li><b>Check Width / Height</b> in mm; the PDF page size follows automatically.</li>
+                    <li>The <b>top</b> and <b>left</b> position (mm from the top-left corner) of the date, payee, amount in figures and amount in words, and the width of the payee and words areas.</li>
+                    <li><b>Font Size</b>, <b>Date Format</b> (for example <code>%d/%m/%Y</code>) and <b>Amount in Words</b> language.</li>
+                    <li>Optional <b>Print Crossing</b> text (for example <i>للمستفيد الأول</i>) and its position.</li>
+                </ul></li>
+            <li><b>Used For</b>: pick the bank journals whose checks use this layout. Create one layout per bank whose leaf differs.</li>
+            <li><b>Print Test Page</b> on plain paper, hold it against a real leaf in front of a light and adjust. If everything is shifted the same way,
+                use <b>Printer Offset Right / Down</b> (negative values move left / up) instead of changing each field.</li>
+        </ol>
+        <div class="row">
+            <div class="col-md-7" style="padding:6px"><img src="images/p01_layout_form.png" alt="Layout form" style="width:100%;border-radius:8px;border:1px solid #e3e8ee"/>
+                <p style="text-align:center;color:#5b6b7c;font-size:14px">The layout: paper, calibration and positions</p></div>
+            <div class="col-md-5" style="padding:6px"><img src="images/p04_layout_test.png" alt="Test page" style="width:100%;border-radius:8px;border:1px solid #e3e8ee"/>
+                <p style="text-align:center;color:#5b6b7c;font-size:14px">The test page with a sample amount and a dashed leaf outline</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container" style="padding:24px 16px">
+    <div class="container" style="max-width:1100px;margin:auto">
+        <h2 style="font-size:28px;font-weight:700;color:#1f2a37;border-bottom:3px solid #1c7ed6;padding-bottom:8px">How to print a check</h2>
+        <ol style="font-size:15.5px;line-height:1.9">
+            <li>Create the outgoing check as usual (vendor, amount, due date, bank journal, checkbook leaf). The form now shows the <b>Amount In Words</b> that will be printed.</li>
+            <li>Get it approved. A check can be printed once it is <b>Approved</b> or <b>Issued</b>, or while in Draft when the company does not require approval.</li>
+            <li>Load the check leaf in the printer and click <b>Print Check</b> (Treasury Officer). The PDF uses the layout of the check's bank journal, falling back to the company default.</li>
+            <li>Click <b>Issue</b> to issue the check.</li>
+            <li>If the leaf jams or prints wrong, a Check Manager can use <b>Reprint Check</b>; the reprint is confirmed first and logged as a copy.</li>
+        </ol>
+        <p style="font-size:15.5px">The date printed is the check's due date; the payee is the vendor's name; the figures are framed like <code>#45,000.00#</code>.</p>
+        <div class="row">
+            <div class="col-md-7" style="padding:6px"><img src="images/p02_outgoing_print_button.png" alt="Print check button" style="width:100%;border-radius:8px;border:1px solid #e3e8ee"/>
+                <p style="text-align:center;color:#5b6b7c;font-size:14px">An approved check with the Print Check button and the amount in words</p></div>
+            <div class="col-md-5" style="padding:6px"><img src="images/p03_printed_check.png" alt="Printed output" style="width:100%;border-radius:8px;border:1px solid #e3e8ee"/>
+                <p style="text-align:center;color:#5b6b7c;font-size:14px">What reaches the printer: only the values, placed on the leaf</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container" style="padding:24px 16px 40px">
+    <div class="container" style="max-width:1100px;margin:auto">
+        <h2 style="font-size:28px;font-weight:700;color:#1f2a37;border-bottom:3px solid #5b6b7c;padding-bottom:8px">Who can do what</h2>
+        <table class="table table-sm" style="font-size:15px">
+            <thead><tr style="background:#f6f8fa"><th>Role</th><th>Printing rights</th></tr></thead>
+            <tbody>
+                <tr><td>Check User</td><td>Sees the layouts and the amount in words; cannot print.</td></tr>
+                <tr><td>Treasury Officer</td><td>Prints approved checks once.</td></tr>
+                <tr><td>Check Manager</td><td>Reprints, and creates and edits layouts.</td></tr>
+            </tbody>
+        </table>
+        <h2 style="font-size:24px;font-weight:700;color:#1f2a37;margin-top:24px">Technical notes</h2>
+        <ul style="font-size:15px;line-height:1.8">
+            <li>Depends on <code>sa_check_management</code>; uses <code>num2words</code> for English words. Version 18.0.1.1.0, license OPL-1.</li>
+            <li>Each layout keeps its own report paper format in sync with its size, with zero margins.</li>
+            <li>Adds the <i>Printed</i> event type, <code>print_count</code> and <code>last_printed_date</code> to checks.</li>
+        </ul>
+        <p style="color:#5b6b7c">Author: Sayed Anwar</p>
+    </div>
+</section>

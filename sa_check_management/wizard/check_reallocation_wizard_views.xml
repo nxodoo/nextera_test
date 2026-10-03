@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="check_reallocation_wizard_view_form" model="ir.ui.view">
+        <field name="name">check.reallocation.wizard.view.form</field>
+        <field name="model">check.reallocation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Repair Allocations">
+                <field name="currency_id" invisible="1"/>
+                <group><field name="check_id"/></group>
+                <div class="text-muted mb-2">
+                    These payments of the check are no longer reconciled with an invoice or bill.
+                    Reconcile them again, move them to other open documents (ticked below, earliest first), or keep them as credit.
+                </div>
+                <field name="open_line_ids" nolabel="1">
+                    <list editable="bottom" create="0" delete="0">
+                        <field name="currency_id" column_invisible="True"/>
+                        <field name="allocation_ref" column_invisible="True"/>
+                        <field name="document_name"/>
+                        <field name="open_amount"/>
+                        <field name="same_available"/>
+                        <field name="resolution"/>
+                    </list>
+                </field>
+                <separator string="Other Open Documents"/>
+                <field name="target_ids" nolabel="1">
+                    <list editable="bottom" create="0" delete="0">
+                        <field name="currency_id" column_invisible="True"/>
+                        <field name="move_ref" column_invisible="True"/>
+                        <field name="selected" widget="boolean_toggle" nolabel="1"/>
+                        <field name="document_name"/>
+                        <field name="document_date" optional="show"/>
+                        <field name="date_due"/>
+                        <field name="installment_count" optional="hide"/>
+                        <field name="open_amount" sum="Open"/>
+                    </list>
+                </field>
+                <footer>
+                    <button name="action_confirm" type="object" string="Repair" class="btn-primary" data-hotkey="q"/>
+                    <button string="Discard" special="cancel" class="btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

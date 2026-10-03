@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="check_replacement_wizard_view_form" model="ir.ui.view">
+        <field name="name">check.replacement.wizard.view.form</field>
+        <field name="model">check.replacement.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Replace Check">
+                <field name="check_type" invisible="1"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <group>
+                    <group string="Old Check">
+                        <field name="check_id"/>
+                        <field name="old_amount"/>
+                    </group>
+                    <group string="Replacement">
+                        <field name="check_number"/>
+                        <field name="amount"/>
+                        <field name="issue_date"/>
+                        <field name="due_date"/>
+                    </group>
+                    <group string="Bank">
+                        <field name="bank_id" invisible="check_type != 'incoming'"
+                               required="check_type == 'incoming'"/>
+                        <field name="journal_id" invisible="check_type != 'outgoing'"
+                               required="check_type == 'outgoing'"/>
+                        <field name="drawer_is_partner" invisible="check_type != 'incoming'"/>
+                        <field name="drawer_name" invisible="check_type != 'incoming' or drawer_is_partner"
+                               required="check_type == 'incoming' and not drawer_is_partner"/>
+                        <field name="drawer_account_number" invisible="check_type != 'incoming'" required="check_type == 'incoming'"/>
+                    </group>
+                    <group string="Options">
+                        <field name="transfer_allocations"/>
+                        <field name="receive_now" invisible="check_type != 'incoming'"/>
+                    </group>
+                </group>
+                <field name="note" placeholder="Notes..."/>
+                <footer>
+                    <button name="action_confirm" type="object" string="Replace" class="btn-primary" data-hotkey="q"/>
+                    <button string="Discard" special="cancel" class="btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="check_settle_wizard_view_form" model="ir.ui.view">
+        <field name="name">check.settle.wizard.view.form</field>
+        <field name="model">check.settle.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Settled by Other Payment">
+                <field name="partner_id" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <group>
+                    <group>
+                        <field name="check_id"/>
+                        <field name="action_date"/>
+                    </group>
+                    <group>
+                        <field name="payment_ids" widget="many2many_tags"
+                               groups="account.group_account_invoice"/>
+                    </group>
+                </group>
+                <field name="note" placeholder="Cash at branch, bank transfer reference..."/>
+                <footer>
+                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary" data-hotkey="q"/>
+                    <button string="Discard" special="cancel" class="btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="check_legal_wizard_view_form" model="ir.ui.view">
+        <field name="name">check.legal.wizard.view.form</field>
+        <field name="model">check.legal.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Legal Action">
+                <group>
+                    <group>
+                        <field name="check_id"/>
+                        <field name="action_date"/>
+                        <field name="case_number"/>
+                    </group>
+                    <group>
+                        <field name="lawyer_id"/>
+                        <field name="court"/>
+                    </group>
+                </group>
+                <field name="note" placeholder="Notes..."/>
+                <footer>
+                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary" data-hotkey="q"/>
+                    <button string="Discard" special="cancel" class="btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="check_discount_wizard_view_form" model="ir.ui.view">
+        <field name="name">check.discount.wizard.view.form</field>
+        <field name="model">check.discount.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Discount Check at Bank">
+                <field name="currency_id" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <group>
+                    <group>
+                        <field name="check_id"/>
+                        <field name="amount"/>
+                        <field name="due_date"/>
+                    </group>
+                    <group>
+                        <field name="term_id" options="{'no_create': True}"/>
+                        <field name="journal_id" invisible="1"/>
+                        <field name="action_date"/>
+                        <field name="days"/>
+                        <field name="advance"/>
+                        <field name="fee"/>
+                        <field name="net_amount"/>
+                    </group>
+                </group>
+                <field name="note" placeholder="Facility reference, interest rate..."/>
+                <footer>
+                    <button name="action_confirm" type="object" string="Discount" class="btn-primary" data-hotkey="q"/>
+                    <button string="Discard" special="cancel" class="btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

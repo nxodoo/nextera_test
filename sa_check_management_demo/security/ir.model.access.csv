@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_check_demo_job_system,check.demo.job system,model_check_demo_job,base.group_system,1,1,1,1
+access_check_demo_wizard_system,check.demo.wizard system,model_check_demo_wizard,base.group_system,1,1,1,1

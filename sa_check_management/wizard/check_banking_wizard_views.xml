@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="check_deposit_wizard_view_form" model="ir.ui.view">
+        <field name="name">check.deposit.wizard.view.form</field>
+        <field name="model">check.deposit.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Deposit Checks">
+                <field name="company_id" invisible="1"/>
+                <field name="early_check_count" invisible="1"/>
+                <div class="alert alert-warning" role="alert" invisible="not early_check_count">
+                    Some checks are deposited before their due date; the bank will hold them until maturity.
+                </div>
+                <group>
+                    <group>
+                        <field name="check_ids" widget="many2many_tags"/>
+                        <field name="journal_id"/>
+                    </group>
+                    <group>
+                        <field name="date"/>
+                        <field name="reference"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_confirm" type="object" string="Deposit" class="btn-primary" data-hotkey="q"/>
+                    <button string="Discard" special="cancel" class="btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="check_collection_wizard_view_form" model="ir.ui.view">
+        <field name="name">check.collection.wizard.view.form</field>
+        <field name="model">check.collection.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Collect Checks">
+                <field name="mode" invisible="1"/>
+                <field name="fee_currency_id" invisible="1"/>
+                <group>
+                    <group>
+                        <field name="check_ids" widget="many2many_tags"/>
+                        <field name="action_date"/>
+                    </group>
+                    <group>
+                        <field name="fee_amount"/>
+                        <field name="fee_currency_id" options="{'no_create': True}" groups="base.group_multi_currency"/>
+                    </group>
+                </group>
+                <field name="note" placeholder="Notes..."/>
+                <footer>
+                    <button name="action_confirm" type="object" string="Collect" class="btn-primary"
+                            invisible="mode != 'collect'" data-hotkey="q"/>
+                    <button name="action_confirm" type="object" string="Mark Cleared" class="btn-primary"
+                            invisible="mode != 'clear'" data-hotkey="q"/>
+                    <button string="Discard" special="cancel" class="btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="check_bounce_wizard_view_form" model="ir.ui.view">
+        <field name="name">check.bounce.wizard.view.form</field>
+        <field name="model">check.bounce.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Bounced Check">
+                <field name="reason_requires_note" invisible="1"/>
+                <field name="fee_currency_id" invisible="1"/>
+                <field name="has_bank" invisible="1"/>
+                <group>
+                    <group>
+                        <field name="check_id"/>
+                        <field name="action_date"/>
+                        <field name="reason_id" options="{'no_create': True}"/>
+                        <field name="bank_reference"/>
+                    </group>
+                    <group>
+                        <field name="fee_amount" invisible="not has_bank"/>
+                        <field name="fee_currency_id" invisible="not has_bank or not fee_amount"
+                               options="{'no_create': True}" groups="base.group_multi_currency"/>
+                        <field name="fee_policy" invisible="not fee_amount"/>
+                        <field name="attachment" filename="attachment_name"/>
+                        <field name="attachment_name" invisible="1"/>
+                    </group>
+                </group>
+                <field name="note" required="reason_requires_note" placeholder="Details..."/>
+                <footer>
+                    <button name="action_confirm" type="object" string="Record Bounce" class="btn-primary"
+                            data-hotkey="q"/>
+                    <button string="Discard" special="cancel" class="btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
