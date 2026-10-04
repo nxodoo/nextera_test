@@ -1,0 +1,42 @@
+# -*- coding: utf-8 -*-
+{
+    'name': 'Audit Log & Compliance Engine',
+    'version': '18.0.1.0.0',
+    'category': 'Productivity/Audit',
+    'summary': 'Enterprise audit trail, deleted-record forensics, access monitoring, '
+               'integrity sealing and retention for any Odoo model',
+    'author': 'Nextera MEA',
+    'website': 'https://nextera-mea.com',
+    'license': 'OPL-1',
+    'depends': ['base', 'web', 'mail', 'base_import'],
+    'data': [
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'security/record_rules.xml',
+        'data/cron.xml',
+        'data/default_data.xml',
+        'views/audit_log_views.xml',
+        'views/audit_log_line_views.xml',
+        'views/audit_batch_views.xml',
+        'views/audit_rule_views.xml',
+        'views/audit_alert_views.xml',
+        'views/audit_retention_views.xml',
+        'views/audit_integrity_views.xml',
+        'views/audit_redaction_views.xml',
+        'views/audit_sensitive_views.xml',
+        'views/res_config_settings_views.xml',
+        'views/audit_dashboard_views.xml',
+        'views/menus.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'nx_audit_log/static/src/**/*.js',
+            'nx_audit_log/static/src/**/*.xml',
+            'nx_audit_log/static/src/**/*.scss',
+        ],
+    },
+    'post_init_hook': 'post_init_hook',
+    'uninstall_hook': 'uninstall_hook',
+    'installable': True,
+    'application': True,
+}

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="audit_rule_view_list" model="ir.ui.view">
+        <field name="name">audit.rule.list</field>
+        <field name="model">audit.rule</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="not active">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="scope"/>
+                <field name="model_id"/>
+                <field name="op_create"/>
+                <field name="op_update"/>
+                <field name="op_delete"/>
+                <field name="op_action"/>
+                <field name="op_read" optional="hide"/>
+                <field name="op_export" optional="hide"/>
+                <field name="op_report" optional="hide"/>
+                <field name="field_mode" optional="show"/>
+                <field name="retention_policy_id" optional="show"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="audit_rule_view_form" model="ir.ui.view">
+        <field name="name">audit.rule.form</field>
+        <field name="model">audit.rule</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(audit_log_action_all)d" type="action" class="oe_stat_button" icon="fa-history"
+                                context="{'search_default_rule_id': id, 'search_default_last_7': 0}">
+                            <field name="log_count" widget="statinfo" string="Events"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Vendor bills"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="scope" widget="radio"/>
+                            <field name="model_id" invisible="scope != 'model'" required="scope == 'model'"
+                                   options="{'no_create': True}"/>
+                            <field name="model_name" invisible="1"/>
+                            <field name="sequence"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="retention_policy_id"/>
+                            <field name="snapshot_policy"/>
+                            <field name="chatter_mirror"/>
+                            <field name="company_ids" widget="many2many_tags" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Operations" name="operations">
+                            <group>
+                                <group string="Changes">
+                                    <field name="op_create"/>
+                                    <field name="op_update"/>
+                                    <field name="op_delete"/>
+                                    <field name="op_action"/>
+                                    <field name="action_methods" invisible="not op_action"
+                                           placeholder="action_post, button_cancel"/>
+                                </group>
+                                <group string="Data access">
+                                    <field name="op_export"/>
+                                    <field name="op_report"/>
+                                    <field name="op_read"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Fields" name="fields">
+                            <group>
+                                <field name="field_mode" widget="radio"/>
+                                <field name="field_ids" widget="many2many_tags" invisible="field_mode != 'selected'"
+                                       options="{'no_create': True}"/>
+                                <field name="excluded_field_ids" widget="many2many_tags"
+                                       invisible="field_mode == 'selected'" options="{'no_create': True}"/>
+                                <field name="sensitive_field_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                <field name="derived_policy" widget="radio"/>
+                                <field name="derived_field_ids" widget="many2many_tags"
+                                       invisible="derived_policy != 'selected'" options="{'no_create': True}"/>
+                            </group>
+                        </page>
+                        <page string="Scope" name="scope">
+                            <group>
+                                <field name="domain" widget="domain" options="{'model': 'model_name', 'in_dialog': True}"
+                                       invisible="scope != 'model'"/>
+                                <field name="excluded_model_ids" widget="many2many_tags" invisible="scope != 'all'"/>
+                                <field name="source_ids" widget="many2many_tags"/>
+                                <field name="user_ids" widget="many2many_tags"/>
+                                <field name="group_ids" widget="many2many_tags"/>
+                                <field name="excluded_user_ids" widget="many2many_tags"/>
+                                <field name="excluded_group_ids" widget="many2many_tags"/>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="audit_rule_view_search" model="ir.ui.view">
+        <field name="name">audit.rule.search</field>
+        <field name="model">audit.rule</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="model_id"/>
+                <filter name="inactive" string="Archived" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+    <record id="audit_rule_action" model="ir.actions.act_window">
+        <field name="name">Audit Rules</field>
+        <field name="res_model">audit.rule</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+</odoo>

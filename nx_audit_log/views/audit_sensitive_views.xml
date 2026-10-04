@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="audit_sensitive_pattern_view_list" model="ir.ui.view">
+        <field name="name">audit.sensitive.pattern.list</field>
+        <field name="model">audit.sensitive.pattern</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="personal_mode" invisible="category != 'personal'"/>
+                <field name="model_pattern"/>
+                <field name="field_pattern"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="audit_sensitive_pattern_action" model="ir.actions.act_window">
+        <field name="name">Sensitive Fields</field>
+        <field name="res_model">audit.sensitive.pattern</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

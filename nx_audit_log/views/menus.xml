@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_audit_root" name="Audit" sequence="95" web_icon="nx_audit_log,static/description/icon.png"
+              groups="group_audit_user"/>
+    <menuitem id="menu_audit_dashboard" name="Dashboard" parent="menu_audit_root" sequence="1"
+              action="audit_dashboard_action"/>
+
+    <menuitem id="menu_audit_logs" name="Audit Logs" parent="menu_audit_root" sequence="10"/>
+    <menuitem id="menu_audit_logs_all" name="All Events" parent="menu_audit_logs" sequence="1" action="audit_log_action_all"/>
+    <menuitem id="menu_audit_logs_creates" name="Creates" parent="menu_audit_logs" sequence="2" action="audit_log_action_creates"/>
+    <menuitem id="menu_audit_logs_updates" name="Updates" parent="menu_audit_logs" sequence="3" action="audit_log_action_updates"/>
+    <menuitem id="menu_audit_logs_deletes" name="Deletes" parent="menu_audit_logs" sequence="4" action="audit_log_action_deletes"/>
+    <menuitem id="menu_audit_logs_actions" name="Business Actions" parent="menu_audit_logs" sequence="5" action="audit_log_action_actions"/>
+    <menuitem id="menu_audit_logs_access" name="Data Access" parent="menu_audit_logs" sequence="6" action="audit_log_action_access"/>
+    <menuitem id="menu_audit_logs_auth" name="Authentication" parent="menu_audit_logs" sequence="7" action="audit_log_action_auth"/>
+    <menuitem id="menu_audit_logs_failures" name="Failed Operations" parent="menu_audit_logs" sequence="8" action="audit_log_action_failures"/>
+    <menuitem id="menu_audit_logs_batches" name="Batches" parent="menu_audit_logs" sequence="9" action="audit_batch_action"/>
+    <menuitem id="menu_audit_logs_archive" name="Archived Events" parent="menu_audit_logs" sequence="10"
+              action="audit_log_archive_action" groups="group_audit_manager"/>
+
+    <menuitem id="menu_audit_alerts" name="Alerts" parent="menu_audit_root" sequence="20"
+              action="audit_alert_action" groups="group_audit_manager"/>
+
+    <menuitem id="menu_audit_reports" name="Reports" parent="menu_audit_root" sequence="30" groups="group_audit_manager"/>
+    <menuitem id="menu_audit_reports_analysis" name="Event Analysis" parent="menu_audit_reports" sequence="1" action="audit_log_action_all"/>
+    <menuitem id="menu_audit_reports_fields" name="Field Changes" parent="menu_audit_reports" sequence="2" action="audit_log_line_action"/>
+    <menuitem id="menu_audit_reports_integrity" name="Integrity Checks" parent="menu_audit_reports" sequence="3" action="audit_integrity_check_action"/>
+    <menuitem id="menu_audit_reports_chains" name="Hash Chains" parent="menu_audit_reports" sequence="4" action="audit_chain_action"/>
+    <menuitem id="menu_audit_reports_checkpoints" name="Checkpoints" parent="menu_audit_reports" sequence="5" action="audit_checkpoint_action"/>
+    <menuitem id="menu_audit_reports_system" name="Audit System Events" parent="menu_audit_reports" sequence="6" action="audit_log_action_system"/>
+
+    <menuitem id="menu_audit_config" name="Configuration" parent="menu_audit_root" sequence="90" groups="group_audit_admin"/>
+    <menuitem id="menu_audit_config_settings" name="Settings" parent="menu_audit_config" sequence="1" action="audit_settings_action"/>
+    <menuitem id="menu_audit_config_rules" name="Audit Rules" parent="menu_audit_config" sequence="2" action="audit_rule_action"/>
+    <menuitem id="menu_audit_config_alerts" name="Alert Rules" parent="menu_audit_config" sequence="3" action="audit_alert_rule_action"/>
+    <menuitem id="menu_audit_config_sensitive" name="Sensitive Fields" parent="menu_audit_config" sequence="4" action="audit_sensitive_pattern_action"/>
+    <menuitem id="menu_audit_config_retention" name="Retention Policies" parent="menu_audit_config" sequence="5" action="audit_retention_policy_action"/>
+    <menuitem id="menu_audit_config_redaction" name="Redaction Requests" parent="menu_audit_config" sequence="6" action="audit_redaction_request_action"/>
+</odoo>

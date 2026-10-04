@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_audit" model="ir.module.category">
+        <field name="name">Audit &amp; Compliance</field>
+        <field name="sequence">90</field>
+    </record>
+
+    <record id="group_audit_shared" model="res.groups">
+        <field name="name">Audit: see shared / global records</field>
+        <field name="comment">Evidence of records without a company (e.g. shared contacts).</field>
+    </record>
+    <record id="group_audit_user" model="res.groups">
+        <field name="name">Audit User</field>
+        <field name="category_id" ref="module_category_audit"/>
+        <field name="implied_ids" eval="[(4, ref('group_audit_shared'))]"/>
+    </record>
+    <record id="group_audit_manager" model="res.groups">
+        <field name="name">Audit Manager</field>
+        <field name="category_id" ref="module_category_audit"/>
+        <field name="implied_ids" eval="[(4, ref('group_audit_user'))]"/>
+    </record>
+    <record id="group_audit_admin" model="res.groups">
+        <field name="name">Audit Administrator</field>
+        <field name="category_id" ref="module_category_audit"/>
+        <field name="implied_ids" eval="[(4, ref('group_audit_manager'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+    <record id="group_audit_global" model="res.groups">
+        <field name="name">Audit: cross-company auditor</field>
+        <field name="comment">Sees evidence of every company.</field>
+    </record>
+    <record id="group_audit_restricted_fields" model="res.groups">
+        <field name="name">Audit: compliance override for restricted fields</field>
+        <field name="comment">Sees changes of fields restricted to groups the user does not belong to.</field>
+    </record>
+</odoo>

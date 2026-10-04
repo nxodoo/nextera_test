@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="nx_audit_log.Timeline">
+        <div class="o_nx_audit_timeline o_action h-100 overflow-auto">
+            <t t-set="data" t-value="state.data"/>
+            <div class="nx-tl-head" t-if="data">
+                <h2 t-esc="data.title"/>
+                <label class="form-check">
+                    <input type="checkbox" class="form-check-input" t-att-checked="state.showDerived"
+                           t-on-change="toggleDerived"/>
+                    <span class="form-check-label">Show derived changes</span>
+                </label>
+            </div>
+            <p t-if="data and !data.events.length" class="text-muted px-4">No audit event for this record.</p>
+            <ol class="nx-tl" t-if="data">
+                <li t-foreach="data.events" t-as="event" t-key="event.id"
+                    t-att-class="'nx-tl-item nx-op-' + event.operation.toLowerCase() + (event.is_child ? ' nx-tl-child' : '')">
+                    <button type="button" class="nx-tl-meta" t-on-click="() => this.openEvent(event)">
+                        <strong><t t-esc="event.operation_label"/><t t-if="event.action_label">: <t t-esc="event.action_label"/></t></strong>
+                        <span t-if="event.is_child"> on <t t-esc="event.record"/></span>
+                        <span class="nx-tl-when"><t t-esc="event.datetime"/> UTC by <t t-esc="event.user"/> via <t t-esc="event.source"/></span>
+                        <span t-if="event.parent_action" class="badge text-bg-info ms-1">during <t t-esc="event.parent_action"/></span>
+                        <span t-if="event.result === 'failure'" class="badge text-bg-danger ms-1">failed</span>
+                        <span t-if="event.sealed" class="badge text-bg-light ms-1" title="Sealed in hash chain">sealed</span>
+                    </button>
+                    <table class="table table-sm nx-tl-lines" t-if="visibleLines(event).length">
+                        <tbody>
+                            <tr t-foreach="visibleLines(event)" t-as="line" t-key="line_index"
+                                t-att-class="line.origin === 'derived' ? 'nx-derived' : ''">
+                                <td class="nx-tl-field">
+                                    <t t-esc="line.field"/>
+                                    <span t-if="line.lang" class="text-muted"> (<t t-esc="line.lang"/>)</span>
+                                </td>
+                                <td class="text-muted" t-esc="changeLabels[line.change_type] or line.change_type"/>
+                                <td><del t-if="line.old" t-esc="line.old"/></td>
+                                <td><ins t-if="line.new" t-esc="line.new"/></td>
+                                <td>
+                                    <span t-if="line.origin === 'derived'" class="badge text-bg-light">derived</span>
+                                    <span t-if="line.origin === 'database_fk'" class="badge text-bg-warning">cascade</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
+            </ol>
+        </div>
+    </t>
+</templates>

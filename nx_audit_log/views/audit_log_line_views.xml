@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="audit_log_line_view_list" model="ir.ui.view">
+        <field name="name">audit.log.line.list</field>
+        <field name="model">audit.log.line</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="event_datetime"/>
+                <field name="audit_log_id"/>
+                <field name="model_name"/>
+                <field name="field_label" string="Field"/>
+                <field name="change_type"/>
+                <field name="old_value_text"/>
+                <field name="new_value_text"/>
+                <field name="change_origin"/>
+                <field name="user_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="audit_log_line_view_search" model="ir.ui.view">
+        <field name="name">audit.log.line.search</field>
+        <field name="model">audit.log.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="field_name"/>
+                <field name="model_name"/>
+                <field name="old_value_text"/>
+                <field name="new_value_text"/>
+                <field name="user_id"/>
+                <filter name="derived" string="Derived" domain="[('change_origin', '=', 'derived')]"/>
+                <filter name="personal" string="Personal data" domain="[('personal', '=', True)]"/>
+                <filter name="masked" string="Secrets" domain="[('masked', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_field" string="Field" context="{'group_by': 'field_name'}"/>
+                    <filter name="group_model" string="Model" context="{'group_by': 'model_name'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="audit_log_line_view_pivot" model="ir.ui.view">
+        <field name="name">audit.log.line.pivot</field>
+        <field name="model">audit.log.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Field changes">
+                <field name="model_name" type="row"/>
+                <field name="field_name" type="row"/>
+                <field name="change_origin" type="col"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="audit_log_line_action" model="ir.actions.act_window">
+        <field name="name">Field Changes</field>
+        <field name="res_model">audit.log.line</field>
+        <field name="view_mode">pivot,list</field>
+    </record>
+</odoo>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="audit_integrity_check_view_list" model="ir.ui.view">
+        <field name="name">audit.integrity.check.list</field>
+        <field name="model">audit.integrity.check</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="state == 'failed'" decoration-success="state == 'passed'">
+                <field name="create_date" string="Run at"/>
+                <field name="state" widget="badge" decoration-danger="state == 'failed'"
+                       decoration-success="state == 'passed'"/>
+                <field name="chain_count"/>
+                <field name="checked_count"/>
+                <field name="violation_count"/>
+                <field name="unsealed_backlog"/>
+                <field name="duration" widget="float_time" optional="hide"/>
+            </list>
+        </field>
+    </record>
+    <record id="audit_integrity_check_view_form" model="ir.ui.view">
+        <field name="name">audit.integrity.check.form</field>
+        <field name="model">audit.integrity.check</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_run" type="object" string="Verify now" class="btn-primary"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <h1><field name="name"/></h1>
+                    <group>
+                        <group>
+                            <field name="chain_count"/>
+                            <field name="checked_count"/>
+                        </group>
+                        <group>
+                            <field name="violation_count"/>
+                            <field name="unsealed_backlog"/>
+                        </group>
+                    </group>
+                    <field name="violation_ids">
+                        <list>
+                            <field name="kind"/>
+                            <field name="chain_key"/>
+                            <field name="seal_seq"/>
+                            <field name="reference"/>
+                            <field name="detail"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="audit_integrity_check_action" model="ir.actions.act_window">
+        <field name="name">Integrity Checks</field>
+        <field name="res_model">audit.integrity.check</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="audit_chain_view_list" model="ir.ui.view">
+        <field name="name">audit.chain.list</field>
+        <field name="model">audit.chain</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="chain_key"/>
+                <field name="last_seq"/>
+                <field name="last_hash"/>
+                <field name="last_sealed_at"/>
+            </list>
+        </field>
+    </record>
+    <record id="audit_chain_action" model="ir.actions.act_window">
+        <field name="name">Hash Chains</field>
+        <field name="res_model">audit.chain</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

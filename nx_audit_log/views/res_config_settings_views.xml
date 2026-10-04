@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.nx_audit_log</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Audit" string="Audit" name="nx_audit_log"
+                     groups="nx_audit_log.group_audit_admin">
+                    <block title="Evidence" name="nx_audit_evidence">
+                        <setting string="Text previews" help="Characters kept in readable previews; the structured value is the evidence.">
+                            <field name="nx_audit_preview_length"/>
+                        </setting>
+                        <setting string="Large values" help="Longer text/HTML is stored as a digest plus its beginning.">
+                            <field name="nx_audit_max_value_chars"/>
+                        </setting>
+                        <setting string="Evidence language" help="Language used for record names stored in evidence.">
+                            <field name="nx_audit_lang"/>
+                        </setting>
+                        <setting string="Excluded fields" help="Technical fields never audited unless a rule selects them explicitly.">
+                            <field name="nx_audit_excluded_fields"/>
+                        </setting>
+                        <setting string="If auditing fails">
+                            <field name="nx_audit_fail_mode" widget="radio"/>
+                        </setting>
+                    </block>
+                    <block title="Data access" name="nx_audit_access">
+                        <setting string="Audit every export">
+                            <field name="nx_audit_all_exports"/>
+                        </setting>
+                        <setting string="Bulk API read threshold" help="API reads returning at least this many records are logged even without a read rule.">
+                            <field name="nx_audit_bulk_read_threshold"/>
+                        </setting>
+                        <setting string="Bulk operation threshold" help="One write/delete touching this many records is grouped into a batch.">
+                            <field name="nx_audit_bulk_batch_threshold"/>
+                        </setting>
+                    </block>
+                    <block title="Authentication" name="nx_audit_auth">
+                        <setting string="Failed login window" help="Failed logins are counted per login, IP and window.">
+                            <field name="nx_audit_auth_bucket"/>
+                        </setting>
+                        <setting string="Store unknown login names">
+                            <field name="nx_audit_store_unknown_logins"/>
+                        </setting>
+                    </block>
+                    <block title="Integrity" name="nx_audit_integrity">
+                        <setting string="Sealing delay" help="Seconds before an event is sealed into its hash chain.">
+                            <field name="nx_audit_seal_delay"/>
+                        </setting>
+                        <setting string="Integrity key">
+                            <field name="nx_audit_key_source"/>
+                        </setting>
+                        <setting string="Maintenance">
+                            <button name="action_nx_audit_load_defaults" type="object" string="Load default rules" class="btn-link" icon="oi-arrow-right"/>
+                            <button name="action_nx_audit_seal_now" type="object" string="Seal pending events" class="btn-link" icon="oi-arrow-right"/>
+                            <button name="action_nx_audit_enable_trigram" type="object" string="Enable value search indexes" class="btn-link" icon="oi-arrow-right"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+    <record id="audit_settings_action" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'nx_audit_log', 'bin_size': False}</field>
+    </record>
+</odoo>

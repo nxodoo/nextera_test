@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="nx_audit_log.Dashboard">
+        <div class="o_nx_audit_dashboard o_action h-100 overflow-auto">
+            <div class="nx-audit-head">
+                <h2>Audit activity</h2>
+                <div class="btn-group" role="group" aria-label="Period">
+                    <t t-foreach="periods" t-as="period" t-key="period.days">
+                        <button type="button" class="btn btn-sm"
+                                t-att-class="state.days === period.days ? 'btn-primary' : 'btn-outline-secondary'"
+                                t-on-click="() => this.setPeriod(period.days)" t-esc="period.label"/>
+                    </t>
+                </div>
+            </div>
+            <t t-set="data" t-value="state.data"/>
+            <div t-if="data" class="nx-audit-body">
+                <section class="nx-seal" t-att-class="'nx-seal--' + data.integrity.state">
+                    <button type="button" class="nx-seal-main" t-on-click="openIntegrity">
+                        <span class="nx-seal-state">
+                            <t t-if="data.integrity.state === 'passed'">Evidence chain intact</t>
+                            <t t-elif="data.integrity.state === 'failed'"><t t-esc="data.integrity.violations"/> integrity violations</t>
+                            <t t-else="">Integrity not verified yet</t>
+                        </span>
+                        <span class="nx-seal-date" t-if="data.integrity.date">Last verification <t t-esc="data.integrity.date"/> UTC</span>
+                    </button>
+                    <button type="button" class="nx-seal-side" t-on-click="openUnsealed">
+                        <strong t-esc="data.unsealed_backlog"/> waiting for sealing over 1 h
+                    </button>
+                    <button type="button" class="nx-seal-side" t-on-click="openAlerts">
+                        <strong t-esc="data.open_alerts"/> open alerts
+                    </button>
+                    <button type="button" class="nx-seal-side" t-on-click="openFailures">
+                        <strong t-esc="data.failures"/> failed operations
+                    </button>
+                </section>
+
+                <section class="nx-ledger">
+                    <h3><t t-esc="data.total"/> events</h3>
+                    <div class="nx-ledger-grid">
+                        <t t-foreach="data.operations" t-as="op" t-key="op.code">
+                            <button type="button" class="nx-ledger-cell" t-on-click="() => this.openOperation(op)"
+                                    t-att-class="op.code === 'DELETE' or op.code.startsWith('FAILED') ? 'nx-warn' : ''">
+                                <span class="nx-ledger-count" t-esc="op.count"/>
+                                <span class="nx-ledger-label" t-esc="op.label"/>
+                            </button>
+                        </t>
+                    </div>
+                </section>
+
+                <div class="nx-columns">
+                    <section>
+                        <h3>By source</h3>
+                        <p t-if="!data.sources.length" class="text-muted">No events in this period.</p>
+                        <t t-foreach="data.sources" t-as="source" t-key="source.code">
+                            <button type="button" class="nx-bar" t-on-click="() => this.openSource(source)">
+                                <span class="nx-bar-label" t-esc="source.label"/>
+                                <span class="nx-bar-track"><span class="nx-bar-fill"
+                                      t-att-style="barStyle(source)"/></span>
+                                <span class="nx-bar-value" t-esc="source.count"/>
+                            </button>
+                        </t>
+                    </section>
+                    <section>
+                        <h3>Most changed models</h3>
+                        <p t-if="!data.top_models.length" class="text-muted">No changes in this period.</p>
+                        <t t-foreach="data.top_models" t-as="row" t-key="row.model">
+                            <button type="button" class="nx-row" t-on-click="() => this.openModel(row)">
+                                <span t-esc="row.model"/><strong t-esc="row.count"/>
+                            </button>
+                        </t>
+                    </section>
+                    <section>
+                        <h3>Most active users</h3>
+                        <t t-foreach="data.top_users" t-as="row" t-key="row.id">
+                            <button type="button" class="nx-row" t-on-click="() => this.openUser(row)">
+                                <span t-esc="row.name"/><strong t-esc="row.count"/>
+                            </button>
+                        </t>
+                    </section>
+                </div>
+
+                <section t-if="data.storage.length" class="nx-storage">
+                    <h3>Storage</h3>
+                    <table class="table table-sm">
+                        <thead><tr><th>Table</th><th class="text-end">Rows</th><th class="text-end">Size</th></tr></thead>
+                        <tbody>
+                            <tr t-foreach="data.storage" t-as="row" t-key="row.table">
+                                <td t-esc="row.table"/>
+                                <td class="text-end" t-esc="row.rows"/>
+                                <td class="text-end" t-esc="formatBytes(row.bytes)"/>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    </t>
+</templates>

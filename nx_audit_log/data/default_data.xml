@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="source_web_ui" model="audit.source"><field name="code">web_ui</field><field name="name">Web UI</field><field name="sequence">0</field></record>
+        <record id="source_json_rpc" model="audit.source"><field name="code">json_rpc</field><field name="name">JSON-RPC</field><field name="sequence">1</field></record>
+        <record id="source_xml_rpc" model="audit.source"><field name="code">xml_rpc</field><field name="name">XML-RPC</field><field name="sequence">2</field></record>
+        <record id="source_external_api" model="audit.source"><field name="code">external_api</field><field name="name">External API / Controller</field><field name="sequence">3</field></record>
+        <record id="source_cron" model="audit.source"><field name="code">cron</field><field name="name">Scheduled Action (Cron)</field><field name="sequence">4</field></record>
+        <record id="source_import" model="audit.source"><field name="code">import</field><field name="name">Import</field><field name="sequence">5</field></record>
+        <record id="source_automated_action" model="audit.source"><field name="code">automated_action</field><field name="name">Automated Action</field><field name="sequence">6</field></record>
+        <record id="source_server_action" model="audit.source"><field name="code">server_action</field><field name="name">Server Action</field><field name="sequence">7</field></record>
+        <record id="source_system" model="audit.source"><field name="code">system</field><field name="name">System / Internal</field><field name="sequence">8</field></record>
+        <record id="sensitive_pattern_1" model="audit.sensitive.pattern">
+            <field name="name">Passwords and secrets</field><field name="category">secret</field><field name="sequence">0</field>
+            <field name="field_pattern">(^|_)(password|secret|token|api_?key|private_?key|otp|totp)s?($|_)</field><field name="personal_mode">store</field>
+        </record>
+        <record id="sensitive_pattern_2" model="audit.sensitive.pattern">
+            <field name="name">API key value</field><field name="category">secret</field><field name="sequence">1</field>
+            <field name="model_pattern">^res\.users\.apikeys$</field>
+            <field name="field_pattern">^key$</field><field name="personal_mode">store</field>
+        </record>
+        <record id="sensitive_pattern_3" model="audit.sensitive.pattern">
+            <field name="name">Payment provider credentials</field><field name="category">secret</field><field name="sequence">2</field>
+            <field name="model_pattern">^payment\.provider$</field>
+            <field name="field_pattern">_(key|secret|password|token)</field><field name="personal_mode">store</field>
+        </record>
+        <record id="sensitive_pattern_4" model="audit.sensitive.pattern">
+            <field name="name">Email addresses</field><field name="category">personal</field><field name="sequence">3</field>
+            <field name="field_pattern">(^|_)email($|_)</field><field name="personal_mode">store</field>
+        </record>
+        <record id="sensitive_pattern_5" model="audit.sensitive.pattern">
+            <field name="name">Phone numbers</field><field name="category">personal</field><field name="sequence">4</field>
+            <field name="field_pattern">(^|_)(phone|mobile)($|_)</field><field name="personal_mode">store</field>
+        </record>
+        <record id="sensitive_pattern_6" model="audit.sensitive.pattern">
+            <field name="name">Bank account numbers</field><field name="category">personal</field><field name="sequence">5</field>
+            <field name="model_pattern">^res\.partner\.bank$</field>
+            <field name="field_pattern">^acc_number$</field><field name="personal_mode">store</field>
+        </record>
+        <record id="sensitive_pattern_7" model="audit.sensitive.pattern">
+            <field name="name">Identification numbers</field><field name="category">personal</field><field name="sequence">6</field>
+            <field name="field_pattern">(^|_)(vat|ssnid|identification_id|passport_id|national_id)($|_)</field><field name="personal_mode">store</field>
+        </record>
+        <record id="sensitive_pattern_8" model="audit.sensitive.pattern">
+            <field name="name">Birth dates</field><field name="category">personal</field><field name="sequence">7</field>
+            <field name="field_pattern">(^|_)(birthday|birthdate|date_of_birth)($|_)</field><field name="personal_mode">store</field>
+        </record>
+        <record id="sensitive_pattern_9" model="audit.sensitive.pattern">
+            <field name="name">Postal addresses</field><field name="category">personal</field><field name="sequence">8</field>
+            <field name="model_pattern">^res\.partner$</field>
+            <field name="field_pattern">^(street|street2|zip)$</field><field name="personal_mode">store</field>
+        </record>
+    </data>
+</odoo>

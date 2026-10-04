@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="audit_retention_policy_view_list" model="ir.ui.view">
+        <field name="name">audit.retention.policy.list</field>
+        <field name="model">audit.retention.policy</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="hot_days"/>
+                <field name="retention_days"/>
+                <field name="prohibit_purge"/>
+            </list>
+        </field>
+    </record>
+    <record id="audit_retention_policy_action" model="ir.actions.act_window">
+        <field name="name">Retention Policies</field>
+        <field name="res_model">audit.retention.policy</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="audit_log_archive_view_list" model="ir.ui.view">
+        <field name="name">audit.log.archive.list</field>
+        <field name="model">audit.log.archive</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="reference"/>
+                <field name="event_datetime"/>
+                <field name="operation"/>
+                <field name="model_name"/>
+                <field name="record_display_name"/>
+                <field name="user_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="purge_after"/>
+            </list>
+        </field>
+    </record>
+    <record id="audit_log_archive_view_form" model="ir.ui.view">
+        <field name="name">audit.log.archive.form</field>
+        <field name="model">audit.log.archive</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0">
+                <sheet>
+                    <h1><field name="reference"/></h1>
+                    <group>
+                        <group>
+                            <field name="event_datetime"/>
+                            <field name="operation"/>
+                            <field name="model_name"/>
+                            <field name="res_id"/>
+                            <field name="record_display_name"/>
+                        </group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="company_id"/>
+                            <field name="chain_key"/>
+                            <field name="seal_seq"/>
+                            <field name="hash"/>
+                            <field name="purge_after"/>
+                        </group>
+                    </group>
+                    <field name="payload" groups="nx_audit_log.group_audit_manager"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="audit_log_archive_view_search" model="ir.ui.view">
+        <field name="name">audit.log.archive.search</field>
+        <field name="model">audit.log.archive</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="record_display_name"/>
+                <field name="model_name"/>
+                <field name="res_id"/>
+                <field name="user_id"/>
+                <field name="reference"/>
+            </search>
+        </field>
+    </record>
+    <record id="audit_log_archive_action" model="ir.actions.act_window">
+        <field name="name">Archived Events</field>
+        <field name="res_model">audit.log.archive</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="audit_checkpoint_view_list" model="ir.ui.view">
+        <field name="name">audit.checkpoint.list</field>
+        <field name="model">audit.checkpoint</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="create_date"/>
+                <field name="chain_key"/>
+                <field name="seq_from"/>
+                <field name="seq_to"/>
+                <field name="event_count"/>
+                <field name="last_hash"/>
+            </list>
+        </field>
+    </record>
+    <record id="audit_checkpoint_action" model="ir.actions.act_window">
+        <field name="name">Checkpoints</field>
+        <field name="res_model">audit.checkpoint</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

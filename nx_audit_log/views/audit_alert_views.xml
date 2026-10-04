@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="audit_alert_rule_view_list" model="ir.ui.view">
+        <field name="name">audit.alert.rule.list</field>
+        <field name="model">audit.alert.rule</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="trigger"/>
+                <field name="model_name"/>
+                <field name="field_name"/>
+                <field name="severity"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="audit_alert_rule_view_form" model="ir.ui.view">
+        <field name="name">audit.alert.rule.form</field>
+        <field name="model">audit.alert.rule</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h1><field name="name"/></h1>
+                    <group>
+                        <group string="Trigger">
+                            <field name="trigger"/>
+                            <field name="model_name"/>
+                            <field name="field_name" invisible="trigger != 'field_change'"/>
+                            <field name="action_method" invisible="trigger != 'action'"/>
+                            <field name="threshold_type" invisible="trigger != 'field_change'"/>
+                            <field name="threshold" invisible="trigger != 'field_change' or threshold_type == 'any'"/>
+                            <field name="count_threshold" invisible="trigger not in ('mass_delete', 'failed_login')"/>
+                            <field name="window_minutes" invisible="trigger != 'mass_delete'"/>
+                        </group>
+                        <group string="Delivery">
+                            <field name="severity"/>
+                            <field name="recipient_user_ids" widget="many2many_tags"/>
+                            <field name="recipient_group_id"/>
+                            <field name="dedup_minutes"/>
+                            <field name="max_per_hour"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="audit_alert_rule_action" model="ir.actions.act_window">
+        <field name="name">Alert Rules</field>
+        <field name="res_model">audit.alert.rule</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="audit_alert_view_list" model="ir.ui.view">
+        <field name="name">audit.alert.list</field>
+        <field name="model">audit.alert</field>
+        <field name="arch" type="xml">
+            <list create="0" decoration-danger="severity == 'critical'" decoration-warning="severity == 'high'"
+                  decoration-muted="state in ('closed', 'suppressed')">
+                <field name="last_seen"/>
+                <field name="name"/>
+                <field name="rule_id"/>
+                <field name="severity" widget="badge"/>
+                <field name="occurrence_count"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="audit_alert_view_form" model="ir.ui.view">
+        <field name="name">audit.alert.form</field>
+        <field name="model">audit.alert</field>
+        <field name="arch" type="xml">
+            <form create="0">
+                <header>
+                    <button name="action_acknowledge" type="object" string="Acknowledge" class="btn-primary"
+                            invisible="state not in ('pending', 'sent')"/>
+                    <button name="action_close" type="object" string="Close" invisible="state == 'closed'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,sent,acknowledged,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_logs" type="object" class="oe_stat_button" icon="fa-history">
+                            <span>Evidence</span>
+                        </button>
+                    </div>
+                    <h1><field name="name"/></h1>
+                    <group>
+                        <group>
+                            <field name="rule_id"/>
+                            <field name="severity"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="first_seen"/>
+                            <field name="last_seen"/>
+                            <field name="occurrence_count"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="Investigation notes"/>
+                    <field name="log_ids"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="audit_alert_view_search" model="ir.ui.view">
+        <field name="name">audit.alert.search</field>
+        <field name="model">audit.alert</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="rule_id"/>
+                <filter name="open" string="Open" domain="[('state', 'in', ('pending', 'sent'))]"/>
+                <filter name="critical" string="Critical" domain="[('severity', '=', 'critical')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_rule" string="Rule" context="{'group_by': 'rule_id'}"/>
+                    <filter name="group_severity" string="Severity" context="{'group_by': 'severity'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="audit_alert_action" model="ir.actions.act_window">
+        <field name="name">Alerts</field>
+        <field name="res_model">audit.alert</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_open': 1}</field>
+    </record>
+</odoo>

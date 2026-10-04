@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="audit_log_action_all" model="ir.actions.act_window">
+        <field name="name">Audit Logs</field>
+        <field name="res_model">audit.log</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+        <field name="context">{'search_default_last_7': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No audit event yet</p>
+            <p>Events appear here once records covered by an audit rule change.</p>
+        </field>
+    </record>
+    <record id="audit_log_view_list" model="ir.ui.view">
+        <field name="name">audit.log.list</field>
+        <field name="model">audit.log</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0" decoration-danger="result == 'failure' or operation == 'DELETE'"
+                  decoration-info="operation == 'ACTION'" decoration-muted="change_origin == 'derived'">
+                <field name="reference"/>
+                <field name="event_datetime"/>
+                <field name="operation"/>
+                <field name="model_description" string="Model"/>
+                <field name="record_display_name"/>
+                <field name="action_label" optional="show"/>
+                <field name="changed_fields_count" string="Fields" optional="show"/>
+                <field name="record_count" optional="hide"/>
+                <field name="user_id"/>
+                <field name="source" optional="show"/>
+                <field name="change_origin" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                <field name="ip_address" optional="hide"/>
+                <field name="result" optional="hide"/>
+                <field name="seal_state" optional="hide" widget="badge"
+                       decoration-success="seal_state == 'sealed'"/>
+                <field name="model_name" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="audit_log_view_form" model="ir.ui.view">
+        <field name="name">audit.log.form</field>
+        <field name="model">audit.log</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0">
+                <header>
+                    <button name="action_open_record_trail" type="object" string="Record timeline"
+                            invisible="not res_id" class="btn-primary"/>
+                    <button name="action_open_record" type="object" string="Open record"
+                            invisible="not res_id or operation == 'DELETE'"/>
+                    <field name="seal_state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(audit_log_action_all)d" type="action" class="oe_stat_button"
+                                icon="fa-link" invisible="not correlation_id"
+                                context="{'search_default_correlation_id': correlation_id}">
+                            <span>Same request</span>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="reference"/></h1>
+                        <h3>
+                            <field name="operation" class="me-2"/>
+                            <field name="record_display_name" class="me-2"/>
+                            <field name="action_label" invisible="not action_label"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <group string="What">
+                            <field name="model_description" string="Model"/>
+                            <field name="model_name"/>
+                            <field name="res_id"/>
+                            <field name="record_count" invisible="not record_count"/>
+                            <field name="rule_id"/>
+                            <field name="change_origin"/>
+                            <field name="parent_action_id" invisible="not parent_action_id"/>
+                            <field name="parent_log_id" invisible="not parent_log_id"/>
+                            <field name="batch_id" invisible="not batch_id"/>
+                            <field name="copy_of" invisible="not copy_of"/>
+                        </group>
+                        <group string="Who / When">
+                            <field name="event_datetime"/>
+                            <field name="event_datetime_last" invisible="not event_datetime_last"/>
+                            <field name="user_id"/>
+                            <field name="user_login"/>
+                            <field name="initiating_user_id" invisible="not initiating_user_id"/>
+                            <field name="is_sudo"/>
+                            <field name="company_id"/>
+                            <field name="visible_company_ids" widget="many2many_tags"/>
+                            <field name="result"/>
+                            <field name="attempt_count" invisible="not attempt_count"/>
+                        </group>
+                    </group>
+                    <group invisible="result != 'failure'">
+                        <field name="failure_reason"/>
+                    </group>
+                    <notebook>
+                        <page string="Changes" name="changes">
+                            <field name="line_ids">
+                                <list decoration-muted="change_origin == 'derived'"
+                                      decoration-warning="change_origin == 'database_fk'">
+                                    <field name="field_label" string="Field"/>
+                                    <field name="field_name" optional="hide"/>
+                                    <field name="change_type"/>
+                                    <field name="old_value_text"/>
+                                    <field name="new_value_text"/>
+                                    <field name="change_origin" optional="show"/>
+                                    <field name="lang" optional="hide"/>
+                                    <field name="masked" optional="hide"/>
+                                    <field name="redacted" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Resulting changes" name="action_changes" invisible="operation != 'ACTION'">
+                            <field name="action_change_ids"/>
+                        </page>
+                        <page string="Child events" name="children" invisible="not child_log_ids">
+                            <field name="child_log_ids"/>
+                        </page>
+                        <page string="Snapshot" name="snapshot" groups="nx_audit_log.group_audit_manager">
+                            <field name="snapshot_text" class="font-monospace" nolabel="1"/>
+                        </page>
+                        <page string="Access details" name="access"
+                              invisible="operation not in ('READ', 'EXPORT', 'REPORT', 'IMPORT', 'ACTION', 'FAILED_ATTEMPT', 'RETENTION', 'REDACTION')">
+                            <group>
+                                <field name="action_method"/>
+                                <field name="is_bulk"/>
+                                <field name="res_ids_json"/>
+                                <field name="fields_json"/>
+                            </group>
+                        </page>
+                        <page string="Request" name="request">
+                            <group>
+                                <group>
+                                    <field name="source"/>
+                                    <field name="execution_path"/>
+                                    <field name="request_path"/>
+                                    <field name="http_method"/>
+                                    <field name="correlation_id"/>
+                                </group>
+                                <group>
+                                    <field name="ip_address"/>
+                                    <field name="user_agent"/>
+                                    <field name="claimed_client"/>
+                                    <field name="session_hash"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Integrity &amp; retention" name="integrity">
+                            <group>
+                                <group string="Integrity">
+                                    <field name="chain_key"/>
+                                    <field name="seal_seq"/>
+                                    <field name="sealed_at"/>
+                                    <field name="hash"/>
+                                    <field name="previous_hash"/>
+                                    <field name="hash_version"/>
+                                    <field name="hmac_key_id"/>
+                                    <field name="snapshot_digest"/>
+                                </group>
+                                <group string="Retention">
+                                    <field name="retention_policy_id"/>
+                                    <field name="archive_after"/>
+                                    <field name="purge_after"/>
+                                    <field name="prohibit_purge"/>
+                                    <field name="redacted"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="audit_log_view_search" model="ir.ui.view">
+        <field name="name">audit.log.search</field>
+        <field name="model">audit.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="record_display_name" string="Record"/>
+                <field name="reference"/>
+                <field name="model_name"/>
+                <field name="res_id"/>
+                <field name="user_id"/>
+                <field name="line_ids" string="Field" filter_domain="[('line_ids.field_name', 'ilike', self)]"/>
+                <field name="line_ids" string="Value"
+                       filter_domain="['|', ('line_ids.old_value_text', 'ilike', self), ('line_ids.new_value_text', 'ilike', self)]"/>
+                <field name="ip_address"/>
+                <field name="correlation_id"/>
+                <field name="rule_id"/>
+                <field name="batch_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <filter name="today" string="Today"
+                        domain="[('event_datetime', '&gt;=', (context_today()).strftime('%Y-%m-%d'))]"/>
+                <filter name="last_7" string="Last 7 days"
+                        domain="[('event_datetime', '&gt;=', (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <filter name="event_datetime" date="event_datetime"/>
+                <separator/>
+                <filter name="creates" string="Creates" domain="[('operation', '=', 'CREATE')]"/>
+                <filter name="updates" string="Updates" domain="[('operation', '=', 'UPDATE')]"/>
+                <filter name="deletes" string="Deletes" domain="[('operation', '=', 'DELETE')]"/>
+                <filter name="actions" string="Business actions" domain="[('operation', '=', 'ACTION')]"/>
+                <filter name="access" string="Access (read/export/print)"
+                        domain="[('operation', 'in', ('READ', 'EXPORT', 'REPORT'))]"/>
+                <filter name="auth" string="Authentication"
+                        domain="[('operation', 'in', ('LOGIN', 'LOGOUT', 'FAILED_LOGIN', 'MFA'))]"/>
+                <separator/>
+                <filter name="failures" string="Failures" domain="[('result', '=', 'failure')]"/>
+                <filter name="derived" string="Derived only" domain="[('change_origin', '=', 'derived')]"/>
+                <filter name="cascade" string="Database cascades" domain="[('change_origin', '=', 'database_fk')]"/>
+                <filter name="sudo" string="Superuser mode" domain="[('is_sudo', '=', True)]"/>
+                <filter name="unsealed" string="Unsealed" domain="[('seal_state', '=', 'unsealed')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_operation" string="Operation" context="{'group_by': 'operation'}"/>
+                    <filter name="group_model" string="Model" context="{'group_by': 'model_name'}"/>
+                    <filter name="group_user" string="User" context="{'group_by': 'user_id'}"/>
+                    <filter name="group_source" string="Source" context="{'group_by': 'source'}"/>
+                    <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"/>
+                    <filter name="group_day" string="Day" context="{'group_by': 'event_datetime:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="audit_log_view_pivot" model="ir.ui.view">
+        <field name="name">audit.log.pivot</field>
+        <field name="model">audit.log</field>
+        <field name="arch" type="xml">
+            <pivot string="Audit analysis">
+                <field name="model_name" type="row"/>
+                <field name="operation" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="audit_log_view_graph" model="ir.ui.view">
+        <field name="name">audit.log.graph</field>
+        <field name="model">audit.log</field>
+        <field name="arch" type="xml">
+            <graph string="Audit events" type="line">
+                <field name="event_datetime" interval="day"/>
+                <field name="operation"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="audit_log_action_creates" model="ir.actions.act_window">
+        <field name="name">Creates</field>
+        <field name="res_model">audit.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('operation', '=', 'CREATE')]</field>
+    </record>
+    <record id="audit_log_action_updates" model="ir.actions.act_window">
+        <field name="name">Updates</field>
+        <field name="res_model">audit.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('operation', '=', 'UPDATE')]</field>
+    </record>
+    <record id="audit_log_action_deletes" model="ir.actions.act_window">
+        <field name="name">Deletes</field>
+        <field name="res_model">audit.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('operation', '=', 'DELETE')]</field>
+    </record>
+    <record id="audit_log_action_actions" model="ir.actions.act_window">
+        <field name="name">Business Actions</field>
+        <field name="res_model">audit.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('operation', '=', 'ACTION')]</field>
+    </record>
+    <record id="audit_log_action_access" model="ir.actions.act_window">
+        <field name="name">Data Access</field>
+        <field name="res_model">audit.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('operation', 'in', ('READ', 'EXPORT', 'REPORT', 'IMPORT'))]</field>
+    </record>
+    <record id="audit_log_action_auth" model="ir.actions.act_window">
+        <field name="name">Authentication</field>
+        <field name="res_model">audit.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('operation', 'in', ('LOGIN', 'LOGOUT', 'FAILED_LOGIN', 'MFA'))]</field>
+    </record>
+    <record id="audit_log_action_failures" model="ir.actions.act_window">
+        <field name="name">Failed Operations</field>
+        <field name="res_model">audit.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('result', '=', 'failure')]</field>
+    </record>
+    <record id="audit_log_action_system" model="ir.actions.act_window">
+        <field name="name">Audit System Events</field>
+        <field name="res_model">audit.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('operation', 'in', ('CONFIG', 'RETENTION', 'REDACTION', 'ENGINE_ERROR'))]</field>
+    </record>
+</odoo>

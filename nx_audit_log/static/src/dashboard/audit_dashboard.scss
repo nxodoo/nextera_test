@@ -1,0 +1,66 @@
+// Ledger + seal: evidence reads like an accounting ledger, integrity like a wax seal.
+$nx-ink: #1f3a4d;
+$nx-seal: #c98a1b;
+$nx-danger: #b3261e;
+
+.o_nx_audit_dashboard {
+    padding: 1.5rem 2rem;
+    background: var(--body-bg, #fff);
+
+    h2 { font-size: 1.5rem; font-weight: 600; margin: 0; color: $nx-ink; }
+    h3 { font-size: 1rem; font-weight: 600; margin-bottom: .75rem; color: $nx-ink; }
+    button { text-align: left; }
+    button:focus-visible { outline: 2px solid $nx-seal; outline-offset: 2px; }
+
+    .nx-audit-head {
+        display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;
+    }
+
+    .nx-seal {
+        display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 1px;
+        background: rgba($nx-ink, .15); border-radius: 10px; overflow: hidden; margin-bottom: 1.5rem;
+        > button { border: 0; background: var(--body-bg, #fff); padding: 1rem 1.25rem; }
+        .nx-seal-main { border-left: 6px solid $nx-seal; }
+        .nx-seal-state { display: block; font-size: 1.15rem; font-weight: 600; color: $nx-ink; }
+        .nx-seal-date { display: block; font-size: .8rem; opacity: .7; }
+        .nx-seal-side strong { display: block; font-size: 1.4rem; color: $nx-ink; }
+        &.nx-seal--failed .nx-seal-main { border-left-color: $nx-danger; }
+        &.nx-seal--failed .nx-seal-state { color: $nx-danger; }
+        &.nx-seal--never .nx-seal-main { border-left-color: rgba($nx-ink, .3); }
+    }
+
+    .nx-ledger-grid {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        border-top: 2px solid $nx-ink; margin-bottom: 1.75rem;
+    }
+    .nx-ledger-cell {
+        border: 0; border-bottom: 1px solid rgba($nx-ink, .15); background: transparent;
+        padding: .75rem .5rem; display: flex; flex-direction: column;
+        &:hover { background: rgba($nx-ink, .04); }
+        &.nx-warn .nx-ledger-count { color: $nx-danger; }
+    }
+    .nx-ledger-count { font-size: 1.6rem; font-variant-numeric: tabular-nums; font-weight: 600; color: $nx-ink; }
+    .nx-ledger-label { font-size: .85rem; opacity: .75; }
+
+    .nx-columns {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem;
+        margin-bottom: 1.75rem;
+    }
+    .nx-bar, .nx-row {
+        width: 100%; border: 0; background: transparent; padding: .35rem 0;
+        display: flex; align-items: center; gap: .5rem;
+        &:hover { background: rgba($nx-ink, .04); }
+    }
+    .nx-row { justify-content: space-between; border-bottom: 1px dotted rgba($nx-ink, .2); }
+    .nx-bar-label { flex: 0 0 9rem; font-size: .85rem; }
+    .nx-bar-track { flex: 1; height: 8px; background: rgba($nx-ink, .08); border-radius: 4px; }
+    .nx-bar-fill { display: block; height: 100%; background: $nx-ink; border-radius: 4px; }
+    .nx-bar-value { flex: 0 0 3.5rem; text-align: right; font-variant-numeric: tabular-nums; }
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+        .nx-seal { grid-template-columns: 1fr 1fr; }
+        .nx-seal-main { grid-column: 1 / -1; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+}
