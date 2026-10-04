@@ -26,6 +26,8 @@ _EXEC = ContextVar('nx_audit_exec', default=())
 _RPC = ContextVar('nx_audit_rpc', default=None)
 # Current semantic action: dict(key, model, method, label).
 _ACTION = ContextVar('nx_audit_action', default=None)
+# Allows capture while the registry is still loading (module post_init hooks).
+_INSTALL_CAPTURE = ContextVar('nx_audit_install_capture', default=False)
 # Source of copy() calls: "model:ids".
 _COPY = ContextVar('nx_audit_copy', default=None)
 
@@ -68,6 +70,24 @@ def audit_bypass(reason):
         yield
     finally:
         _BYPASS.reset(token)
+
+
+@contextlib.contextmanager
+def capture_during_install():
+    """Audit even though the registry is not marked ready.
+
+    Only for post_init hooks of modules depending on nx_audit_log (its tables
+    exist then). Evidence must be finalized inside the block (flush_audit).
+    """
+    token = _INSTALL_CAPTURE.set(True)
+    try:
+        yield
+    finally:
+        _INSTALL_CAPTURE.reset(token)
+
+
+def install_capture_enabled():
+    return _INSTALL_CAPTURE.get()
 
 
 def is_bypassed():

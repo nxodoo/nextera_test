@@ -30,7 +30,9 @@ OP_FOR_HOOK = {
 # ---------------------------------------------------------------------------
 def get_plan(env, model_name):
     registry = env.registry
-    if not registry.ready or 'audit.rule' not in registry:
+    if 'audit.rule' not in registry:
+        return None
+    if not registry.ready and not audit_context.install_capture_enabled():
         return None
     if model_name.startswith('audit.'):
         return None
@@ -297,7 +299,8 @@ def record_event(env, entry_type, **values):
     """Append an access/semantic entry (read, export, report, action...)."""
     if audit_context.is_bypassed():
         return
-    if not env.registry.ready or 'audit.rule' not in env.registry:
+    if 'audit.rule' not in env.registry or not (
+            env.registry.ready or audit_context.install_capture_enabled()):
         return
     acc = _accumulator(env)
     entry = {'type': entry_type, 'uid': env.uid, 'su': env.su}
