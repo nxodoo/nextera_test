@@ -73,7 +73,8 @@ class NxAuditDemo(models.AbstractModel):
         icp = self.env['ir.config_parameter'].sudo()
         if icp.get_param(DONE_PARAM):
             return False
-        self.sudo()._generate()
+        admin = self.env.ref('base.user_admin', raise_if_not_found=False)
+        (self.with_user(admin) if admin else self).sudo()._generate()
         return True
 
     # ------------------------------------------------------------------
