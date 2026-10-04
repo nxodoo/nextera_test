@@ -371,11 +371,15 @@ class NxAuditDemo(models.AbstractModel):
             by_request.setdefault(log.correlation_id or f'log{log.id}', []).append(log.id)
         groups = list(by_request.values())
         cr = self.env.cr
+        recent_from = int(len(groups) * 0.7)   # last 30% of the story happens today
         for position, ids in enumerate(groups):
-            age = DAYS_SPREAD * (len(groups) - position) / max(len(groups), 1)
-            when = now - timedelta(days=age, minutes=random.randint(0, 600))
-            if when > now:
-                when = now - timedelta(minutes=5)
+            if position >= recent_from:
+                span = max(len(groups) - recent_from, 1)
+                when = now - timedelta(hours=20 * (len(groups) - position) / span,
+                                       minutes=random.randint(1, 30))
+            else:
+                age = DAYS_SPREAD * (recent_from - position) / max(recent_from, 1)
+                when = now - timedelta(days=age, minutes=random.randint(0, 600))
             cr.execute("""
                 UPDATE audit_log
                    SET event_datetime = %s,

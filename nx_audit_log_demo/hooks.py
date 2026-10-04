@@ -12,9 +12,21 @@ MODEL_ORDER = ['audit.redaction.request', 'res.users', 'ir.config_parameter', 'r
 
 
 def post_init_hook(env):
-    """Evidence is produced only once the registry is ready (after install):
-    the one-shot job is triggered now and runs right after installation."""
-    env.ref(f'{MODULE}.cron_generate_demo')._trigger()
+    """Generate the demo evidence during installation.
+
+    The audit engine normally ignores operations while modules are loading,
+    so capture is explicitly enabled for this block. If generation fails for
+    any reason, installation still succeeds and the one-shot job retries
+    after installation (also available from Audit > Configuration).
+    """
+    cron = env.ref(f'{MODULE}.cron_generate_demo')
+    try:
+        with env.cr.savepoint(), audit_context.capture_during_install():
+            env['nx.audit.demo']._generate_once()
+        cron.active = False
+    except Exception:  # noqa: BLE001 - never block the installation
+        _logger.exception("nx_audit_log_demo: generation during install failed, retrying via cron")
+        cron._trigger()
 
 
 def uninstall_hook(env):
