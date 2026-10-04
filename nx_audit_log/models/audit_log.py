@@ -565,9 +565,9 @@ class AuditLog(models.Model):
 
     def _storage_stats(self):
         self.env.cr.execute("""
-            SELECT relname, pg_total_relation_size(c.oid), COALESCE(s.n_live_tup, 0)
+            SELECT c.relname, pg_total_relation_size(c.oid), COALESCE(s.n_live_tup, 0)
               FROM pg_class c LEFT JOIN pg_stat_user_tables s ON s.relid = c.oid
-             WHERE relname IN ('audit_log', 'audit_log_line', 'audit_log_archive',
+             WHERE c.relname IN ('audit_log', 'audit_log_line', 'audit_log_archive',
                                'audit_log_tombstone')
         """)
         return [{'table': t, 'bytes': b, 'rows': r} for t, b, r in self.env.cr.fetchall()]

@@ -82,8 +82,20 @@ class AuditAlertRule(models.Model):
     def _match_field_change(self, logs):
         for log in logs.filtered(lambda l: l.operation in ('UPDATE', 'CREATE') and self._model_ok(l)):
             for line in log.line_ids.filtered(lambda ln: ln.field_name == self.field_name):
-                if self._threshold_reached(line):
-                    yield log, f'field:{log.model_name}:{log.res_id}:{line.field_name}', _(
+                if not self._threshold_reached(line):
+                    continue
+                # the change content is part of the key: an escalation right after a
+                # first change must not be swallowed by deduplication
+                key = f'field:{log.model_name}:{log.res_id}:{line.field_name}:{line.change_type}:' \
+                      f'{line.old_value_text or ""}>{line.new_value_text or ""}'
+                if line.change_type in ('add', 'remove'):
+                    yield log, key, _(
+                        "%(field)s on %(record)s - %(kind)s: %(values)s", field=line.field_label,
+                        record=log.record_display_name,
+                        kind=_('added') if line.change_type == 'add' else _('removed'),
+                        values=line.new_value_text if line.change_type == 'add' else line.old_value_text)
+                else:
+                    yield log, key, _(
                         "%(field)s changed on %(record)s: %(old)s \u2192 %(new)s",
                         field=line.field_label, record=log.record_display_name,
                         old=line.old_value_text or '', new=line.new_value_text or '')
@@ -174,7 +186,7 @@ class AuditAlertRule(models.Model):
             {'name': 'User groups changed', 'trigger': 'field_change', 'model_name': 'res.users',
              'field_name': 'groups_id', 'severity': 'high'},
             {'name': 'Group members changed', 'trigger': 'field_change', 'model_name': 'res.groups',
-             'field_name': 'users', 'severity': 'high'},
+             'field_name': 'users', 'severity': 'high', 'active': False},
             {'name': 'Mass deletion', 'trigger': 'mass_delete', 'count_threshold': 50,
              'window_minutes': 10, 'severity': 'critical'},
             {'name': 'Brute force login', 'trigger': 'failed_login', 'count_threshold': 10,

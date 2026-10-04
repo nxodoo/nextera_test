@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- One-shot job: the audit engine only records once the registry is ready,
+         i.e. after the installation transaction. The job deactivates itself. -->
+    <record id="cron_generate_demo" model="ir.cron">
+        <field name="name">Audit demo: generate demo evidence</field>
+        <field name="model_id" ref="model_nx_audit_demo"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_generate()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="user_id" ref="base.user_root"/>
+    </record>
+
+    <record id="action_generate_demo" model="ir.actions.server">
+        <field name="name">Generate Demo Data</field>
+        <field name="model_id" ref="model_nx_audit_demo"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_generate()</field>
+    </record>
+    <menuitem id="menu_generate_demo" name="Generate Demo Data" parent="nx_audit_log.menu_audit_config"
+              sequence="99" action="action_generate_demo" groups="nx_audit_log.group_audit_admin"/>
+</odoo>
