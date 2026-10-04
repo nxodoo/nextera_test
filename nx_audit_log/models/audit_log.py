@@ -61,7 +61,9 @@ class AuditLog(models.Model):
     model_name = fields.Char('Model', required=True, index=True, readonly=True)
     model_id = fields.Many2one('ir.model', 'Model Record', ondelete='set null', readonly=True)
     model_description = fields.Char(compute='_compute_model_description')
-    res_id = fields.Many2oneReference('Record ID', model_field='model_name', index=True, readonly=True)
+    # Plain integer on purpose: evidence often points to records that no longer
+    # exist (deletes); a Many2oneReference widget cannot render those.
+    res_id = fields.Integer('Record ID', index=True, readonly=True, aggregator=None)
     record_display_name = fields.Char('Record', readonly=True)
     record_count = fields.Integer(readonly=True)
     res_ids_json = fields.Json('Record IDs', readonly=True)

@@ -26,7 +26,7 @@ class AuditLogLine(models.Model):
     event_datetime = fields.Datetime(related='audit_log_id.event_datetime', store=True, index=True)
     operation = fields.Selection(related='audit_log_id.operation', store=True)
     user_id = fields.Many2one(related='audit_log_id.user_id', store=True, index=True)
-    res_id = fields.Many2oneReference(related='audit_log_id.res_id', model_field='model_name')
+    res_id = fields.Integer(related='audit_log_id.res_id')
     model_name = fields.Char(readonly=True, index=True)
     field_name = fields.Char(required=True, index=True, readonly=True)
     field_label = fields.Char(readonly=True)
